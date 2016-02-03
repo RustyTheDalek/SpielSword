@@ -1,0 +1,162 @@
+fileFormatVersion: 2
+guid: 6a883d6d1298c8045a5353af4b687a73
+timeCreated: 1454247272
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: The boss seperated stage 2_0
+    21300002: The boss seperated stage 2_1
+    21300004: The boss seperated stage 2_2
+    21300006: The boss seperated stage 2_3
+    21300008: The boss seperated stage 2_4
+    21300010: The boss seperated stage 2_5
+    21300012: The boss seperated stage 2_6
+    21300014: The boss seperated stage 2_7
+    21300016: The boss seperated stage 2_8
+    21300018: The boss seperated stage 2_9
+    21300020: The boss seperated stage 2_10
+    21300022: The boss seperated stage 2_11
+    21300024: The boss seperated stage 2_12
+    21300026: The boss seperated stage 2_13
+    21300028: The boss seperated stage 2_14
+    21300030: The boss seperated stage 2_15
+    21300032: The boss seperated stage 2_16
+    21300034: The boss seperated stage 2_17
+    21300036: The boss seperated stage 2_18
+    21300038: The boss seperated stage 2_19
+    21300040: The boss seperated stage 2_20
+    21300042: The boss seperated stage 2_21
+    21300044: The boss seperated stage 2_22
+    21300046: The boss seperated stage 2_23
+    21300048: The boss seperated stage 2_24
+    21300050: The boss seperated stage 2_25
+    21300052: The boss seperated stage 2_26
+    21300054: The boss seperated stage 2_27
+    21300056: The boss seperated stage 2_28
+    21300058: The boss seperated stage 2_29
+    21300060: The boss seperated stage 2_30
+    21300062: The boss seperated stage 2_31
+    21300064: The boss seperated stage 2_32
+    21300066: The boss seperated stage 2_33
+    21300068: The boss seperated stage 2_34
+    21300070: The boss seperated stage 2_35
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: The boss seperated stage 2_0
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 628
+        width: 227
+        height: 383
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: The boss seperated stage 2_1
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 14
+        width: 293
+        height: 500
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: The boss seperated stage 2_2
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 254
+        width: 585
+        height: 324
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: The boss seperated stage 2_3
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 15
+        width: 320
+        height: 456
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: The boss seperated stage 2_5
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 164
+        width: 306
+        height: 84
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: The boss seperated stage 2_6
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 100
+        width: 186
+        height: 58
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: The boss seperated stage 2_24
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 42
+        width: 78
+        height: 34
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
