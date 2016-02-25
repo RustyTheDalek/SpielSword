@@ -1,0 +1,133 @@
+fileFormatVersion: 2
+guid: 83ec7dcaf4161ee4ca4b77c1960958d1
+timeCreated: 1454176972
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: RockHandTemp_0
+    21300002: RockHandTemp_1
+    21300004: RockHandTemp_2
+    21300006: RockHandTemp_3
+    21300008: RockHandTemp_4
+    21300010: RockHandTemp_5
+    21300012: RockHandTemp_6
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 552, y: 255, z: 552, w: 255}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: RockHandTemp_0
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 1225
+        width: 44
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: RockHandTemp_1
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 1032
+        width: 23
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: RockHandTemp_2
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 316
+        width: 723
+        height: 837
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: RockHandTemp_3
+      rect:
+        serializedVersion: 2
+        x: 581
+        y: 826
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: RockHandTemp_4
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 145
+        width: 101
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: RockHandTemp_5
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 266
+        width: 17
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: RockHandTemp_6
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 201
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
