@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Head : MonoBehaviour {
 
-    public Boss boss;
+    public Golem boss;
 
     public Sprite originalHead;
     public Sprite damageHead;
@@ -32,7 +32,7 @@ public class Head : MonoBehaviour {
         Debug.Log("Collision");
         if(coll.transform.name == "Melee")
         {
-            Boss.health--;
+            Golem.health--;
             GetComponent<SpriteRenderer>().sprite = damageHead;
             damageTimer.StartTimer();
         }

@@ -12,6 +12,6 @@ public class UpdateHealth : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        GetComponent<Image>().fillAmount = Boss.health/100f;
+        GetComponent<Image>().fillAmount = Golem.health/100f;
 	}
 }

@@ -5,9 +5,10 @@ using System.Collections.Generic;
 
 public abstract class BossManager : MonoBehaviour {
 
-	public Animator leftArm, rightArm;
 
 	public static float health = 100;
+
+	int[] stageOneAttacks, stageTwoAttacks, stageThreeAttacks, stageFourAttacks, stageFiveAttacks;
 	
 	public bool alive
 	{
@@ -19,6 +20,8 @@ public abstract class BossManager : MonoBehaviour {
 	public float currentHealth;
 	public Image healthBar;
 
+	public Animator leftArm, rightArm;
+
 	List<float> healthRecord;
 
 	public List<SpriteRenderer> bossParts;
@@ -26,31 +29,31 @@ public abstract class BossManager : MonoBehaviour {
 	public List<Sprite> headStages, chestStages, lArmStages, rArmStages, c2, c3, c4;
 
 	// Update is called once per frame
-	void Update ()
+	public void ManagerUpdate ()
 	{
 
 		#region Debug options for testing
-		if(Input.GetKeyDown(KeyCode.Alpha1))
+		if(Input.GetKeyDown(KeyCode.Alpha2))
 		{
 			health = 100;
 		}
-		if (Input.GetKeyDown(KeyCode.Alpha2))
+		if (Input.GetKeyDown(KeyCode.Alpha3))
 		{
 			health = 70;
 		}
-		if(Input.GetKeyDown(KeyCode.Alpha3))
+		if(Input.GetKeyDown(KeyCode.Alpha4))
 		{
 			health = 50;
 		}
-		if (Input.GetKeyDown(KeyCode.Alpha4))
+		if (Input.GetKeyDown(KeyCode.Alpha5))
 		{
 			health = 30;
 		}
-		if(Input.GetKeyDown(KeyCode.Alpha5))
+		if(Input.GetKeyDown(KeyCode.Alpha6))
 		{
 			health = 10;
 		}
-		if(Input.GetKeyDown(KeyCode.Alpha6))
+		if(Input.GetKeyDown(KeyCode.Alpha7))
 		{
 			health = 0;
 		}
@@ -58,23 +61,23 @@ public abstract class BossManager : MonoBehaviour {
 
 		#region Stadge select (case?)
 
-		if (health > 80)
+		if (currentHealth > 80)
 		{
 			StadgeOne ();
 		}
-		else if(health < 80 && health > 60)
+		else if(currentHealth < 80 && currentHealth > 60)
 		{
 			StadgeTwo ();
 		}
-		else if(health < 60 && health > 40)
+		else if(currentHealth < 60 && currentHealth > 40)
 		{
 			StadgeThree ();
 		}
-		else if(health < 40 && health > 20)
+		else if(currentHealth < 40 && currentHealth > 20)
 		{
 			StadgeFour ();
 		}
-		else if(health <= 0)
+		else if(currentHealth <= 0)
 		{
 			StadgeFive ();
 		}

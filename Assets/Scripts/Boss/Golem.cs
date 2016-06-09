@@ -1,10 +1,10 @@
 ﻿public class Golem : BossManager {
 
 	//public Animator leftArm, rightArm;
-	
+
 	Timer LAttack1, RAttack1,
 	LAttack2, RAttack2;
-	
+
 	int totalSweeps = 3, currentSweeps = 0,
 	totalSlams = 4, currentSlams = 0;
 
@@ -68,6 +68,7 @@
 
 	void Update ()
 	{
+		ManagerUpdate();
 		if (currentSweeps <= totalSweeps)
 		{
 			if (LAttack1.complete)
