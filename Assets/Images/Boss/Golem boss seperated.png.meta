@@ -1,0 +1,358 @@
+fileFormatVersion: 2
+guid: 0d520124fca620249ab140b82c660937
+timeCreated: 1465912436
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Head Stage 1
+    21300002: Larm Stage 1
+    21300004: Chest Stage 1
+    21300006: Rarm Stage 1
+    21300008: UpperRing Stage 1
+    21300010: MidRing Stage 1
+    21300012: LowerRing Stage 1
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Head Stage 1
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 632
+        width: 229
+        height: 382
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 86.5, y: -106}
+        - {x: 91.5, y: -82}
+        - {x: 98.5, y: -50}
+        - {x: 107.5, y: 8}
+        - {x: 114.5, y: 47}
+        - {x: 114.5, y: 99}
+        - {x: 104.5, y: 134}
+        - {x: 101.5, y: 141}
+        - {x: 68.5, y: 171}
+        - {x: 41.5, y: 182}
+        - {x: 1.5, y: 189}
+        - {x: -4.5, y: 189}
+        - {x: -40.5, y: 182}
+        - {x: -66.5, y: 173}
+        - {x: -79.5, y: 165}
+        - {x: -102.5, y: 142}
+        - {x: -108.5, y: 129}
+        - {x: -114.5, y: 105}
+        - {x: -114.5, y: 35}
+        - {x: -110.5, y: 10}
+        - {x: -89.5, y: -110}
+        - {x: -84.5, y: -166}
+        - {x: -69.5, y: -186}
+        - {x: -55.5, y: -191}
+        - {x: 53.5, y: -191}
+        - {x: 71.5, y: -181}
+        - {x: 80.5, y: -167}
+        - {x: 84.5, y: -149}
+    - name: Larm Stage 1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 20
+        width: 274
+        height: 493
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 93, y: -231.5}
+        - {x: 118, y: -246.5}
+        - {x: 131, y: -246.5}
+        - {x: 134, y: -244.5}
+        - {x: 137, y: -231.5}
+        - {x: 137, y: -204.5}
+        - {x: 136, y: -196.5}
+        - {x: 135, y: -192.5}
+        - {x: 134, y: -186.5}
+        - {x: 133, y: -183.5}
+        - {x: 131, y: -174.5}
+        - {x: 125, y: -92.5}
+        - {x: 79, y: 46.5}
+        - {x: 70, y: 50.5}
+        - {x: 14, y: 246.5}
+        - {x: -3, y: 246.5}
+        - {x: -6, y: 238.5}
+        - {x: -14, y: 193.5}
+        - {x: -36, y: 149.5}
+        - {x: -62, y: 37.5}
+        - {x: -84, y: 22.5}
+        - {x: -120, y: -57.5}
+        - {x: -137, y: -163.5}
+        - {x: -137, y: -225.5}
+        - {x: -136, y: -232.5}
+        - {x: -128, y: -246.5}
+        - {x: -42, y: -246.5}
+        - {x: -35, y: -225.5}
+        - {x: -5, y: -246.5}
+        - {x: 75, y: -246.5}
+      - - {x: 33, y: -244.5}
+        - {x: 34, y: -246.5}
+        - {x: 44, y: -246.5}
+        - {x: 44, y: -245.5}
+        - {x: 40, y: -240.5}
+        - {x: 36, y: -239.5}
+      - - {x: 95, y: -235.5}
+        - {x: 93, y: -238.5}
+        - {x: 93, y: -242.5}
+        - {x: 97, y: -246.5}
+        - {x: 105, y: -246.5}
+        - {x: 103, y: -241.5}
+        - {x: 100, y: -236.5}
+        - {x: 97, y: -235.5}
+    - name: Chest Stage 1
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 254
+        width: 590
+        height: 324
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -7, y: -71}
+        - {x: 59, y: -79}
+        - {x: 79, y: -134}
+        - {x: 42, y: -153}
+        - {x: 45, y: -162}
+        - {x: 90, y: -162}
+        - {x: 139, y: -126}
+        - {x: 170, y: -75}
+        - {x: 186, y: -30}
+        - {x: 202, y: -30}
+        - {x: 221, y: -25}
+        - {x: 295, y: -43}
+        - {x: 295, y: -10}
+        - {x: 228, y: 44}
+        - {x: 217, y: 67}
+        - {x: 183, y: 93}
+        - {x: 104, y: 146}
+        - {x: 52, y: 162}
+        - {x: -49, y: 162}
+        - {x: -93, y: 147}
+        - {x: -176, y: 93}
+        - {x: -215, y: 56}
+        - {x: -217, y: 52}
+        - {x: -291, y: -18}
+        - {x: -295, y: -29}
+        - {x: -295, y: -34}
+        - {x: -290, y: -42}
+        - {x: -278, y: -42}
+        - {x: -198, y: -33}
+        - {x: -167, y: -55}
+        - {x: -142, y: -110}
+        - {x: -128, y: -112}
+        - {x: -119, y: -138}
+        - {x: -90, y: -161}
+        - {x: -85, y: -162}
+        - {x: -36, y: -162}
+        - {x: -34, y: -161}
+        - {x: -29, y: -155}
+        - {x: -66, y: -134}
+      - - {x: -3, y: -95}
+        - {x: -16, y: -100}
+        - {x: -16, y: -144}
+        - {x: 27, y: -144}
+        - {x: 29, y: -138}
+        - {x: 29, y: -99}
+        - {x: 23, y: -95}
+      - - {x: 191, y: -116}
+        - {x: 193, y: -118}
+        - {x: 196, y: -117}
+        - {x: 196, y: -114}
+        - {x: 194, y: -112}
+        - {x: 191, y: -113}
+    - name: Rarm Stage 1
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 20
+        width: 316
+        height: 503
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -158, y: -251.5}
+        - {x: -151, y: -251.5}
+        - {x: -151, y: -250.5}
+        - {x: -156, y: -245.5}
+        - {x: -158, y: -245.5}
+      - - {x: -98, y: -250.5}
+        - {x: -98, y: -251.5}
+        - {x: -90, y: -251.5}
+        - {x: -90, y: -250.5}
+        - {x: -93, y: -247.5}
+        - {x: -95, y: -247.5}
+      - - {x: 107, y: -245.5}
+        - {x: 142, y: -240.5}
+        - {x: 157, y: -228.5}
+        - {x: 158, y: -224.5}
+        - {x: 158, y: -163.5}
+        - {x: 141, y: -105.5}
+        - {x: 131, y: -52.5}
+        - {x: 94, y: 17.5}
+        - {x: 79, y: 37.5}
+        - {x: 66, y: 39.5}
+        - {x: 37, y: 166.5}
+        - {x: 21, y: 181.5}
+        - {x: 8, y: 250.5}
+        - {x: 5, y: 251.5}
+        - {x: -14, y: 251.5}
+        - {x: -19, y: 242.5}
+        - {x: -50, y: 145.5}
+        - {x: -66, y: 92.5}
+        - {x: -73, y: 52.5}
+        - {x: -91, y: 52.5}
+        - {x: -127, y: -36.5}
+        - {x: -139, y: -87.5}
+        - {x: -157, y: -179.5}
+        - {x: -158, y: -185.5}
+        - {x: -158, y: -232.5}
+        - {x: -154, y: -240.5}
+        - {x: -142, y: -246.5}
+        - {x: -113, y: -213.5}
+        - {x: -62, y: -243.5}
+        - {x: -42, y: -209.5}
+        - {x: -26, y: -241.5}
+        - {x: -4, y: -251.5}
+        - {x: 18, y: -251.5}
+        - {x: 45, y: -214.5}
+        - {x: 80, y: -243.5}
+        - {x: 99, y: -213.5}
+      - - {x: 22, y: -251.5}
+        - {x: 21, y: -248.5}
+        - {x: 17, y: -248.5}
+        - {x: 16, y: -251.5}
+      - - {x: 149, y: -245.5}
+        - {x: 142, y: -250.5}
+        - {x: 142, y: -251.5}
+        - {x: 158, y: -251.5}
+        - {x: 158, y: -248.5}
+        - {x: 153, y: -246.5}
+      - - {x: -110, y: -224.5}
+        - {x: -108, y: -226.5}
+        - {x: -105, y: -225.5}
+        - {x: -105, y: -222.5}
+        - {x: -107, y: -220.5}
+        - {x: -110, y: -221.5}
+      - - {x: 155, y: -145.5}
+        - {x: 157, y: -147.5}
+        - {x: 158, y: -147.5}
+        - {x: 158, y: -141.5}
+        - {x: 155, y: -142.5}
+    - name: UpperRing Stage 1
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 164
+        width: 291
+        height: 85
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -145.5, y: 42.5}
+        - {x: -145.5, y: 9.5}
+        - {x: -59.5, y: -42.5}
+        - {x: 71.5, y: -42.5}
+        - {x: 145.5, y: 17.5}
+        - {x: 145.5, y: 42.5}
+    - name: MidRing Stage 1
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 100
+        width: 167
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -83.5, y: 30}
+        - {x: -83.5, y: 17}
+        - {x: -80.5, y: 14}
+        - {x: -68.5, y: 0}
+        - {x: -37.5, y: -30}
+        - {x: 26.5, y: -30}
+        - {x: 60.5, y: -7}
+        - {x: 83.5, y: 17}
+        - {x: 83.5, y: 30}
+    - name: LowerRing Stage 1
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 42
+        width: 78
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -39, y: 17}
+        - {x: -39, y: 4}
+        - {x: -13, y: -17}
+        - {x: 15, y: -17}
+        - {x: 39, y: 3}
+        - {x: 39, y: 17}
+      - - {x: 16, y: -17}
+        - {x: 15, y: -14}
+        - {x: 11, y: -14}
+        - {x: 10, y: -17}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
