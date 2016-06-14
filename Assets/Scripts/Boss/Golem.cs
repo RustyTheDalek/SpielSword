@@ -28,35 +28,35 @@
 		RAttack2.Setup("RHandSlam", 1f, true);
 	}
 
-	public override void StadgeOne ()
+	public override void StageOne ()
 	{
 
 	}
-	public override void StadgeTwo ()
+	public override void StageTwo ()
 	{
 		bossParts[0].sprite = headStages[0];
-		bossParts[1].sprite = chestStages[0];
-		bossParts[2].sprite = c2[0];      
-		bossParts[3].sprite = c3[0];
-		bossParts[4].sprite = c4[0];
+		bossParts[1].sprite = bodyStages[0];
+		bossParts[2].sprite = utilityA[0];      
+		bossParts[3].sprite = utilityB[0];
+		bossParts[4].sprite = utilityC[0];
 		bossParts[5].sprite = rArmStages[0];
 		bossParts[6].sprite = lArmStages[0];
 	}
-	public override void StadgeThree ()
+	public override void StageThree ()
 	{
 
 	}
-	public override void StadgeFour ()
+	public override void StageFour ()
 	{
 		bossParts[0].sprite = headStages[1];
-		bossParts[1].sprite = chestStages[1];
-		bossParts[2].sprite = c2[1];
-		bossParts[3].sprite = c3[1];
-		bossParts[4].sprite = c4[1];
+		bossParts[1].sprite = bodyStages[1];
+		bossParts[2].sprite = utilityA[1];
+		bossParts[3].sprite = utilityB[1];
+		bossParts[4].sprite = utilityC[1];
 		bossParts[5].sprite = rArmStages[1];
 		bossParts[6].sprite = lArmStages[1];
 	}
-	public override void StadgeFive ()
+	public override void StageFive ()
 	{
 		
 	}
@@ -66,9 +66,10 @@
 		
 	}
 
-	void Update ()
+	public override void Update ()
 	{
-		ManagerUpdate();
+		base.Update();
+
 		if (currentSweeps <= totalSweeps)
 		{
 			if (LAttack1.complete)
@@ -128,5 +129,6 @@
 			currentSweeps = 0;
 			currentSlams = 0;
 		}
+
 	}
 }

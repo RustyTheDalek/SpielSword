@@ -26,10 +26,10 @@ public abstract class BossManager : MonoBehaviour {
 
 	public List<SpriteRenderer> bossParts;
 
-	public List<Sprite> headStages, chestStages, lArmStages, rArmStages, c2, c3, c4;
+	public List<Sprite> headStages, bodyStages, outterLArmStages, lArmStages, outterRArmStages, rArmStages, lFootStages, rFootStages, tailStages, utilityA, utilityB, utilityC;
 
 	// Update is called once per frame
-	public void ManagerUpdate ()
+	public virtual void Update ()
 	{
 
 		#region Debug options for testing
@@ -63,23 +63,23 @@ public abstract class BossManager : MonoBehaviour {
 
 		if (currentHealth > 80)
 		{
-			StadgeOne ();
+			StageOne ();
 		}
 		else if(currentHealth < 80 && currentHealth > 60)
 		{
-			StadgeTwo ();
+			StageTwo ();
 		}
 		else if(currentHealth < 60 && currentHealth > 40)
 		{
-			StadgeThree ();
+			StageThree ();
 		}
 		else if(currentHealth < 40 && currentHealth > 20)
 		{
-			StadgeFour ();
+			StageFour ();
 		}
 		else if(currentHealth <= 0)
 		{
-			StadgeFive ();
+			StageFive ();
 		}
 		#endregion
 
@@ -91,11 +91,11 @@ public abstract class BossManager : MonoBehaviour {
 	    }
 	}
 
-	public abstract void StadgeOne ();
-	public abstract void StadgeTwo ();
-	public abstract void StadgeThree ();
-	public abstract void StadgeFour ();
-	public abstract void StadgeFive ();
+	public abstract void StageOne ();
+	public abstract void StageTwo ();
+	public abstract void StageThree ();
+	public abstract void StageFour ();
+	public abstract void StageFive ();
 
 	public abstract void SetBossParts ();
 
