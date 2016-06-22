@@ -8,7 +8,9 @@ public abstract class BossManager : MonoBehaviour {
 
 	public static float health = 100;
 
-	int[] stageOneAttacks, stageTwoAttacks, stageThreeAttacks, stageFourAttacks, stageFiveAttacks;
+	public List<int> stageOneAttacks, stageTwoAttacks, stageThreeAttacks, stageFourAttacks, stageFiveAttacks = new List<int>();
+
+	public int attackCountStage;
 	
 	public bool alive
 	{

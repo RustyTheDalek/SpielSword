@@ -1,4 +1,7 @@
-﻿public class Golem : BossManager {
+﻿using UnityEngine;
+
+
+public class Golem : BossManager {
 
 	//public Animator leftArm, rightArm;
 
@@ -30,8 +33,71 @@
 
 	public override void StageOne ()
 	{
-
+		/*
+		bool exit = false;
+		attackCountStage = 4;
+		// prevent steping in
+		if (stageOneAttacks.Count > 0)
+		{
+			foreach (int attack in stageOneAttacks)
+			{
+				
+				StageOneAttack(attack);
+				// Cooldown
+			}
+		}
+		exit = true;
+		int newAttack = Random.Range(0, attackCountStage);
+		StageOneAttack(newAttack);
+		// Cooldown
+		stageOneAttacks.Add(newAttack);
+		*/
 	}
+
+	void StageOneAttack(int attack)
+	{
+		if (attack == 0)
+		{
+			LAttack1.Reset();
+			leftArm.SetBool("Attack1", true);
+
+			//LAttack1.enabled = false;
+
+			//RAttack1.enabled = true;
+			RAttack1.StartTimer();
+		}
+		if (attack == 1)
+		{
+			rightArm.SetBool("Attack1", true);
+			RAttack1.Reset();
+
+			//RAttack1.enabled = false;
+
+			//LAttack1.enabled = true;
+			LAttack1.StartTimer();
+		}
+		if (attack == 2)
+		{
+			LAttack2.Reset();
+			leftArm.SetBool("Attack2", true);
+
+			//LAttack2.enabled = false;
+
+			//RAttack2.enabled = true;
+			RAttack2.StartTimer();
+		}
+		if (attack == 3)
+		{
+			rightArm.SetBool("Attack2", true);
+			RAttack2.Reset();
+
+			//RAttack2.enabled = false;
+
+			//LAttack2.enabled = true;
+			LAttack2.StartTimer();
+		}
+	}
+
 	public override void StageTwo ()
 	{
 		bossParts[0].sprite = headStages[0];
@@ -69,7 +135,6 @@
 	public override void Update ()
 	{
 		base.Update();
-
 		if (currentSweeps <= totalSweeps)
 		{
 			if (LAttack1.complete)
@@ -129,6 +194,5 @@
 			currentSweeps = 0;
 			currentSlams = 0;
 		}
-
 	}
 }
