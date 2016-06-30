@@ -8,13 +8,20 @@ public class Golem : BossManager {
 	Timer LAttack1, RAttack1,
 	LAttack2, RAttack2;
 
+	bool playList;
+
 	int totalSweeps = 3, currentSweeps = 0,
 	totalSlams = 4, currentSlams = 0;
 
 	//public List<Sprite> headStages, chestStages, lArmStages, rArmStages, c2, c3, c4;
 
 	void Start () {
-		
+
+		playList = true;
+
+		attackManager = GameObject.Find ("Attack Manager");
+		attackList = attackManager.GetComponent<AttackStorage> ().stageOneAttacks;
+
 		LAttack1 = gameObject.AddComponent<Timer>();
 		LAttack1.Setup("LeftHandAttack", 2, true);
 		
@@ -22,7 +29,7 @@ public class Golem : BossManager {
 		
 		RAttack1 = gameObject.AddComponent<Timer>();
 		RAttack1.Setup("RightHandAttack", 2.5f, true);
-		RAttack1.enabled = false;
+		//RAttack1.enabled = false;
 		
 		LAttack2 = gameObject.AddComponent<Timer>();
 		LAttack2.Setup("LHandSlam", 1f, true);
@@ -33,68 +40,71 @@ public class Golem : BossManager {
 
 	public override void StageOne ()
 	{
-		/*
-		bool exit = false;
 		attackCountStage = 4;
 		// prevent steping in
-		if (stageOneAttacks.Count > 0)
+		if(leftArm.GetBool("Attack1") == false && rightArm.GetBool("Attack1") == false &&
+			leftArm.GetBool("Attack2") == false && rightArm.GetBool("Attack2") == false)
 		{
-			foreach (int attack in stageOneAttacks)
+			if (attackList.Count > 0 && playList)
 			{
 				
-				StageOneAttack(attack);
-				// Cooldown
+				foreach (int attack in attackList)
+				{
+					
+					StageOneAttack(attack);
+					// Cooldown
+				}
+				playList = false;
 			}
+			//exit = true;
+			int newAttack = Random.Range(0, attackCountStage);
+			StageOneAttack(newAttack);
+			// Cooldown
+			attackList.Add(newAttack);
 		}
-		exit = true;
-		int newAttack = Random.Range(0, attackCountStage);
-		StageOneAttack(newAttack);
-		// Cooldown
-		stageOneAttacks.Add(newAttack);
-		*/
 	}
 
 	void StageOneAttack(int attack)
 	{
 		if (attack == 0)
 		{
-			LAttack1.Reset();
+			//LAttack1.Reset();
 			leftArm.SetBool("Attack1", true);
 
 			//LAttack1.enabled = false;
 
 			//RAttack1.enabled = true;
-			RAttack1.StartTimer();
+			//RAttack1.StartTimer();
 		}
 		if (attack == 1)
 		{
 			rightArm.SetBool("Attack1", true);
-			RAttack1.Reset();
+			//RAttack1.Reset();
 
 			//RAttack1.enabled = false;
 
 			//LAttack1.enabled = true;
-			LAttack1.StartTimer();
+			//LAttack1.StartTimer();
 		}
 		if (attack == 2)
 		{
-			LAttack2.Reset();
+			//LAttack2.Reset();
 			leftArm.SetBool("Attack2", true);
 
 			//LAttack2.enabled = false;
 
 			//RAttack2.enabled = true;
-			RAttack2.StartTimer();
+			//RAttack2.StartTimer();
 		}
 		if (attack == 3)
 		{
 			rightArm.SetBool("Attack2", true);
-			RAttack2.Reset();
+			//RAttack2.Reset();
 
 			//RAttack2.enabled = false;
 
 			//LAttack2.enabled = true;
-			LAttack2.StartTimer();
+			//LAttack2.StartTimer();
 		}
 	}
 
@@ -135,6 +145,7 @@ public class Golem : BossManager {
 	public override void Update ()
 	{
 		base.Update();
+		/*
 		if (currentSweeps <= totalSweeps)
 		{
 			if (LAttack1.complete)
@@ -194,5 +205,6 @@ public class Golem : BossManager {
 			currentSweeps = 0;
 			currentSlams = 0;
 		}
+		*/
 	}
 }

@@ -5,12 +5,15 @@ using System.Collections.Generic;
 
 public abstract class BossManager : MonoBehaviour {
 
+	public GameObject attackManager;
 
 	public static float health = 100;
 
-	public List<int> stageOneAttacks, stageTwoAttacks, stageThreeAttacks, stageFourAttacks, stageFiveAttacks = new List<int>();
+	public List<int> attackList = new List<int>();
 
 	public int attackCountStage;
+
+	public int startTimer = 4;
 	
 	public bool alive
 	{
@@ -28,7 +31,8 @@ public abstract class BossManager : MonoBehaviour {
 
 	public List<SpriteRenderer> bossParts;
 
-	public List<Sprite> headStages, bodyStages, outterLArmStages, lArmStages, outterRArmStages, rArmStages, lFootStages, rFootStages, tailStages, utilityA, utilityB, utilityC;
+	public List<Sprite> headStages, bodyStages, outterLArmStages, lArmStages, outterRArmStages, 
+	rArmStages, lFootStages, rFootStages, tailStages, utilityA, utilityB, utilityC;
 
 	// Update is called once per frame
 	public virtual void Update ()
@@ -62,31 +66,31 @@ public abstract class BossManager : MonoBehaviour {
 		#endregion 
 
 		#region Stadge select (case?)
+		if(startTimer == 4){
+			if (currentHealth > 80)
+			{
+				StageOne ();
+			}
+			else if(currentHealth < 80 && currentHealth > 60)
+			{
+				StageTwo ();
+			}
+			else if(currentHealth < 60 && currentHealth > 40)
+			{
+				StageThree ();
+			}
+			else if(currentHealth < 40 && currentHealth > 20)
+			{
+				StageFour ();
+			}
+			else if(currentHealth <= 0)
+			{
+				StageFive ();
+			}
+			#endregion
 
-		if (currentHealth > 80)
-		{
-			StageOne ();
+			currentHealth = health;
 		}
-		else if(currentHealth < 80 && currentHealth > 60)
-		{
-			StageTwo ();
-		}
-		else if(currentHealth < 60 && currentHealth > 40)
-		{
-			StageThree ();
-		}
-		else if(currentHealth < 40 && currentHealth > 20)
-		{
-			StageFour ();
-		}
-		else if(currentHealth <= 0)
-		{
-			StageFive ();
-		}
-		#endregion
-
-		currentHealth = health;
-
 		if (!alive)
 		{
 			Detach(gameObject);
