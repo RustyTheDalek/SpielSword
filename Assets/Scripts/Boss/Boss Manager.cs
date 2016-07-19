@@ -9,7 +9,8 @@ public abstract class BossManager : MonoBehaviour {
 
 	public static float health = 100;
 
-	public List<int> attackList = new List<int>();
+	public List<int> attackList, attackList2, attackList3, 
+	attackList4, attackList5 = new List<int>();
 
 	public int attackCountStage;
 
@@ -33,6 +34,17 @@ public abstract class BossManager : MonoBehaviour {
 
 	public List<Sprite> headStages, bodyStages, outterLArmStages, lArmStages, outterRArmStages, 
 	rArmStages, lFootStages, rFootStages, tailStages, utilityA, utilityB, utilityC;
+
+	public virtual void Start ()
+	{
+		attackManager = GameObject.Find ("Attack Manager");
+		// Lists to store the attack sequence for each stage
+		attackList = attackManager.GetComponent<AttackStorage> ().stageOneAttacks;
+		attackList2 = attackManager.GetComponent<AttackStorage> ().stageTwoAttacks;
+		attackList3 = attackManager.GetComponent<AttackStorage> ().stageThreeAttacks;
+		attackList4 = attackManager.GetComponent<AttackStorage> ().stageFourAttacks;
+		attackList5 = attackManager.GetComponent<AttackStorage> ().stageFiveAttacks;
+	}
 
 	// Update is called once per frame
 	public virtual void Update ()
@@ -93,6 +105,7 @@ public abstract class BossManager : MonoBehaviour {
 		}
 		if (!alive)
 		{
+			//Death of boss
 			Detach(gameObject);
 	    }
 	}
@@ -131,5 +144,5 @@ public abstract class BossManager : MonoBehaviour {
 		}
 		
 		transform.DetachChildren();  
-	}
+	}// Controls the death of the boss
 }
