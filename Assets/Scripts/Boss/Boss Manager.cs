@@ -13,6 +13,11 @@ public abstract class BossManager : MonoBehaviour {
 	attackList4, attackList5 = new List<int>();
 
 	public int attackCountStage;
+	// Values stored in these ints are used to track the progress in the attack list
+	// number system determins the stage they are in charge of
+	public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
+	// Makes sure the list isn't run more then once per stage
+	public bool playList, playList2, playList3, playList4, playList5;
 
 	public int startTimer = 4;
 	
@@ -44,6 +49,18 @@ public abstract class BossManager : MonoBehaviour {
 		attackList3 = attackManager.GetComponent<AttackStorage> ().stageThreeAttacks;
 		attackList4 = attackManager.GetComponent<AttackStorage> ().stageFourAttacks;
 		attackList5 = attackManager.GetComponent<AttackStorage> ().stageFiveAttacks;
+		//Sets the counter for the list to zero
+		currentCount = 0;
+		currentCount2 = 0;
+		currentCount3 = 0;
+		currentCount4 = 0;
+		currentCount5 = 0;
+		// sets the bool to true so they run first time
+		playList = true;
+		playList2 = true;
+		playList3 = true;
+		playList4 = true;
+		playList5 = true;
 	}
 
 	// Update is called once per frame
@@ -95,7 +112,7 @@ public abstract class BossManager : MonoBehaviour {
 			{
 				StageFour ();
 			}
-			else if(currentHealth <= 0)
+			else if(currentHealth > 0)
 			{
 				StageFive ();
 			}
