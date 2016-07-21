@@ -85,7 +85,7 @@ public class Golem : BossManager {
 		bossParts[6].sprite = lArmStages[0];
 
 		//Sets the amount of attacks possible this stage
-		attackCountStage = 4;
+		attackCountStage = 5;
 		// checks to make sure an attack is possible
 		if(leftArm.GetBool("Attack1") == false && rightArm.GetBool("Attack1") == false &&
 			leftArm.GetBool("Attack2") == false && rightArm.GetBool("Attack2") == false)
@@ -144,6 +144,10 @@ public class Golem : BossManager {
 		if (attack == 3)
 		{
 			rightArm.SetBool("Attack2", true);
+		}
+		if (attack == 4)
+		{
+			rightArm.SetBool("S2Attack1", true);
 		}
 	}// Selects the attack based on the given number
 	#endregion
@@ -250,6 +254,7 @@ public class Golem : BossManager {
 			}
 		}
 	}
+
 	void StageFourListings()
 	{
 		//pulls up the next attack in sequence
