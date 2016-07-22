@@ -139,16 +139,18 @@ public class Golem : BossManager {
 		}
 		if (attack == 2)
 		{
-			leftArm.SetBool("Attack2", true);
+			leftArm.SetBool("S2Attack1", true);
 		}
 		if (attack == 3)
 		{
-			rightArm.SetBool("Attack2", true);
+			rightArm.SetBool("S2Attack1", true);
 		}
 		if (attack == 4)
 		{
-			rightArm.SetBool("S2Attack1", true);
+			rightArm.SetBool("S2Attack2", true);
+			leftArm.SetBool("S2Attack2", true);
 		}
+
 	}// Selects the attack based on the given number
 	#endregion
 
