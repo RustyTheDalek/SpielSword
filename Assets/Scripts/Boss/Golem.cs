@@ -2,8 +2,11 @@
 
 public class Golem : BossManager {
 
+	bool isAttacking;
+
 	public override void Start () {
 		base.Start();
+		isAttacking = false;
 	}
 
 	#region Stage One
@@ -12,8 +15,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 4;
 		// checks to make sure an attack is possible
-		if(leftArm.GetBool("Attack1") == false && rightArm.GetBool("Attack1") == false &&
-			leftArm.GetBool("Attack2") == false && rightArm.GetBool("Attack2") == false)
+		if(!isAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList.Count > currentCount && playList)
@@ -39,8 +41,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount; i <= attackList.Count; i++)
 		{
-			if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true ||
-				leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true)
+			if(isAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -87,8 +88,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 5;
 		// checks to make sure an attack is possible
-		if(leftArm.GetBool("Attack1") == false && rightArm.GetBool("Attack1") == false &&
-			leftArm.GetBool("Attack2") == false && rightArm.GetBool("Attack2") == false)
+		if(!isAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList2.Count > currentCount2 && playList2)
@@ -114,8 +114,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount2; i <= attackList2.Count; i++)
 		{
-			if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true ||
-				leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true)
+			if(isAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -160,8 +159,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 4;
 		// checks to make sure an attack is possible
-		if(leftArm.GetBool("Attack1") == false && rightArm.GetBool("Attack1") == false &&
-			leftArm.GetBool("Attack2") == false && rightArm.GetBool("Attack2") == false)
+		if(!isAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList3.Count > currentCount3 && playList3)
@@ -187,8 +185,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount3; i <= attackList3.Count; i++)
 		{
-			if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true ||
-				leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true)
+			if(isAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -204,19 +201,19 @@ public class Golem : BossManager {
 	{
 		if (attack == 0)
 		{
-			leftArm.SetBool("Attack1", true);
+			leftArm.SetBool("S3Attack1", true);
 		}
 		if (attack == 1)
 		{
-			rightArm.SetBool("Attack1", true);
+			rightArm.SetBool("S3Attack1", true);
 		}
 		if (attack == 2)
 		{
-			leftArm.SetBool("Attack2", true);
+			leftArm.SetBool("S3Attack2", true);
 		}
 		if (attack == 3)
 		{
-			rightArm.SetBool("Attack2", true);
+			rightArm.SetBool("S3Attack2", true);
 		}
 	}// Selects the attack based on the given number
 	#endregion
@@ -235,8 +232,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 4;
 		// checks to make sure an attack is possible
-		if(leftArm.GetBool("Attack1") == false && rightArm.GetBool("Attack1") == false &&
-			leftArm.GetBool("Attack2") == false && rightArm.GetBool("Attack2") == false)
+		if(!isAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList4.Count > currentCount4 && playList4)
@@ -262,8 +258,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount4; i <= attackList4.Count; i++)
 		{
-			if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true ||
-				leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true)
+			if(isAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -302,8 +297,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 4;
 		// checks to make sure an attack is possible
-		if(leftArm.GetBool("Attack1") == false && rightArm.GetBool("Attack1") == false &&
-			leftArm.GetBool("Attack2") == false && rightArm.GetBool("Attack2") == false)
+		if(!isAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList5.Count > currentCount5 && playList5)
@@ -329,8 +323,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount5; i <= attackList5.Count; i++)
 		{
-			if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true ||
-				leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true)
+			if(isAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -371,6 +364,19 @@ public class Golem : BossManager {
 
 	public override void Update ()
 	{
+		if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true 
+			|| leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true
+			|| leftArm.GetBool("S2Attack1") == true || rightArm.GetBool("S2Attack1") == true
+			|| leftArm.GetBool("S2Attack2") == true || leftArm.GetBool("S2Attack2") == true
+			|| leftArm.GetBool("S3Attack1") == true || leftArm.GetBool("S3Attack1") == true
+			|| leftArm.GetBool("S3Attack2") == true || leftArm.GetBool("S3Attack2") == true)
+		{
+			isAttacking = true;
+		}
+		else
+		{
+			isAttacking = false;
+		}
 		base.Update();
 	}
 }
