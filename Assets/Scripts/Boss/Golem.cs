@@ -230,7 +230,7 @@ public class Golem : BossManager {
 		bossParts[6].sprite = lArmStages[1];
 
 		//Sets the amount of attacks possible this stage
-		attackCountStage = 4;
+		attackCountStage = 6;
 		// checks to make sure an attack is possible
 		if(!isAttacking)
 		{
@@ -282,11 +282,21 @@ public class Golem : BossManager {
 		}
 		if (attack == 2)
 		{
-			leftArm.SetBool("Attack2", true);
+			leftArm.SetBool("S4Attack1", true);
 		}
 		if (attack == 3)
 		{
-			rightArm.SetBool("Attack2", true);
+			rightArm.SetBool("S4Attack1", true);
+		}
+		if (attack == 4)
+		{
+			leftArm.SetBool("S4Special", true);
+			rightArm.SetBool("S4Special", true);
+		}
+		if (attack == 5)
+		{
+			rightArm.SetBool("S4Stun", true);
+			leftArm.SetBool("S4Stun", true);
 		}
 	}// Selects the attack based on the given number
 	#endregion
@@ -339,19 +349,24 @@ public class Golem : BossManager {
 	{
 		if (attack == 0)
 		{
-			leftArm.SetBool("Attack1", true);
+			leftArm.SetBool("S5Attack1", true);
 		}
 		if (attack == 1)
 		{
-			rightArm.SetBool("Attack1", true);
+			rightArm.SetBool("S5Attack1", true);
 		}
 		if (attack == 2)
 		{
-			leftArm.SetBool("Attack2", true);
+			leftArm.SetBool("S5Attack2", true);
 		}
 		if (attack == 3)
 		{
-			rightArm.SetBool("Attack2", true);
+			rightArm.SetBool("S5Attack2", true);
+		}
+		if (attack == 4)
+		{
+			rightArm.SetBool("S5SpecialStun", true);
+			leftArm.SetBool("S5SpecialStun", true);
 		}
 	}// Selects the attack based on the given number
 	#endregion
@@ -367,9 +382,15 @@ public class Golem : BossManager {
 		if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true 
 			|| leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true
 			|| leftArm.GetBool("S2Attack1") == true || rightArm.GetBool("S2Attack1") == true
-			|| leftArm.GetBool("S2Attack2") == true || leftArm.GetBool("S2Attack2") == true
-			|| leftArm.GetBool("S3Attack1") == true || leftArm.GetBool("S3Attack1") == true
-			|| leftArm.GetBool("S3Attack2") == true || leftArm.GetBool("S3Attack2") == true)
+			|| leftArm.GetBool("S2Attack2") == true || rightArm.GetBool("S2Attack2") == true
+			|| leftArm.GetBool("S3Attack1") == true || rightArm.GetBool("S3Attack1") == true
+			|| leftArm.GetBool("S3Attack2") == true || rightArm.GetBool("S3Attack2") == true
+			|| leftArm.GetBool("S4Attack1") == true || rightArm.GetBool("S4Attack1") == true
+			|| leftArm.GetBool("S4Special") == true || rightArm.GetBool("S4Special") == true
+			|| leftArm.GetBool("S4Stun") == true || rightArm.GetBool("S4Stun") == true
+			|| leftArm.GetBool("S5Attack1") == true || rightArm.GetBool("S5Attack1") == true
+			|| leftArm.GetBool("S5Attack2") == true || rightArm.GetBool("S5Attack2") == true
+			|| leftArm.GetBool("S5SpecialStun") == true || rightArm.GetBool("S5SpecialStun") == true)
 		{
 			isAttacking = true;
 		}
