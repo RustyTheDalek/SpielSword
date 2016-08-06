@@ -6,7 +6,7 @@ public class Golem : BossManager {
 
 	public override void Start () {
 		base.Start();
-		isAttacking = false;
+		isAttacking = true;
 	}
 
 	#region Stage One
@@ -50,6 +50,7 @@ public class Golem : BossManager {
 			StageOneAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount++;
+			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -123,6 +124,7 @@ public class Golem : BossManager {
 			StageTwoAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount2++;
+			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -194,6 +196,7 @@ public class Golem : BossManager {
 			StageThreeAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount3++;
+			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -267,6 +270,7 @@ public class Golem : BossManager {
 			StageFourAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount4++;
+			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -342,6 +346,7 @@ public class Golem : BossManager {
 			StageFiveAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount5++;
+			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -377,7 +382,7 @@ public class Golem : BossManager {
 		
 	}
 
-	public override void Update ()
+	void CheckIfAttacking()
 	{
 		if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true 
 			|| leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true
@@ -398,6 +403,11 @@ public class Golem : BossManager {
 		{
 			isAttacking = false;
 		}
+	}
+
+	public override void Update ()
+	{
+		CheckIfAttacking();
 		base.Update();
 	}
 }

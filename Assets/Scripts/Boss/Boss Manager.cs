@@ -18,9 +18,7 @@ public abstract class BossManager : MonoBehaviour {
 	public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
 	// Makes sure the list isn't run more then once per stage
 	public bool playList, playList2, playList3, playList4, playList5;
-
-	public int startTimer = 4;
-	
+		
 	public bool alive
 	{
 		get
@@ -66,7 +64,6 @@ public abstract class BossManager : MonoBehaviour {
 	// Update is called once per frame
 	public virtual void Update ()
 	{
-
 		#region Debug options for testing
 		if(Input.GetKeyDown(KeyCode.Alpha2))
 		{
@@ -92,34 +89,33 @@ public abstract class BossManager : MonoBehaviour {
 		{
 			health = 0;
 		}
-		#endregion 
+		#endregion
 
 		#region Stadge select (case?)
-		if(startTimer == 4){
-			if (currentHealth > 80)
-			{
-				StageOne ();
-			}
-			else if(currentHealth < 80 && currentHealth > 60)
-			{
-				StageTwo ();
-			}
-			else if(currentHealth < 60 && currentHealth > 40)
-			{
-				StageThree ();
-			}
-			else if(currentHealth < 40 && currentHealth > 20)
-			{
-				StageFour ();
-			}
-			else if(currentHealth > 0)
-			{
-				StageFive ();
-			}
-			#endregion
-
-			currentHealth = health;
+		if (currentHealth > 80)
+		{
+			StageOne ();
 		}
+		else if(currentHealth < 80 && currentHealth > 60)
+		{
+			StageTwo ();
+		}
+		else if(currentHealth < 60 && currentHealth > 40)
+		{
+			StageThree ();
+		}
+		else if(currentHealth < 40 && currentHealth > 20)
+		{
+			StageFour ();
+		}
+		else if(currentHealth > 0)
+		{
+			StageFive ();
+		}
+		#endregion
+
+		currentHealth = health;
+
 		if (!alive)
 		{
 			//Death of boss
