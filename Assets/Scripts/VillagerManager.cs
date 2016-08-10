@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Manages all the Villages Alived, Past or Dead.
+/// </summary>
 public class VillagerManager : MonoBehaviour {
 
     public Transform    activeVillagerTrans,
@@ -26,6 +29,11 @@ public class VillagerManager : MonoBehaviour {
     public List<Sprite> Hats;
 
     public static int totalLives = 0;
+
+    /// <summary>
+    /// Whether the World needs to be reset during the next Fixed Update
+    /// </summary>
+    bool resetWorld = false;
 
 	// Use this for initialization
 	void Start ()
@@ -83,15 +91,7 @@ public class VillagerManager : MonoBehaviour {
         }
         else
         {
-            //What needs to happen when active Villager dies
-            //1. Level resets to start
-            Destroy(currentBoss);
-            currentBoss = Instantiate(bossTemplate);
-            //2. previous Villagers begin their tasks
-            //3. Take control of next Villager in list
-            NextVillager();
-            //4. Teleport Villager to middle
-            EnterArena();
+            resetWorld = true;
         }
 
         for(int i = 0; i < remainingVillagers.Count; i++)
@@ -105,6 +105,24 @@ public class VillagerManager : MonoBehaviour {
             }
         }
 	}
+
+    void FixedUpdate()
+    {
+        if (resetWorld)
+        {
+            //What needs to happen when active Villager dies
+            //1. Level resets to start
+            Destroy(currentBoss);
+            currentBoss = Instantiate(bossTemplate);
+            //2. previous Villagers begin their tasks
+            //3. Take control of next Villager in list
+            NextVillager();
+            //4. Teleport Villager to middle
+            EnterArena();
+
+            resetWorld = false;
+        }
+    }
 
     /// <summary>
     /// Gives player control of next villager
@@ -162,7 +180,7 @@ public class VillagerManager : MonoBehaviour {
 
     void EnterArena()
     {
-        activeVillager.transform.position = warpGateExit.transform.position; 
+        activeVillager.GetComponent<Rigidbody2D>().position = warpGateExit.transform.position;
     }
 
 }
