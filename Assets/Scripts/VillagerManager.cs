@@ -180,7 +180,11 @@ public class VillagerManager : MonoBehaviour {
 
     void EnterArena()
     {
-        activeVillager.GetComponent<Rigidbody2D>().position = warpGateExit.transform.position;
+        activeVillager.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        activeVillager.GetComponent<Rigidbody2D>().angularVelocity = 0;
+        activeVillager.GetComponent<Rigidbody2D>().isKinematic = true;
+        activeVillager.transform.position = warpGateExit.transform.position;
+        activeVillager.GetComponent<Rigidbody2D>().isKinematic = false;
     }
 
 }
