@@ -30,6 +30,7 @@ public class Golem : BossManager {
 				int newAttack = Random.Range(0, attackCountStage);
 				// Adds attack to list
 				attackList.Add(newAttack);
+				currentCount = attackList.Count;
 				// Runs the attack assosiated with that number
 				StageOneAttack(newAttack);
 			}
@@ -104,6 +105,7 @@ public class Golem : BossManager {
 				int newAttack = Random.Range(0, attackCountStage);
 				// Adds attack to list
 				attackList2.Add(newAttack);
+				currentCount2 = attackList2.Count;
 				// Runs the attack assosiated with that number
 				StageTwoAttack(newAttack);
 			}
@@ -176,6 +178,7 @@ public class Golem : BossManager {
 				int newAttack = Random.Range(0, attackCountStage);
 				// Adds attack to list
 				attackList3.Add(newAttack);
+				currentCount3 = attackList3.Count;
 				// Runs the attack assosiated with that number
 				StageThreeAttack(newAttack);
 			}
@@ -250,6 +253,7 @@ public class Golem : BossManager {
 				int newAttack = Random.Range(0, attackCountStage);
 				// Adds attack to list
 				attackList4.Add(newAttack);
+				currentCount4 = attackList4.Count;
 				// Runs the attack assosiated with that number
 				StageFourAttack(newAttack);
 			}

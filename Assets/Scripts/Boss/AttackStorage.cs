@@ -7,9 +7,10 @@ public class AttackStorage : MonoBehaviour {
 
 	public List<int> stageOneAttacks, stageTwoAttacks, stageThreeAttacks, 
 	stageFourAttacks, stageFiveAttacks = new List<int>();
+
+	public bool canAttack;
 	// Use this for initialization
 	void Start () {
-	
 	}
 
 }

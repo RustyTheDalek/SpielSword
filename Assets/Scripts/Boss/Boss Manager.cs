@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public abstract class BossManager : MonoBehaviour {
 
 	public GameObject attackManager;
+	public GameObject head;
 
 	public static float health = 100;
 
@@ -18,6 +19,8 @@ public abstract class BossManager : MonoBehaviour {
 	public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
 	// Makes sure the list isn't run more then once per stage
 	public bool playList, playList2, playList3, playList4, playList5;
+
+	public AttackStorage canTakeDamage;
 		
 	public bool alive
 	{
@@ -59,6 +62,9 @@ public abstract class BossManager : MonoBehaviour {
 		playList3 = true;
 		playList4 = true;
 		playList5 = true;
+
+		canTakeDamage = attackManager.GetComponent<AttackStorage> ();
+		canTakeDamage.canAttack = true;
 	}
 
 	// Update is called once per frame
@@ -98,22 +104,57 @@ public abstract class BossManager : MonoBehaviour {
 		}
 		else if(currentHealth < 80 && currentHealth > 60)
 		{
-			StageTwo ();
+			if(attackList.Count != currentCount)
+			{
+				StageOne ();
+				canTakeDamage.canAttack = false;
+			}
+			else
+			{
+				canTakeDamage.canAttack = true;
+				StageTwo ();
+			}
 		}
 		else if(currentHealth < 60 && currentHealth > 40)
 		{
-			StageThree ();
+			if(attackList2.Count != currentCount2)
+			{
+				StageTwo ();
+				canTakeDamage.canAttack = false;
+			}
+			else
+			{
+				canTakeDamage.canAttack = true;
+				StageThree ();
+			}
 		}
 		else if(currentHealth < 40 && currentHealth > 20)
 		{
-			StageFour ();
+			if(attackList3.Count != currentCount3)
+			{
+				StageThree ();
+				canTakeDamage.canAttack = false;
+			}
+			else
+			{
+				canTakeDamage.canAttack = true;
+				StageFour ();
+			}
 		}
 		else if(currentHealth > 0)
 		{
-			StageFive ();
+			if(attackList4.Count != currentCount4)
+			{
+				StageFour ();
+				canTakeDamage.canAttack = false;
+			}
+			else
+			{
+				canTakeDamage.canAttack = true;
+				StageFive ();
+			}
 		}
 		#endregion
-
 		currentHealth = health;
 
 		if (!alive)
@@ -153,7 +194,6 @@ public abstract class BossManager : MonoBehaviour {
 				sprite.GetComponent<Attack>().enabled = false;
 			}
 			sprite.transform.DetachChildren();
-			
 		}
 		
 		transform.DetachChildren();  
