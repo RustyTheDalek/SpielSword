@@ -4,9 +4,12 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Manages all the Villages Alived, Past or Dead.
+/// Created By      : Ian - GGJ16         
+/// Last updated By : Ian - 12/08/16
 /// </summary>
 public class VillagerManager : MonoBehaviour {
 
+    //Transforms to sort the Villagers
     public Transform    activeVillagerTrans,
                         remainingVillagersTrans,
                         pastVillagersTrans,
@@ -14,6 +17,7 @@ public class VillagerManager : MonoBehaviour {
                         warpGateEnt,
                         warpGateExit;
 
+    
     Villager activeVillager;
 
     [SerializeField] List<Villager> remainingVillagers;
@@ -38,46 +42,34 @@ public class VillagerManager : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+        //Setup lists
         remainingVillagers = new List<Villager>();
         pastVillagers = new List<PastVillager>();
+        playerActions = new List<Action>();
 
+        //Get all Villagers and add them to the Villager list
         Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
-
         remainingVillagers.AddRange(villagers);
 
-	    if(activeVillager == null)
-        {
-            Villager player = activeVillagerTrans.GetComponentInChildren<Villager>();
-
-            if (player == null)
-            {
-                NextVillager();
-                EnterArena();
-            }
-            else
-            {
-                activeVillager = player;
-            }
-
-            activeVillager.activePlayer = true;
-
-            playerActions = new List<Action>();
-        }
+        //Spawn a new villager and teleport them to the Arena
+        NextVillager();
+        EnterArena();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             activeVillager.Kill();
         }
 
 #endif
 
+        //Adds a new action every frame to record the players input that frame
         if (activeVillager.alive)
         {
             currentAction = new Action();
@@ -89,11 +81,12 @@ public class VillagerManager : MonoBehaviour {
 
             playerActions.Add(currentAction);
         }
-        else
+        else //Game world needs to be reset
         {
             resetWorld = true;
         }
 
+        //Set remaining Villagers to Queue appropriately
         for(int i = 0; i < remainingVillagers.Count; i++)
         {
             //If Villager is not moving forward and not in his correct place
@@ -110,14 +103,9 @@ public class VillagerManager : MonoBehaviour {
     {
         if (resetWorld)
         {
-            //What needs to happen when active Villager dies
-            //1. Level resets to start
             Destroy(currentBoss);
             currentBoss = Instantiate(bossTemplate);
-            //2. previous Villagers begin their tasks
-            //3. Take control of next Villager in list
             NextVillager();
-            //4. Teleport Villager to middle
             EnterArena();
 
             resetWorld = false;
@@ -130,6 +118,7 @@ public class VillagerManager : MonoBehaviour {
     void NextVillager()
     {
         totalLives++;
+
         if (remainingVillagers.Count > 0)
         {
             //Prevent previous Villager from being controlled
@@ -137,6 +126,8 @@ public class VillagerManager : MonoBehaviour {
             {
                 Golem.health = 100;
 
+                //Reset the active player so he can play through his actions when the 
+                //player controls the next character
                 activeVillager.activePlayer = false;
                 activeVillager.transform.position = activeVillager.startingPos;
                 activeVillager.gameObject.AddComponent<PastVillager>();
@@ -147,12 +138,13 @@ public class VillagerManager : MonoBehaviour {
                                                                                 activeVillager.GetComponent<SpriteRenderer>().color.g,
                                                                                 activeVillager.GetComponent<SpriteRenderer>().color.b,
                                                                                 .5f);
+
                 activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
                                                                 activeVillager.GetComponent<SpriteRenderer>().color.g,
                                                                 activeVillager.GetComponent<SpriteRenderer>().color.b,
                                                                 .5f);
+
                 pastVillagers.Add(activeVillager.GetComponent<PastVillager>());
-                activeVillager.m_Character.PresentVillager = false;
             }
 
             if (playerActions != null)
@@ -160,16 +152,18 @@ public class VillagerManager : MonoBehaviour {
                 playerActions.Clear();
             }
 
+            //Get the next Villager
             activeVillager = remainingVillagers[0];
-            remainingVillagers.RemoveAt(0);
-
             activeVillager.activePlayer = true;
             activeVillager.transform.parent = activeVillagerTrans;
+            remainingVillagers.RemoveAt(0);
 
-
+            //Add a random Hat to the active Villager
             activeVillager.transform.Find("Hat").gameObject.AddComponent<SpriteRenderer>();
             activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count - 1)];
             activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sortingOrder = 5;
+
+            //Reset all the past Villagers
             foreach (PastVillager pVillager in pastVillagers)
             {
                 pVillager.t = 0;
@@ -178,6 +172,7 @@ public class VillagerManager : MonoBehaviour {
         }
     }
 
+    //Move active Villager to the Arena
     void EnterArena()
     {
         activeVillager.GetComponent<Rigidbody2D>().velocity = Vector3.zero;

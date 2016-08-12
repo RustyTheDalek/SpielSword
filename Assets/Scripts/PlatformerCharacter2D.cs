@@ -18,8 +18,6 @@ public class PlatformerCharacter2D : MonoBehaviour
     private Rigidbody2D m_Rigidbody2D;
     private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
-    public bool PresentVillager = true;
-
     private void Awake()
     {
         // Setting up references.
