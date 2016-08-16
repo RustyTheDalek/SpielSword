@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Animation data to be sent to Platformer Character2D
+/// </summary>
 public struct VillagerAnimData
 {
     public float move;

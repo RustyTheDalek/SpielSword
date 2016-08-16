@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Controls the Animation and movement of the 2D Characters
+/// </summary>
 public class PlatformerCharacter2D : MonoBehaviour
 {
     [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.

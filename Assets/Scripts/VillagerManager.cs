@@ -35,12 +35,37 @@ public class VillagerManager : MonoBehaviour {
     public static int totalLives = 0;
 
     /// <summary>
-    /// Whether the World needs to be reset during the next Fixed Update
+    /// Custom Time Variable for past Villagers
+    /// </summary>
+    public static float t;
+
+    /// <summary>
+    /// Time Scale for Past Villagers
+    ///  1 = Normal Time
+    /// -1 = Reversed Time;
+    /// </summary>
+    public static float villagerTimeScale = 1;
+
+    /// <summary>
+    /// Scaling for Time Helps speed up reversal
+    /// </summary>
+    public float longestTime = 0;
+
+    /// <summary>
+    /// Whether the World is waiting to be reset
     /// </summary>
     bool resetWorld = false;
 
-	// Use this for initialization
-	void Start ()
+#if UNITY_EDITOR
+    /// <summary>
+    /// Editor variables to view statics
+    /// </summary>
+    public float myT;
+    public float myTimeScale;
+#endif
+
+    // Use this for initialization
+    void Start ()
     {
         //Setup lists
         remainingVillagers = new List<Villager>();
@@ -62,11 +87,13 @@ public class VillagerManager : MonoBehaviour {
 
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
 
+        myT = t;
+        myTimeScale = villagerTimeScale;
+
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             activeVillager.Kill();
         }
-
 #endif
 
         //Adds a new action every frame to record the players input that frame
@@ -81,9 +108,34 @@ public class VillagerManager : MonoBehaviour {
 
             playerActions.Add(currentAction);
         }
-        else //Game world needs to be reset
+        else if(!resetWorld) //Game world needs to be reset
         {
             resetWorld = true;
+            villagerTimeScale = -1;
+            longestTime = t;
+
+            activeVillager.deathEffect.Play();
+            activeVillager.villagerState = VillagerState.PastVillager;
+            activeVillager.gameObject.AddComponent<PastVillager>();
+            activeVillager.GetComponent<PastVillager>().Setup(playerActions);
+            activeVillager.transform.parent = pastVillagersTrans;
+            activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+            activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+                                                                            activeVillager.GetComponent<SpriteRenderer>().color.g,
+                                                                            activeVillager.GetComponent<SpriteRenderer>().color.b,
+                                                                            .5f);
+
+            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+                                                            activeVillager.GetComponent<SpriteRenderer>().color.g,
+                                                            activeVillager.GetComponent<SpriteRenderer>().color.b,
+                                                            .5f);
+
+            pastVillagers.Add(activeVillager.GetComponent<PastVillager>());
+
+            if (playerActions != null)
+            {
+                playerActions.Clear();
+            }
         }
 
         //Set remaining Villagers to Queue appropriately
@@ -97,12 +149,22 @@ public class VillagerManager : MonoBehaviour {
                 remainingVillagers[i].SetTarget(i * - 2);
             }
         }
+
+        t += villagerTimeScale;
+
+        if (t % 100 == 0 && villagerTimeScale < 1)
+        {
+            villagerTimeScale *= 2;
+        }
 	}
 
     void FixedUpdate()
     {
-        if (resetWorld)
+        if (resetWorld && t <= 0)
         {
+            t = 0;
+            villagerTimeScale = 1;
+            longestTime = 0;
             Destroy(currentBoss);
             currentBoss = Instantiate(bossTemplate);
             NextVillager();
@@ -125,36 +187,11 @@ public class VillagerManager : MonoBehaviour {
             if (activeVillager)
             {
                 Golem.health = 100;
-
-                //Reset the active player so he can play through his actions when the 
-                //player controls the next character
-                activeVillager.activePlayer = false;
-                activeVillager.transform.position = activeVillager.startingPos;
-                activeVillager.gameObject.AddComponent<PastVillager>();
-                activeVillager.GetComponent<PastVillager>().Setup(playerActions);
-                activeVillager.transform.parent = pastVillagersTrans;
-                activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-                activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                                                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
-                                                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
-                                                                                .5f);
-
-                activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
-                                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
-                                                                .5f);
-
-                pastVillagers.Add(activeVillager.GetComponent<PastVillager>());
-            }
-
-            if (playerActions != null)
-            {
-                playerActions.Clear();
             }
 
             //Get the next Villager
             activeVillager = remainingVillagers[0];
-            activeVillager.activePlayer = true;
+            activeVillager.villagerState = VillagerState.CurrentVillager;
             activeVillager.transform.parent = activeVillagerTrans;
             remainingVillagers.RemoveAt(0);
 
@@ -166,7 +203,6 @@ public class VillagerManager : MonoBehaviour {
             //Reset all the past Villagers
             foreach (PastVillager pVillager in pastVillagers)
             {
-                pVillager.t = 0;
                 pVillager.GetComponent<Animator>().SetTrigger("ExitDeath");
             }
         }

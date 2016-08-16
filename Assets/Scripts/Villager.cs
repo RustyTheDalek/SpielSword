@@ -38,21 +38,32 @@ public class Villager : MonoBehaviour
     }
 
     //Whether it's currently in control by the player
-    public bool activePlayer = false;
+    public bool activePlayer
+    {
+        get
+        {
+            return villagerState == VillagerState.CurrentVillager;
+        }
+    }
+
+    public VillagerState villagerState;
+
+    public ParticleSystem deathEffect;
 
     private void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
+        deathEffect = GetComponentInChildren<ParticleSystem>();
         startingPos = transform.position;
     }
 
     private void Update()
     {
-        if (alive)
+        switch(villagerState)
         {
-            if (activePlayer)
-            {   
+            case VillagerState.CurrentVillager:   
 
+                //Get PlayerMovement
                 xDir = 0;
                 xDir = ((Input.GetKey(KeyCode.D)) ? 1 : xDir);
                 xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
@@ -62,9 +73,12 @@ public class Villager : MonoBehaviour
                     // Read the jump input in Update so button presses aren't missed.
                     m_Jump = Input.GetKeyDown(KeyCode.Space);
                 }
-            }
-            else
-            {
+
+                break;
+
+            case VillagerState.Waiting:
+
+                //Wander/AI Code
                 if (Mathf.Abs(transform.localPosition.x - targetX) > .5f)
                 {
                     xDir = Mathf.Clamp01(targetX - transform.localPosition.x);
@@ -72,11 +86,9 @@ public class Villager : MonoBehaviour
                 else
                 {
                     advancing = false;
-                }   
-            }
-        }
-        else
-        {
+                }
+
+                break;
         }
     }
 
