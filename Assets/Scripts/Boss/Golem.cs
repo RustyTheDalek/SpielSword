@@ -1,8 +1,15 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// Script to control the Golem Boss
+/// </summary>
 public class Golem : BossManager {
-
+	/// <summary>
+	/// A check to see if if an attack is running
+	/// </summary>
 	bool isAttacking;
+
+	public Animator lArmRock1, lArmRock2, lArmRock3,
+	rArmRock1, rArmRock2, rArmRock3;
 
 	public override void Start () {
 		base.Start();
@@ -380,7 +387,6 @@ public class Golem : BossManager {
 	}// Selects the attack based on the given number
 	#endregion
 
-		
 	public override void SetBossParts ()
 	{
 		
@@ -409,9 +415,31 @@ public class Golem : BossManager {
 		}
 	}
 
+	void SupportAttacks()
+	{
+		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamRightRock") &&
+			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
+		{
+			lArmRock1.SetBool("Fall", true);
+			lArmRock2.SetBool("Fall", true);
+			lArmRock3.SetBool("Fall", true);
+		}
+
+		if(rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSlamLeftRock") &&
+			rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+		{
+			
+			rArmRock1.SetBool("Fall", true);
+			rArmRock2.SetBool("Fall", true);
+			rArmRock3.SetBool("Fall", true);
+		}
+	}
+
 	public override void Update ()
 	{
 		CheckIfAttacking();
+		SupportAttacks();
 		base.Update();
+
 	}
 }

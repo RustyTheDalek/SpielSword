@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿//WIP to improve the Golem script
+using UnityEngine;
 using System.Collections;
 
 public class GolemBoss : BossManager {
