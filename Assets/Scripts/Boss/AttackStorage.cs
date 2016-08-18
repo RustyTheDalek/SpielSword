@@ -7,8 +7,5 @@ using System.Collections.Generic;
 /// </summary>
 public class AttackStorage : MonoBehaviour {
 
-	public List<int> stageOneAttacks, stageTwoAttacks, stageThreeAttacks, 
-	stageFourAttacks, stageFiveAttacks = new List<int>();
-
 	public bool canAttack;
 }

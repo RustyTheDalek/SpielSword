@@ -5,10 +5,17 @@ using System.Collections.Generic;
 
 public abstract class BossManager : MonoBehaviour {
 
-	public GameObject attackManager;
-	public GameObject head;
 
-	public static float health = 100;
+    public int stage = 0;
+
+	public Head head;
+
+    /// <summary>
+    /// Whether the Boss is currently attackble by the Player 
+    /// </summary>
+    public bool attackable = true;
+
+    public static float health = 100;
 
 	public List<int> attackList, attackList2, attackList3, 
 	attackList4, attackList5 = new List<int>();
@@ -19,8 +26,6 @@ public abstract class BossManager : MonoBehaviour {
 	public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
 	// Makes sure the list isn't run more then once per stage
 	public bool playList, playList2, playList3, playList4, playList5;
-
-	public AttackStorage canTakeDamage;
 		
 	public bool alive
 	{
@@ -29,34 +34,31 @@ public abstract class BossManager : MonoBehaviour {
 			return health > 0;
 		}
 	}
-	public float currentHealth;
-	public Image healthBar;
 
-	public Animator leftArm, rightArm;
-
-	List<float> healthRecord;
+	public Animator headAnim, leftArm, rightArm;
 
 	public List<SpriteRenderer> bossParts;
 
 	public List<Sprite> headStages, bodyStages, outterLArmStages, lArmStages, outterRArmStages, 
 	rArmStages, lFootStages, rFootStages, tailStages, utilityA, utilityB, utilityC;
 
+    public BossHealthBar bossHealthBar;
+
+    public List<int>    stageOneAttacks = new List<int>(),
+                        stageTwoAttacks = new List<int>(),
+                        stageThreeAttacks = new List<int>(),
+                        stageFourAttacks = new List<int>(),
+                        stageFiveAttacks = new List<int>();
+
     #region Variables for retracing the Boss' Actions
     //List of Boss parts that are tracked for rewind
     List<ObjectTracking> trackedBossObjs = new List<ObjectTracking>();
 
-    List<float> trackedHealth = new List<float>();
+    public List<float> trackedHealth = new List<float>();
     #endregion
 
     public virtual void Start ()
 	{
-		attackManager = GameObject.Find ("Attack Manager");
-		// Lists to store the attack sequence for each stage
-		attackList = attackManager.GetComponent<AttackStorage> ().stageOneAttacks;
-		attackList2 = attackManager.GetComponent<AttackStorage> ().stageTwoAttacks;
-		attackList3 = attackManager.GetComponent<AttackStorage> ().stageThreeAttacks;
-		attackList4 = attackManager.GetComponent<AttackStorage> ().stageFourAttacks;
-		attackList5 = attackManager.GetComponent<AttackStorage> ().stageFiveAttacks;
 		//Sets the counter for the list to zero
 		currentCount = 0;
 		currentCount2 = 0;
@@ -69,9 +71,6 @@ public abstract class BossManager : MonoBehaviour {
 		playList3 = true;
 		playList4 = true;
 		playList5 = true;
-
-		canTakeDamage = attackManager.GetComponent<AttackStorage> ();
-		canTakeDamage.canAttack = true;
 
         //Get All objects that can be tracked
         //Currently assumes anything with an Animator needs to be tracked
@@ -87,6 +86,11 @@ public abstract class BossManager : MonoBehaviour {
     public virtual void Update()
     {
         #region Debug options for testing
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Reset();
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             health = 100;
@@ -117,60 +121,60 @@ public abstract class BossManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
-                #region Stadge select (case?)
-                if (currentHealth > 80)
+                #region Stage select
+                if (health > 80)
                 {
                     StageOne();
                 }
-                else if (currentHealth < 80 && currentHealth > 60)
+                else if (health < 80 && health > 60)
                 {
                     if (attackList.Count != currentCount)
                     {
                         StageOne();
-                        canTakeDamage.canAttack = false;
+                        attackable = false;
                     }
                     else
                     {
-                        canTakeDamage.canAttack = true;
+                        attackable = true;
                         StageTwo();
                     }
                 }
-                else if (currentHealth < 60 && currentHealth > 40)
+                else if (health < 60 && health > 40)
                 {
                     if (attackList2.Count != currentCount2)
                     {
                         StageTwo();
-                        canTakeDamage.canAttack = false;
+                        attackable = false;
                     }
                     else
                     {
-                        canTakeDamage.canAttack = true;
+                        attackable = true;
                         StageThree();
                     }
                 }
-                else if (currentHealth < 40 && currentHealth > 20)
+                else if (health < 40 && health > 20)
                 {
                     if (attackList3.Count != currentCount3)
                     {
                         StageThree();
-                        canTakeDamage.canAttack = false;
+                        attackable = false;
                     }
                     else
                     {
-                        canTakeDamage.canAttack = true;
+                        attackable = true;
                         StageFour();
                     }
                 }
-                else if (currentHealth > 0)
+                else if (health > 0 && health < 20)
                 {
                     if (attackList4.Count != currentCount4)
                     {
                         StageFour();
-                        canTakeDamage.canAttack = false;
+                        attackable = false;
                     }
                     else
                     {
-                        canTakeDamage.canAttack = true;
+                        attackable = true;
                         StageFive();
                     }
                 }
@@ -178,7 +182,26 @@ public abstract class BossManager : MonoBehaviour {
 
                 if (alive)
                 {
-                    trackedHealth.Add(Golem.health);
+                    if (Game.t < trackedHealth.Count)
+                    {
+                        if (trackedHealth[(int)Game.t] < health)
+                        {
+                            health = trackedHealth[(int)Game.t];
+                        }
+                    }
+                    else
+                    {
+                        trackedHealth.Add(health);
+                    }
+
+                    if (attackable)
+                    {
+                        bossHealthBar.SetHealthBar(HealthBarState.Standard);
+                    }
+                    else
+                    {
+                        bossHealthBar.SetHealthBar(HealthBarState.Invincible);
+                    }
                 }
                 else//Death of boss
                 {
@@ -195,8 +218,33 @@ public abstract class BossManager : MonoBehaviour {
                 }
                 break;
         }
+    }
 
-        currentHealth = health;
+    public virtual void Reset()
+    {
+        headAnim.Play("WakeUp", 0);
+        leftArm.Play("WakeUp", 0);
+        rightArm.Play("WakeUp", 0);
+
+        SetAnimators(true);
+
+        currentCount = 0;
+        currentCount2 = 0;
+        currentCount3 = 0;
+        currentCount4 = 0;
+        currentCount5 = 0;
+
+        // sets the bool to true so they run first time
+        playList = true;
+        playList2 = true;
+        playList3 = true;
+        playList4 = true;
+        playList5 = true;
+
+        attackable = true;
+
+        health = 100;
+
     }
 
 	public abstract void StageOne ();

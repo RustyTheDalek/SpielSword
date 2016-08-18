@@ -19,7 +19,8 @@ public class Attack : MonoBehaviour
     void OnCollisionEnter2D(Collision2D coll)
     {
         Debug.Log("Collided with " + coll.gameObject.name);
-        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled)
+        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
+            && !Game.GodMode)
         {
             coll.gameObject.GetComponent<Villager>().health--;
         }

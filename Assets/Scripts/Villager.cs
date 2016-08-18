@@ -50,6 +50,8 @@ public class Villager : MonoBehaviour
 
     public ParticleSystem deathEffect;
 
+    public CircleCollider2D melee;
+
     private void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
@@ -57,6 +59,9 @@ public class Villager : MonoBehaviour
         startingPos = transform.position;
 
         villagerState = VillagerState.Waiting;
+
+        //TO-DO: FIX THIS TRASH
+        melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
     }
 
     private void Update()
@@ -96,27 +101,31 @@ public class Villager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (activePlayer)
+        switch (villagerState)
         {
-            xDir = ((Input.GetKey(KeyCode.D)) ? 1 : xDir);
-            xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
+            case VillagerState.CurrentVillager:
 
-            animData.move = xDir;
-            animData.jump = m_Jump;
-            animData.attack = Input.GetKey(KeyCode.DownArrow);
-            animData.dead = !alive;
+                xDir = ((Input.GetKey(KeyCode.D)) ? 1 : xDir);
+                xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
 
-            // Pass all parameters to the character control script.
-            m_Character.Move(animData);
-            m_Jump = false;
-        }
-        else
-        {
-            animData.move = xDir;
-            animData.dead = false;
-            animData.jump = false;
-            animData.attack = false;
-            m_Character.Move(animData);
+                animData.move = xDir;
+                animData.jump = m_Jump;
+                animData.attack = Input.GetKey(KeyCode.DownArrow);
+                animData.dead = !alive;
+
+                // Pass all parameters to the character control script.
+                m_Character.Move(animData);
+                m_Jump = false;
+                break;
+
+            case VillagerState.Waiting:
+
+                animData.move = xDir;
+                animData.dead = false;
+                animData.jump = false;
+                animData.attack = false;
+                m_Character.Move(animData);
+                break;
         }
     }
     

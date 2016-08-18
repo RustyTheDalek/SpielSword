@@ -3,21 +3,46 @@
 /// Script to control the Golem Boss
 /// </summary>
 public class Golem : BossManager {
-	/// <summary>
-	/// A check to see if if an attack is running
-	/// </summary>
-	bool isAttacking;
 
 	public Animator lArmRock1, lArmRock2, lArmRock3,
 	rArmRock1, rArmRock2, rArmRock3;
 
-	public override void Start () {
+    /// <summary>
+    /// Checks whether the the Boss is attacking
+    /// </summary>
+    public bool isAttacking
+    {
+        get
+        {
+            if (leftArm.GetBool("S1Attack1") == true || rightArm.GetBool("S1Attack1") == true
+                || leftArm.GetBool("S1Attack2") == true || rightArm.GetBool("S1Attack2") == true
+                || leftArm.GetBool("S2Attack1") == true || rightArm.GetBool("S2Attack1") == true
+                || leftArm.GetBool("S2Attack2") == true || rightArm.GetBool("S2Attack2") == true
+                || leftArm.GetBool("S3Attack1") == true || rightArm.GetBool("S3Attack1") == true
+                || leftArm.GetBool("S3Attack2") == true || rightArm.GetBool("S3Attack2") == true
+                || leftArm.GetBool("S4Attack1") == true || rightArm.GetBool("S4Attack1") == true
+                || leftArm.GetBool("S4Special") == true || rightArm.GetBool("S4Special") == true
+                || leftArm.GetBool("S4Stun") == true || rightArm.GetBool("S4Stun") == true
+                || leftArm.GetBool("S5Attack1") == true || rightArm.GetBool("S5Attack1") == true
+                || leftArm.GetBool("S5Attack2") == true || rightArm.GetBool("S5Attack2") == true
+                || leftArm.GetBool("S5SpecialStun") == true || rightArm.GetBool("S5SpecialStun") == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public override void Start ()
+    {
 		base.Start();
-		isAttacking = true;
 	}
 
-	#region Stage One
-	public override void StageOne ()
+    #region Stage One
+    public override void StageOne ()
 	{
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 4;
@@ -58,7 +83,6 @@ public class Golem : BossManager {
 			StageOneAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount++;
-			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -66,19 +90,19 @@ public class Golem : BossManager {
 	{
 		if (attack == 0)
 		{
-			leftArm.SetBool("Attack1", true);
+			leftArm.SetBool("S1Attack1", true);
 		}
 		if (attack == 1)
 		{
-			rightArm.SetBool("Attack1", true);
+			rightArm.SetBool("S1Attack1", true);
 		}
 		if (attack == 2)
 		{
-			leftArm.SetBool("Attack2", true);
+			leftArm.SetBool("S1Attack2", true);
 		}
 		if (attack == 3)
 		{
-			rightArm.SetBool("Attack2", true);
+			rightArm.SetBool("S1Attack2", true);
 		}
 	}// Selects the attack based on the given number
 	#endregion
@@ -133,7 +157,6 @@ public class Golem : BossManager {
 			StageTwoAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount2++;
-			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -141,11 +164,11 @@ public class Golem : BossManager {
 	{
 		if (attack == 0)
 		{
-			leftArm.SetBool("Attack1", true);
+			leftArm.SetBool("S1Attack1", true);
 		}
 		if (attack == 1)
 		{
-			rightArm.SetBool("Attack1", true);
+			rightArm.SetBool("S1Attack1", true);
 		}
 		if (attack == 2)
 		{
@@ -206,7 +229,6 @@ public class Golem : BossManager {
 			StageThreeAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount3++;
-			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -281,7 +303,6 @@ public class Golem : BossManager {
 			StageFourAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount4++;
-			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -289,11 +310,11 @@ public class Golem : BossManager {
 	{
 		if (attack == 0)
 		{
-			leftArm.SetBool("Attack1", true);
+			leftArm.SetBool("S1Attack1", true);
 		}
 		if (attack == 1)
 		{
-			rightArm.SetBool("Attack1", true);
+			rightArm.SetBool("S1Attack1", true);
 		}
 		if (attack == 2)
 		{
@@ -357,7 +378,6 @@ public class Golem : BossManager {
 			StageFiveAttack(attack);
 			// remembers the place in the list if exited out by above
 			currentCount5++;
-			CheckIfAttacking();
 		}
 	}// Handles the List reading and exit upon exsisting attack
 
@@ -392,29 +412,6 @@ public class Golem : BossManager {
 		
 	}
 
-	void CheckIfAttacking()
-	{
-		if(leftArm.GetBool("Attack1") == true || rightArm.GetBool("Attack1") == true 
-			|| leftArm.GetBool("Attack2") == true || rightArm.GetBool("Attack2") == true
-			|| leftArm.GetBool("S2Attack1") == true || rightArm.GetBool("S2Attack1") == true
-			|| leftArm.GetBool("S2Attack2") == true || rightArm.GetBool("S2Attack2") == true
-			|| leftArm.GetBool("S3Attack1") == true || rightArm.GetBool("S3Attack1") == true
-			|| leftArm.GetBool("S3Attack2") == true || rightArm.GetBool("S3Attack2") == true
-			|| leftArm.GetBool("S4Attack1") == true || rightArm.GetBool("S4Attack1") == true
-			|| leftArm.GetBool("S4Special") == true || rightArm.GetBool("S4Special") == true
-			|| leftArm.GetBool("S4Stun") == true || rightArm.GetBool("S4Stun") == true
-			|| leftArm.GetBool("S5Attack1") == true || rightArm.GetBool("S5Attack1") == true
-			|| leftArm.GetBool("S5Attack2") == true || rightArm.GetBool("S5Attack2") == true
-			|| leftArm.GetBool("S5SpecialStun") == true || rightArm.GetBool("S5SpecialStun") == true)
-		{
-			isAttacking = true;
-		}
-		else
-		{
-			isAttacking = false;
-		}
-	}
-
 	void SupportAttacks()
 	{
 		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamRightRock") &&
@@ -437,9 +434,38 @@ public class Golem : BossManager {
 
 	public override void Update ()
 	{
-		CheckIfAttacking();
 		SupportAttacks();
-		base.Update();
-
+        base.Update();
 	}
+
+    public override void Reset()
+    {
+        base.Reset();
+
+        for (int stage = 1; stage <= 5; stage++)
+        {
+            for (int attack = 1; attack <= 2; attack++)
+            {
+                leftArm.SetBool("S" + stage + "Attack" + attack, false);
+                rightArm.SetBool("S" +stage + "Attack" + attack, false);
+            }
+
+            if (stage == 4)
+            {
+                leftArm.SetBool("S" + stage + "Special", false);
+                rightArm.SetBool("S" + stage + "Special", false);
+
+                leftArm.SetBool("S" + stage + "Stun", false);
+                rightArm.SetBool("S" + stage + "Stun", false);
+
+            }
+
+            if (stage == 5)
+            {
+                leftArm.SetBool("S" + stage+ "SpecialStun", false);
+                rightArm.SetBool("S" + stage + "SpecialStun", false);
+
+            }
+        }
+    }
 }

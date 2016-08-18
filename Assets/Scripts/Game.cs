@@ -21,4 +21,14 @@ public static class Game
     /// Scaling for Time Helps speed up reversal
     /// </summary>
     public static float longestTime = 0;
+
+    /// <summary>
+    /// Invcinibilty mode for testing
+    /// </summary>
+    public static bool GodMode = true;
+
+    /// <summary>
+    /// If the Boss is attackable
+    /// </summary>
+    public static bool attackable = true; 
 }

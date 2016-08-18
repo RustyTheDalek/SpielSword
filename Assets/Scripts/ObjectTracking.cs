@@ -75,10 +75,6 @@ public class ObjectTracking : MonoBehaviour {
 
                 m_Sprite.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b, bossFrames[t].alpha);
             }
-            else
-            {
-                Debug.LogWarning("No frames for Boss at this time");
-            }
         }
         else
         {

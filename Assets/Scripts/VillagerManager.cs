@@ -27,7 +27,7 @@ public class VillagerManager : MonoBehaviour {
 
     Action currentAction;
 
-    public GameObject   bossTemplate,
+    public BossManager   bossTemplate,
                         currentBoss;
 
     public List<Sprite> Hats;
@@ -105,6 +105,9 @@ public class VillagerManager : MonoBehaviour {
                     activeVillager.GetComponent<PastVillager>().Setup(playerActions);
                     activeVillager.transform.parent = pastVillagersTrans;
                     activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+                    activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+
+
                     activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
                                                                                     activeVillager.GetComponent<SpriteRenderer>().color.g,
                                                                                     activeVillager.GetComponent<SpriteRenderer>().color.b,
@@ -130,7 +133,7 @@ public class VillagerManager : MonoBehaviour {
             case TimeState.Backward:
 
                 //Speeds rewind every 100 frame
-                if (Game.t % 100 == 0)
+                if (Game.t % 200 == 0)
                 {
                     Game.timeScale *= 2;
                 }
@@ -164,10 +167,9 @@ public class VillagerManager : MonoBehaviour {
                     Game.t = 0;
                     Game.timeScale = 1;
                     Game.longestTime = 0;
-                    Game.timeState = TimeState.Forward;
+                    currentBoss.Reset();
 
-                    Destroy(currentBoss);
-                    currentBoss = Instantiate(bossTemplate);
+                    Game.timeState = TimeState.Forward;
 
                     NextVillager();
                     EnterArena();
