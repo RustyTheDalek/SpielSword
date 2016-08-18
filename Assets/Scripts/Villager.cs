@@ -55,6 +55,8 @@ public class Villager : MonoBehaviour
         m_Character = GetComponent<PlatformerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         startingPos = transform.position;
+
+        villagerState = VillagerState.Waiting;
     }
 
     private void Update()
