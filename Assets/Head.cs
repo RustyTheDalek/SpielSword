@@ -44,7 +44,7 @@ public class Head : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        Debug.Log("Collision");
+        //Debug.Log("Collision");
 
 		if(coll.transform.name == "Melee" && ifAttack)
         {

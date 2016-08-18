@@ -34,28 +34,6 @@ public class VillagerManager : MonoBehaviour {
 
     public static int totalLives = 0;
 
-    /// <summary>
-    /// Custom Time Variable for past Villagers
-    /// </summary>
-    public static float t;
-
-    /// <summary>
-    /// Time Scale for Past Villagers
-    ///  1 = Normal Time
-    /// -1 = Reversed Time;
-    /// </summary>
-    public static float villagerTimeScale = 1;
-
-    /// <summary>
-    /// Scaling for Time Helps speed up reversal
-    /// </summary>
-    public float longestTime = 0;
-
-    /// <summary>
-    /// Whether the World is waiting to be reset
-    /// </summary>
-    bool resetWorld = false;
-
 #if UNITY_EDITOR
     /// <summary>
     /// Editor variables to view statics
@@ -87,8 +65,8 @@ public class VillagerManager : MonoBehaviour {
 
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
 
-        myT = t;
-        myTimeScale = villagerTimeScale;
+        myT = Game.t;
+        myTimeScale = Game.timeScale;
 
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
@@ -96,47 +74,69 @@ public class VillagerManager : MonoBehaviour {
         }
 #endif
 
-        //Adds a new action every frame to record the players input that frame
-        if (activeVillager.alive)
+        switch (Game.timeState)
         {
-            currentAction = new Action();
-            currentAction.timeStamp = Time.timeSinceLevelLoad;
-            currentAction.pos = activeVillager.transform.position;
-            currentAction.move = activeVillager.xDir;
-            currentAction.attack = Input.GetKey(KeyCode.DownArrow);
-            currentAction.health = activeVillager.health;
+            case TimeState.Forward:
 
-            playerActions.Add(currentAction);
-        }
-        else if(!resetWorld) //Game world needs to be reset
-        {
-            resetWorld = true;
-            villagerTimeScale = -1;
-            longestTime = t;
+                //Continue tracking as normal
+                if (activeVillager.alive)
+                {
+                    currentAction = new Action();
+                    currentAction.timeStamp = Time.timeSinceLevelLoad;
+                    currentAction.pos = activeVillager.transform.position;
+                    currentAction.move = activeVillager.xDir;
+                    currentAction.attack = Input.GetKey(KeyCode.DownArrow);
+                    currentAction.health = activeVillager.health;
 
-            activeVillager.deathEffect.Play();
-            activeVillager.villagerState = VillagerState.PastVillager;
-            activeVillager.gameObject.AddComponent<PastVillager>();
-            activeVillager.GetComponent<PastVillager>().Setup(playerActions);
-            activeVillager.transform.parent = pastVillagersTrans;
-            activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-            activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                                                                            activeVillager.GetComponent<SpriteRenderer>().color.g,
-                                                                            activeVillager.GetComponent<SpriteRenderer>().color.b,
-                                                                            .5f);
+                    playerActions.Add(currentAction);
+                }
+                else //Game world needs to be reset
+                {
+                    //Reverse time
+                    Game.timeState = TimeState.Backward;
+                    Game.timeScale = -1;
+                    //Store longest time for Scaling
+                    Game.longestTime = Game.t;
 
-            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                                                            activeVillager.GetComponent<SpriteRenderer>().color.g,
-                                                            activeVillager.GetComponent<SpriteRenderer>().color.b,
-                                                            .5f);
+                    //Turn active Villager into Past Villager
+                    activeVillager.deathEffect.Play();
+                    activeVillager.villagerState = VillagerState.PastVillager;
+                    activeVillager.gameObject.AddComponent<PastVillager>();
+                    activeVillager.GetComponent<PastVillager>().Setup(playerActions);
+                    activeVillager.transform.parent = pastVillagersTrans;
+                    activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+                    activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+                                                                                    activeVillager.GetComponent<SpriteRenderer>().color.g,
+                                                                                    activeVillager.GetComponent<SpriteRenderer>().color.b,
+                                                                                    .5f);
 
-            pastVillagers.Add(activeVillager.GetComponent<PastVillager>());
+                    activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+                                                                    activeVillager.GetComponent<SpriteRenderer>().color.g,
+                                                                    activeVillager.GetComponent<SpriteRenderer>().color.b,
+                                                                    .5f);
 
-            if (playerActions != null)
-            {
-                playerActions.Clear();
-            }
-        }
+                    pastVillagers.Add(activeVillager.GetComponent<PastVillager>());
+
+                    if (playerActions != null)
+                    {
+                        playerActions.Clear();
+                    }
+
+                    currentBoss.GetComponent<BossManager>().SetAnimators(false);
+                }
+
+                break;
+
+            case TimeState.Backward:
+
+                //Speeds rewind every 100 frame
+                if (Game.t % 100 == 0)
+                {
+                    Game.timeScale *= 2;
+                }
+
+                break;
+        }  
 
         //Set remaining Villagers to Queue appropriately
         for(int i = 0; i < remainingVillagers.Count; i++)
@@ -150,27 +150,29 @@ public class VillagerManager : MonoBehaviour {
             }
         }
 
-        t += villagerTimeScale;
-
-        if (t % 100 == 0 && villagerTimeScale < 1)
-        {
-            villagerTimeScale *= 2;
-        }
+        Game.t += Game.timeScale;
 	}
 
     void FixedUpdate()
     {
-        if (resetWorld && t <= 0)
+        switch (Game.timeState)
         {
-            t = 0;
-            villagerTimeScale = 1;
-            longestTime = 0;
-            Destroy(currentBoss);
-            currentBoss = Instantiate(bossTemplate);
-            NextVillager();
-            EnterArena();
+            case TimeState.Backward:
 
-            resetWorld = false;
+                if(Game.t <= 0)
+                {
+                    Game.t = 0;
+                    Game.timeScale = 1;
+                    Game.longestTime = 0;
+                    Game.timeState = TimeState.Forward;
+
+                    Destroy(currentBoss);
+                    currentBoss = Instantiate(bossTemplate);
+
+                    NextVillager();
+                    EnterArena();
+                }
+                break;
         }
     }
 

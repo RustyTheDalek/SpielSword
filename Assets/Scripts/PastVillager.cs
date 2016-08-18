@@ -24,7 +24,7 @@ public class PastVillager : MonoBehaviour {
     {
         get
         {
-            return (int)VillagerManager.t;
+            return (int)Game.t;
         }
     }
 

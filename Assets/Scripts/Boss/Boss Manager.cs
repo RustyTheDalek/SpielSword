@@ -41,7 +41,14 @@ public abstract class BossManager : MonoBehaviour {
 	public List<Sprite> headStages, bodyStages, outterLArmStages, lArmStages, outterRArmStages, 
 	rArmStages, lFootStages, rFootStages, tailStages, utilityA, utilityB, utilityC;
 
-	public virtual void Start ()
+    #region Variables for retracing the Boss' Actions
+    //List of Boss parts that are tracked for rewind
+    List<ObjectTracking> trackedBossObjs = new List<ObjectTracking>();
+
+    List<float> trackedHealth = new List<float>();
+    #endregion
+
+    public virtual void Start ()
 	{
 		attackManager = GameObject.Find ("Attack Manager");
 		// Lists to store the attack sequence for each stage
@@ -65,104 +72,132 @@ public abstract class BossManager : MonoBehaviour {
 
 		canTakeDamage = attackManager.GetComponent<AttackStorage> ();
 		canTakeDamage.canAttack = true;
-	}
 
-	// Update is called once per frame
-	public virtual void Update ()
-	{
-		#region Debug options for testing
-		if(Input.GetKeyDown(KeyCode.Alpha2))
-		{
-			health = 100;
-		}
-		if (Input.GetKeyDown(KeyCode.Alpha3))
-		{
-			health = 70;
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha4))
-		{
-			health = 50;
-		}
-		if (Input.GetKeyDown(KeyCode.Alpha5))
-		{
-			health = 30;
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha6))
-		{
-			health = 10;
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha7))
-		{
-			health = 0;
-		}
-		#endregion
+        //Get All objects that can be tracked
+        //Currently assumes anything with an Animator needs to be tracked
+        Component[] objs = GetComponentsInChildren<Animator>();
 
-		#region Stadge select (case?)
-		if (currentHealth > 80)
-		{
-			StageOne ();
-		}
-		else if(currentHealth < 80 && currentHealth > 60)
-		{
-			if(attackList.Count != currentCount)
-			{
-				StageOne ();
-				canTakeDamage.canAttack = false;
-			}
-			else
-			{
-				canTakeDamage.canAttack = true;
-				StageTwo ();
-			}
-		}
-		else if(currentHealth < 60 && currentHealth > 40)
-		{
-			if(attackList2.Count != currentCount2)
-			{
-				StageTwo ();
-				canTakeDamage.canAttack = false;
-			}
-			else
-			{
-				canTakeDamage.canAttack = true;
-				StageThree ();
-			}
-		}
-		else if(currentHealth < 40 && currentHealth > 20)
-		{
-			if(attackList3.Count != currentCount3)
-			{
-				StageThree ();
-				canTakeDamage.canAttack = false;
-			}
-			else
-			{
-				canTakeDamage.canAttack = true;
-				StageFour ();
-			}
-		}
-		else if(currentHealth > 0)
-		{
-			if(attackList4.Count != currentCount4)
-			{
-				StageFour ();
-				canTakeDamage.canAttack = false;
-			}
-			else
-			{
-				canTakeDamage.canAttack = true;
-				StageFive ();
-			}
-		}
-		#endregion
-		currentHealth = health;
+        foreach (Component part in objs)
+        {
+            trackedBossObjs.Add(part.gameObject.AddComponent<ObjectTracking>());
+        }
+    }
 
-		if (!alive)
-		{
-			//Death of boss
-			Detach(gameObject);
-	    }
-	}
+    // Update is called once per frame
+    public virtual void Update()
+    {
+        #region Debug options for testing
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            health = 100;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            health = 70;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            health = 50;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            health = 30;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            health = 10;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            health = 0;
+        }
+        #endregion
+
+        switch (Game.timeState)
+        {
+            case TimeState.Forward:
+
+                #region Stadge select (case?)
+                if (currentHealth > 80)
+                {
+                    StageOne();
+                }
+                else if (currentHealth < 80 && currentHealth > 60)
+                {
+                    if (attackList.Count != currentCount)
+                    {
+                        StageOne();
+                        canTakeDamage.canAttack = false;
+                    }
+                    else
+                    {
+                        canTakeDamage.canAttack = true;
+                        StageTwo();
+                    }
+                }
+                else if (currentHealth < 60 && currentHealth > 40)
+                {
+                    if (attackList2.Count != currentCount2)
+                    {
+                        StageTwo();
+                        canTakeDamage.canAttack = false;
+                    }
+                    else
+                    {
+                        canTakeDamage.canAttack = true;
+                        StageThree();
+                    }
+                }
+                else if (currentHealth < 40 && currentHealth > 20)
+                {
+                    if (attackList3.Count != currentCount3)
+                    {
+                        StageThree();
+                        canTakeDamage.canAttack = false;
+                    }
+                    else
+                    {
+                        canTakeDamage.canAttack = true;
+                        StageFour();
+                    }
+                }
+                else if (currentHealth > 0)
+                {
+                    if (attackList4.Count != currentCount4)
+                    {
+                        StageFour();
+                        canTakeDamage.canAttack = false;
+                    }
+                    else
+                    {
+                        canTakeDamage.canAttack = true;
+                        StageFive();
+                    }
+                }
+                #endregion
+
+                if (alive)
+                {
+                    trackedHealth.Add(Golem.health);
+                }
+                else//Death of boss
+                {
+                    Detach(gameObject);
+                }
+
+                break;
+
+            case TimeState.Backward:
+
+                if (Game.t < trackedHealth.Count && Game.t >= 0)
+                {
+                    Golem.health = trackedHealth[(int)Game.t];
+                }
+                break;
+        }
+
+        currentHealth = health;
+    }
 
 	public abstract void StageOne ();
 	public abstract void StageTwo ();
@@ -198,4 +233,12 @@ public abstract class BossManager : MonoBehaviour {
 		
 		transform.DetachChildren();  
 	}// Controls the death of the boss
+
+    public void SetAnimators(bool enabled)
+    {
+        foreach (ObjectTracking obj in trackedBossObjs)
+        {
+            obj.GetComponent<Animator>().enabled = enabled;
+        }
+    }
 }
