@@ -1,10 +1,17 @@
 ﻿//WIP to improve the Golem script
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GolemBoss : BossManager {
 	
 	bool isAttacking;
+
+	public Animator lArmRock1, lArmRock2, lArmRock3,
+	rArmRock1, rArmRock2, rArmRock3, headAnim, leftArm, rightArm;
+
+	public List<Sprite> headStages, bodyStages, lArmStages, rArmStages,
+	utilityA, utilityB, utilityC;
 
 	public override void Start () {
 		base.Start();

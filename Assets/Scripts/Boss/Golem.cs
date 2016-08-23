@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 /// <summary>
 /// Script to control the Golem Boss
 /// </summary>
 public class Golem : BossManager {
 
 	public Animator lArmRock1, lArmRock2, lArmRock3,
-	rArmRock1, rArmRock2, rArmRock3;
+	rArmRock1, rArmRock2, rArmRock3, headAnim, leftArm, rightArm,
+	leftCrystal, rightCrystal;
+
+	public List<Sprite> headStages, bodyStages, lArmStages, rArmStages,
+						utilityA, utilityB, utilityC;
 
     /// <summary>
     /// Checks whether the the Boss is attacking
@@ -412,6 +417,7 @@ public class Golem : BossManager {
 		
 	}
 
+	//Sync support attacks with sequenced attacks for additional effects
 	void SupportAttacks()
 	{
 		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamRightRock") &&
@@ -425,10 +431,29 @@ public class Golem : BossManager {
 		if(rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSlamLeftRock") &&
 			rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
 		{
-			
 			rArmRock1.SetBool("Fall", true);
 			rArmRock2.SetBool("Fall", true);
 			rArmRock3.SetBool("Fall", true);
+		}
+
+		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamCrystal") ||
+			leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSpecial"))
+		{
+			if(leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.3f &&
+				leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f)
+			{
+				rightCrystal.SetBool("Rise", true);
+			}
+		}
+
+		if(rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSlamCrystal") ||
+			rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSpecial"))
+		{
+			if(rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.3f &&
+				rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f)
+			{
+				leftCrystal.SetBool("Rise", true);
+			}
 		}
 	}
 
@@ -441,6 +466,10 @@ public class Golem : BossManager {
     public override void Reset()
     {
         base.Reset();
+
+		headAnim.Play("WakeUp", 0);
+		leftArm.Play("WakeUp", 0);
+		rightArm.Play("WakeUp", 0);
 
         for (int stage = 1; stage <= 5; stage++)
         {

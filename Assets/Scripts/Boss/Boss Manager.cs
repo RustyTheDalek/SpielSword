@@ -35,12 +35,7 @@ public abstract class BossManager : MonoBehaviour {
 		}
 	}
 
-	public Animator headAnim, leftArm, rightArm;
-
 	public List<SpriteRenderer> bossParts;
-
-	public List<Sprite> headStages, bodyStages, outterLArmStages, lArmStages, outterRArmStages, 
-	rArmStages, lFootStages, rFootStages, tailStages, utilityA, utilityB, utilityC;
 
     public BossHealthBar bossHealthBar;
 
@@ -222,10 +217,6 @@ public abstract class BossManager : MonoBehaviour {
 
     public virtual void Reset()
     {
-        headAnim.Play("WakeUp", 0);
-        leftArm.Play("WakeUp", 0);
-        rightArm.Play("WakeUp", 0);
-
         SetAnimators(true);
 
         currentCount = 0;
