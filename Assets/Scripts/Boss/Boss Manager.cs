@@ -236,6 +236,11 @@ public abstract class BossManager : MonoBehaviour {
 
         health = 100;
 
+        foreach (ObjectTracking obj in trackedBossObjs)
+        {
+            obj.Reset();
+        } 
+
     }
 
 	public abstract void StageOne ();

@@ -95,8 +95,6 @@ public class VillagerManager : MonoBehaviour {
                     //Reverse time
                     Game.timeState = TimeState.Backward;
                     Game.timeScale = -1;
-                    //Store longest time for Scaling
-                    Game.longestTime = Game.t;
 
                     //Turn active Villager into Past Villager
                     activeVillager.deathEffect.Play();
@@ -133,7 +131,7 @@ public class VillagerManager : MonoBehaviour {
             case TimeState.Backward:
 
                 //Speeds rewind every 100 frame
-                if (Game.t % 200 == 0)
+                if (Game.t % 300 == 0)
                 {
                     Game.timeScale *= 2;
                 }
@@ -156,6 +154,21 @@ public class VillagerManager : MonoBehaviour {
         Game.t += Game.timeScale;
 	}
 
+    void LateUpdate()
+    {
+        switch (Game.timeState)
+        {
+            case TimeState.Forward:
+
+                //Store longest time for Scaling
+                if (Game.t > Game.longestTime)
+                    Game.longestTime = Game.t;
+
+                break;
+        }
+
+    }
+
     void FixedUpdate()
     {
         switch (Game.timeState)
@@ -166,7 +179,6 @@ public class VillagerManager : MonoBehaviour {
                 {
                     Game.t = 0;
                     Game.timeScale = 1;
-                    Game.longestTime = 0;
                     currentBoss.Reset();
 
                     Game.timeState = TimeState.Forward;

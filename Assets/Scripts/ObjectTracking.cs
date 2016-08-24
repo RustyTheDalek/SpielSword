@@ -51,12 +51,9 @@ public class ObjectTracking : MonoBehaviour {
 
         currentBossFrame.m_Position = gameObject.transform.position;
         currentBossFrame.m_Rotation = gameObject.transform.rotation;
-        currentBossFrame.alpha = GetComponent<SpriteRenderer>().color.a;
+        currentBossFrame.color = m_Sprite.color;
 
         bossFrames.Add(currentBossFrame);
-
-        //Debug.Log(name + ": " + bossFrames[bossFrames.Count - 1].m_Transform.position);
-
     }
 
     public void PlayFrame()
@@ -73,13 +70,18 @@ public class ObjectTracking : MonoBehaviour {
 
                 spriteColor = m_Sprite.color;
 
-                m_Sprite.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b, bossFrames[t].alpha);
+                m_Sprite.color = bossFrames[t].color;
             }
         }
         else
         {
             Debug.LogWarning("Frames are null, no movmement to play back");
         }
+    }
+
+    public void Reset()
+    {
+        bossFrames.Clear();
     }
 
     //void OnDrawGizmos()
