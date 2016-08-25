@@ -9,6 +9,8 @@ public class Golem : BossManager {
 	rArmRock1, rArmRock2, rArmRock3, headAnim, leftArm, rightArm,
 	leftCrystal, rightCrystal;
 
+	public GameObject rockPileLeft, rockPileRight, lArm, rArm;
+
 	public List<Sprite> headStages, bodyStages, lArmStages, rArmStages,
 						utilityA, utilityB, utilityC;
 
@@ -412,54 +414,10 @@ public class Golem : BossManager {
 	}// Selects the attack based on the given number
 	#endregion
 
-	public override void SetBossParts ()
-	{
-		
-	}
-
-	//Sync support attacks with sequenced attacks for additional effects
-	void SupportAttacks()
-	{
-		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamRightRock") &&
-			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
-		{
-			lArmRock1.SetBool("Fall", true);
-			lArmRock2.SetBool("Fall", true);
-			lArmRock3.SetBool("Fall", true);
-		}
-
-		if(rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSlamLeftRock") &&
-			rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
-		{
-			rArmRock1.SetBool("Fall", true);
-			rArmRock2.SetBool("Fall", true);
-			rArmRock3.SetBool("Fall", true);
-		}
-
-		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamCrystal") ||
-			leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSpecial"))
-		{
-			if(leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.3f &&
-				leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f)
-			{
-				rightCrystal.SetBool("Rise", true);
-			}
-		}
-
-		if(rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSlamCrystal") ||
-			rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSpecial"))
-		{
-			if(rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.3f &&
-				rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f)
-			{
-				leftCrystal.SetBool("Rise", true);
-			}
-		}
-	}
+	public override void SetBossParts (){}
 
 	public override void Update ()
 	{
-		SupportAttacks();
         base.Update();
 	}
 
