@@ -27,13 +27,15 @@ public class RightArm : MonoBehaviour {
 
 		if(rightArm.GetCurrentAnimatorStateInfo(0).IsName("RightSlamLeftRock") &&
 			rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.6f &&
-			rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.9f)
+			rightArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.8f)
 		{
 			//parent and move
+			rockPileLeft.GetComponent<SpriteRenderer>().enabled = false;
 			rockPileLeft.transform.position = this.transform.position;
 			rockPileLeft.transform.rotation = this.transform.rotation;
 			rockPileLeft.transform.localPosition = new Vector3 (0,-2,0);
 			rockPileLeft.transform.parent = this.transform;
+			rockPileLeft.GetComponent<SpriteRenderer>().enabled = true;
 		}
 		else
 		{

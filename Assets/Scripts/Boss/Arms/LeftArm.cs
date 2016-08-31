@@ -7,8 +7,7 @@ public class LeftArm : MonoBehaviour {
 
 	public GameObject rockPileRight;
 
-	public Animator lArmRock1, lArmRock2, lArmRock3,
-	leftArm, rightCrystal;
+	public Animator lArmRock1, lArmRock2, lArmRock3, lArmRock4, leftArm, rightCrystal;
 
 	// Use this for initialization
 	void Start () {
@@ -18,22 +17,36 @@ public class LeftArm : MonoBehaviour {
 	void SupportAttacks ()
 	{
 		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamRightRock") &&
-			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
 		{
 			lArmRock1.SetBool("Fall", true);
 			lArmRock2.SetBool("Fall", true);
 			lArmRock3.SetBool("Fall", true);
 		}
 
+		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftCenterSlamWithRocks") &&
+			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+		{
+			lArmRock1.SetBool("Center", true);
+			lArmRock2.SetBool("Center", true);
+			lArmRock3.SetBool("Center", true);
+			lArmRock4.SetBool("Center", true);
+		}
+
 		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamRightRock") &&
 			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.6f &&
+			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.8f || 
+			leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftCenterSlamWithRocks") &&
+			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f &&
 			leftArm.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.9f)
 		{
 			//parent and move
+			rockPileRight.GetComponent<SpriteRenderer>().enabled = false;
 			rockPileRight.transform.position = this.transform.position;
 			rockPileRight.transform.rotation = this.transform.rotation;
 			rockPileRight.transform.localPosition = new Vector3 (0,-2,0);
 			rockPileRight.transform.parent = this.transform;
+			rockPileRight.GetComponent<SpriteRenderer>().enabled = true;
 		}
 		else
 		{
@@ -43,6 +56,7 @@ public class LeftArm : MonoBehaviour {
 			//reset
 		}
 
+			
 		if(leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSlamCrystal") ||
 			leftArm.GetCurrentAnimatorStateInfo(0).IsName("LeftSpecial"))
 		{
