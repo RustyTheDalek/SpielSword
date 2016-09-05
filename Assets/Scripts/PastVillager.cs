@@ -50,6 +50,22 @@ public class PastVillager : MonoBehaviour {
             {
                 //Set new position and adjust for Time Scale
                 GetComponent<Rigidbody2D>().transform.position = actions[t].pos;
+                animData.move = actions[t].move;
+                animData.jump = actions[t].jump;
+                animData.attack = actions[t].attack;
+                animData.dead = actions[t].dead;
+            }
+            else if (t == actions.Count)
+            {
+                if (Game.timeState == TimeState.Backward)
+                {
+                    Debug.Log("Villager Un-Dying");
+                    GetComponent<Animator>().SetTrigger("ExitDeath");
+                }
+                animData.move = 0;
+                animData.jump = false;
+                animData.attack = false;
+                animData.dead = false;
             }
         }
     }
@@ -61,21 +77,30 @@ public class PastVillager : MonoBehaviour {
             if (t < actions.Count &&
                 t >= 0)
             {
-                animData.move = actions[t].move;
-                animData.jump = actions[t].jump;
-                animData.attack = actions[t].attack;
-                animData.dead = actions[t].dead;
                 m_Character.Move(animData);
             }
-            else if (t >= actions.Count)
+            else if (t == actions.Count)
             {
-                animData.move = 0;
-                animData.jump = false;
-                animData.attack = false;
-                animData.dead = true;
                 m_Character.Move(animData);
             }
         }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.GetComponent<Attack>() && !animData.dead && Game.timeState == TimeState.Forward)
+        {
+            Debug.Log("Past Villager Hit By Boss Attack");
+            animData.dead = true;
+            m_Character.Move(animData);
+
+            GetComponentInChildren<ParticleSystem>().Play();
+        }
+    }
+
+    public void OnCollisionEnter2D()
+    {
+        Debug.Log("Past Villager Hit Collision");
     }
 
 }

@@ -104,6 +104,8 @@ public class VillagerManager : MonoBehaviour {
                     activeVillager.transform.parent = pastVillagersTrans;
                     activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
                     activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+                    activeVillager.SetTrigger(true);
+                    activeVillager.GetComponent<Rigidbody2D>().gravityScale = 0;
 
 
                     activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
@@ -219,7 +221,7 @@ public class VillagerManager : MonoBehaviour {
             //Reset all the past Villagers
             foreach (PastVillager pVillager in pastVillagers)
             {
-                pVillager.GetComponent<Animator>().SetTrigger("ExitDeath");
+                //pVillager.GetComponent<Animator>().SetTrigger("ExitDeath");
             }
         }
     }

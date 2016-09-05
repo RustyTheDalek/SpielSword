@@ -52,6 +52,8 @@ public class Villager : MonoBehaviour
 
     public CircleCollider2D melee;
 
+    public CircleCollider2D[] PlayerCollisions;
+
     private void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
@@ -62,6 +64,8 @@ public class Villager : MonoBehaviour
 
         //TO-DO: FIX THIS TRASH
         melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
+
+        PlayerCollisions = GetComponents<CircleCollider2D>();
     }
 
     private void Update()
@@ -111,7 +115,7 @@ public class Villager : MonoBehaviour
                 animData.move = xDir;
                 animData.jump = m_Jump;
                 animData.attack = Input.GetKey(KeyCode.DownArrow);
-                animData.dead = !alive;
+                //animData.dead = !alive;
 
                 // Pass all parameters to the character control script.
                 m_Character.Move(animData);
@@ -145,6 +149,12 @@ public class Villager : MonoBehaviour
     {
         targetX = xPos;
         advancing = true;
+    }
+
+    public void SetTrigger(bool active)
+    {
+        PlayerCollisions[0].isTrigger = active;
+        PlayerCollisions[1].isTrigger = active;
     }
 }
 
