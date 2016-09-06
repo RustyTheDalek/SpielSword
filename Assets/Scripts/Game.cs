@@ -10,12 +10,12 @@ public static class Game
     ///  1 = Normal Time
     /// -1 = Reversed Time;
     /// </summary>
-    public static float timeScale = 1;
+    public static int timeScale = 1;
 
     /// <summary>
     /// Custom Time Variable for past Villagers
     /// </summary>
-    public static float t;
+    public static int t;
 
     /// <summary>
     /// Scaling for Time Helps speed up reversal

@@ -50,6 +50,8 @@ public class PlatformerCharacter2D : MonoBehaviour
 
         // Set the vertical animation
         m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+
+        m_Anim.SetFloat("TimeSpeed", Game.timeScale);
     }
 
 

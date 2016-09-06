@@ -15,6 +15,11 @@ public class PastVillager : MonoBehaviour {
 
     VillagerAnimData animData;
 
+    /// <summary>
+    /// Special time in which Villagers "Finish" Dying.
+    /// </summary>
+    public int reverseDeathTimeStamp = 0;
+
     private void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
@@ -57,16 +62,22 @@ public class PastVillager : MonoBehaviour {
             }
             else if (t == actions.Count)
             {
-                if (Game.timeState == TimeState.Backward)
-                {
-                    Debug.Log("Villager Un-Dying");
-                    GetComponent<Animator>().SetTrigger("ExitDeath");
-                }
                 animData.move = 0;
                 animData.jump = false;
                 animData.attack = false;
                 animData.dead = false;
             }
+            else if (Game.timeState == TimeState.Backward)
+            {
+                if (reverseDeathTimeStamp != 0 &&
+                    reverseDeathTimeStamp == Game.t)
+                {
+                    Debug.Break();
+                    Debug.Log("Villager Un-Dying");
+                    GetComponent<Animator>().SetTrigger("ExitDeath");
+                }
+            }
+
         }
     }
 

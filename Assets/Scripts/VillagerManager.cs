@@ -42,6 +42,13 @@ public class VillagerManager : MonoBehaviour {
     public float myTimeScale;
 #endif
 
+    /// <summary>
+    /// Render Layer for CurrentVillager
+    /// </summary>
+    int currentVillagerLayer = 6;
+
+    public List<Sprite> villagerSprites;
+
     // Use this for initialization
     void Start ()
     {
@@ -211,12 +218,17 @@ public class VillagerManager : MonoBehaviour {
             activeVillager = remainingVillagers[0];
             activeVillager.villagerState = VillagerState.CurrentVillager;
             activeVillager.transform.parent = activeVillagerTrans;
+            activeVillager.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
             remainingVillagers.RemoveAt(0);
+
+            currentVillagerLayer++;
 
             //Add a random Hat to the active Villager
             activeVillager.transform.Find("Hat").gameObject.AddComponent<SpriteRenderer>();
             activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count - 1)];
-            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sortingOrder = 5;
+            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
+
+            currentVillagerLayer++;
 
             //Reset all the past Villagers
             foreach (PastVillager pVillager in pastVillagers)
