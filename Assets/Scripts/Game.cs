@@ -3,14 +3,7 @@ using System.Collections;
 
 public static class Game
 {
-    public static TimeState timeState;
-
-    /// <summary>
-    /// Time Scale for Past Villagers
-    ///  1 = Normal Time
-    /// -1 = Reversed Time;
-    /// </summary>
-    public static int timeScale = 1;
+    public static TimeState timeState = TimeState.Forward;
 
     /// <summary>
     /// Custom Time Variable for past Villagers
@@ -25,7 +18,7 @@ public static class Game
     /// <summary>
     /// Invcinibilty mode for testing
     /// </summary>
-    public static bool GodMode = true;
+    public static bool GodMode = false;
 
     /// <summary>
     /// If the Boss is attackable

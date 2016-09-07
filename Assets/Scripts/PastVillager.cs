@@ -72,7 +72,7 @@ public class PastVillager : MonoBehaviour {
                 if (reverseDeathTimeStamp != 0 &&
                     reverseDeathTimeStamp == Game.t)
                 {
-                    Debug.Break();
+                    //Debug.Break();
                     Debug.Log("Villager Un-Dying");
                     GetComponent<Animator>().SetTrigger("ExitDeath");
                 }

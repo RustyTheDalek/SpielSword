@@ -3,6 +3,6 @@
 /// </summary>
 public enum TimeState
 {
-    Forward,
-    Backward,
+    Forward = 1,
+    Backward = -1,
 };

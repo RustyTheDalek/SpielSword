@@ -73,7 +73,7 @@ public class VillagerManager : MonoBehaviour {
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
 
         myT = Game.t;
-        myTimeScale = Game.timeScale;
+        //myTimeScale = Time.timeScale;
 
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
@@ -101,7 +101,6 @@ public class VillagerManager : MonoBehaviour {
                 {
                     //Reverse time
                     Game.timeState = TimeState.Backward;
-                    Game.timeScale = -1;
 
                     //Turn active Villager into Past Villager
                     activeVillager.deathEffect.Play();
@@ -139,11 +138,9 @@ public class VillagerManager : MonoBehaviour {
 
             case TimeState.Backward:
 
-                //Speeds rewind every 100 frame
-                if (Game.t % 300 == 0)
-                {
-                    Game.timeScale *= 2;
-                }
+                float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
+                float newTimeScale = -Mathf.Pow(x, 2) + (2 * x) + 1;
+                Time.timeScale = newTimeScale; 
 
                 break;
         }  
@@ -160,7 +157,7 @@ public class VillagerManager : MonoBehaviour {
             }
         }
 
-        Game.t += Game.timeScale;
+        Game.t += (int)Time.timeScale * (int)Game.timeState;
 	}
 
     void LateUpdate()
@@ -187,7 +184,7 @@ public class VillagerManager : MonoBehaviour {
                 if(Game.t <= 0)
                 {
                     Game.t = 0;
-                    Game.timeScale = 1;
+                    Time.timeScale = 1;
                     currentBoss.Reset();
 
                     Game.timeState = TimeState.Forward;
@@ -225,7 +222,7 @@ public class VillagerManager : MonoBehaviour {
 
             //Add a random Hat to the active Villager
             activeVillager.transform.Find("Hat").gameObject.AddComponent<SpriteRenderer>();
-            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count - 1)];
+            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count)];
             activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
 
             currentVillagerLayer++;
