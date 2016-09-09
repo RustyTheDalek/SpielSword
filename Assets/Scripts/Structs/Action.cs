@@ -14,6 +14,9 @@ public struct Action
 
     public float health;
 
+    public bool special;
+    public bool canSpecial;
+
     public void Reset()
     {
         pos = Vector3.zero;

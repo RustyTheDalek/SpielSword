@@ -6,7 +6,7 @@ using UnityStandardAssets._2D;
 /// Class for controller Villager
 /// </summary>
 [RequireComponent(typeof(PlatformerCharacter2D))]
-public class Villager : MonoBehaviour
+public abstract class Villager : MonoBehaviour
 {
     public PlatformerCharacter2D m_Character;
     private bool m_Jump;
@@ -19,7 +19,7 @@ public class Villager : MonoBehaviour
     //Target X position for Villager to aim for when they're waiting in queue
     public float targetX;
 
-    VillagerAnimData animData;
+    public  VillagerAnimData animData;
 
     /// <summary>
     /// Whether the Villager is advancing in the queue
@@ -54,21 +54,23 @@ public class Villager : MonoBehaviour
 
     public CircleCollider2D[] PlayerCollisions;
 
-    private void Awake()
+    public virtual void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         startingPos = transform.position;
 
-        villagerState = VillagerState.Waiting;
+        //villagerState = VillagerState.Waiting;
 
         //TO-DO: FIX THIS TRASH
         melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
+
+        animData.canSpecial = true;
     }
 
-    private void Update()
+    public virtual void Update()
     {
         switch(villagerState)
         {
@@ -78,6 +80,10 @@ public class Villager : MonoBehaviour
                 xDir = 0;
                 xDir = ((Input.GetKey(KeyCode.D)) ? 1 : xDir);
                 xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
+
+                animData.attack = Input.GetKey(KeyCode.DownArrow);
+
+                OnSpecial(Input.GetKey(KeyCode.LeftArrow));
 
                 if (!m_Jump)
                 {
@@ -109,15 +115,11 @@ public class Villager : MonoBehaviour
         {
             case VillagerState.CurrentVillager:
 
-                xDir = ((Input.GetKey(KeyCode.D)) ? 1 : xDir);
-                xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
-
                 animData.move = xDir;
                 animData.jump = m_Jump;
-                animData.attack = Input.GetKey(KeyCode.DownArrow);
+
                 //animData.dead = !alive;
 
-                // Pass all parameters to the character control script.
                 m_Character.Move(animData);
                 m_Jump = false;
                 break;
@@ -155,6 +157,13 @@ public class Villager : MonoBehaviour
     {
         PlayerCollisions[0].isTrigger = active;
         PlayerCollisions[1].isTrigger = active;
+    }
+
+    public abstract void OnSpecial(bool playerSpecial);
+
+    public virtual void OnHit()
+    {
+        health--;
     }
 }
 

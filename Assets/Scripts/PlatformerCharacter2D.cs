@@ -62,6 +62,8 @@ public class PlatformerCharacter2D : MonoBehaviour
         } 
 
         m_Anim.SetBool("Attacking", animData.attack);
+        m_Anim.SetBool("ShieldSpecial", animData.shieldSpecial);
+        m_Anim.SetBool("CanSpecial", animData.canSpecial);
         
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl && !animData.dead)

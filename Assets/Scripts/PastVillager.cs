@@ -58,6 +58,8 @@ public class PastVillager : MonoBehaviour {
                 animData.move = actions[t].move;
                 animData.jump = actions[t].jump;
                 animData.attack = actions[t].attack;
+                animData.shieldSpecial = actions[t].special;
+                animData.canSpecial = actions[t].canSpecial;
                 animData.dead = actions[t].dead;
             }
             else if (t == actions.Count)

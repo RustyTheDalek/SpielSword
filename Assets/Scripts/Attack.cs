@@ -22,7 +22,7 @@ public class Attack : MonoBehaviour
         if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
             && !Game.GodMode)
         {
-            coll.gameObject.GetComponent<Villager>().health--;
+            coll.gameObject.GetComponent<Villager>().OnHit();
         }
     }
 }

@@ -94,6 +94,8 @@ public class VillagerManager : MonoBehaviour {
                     currentAction.move = activeVillager.xDir;
                     currentAction.attack = Input.GetKey(KeyCode.DownArrow);
                     currentAction.health = activeVillager.health;
+                    currentAction.special = Input.GetKey(KeyCode.LeftArrow);
+                    currentAction.canSpecial = activeVillager.animData.canSpecial;
 
                     playerActions.Add(currentAction);
                 }
