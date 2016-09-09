@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityStandardAssets._2D;
 
 /// <summary>
@@ -54,6 +55,17 @@ public abstract class Villager : MonoBehaviour
 
     public CircleCollider2D[] PlayerCollisions;
 
+    #region pastVillager variables
+
+    public List<Action> actions;
+
+    /// <summary>
+    /// Special time in which Villagers "Finish" Dying.
+    /// </summary>
+    public int reverseDeathTimeStamp = 0;
+
+    #endregion
+
     public virtual void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
@@ -106,7 +118,67 @@ public abstract class Villager : MonoBehaviour
                 }
 
                 break;
+
+            case VillagerState.PastVillager:
+
+                if (actions != null)
+                {
+                    //So long as T is within Range
+                    if (Game.t < actions.Count && Game.t >= 0)
+                    {
+                        //Set new position and adjust for Time Scale
+                        GetComponent<Rigidbody2D>().transform.position = actions[Game.t].pos;
+                        animData.move = actions[Game.t].move;
+                        animData.jump = actions[Game.t].jump;
+                        animData.attack = actions[Game.t].attack;
+                        animData.shieldSpecial = actions[Game.t].special;
+                        animData.canSpecial = actions[Game.t].canSpecial;
+                        animData.dead = actions[Game.t].dead;
+                    }
+                    else if (Game.t == actions.Count)
+                    {
+                        animData.move = 0;
+                        animData.jump = false;
+                        animData.attack = false;
+                        animData.dead = false;
+                    }
+
+                    if (Game.timeState == TimeState.Backward)
+                    {
+                        if (reverseDeathTimeStamp != 0 &&
+                            reverseDeathTimeStamp == Game.t)
+                        {
+                            //Debug.Break();
+                            Debug.Log("Villager Un-Dying");
+                            GetComponent<Animator>().SetTrigger("ExitDeath");
+                        }
+                    }
+
+                }
+
+                break;
         }
+    }
+
+    public Action RecordFrame()
+    {
+        Action currentAction = new Action();
+
+        currentAction.timeStamp = Time.timeSinceLevelLoad;
+        currentAction.pos = transform.position;
+        currentAction.move = xDir;
+        currentAction.attack = Input.GetKey(KeyCode.DownArrow);
+        currentAction.health = health;
+        currentAction.special = Input.GetKey(KeyCode.LeftArrow);
+        currentAction.canSpecial = animData.canSpecial;
+
+        return currentAction;
+    }
+
+    public void actionsSetup(List<Action> _Actions)
+    {
+        actions = new List<Action>();
+        actions.AddRange(_Actions);
     }
 
     private void FixedUpdate()
@@ -131,6 +203,22 @@ public abstract class Villager : MonoBehaviour
                 animData.jump = false;
                 animData.attack = false;
                 m_Character.Move(animData);
+                break;
+
+            case VillagerState.PastVillager:
+
+                if (actions != null)
+                {
+                    if (Game.t < actions.Count &&
+                        Game.t >= 0)
+                    {
+                        m_Character.Move(animData);
+                    }
+                    else if (Game.t == actions.Count)
+                    {
+                        m_Character.Move(animData);
+                    }
+                }
                 break;
         }
     }
@@ -164,6 +252,27 @@ public abstract class Villager : MonoBehaviour
     public virtual void OnHit()
     {
         health--;
+    }
+
+    public virtual void OnPastHit(Collider2D collider)
+    {
+        if (collider.GetComponent<Attack>() && !animData.dead &&
+            Game.timeState == TimeState.Forward)
+        {
+            Debug.Log("Past Villager Hit By Boss Attack");
+            animData.dead = true;
+            m_Character.Move(animData);
+
+            GetComponentInChildren<ParticleSystem>().Play();
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (villagerState == VillagerState.PastVillager)
+        {
+            OnPastHit(collider);
+        }
     }
 }
 

@@ -21,7 +21,7 @@ public class VillagerManager : MonoBehaviour {
     Villager activeVillager;
 
     [SerializeField] List<Villager> remainingVillagers;
-    List<PastVillager> pastVillagers;
+    List<Villager> pastVillagers;
 
     List<Action> playerActions;
 
@@ -54,7 +54,7 @@ public class VillagerManager : MonoBehaviour {
     {
         //Setup lists
         remainingVillagers = new List<Villager>();
-        pastVillagers = new List<PastVillager>();
+        pastVillagers = new List<Villager>();
         playerActions = new List<Action>();
 
         //Get all Villagers and add them to the Villager list
@@ -88,15 +88,7 @@ public class VillagerManager : MonoBehaviour {
                 //Continue tracking as normal
                 if (activeVillager.alive)
                 {
-                    currentAction = new Action();
-                    currentAction.timeStamp = Time.timeSinceLevelLoad;
-                    currentAction.pos = activeVillager.transform.position;
-                    currentAction.move = activeVillager.xDir;
-                    currentAction.attack = Input.GetKey(KeyCode.DownArrow);
-                    currentAction.health = activeVillager.health;
-                    currentAction.special = Input.GetKey(KeyCode.LeftArrow);
-                    currentAction.canSpecial = activeVillager.animData.canSpecial;
-
+                    currentAction = activeVillager.RecordFrame();
                     playerActions.Add(currentAction);
                 }
                 else //Game world needs to be reset
@@ -107,8 +99,7 @@ public class VillagerManager : MonoBehaviour {
                     //Turn active Villager into Past Villager
                     activeVillager.deathEffect.Play();
                     activeVillager.villagerState = VillagerState.PastVillager;
-                    activeVillager.gameObject.AddComponent<PastVillager>();
-                    activeVillager.GetComponent<PastVillager>().Setup(playerActions);
+                    activeVillager.GetComponent<Villager>().actionsSetup(playerActions);
                     activeVillager.transform.parent = pastVillagersTrans;
                     activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
                     activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
@@ -126,7 +117,7 @@ public class VillagerManager : MonoBehaviour {
                                                                     activeVillager.GetComponent<SpriteRenderer>().color.b,
                                                                     .5f);
 
-                    pastVillagers.Add(activeVillager.GetComponent<PastVillager>());
+                    pastVillagers.Add(activeVillager);
 
                     if (playerActions != null)
                     {
@@ -141,8 +132,8 @@ public class VillagerManager : MonoBehaviour {
             case TimeState.Backward:
 
                 float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-                float newTimeScale = -Mathf.Pow(x, 2) + (2 * x) + 1;
-                Time.timeScale = newTimeScale; 
+                float newTimeScale = -Mathf.Pow(x, 2) + (4 * x) + 1;
+                Time.timeScale = newTimeScale;
 
                 break;
         }  
@@ -230,10 +221,10 @@ public class VillagerManager : MonoBehaviour {
             currentVillagerLayer++;
 
             //Reset all the past Villagers
-            foreach (PastVillager pVillager in pastVillagers)
-            {
+            //foreach (PastVillager pVillager in pastVillagers)
+            //{
                 //pVillager.GetComponent<Animator>().SetTrigger("ExitDeath");
-            }
+            //}
         }
     }
 

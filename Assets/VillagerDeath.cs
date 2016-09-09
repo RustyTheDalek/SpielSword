@@ -12,13 +12,14 @@ public class VillagerDeath : StateMachineBehaviour {
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Tracks the in which the Villager dies so the Aninmation can be reversed when needed
-        if (stateInfo.normalizedTime >= 1 && animator.GetComponent<PastVillager>().reverseDeathTimeStamp == 0)
+        if (stateInfo.normalizedTime >= 1 && animator.GetComponent<Villager>().reverseDeathTimeStamp == 0)
         {
-            animator.GetComponent<PastVillager>().reverseDeathTimeStamp = Game.t;
+            animator.GetComponent<Villager>().reverseDeathTimeStamp = Game.t;
         }
         //If Time is rewinding and the Villager is at the start of his death Animation, allow him to reverse out
-        else if (stateInfo.normalizedTime <= 0 && Game.timeState == TimeState.Backward)
+        if (stateInfo.normalizedTime <= 0 && Game.timeState == TimeState.Backward)
         {
+            Debug.Log("Villager Undying");
             animator.SetTrigger("ExitDeath");
         }
     }

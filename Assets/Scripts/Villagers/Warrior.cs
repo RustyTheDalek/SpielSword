@@ -78,4 +78,12 @@ public class Warrior : Villager
             base.OnHit();
         }
     }
+
+    public override void OnPastHit(Collider2D collider)
+    {
+        if (!shielded)
+        {
+            base.OnPastHit(collider);
+        }
+    }
 }
