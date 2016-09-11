@@ -57,7 +57,8 @@ public abstract class Villager : MonoBehaviour
 
     #region pastVillager variables
 
-    public List<Action> actions;
+    public List<Action> actions = new List<Action>();
+    public Action currentAction;
 
     /// <summary>
     /// Special time in which Villagers "Finish" Dying.
@@ -102,6 +103,8 @@ public abstract class Villager : MonoBehaviour
                     // Read the jump input in Update so button presses aren't missed.
                     m_Jump = Input.GetKeyDown(KeyCode.Space);
                 }
+
+                RecordFrame();
 
                 break;
 
@@ -160,9 +163,9 @@ public abstract class Villager : MonoBehaviour
         }
     }
 
-    public Action RecordFrame()
+    public void RecordFrame()
     {
-        Action currentAction = new Action();
+        currentAction = new Action();
 
         currentAction.timeStamp = Time.timeSinceLevelLoad;
         currentAction.pos = transform.position;
@@ -172,7 +175,7 @@ public abstract class Villager : MonoBehaviour
         currentAction.special = Input.GetKey(KeyCode.LeftArrow);
         currentAction.canSpecial = animData.canSpecial;
 
-        return currentAction;
+        actions.Add(currentAction);
     }
 
     public void actionsSetup(List<Action> _Actions)

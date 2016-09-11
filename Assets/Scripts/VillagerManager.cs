@@ -23,8 +23,6 @@ public class VillagerManager : MonoBehaviour {
     [SerializeField] List<Villager> remainingVillagers;
     List<Villager> pastVillagers;
 
-    List<Action> playerActions;
-
     Action currentAction;
 
     public BossManager   bossTemplate,
@@ -47,15 +45,12 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     int currentVillagerLayer = 6;
 
-    public List<Sprite> villagerSprites;
-
     // Use this for initialization
     void Start ()
     {
         //Setup lists
         remainingVillagers = new List<Villager>();
         pastVillagers = new List<Villager>();
-        playerActions = new List<Action>();
 
         //Get all Villagers and add them to the Villager list
         Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
@@ -85,13 +80,7 @@ public class VillagerManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
-                //Continue tracking as normal
-                if (activeVillager.alive)
-                {
-                    currentAction = activeVillager.RecordFrame();
-                    playerActions.Add(currentAction);
-                }
-                else //Game world needs to be reset
+                if(!activeVillager.alive)//Game world needs to be reset
                 {
                     //Reverse time
                     Game.timeState = TimeState.Backward;
@@ -99,7 +88,6 @@ public class VillagerManager : MonoBehaviour {
                     //Turn active Villager into Past Villager
                     activeVillager.deathEffect.Play();
                     activeVillager.villagerState = VillagerState.PastVillager;
-                    activeVillager.GetComponent<Villager>().actionsSetup(playerActions);
                     activeVillager.transform.parent = pastVillagersTrans;
                     activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
                     activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
@@ -118,11 +106,6 @@ public class VillagerManager : MonoBehaviour {
                                                                     .5f);
 
                     pastVillagers.Add(activeVillager);
-
-                    if (playerActions != null)
-                    {
-                        playerActions.Clear();
-                    }
 
                     currentBoss.GetComponent<BossManager>().SetAnimators(false);
                 }
