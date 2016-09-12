@@ -24,5 +24,23 @@ public class Attack : MonoBehaviour
         {
             coll.gameObject.GetComponent<Villager>().OnHit();
         }
+        else if (this.name.Contains("Range"))
+        {
+            Destroy(this.gameObject);
+        }
+
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (this.name.Contains("Range"))
+        {
+            if (coll.gameObject.GetComponent<Head>())
+            {
+                coll.gameObject.GetComponent<Head>().OnHit();
+            }
+
+            Destroy(this.gameObject);
+        }
     }
 }

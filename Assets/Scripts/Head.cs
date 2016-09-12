@@ -38,13 +38,26 @@ public class Head : MonoBehaviour {
         if (coll.transform.name == "Melee" && boss.attackable)
         {
             //Debug.Log("Attack Succesful");
-            Golem.health--;
-            GetComponent<SpriteRenderer>().sprite = damageHead;
-            damageTimer.StartTimer();
+            OnHit();
         }
         else
         {
             //Debug.Log("Collision with" + coll.name);
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.transform.name.Contains("Range") && boss.attackable)
+        {
+            OnHit();
+        }
+    }
+
+    public void OnHit()
+    {
+        Golem.health--;
+        GetComponent<SpriteRenderer>().sprite = damageHead;
+        damageTimer.StartTimer();
     }
 }

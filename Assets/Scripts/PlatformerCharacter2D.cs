@@ -63,7 +63,8 @@ public class PlatformerCharacter2D : MonoBehaviour
             m_Anim.SetBool("Dead", animData.dead);
         } 
 
-        m_Anim.SetBool("Attacking", animData.attack);
+        m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
+        m_Anim.SetBool("RangedAttack", animData.rangedAttack);
         m_Anim.SetBool("ShieldSpecial", animData.shieldSpecial);
         m_Anim.SetBool("CanSpecial", animData.canSpecial);
         

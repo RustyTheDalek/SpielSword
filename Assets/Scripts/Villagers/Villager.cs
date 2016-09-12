@@ -9,6 +9,15 @@ using UnityStandardAssets._2D;
 [RequireComponent(typeof(PlatformerCharacter2D))]
 public abstract class Villager : MonoBehaviour
 {
+    public VillagerState villagerState = VillagerState.Waiting;
+    public AttackType villagerAttackType = AttackType.Melee;
+
+    Transform rangedTrans;
+
+    static GameObject rangedPrefab;
+
+    float rangedStrength = 25;
+
     public PlatformerCharacter2D m_Character;
     private bool m_Jump;
     public float xDir;
@@ -27,9 +36,6 @@ public abstract class Villager : MonoBehaviour
     /// </summary>
     public bool advancing;
 
-    /// <summary>
-    /// If the Villager alive?
-    /// </summary>
     public bool alive
     {
         get
@@ -46,8 +52,6 @@ public abstract class Villager : MonoBehaviour
             return villagerState == VillagerState.CurrentVillager;
         }
     }
-
-    public VillagerState villagerState;
 
     public ParticleSystem deathEffect;
 
@@ -73,6 +77,8 @@ public abstract class Villager : MonoBehaviour
         deathEffect = GetComponentInChildren<ParticleSystem>();
         startingPos = transform.position;
 
+        rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;
+
         //villagerState = VillagerState.Waiting;
 
         //TO-DO: FIX THIS TRASH
@@ -82,6 +88,11 @@ public abstract class Villager : MonoBehaviour
 
         animData.canSpecial = true;
         villagerState = VillagerState.Waiting;
+
+        if (!rangedPrefab)
+        {
+            rangedPrefab = (GameObject)Resources.Load("Range");
+        }
     }
 
     public virtual void Update()
@@ -95,11 +106,17 @@ public abstract class Villager : MonoBehaviour
                 xDir = ((Input.GetKey(KeyCode.D)) ? 1 : xDir);
                 xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
 
-                animData.attack = Input.GetKey(KeyCode.DownArrow);
-
-                if (!animData.attack)
+                switch (villagerAttackType)
                 {
-                    GetComponent<Animator>().SetBool("CanAttack", true);
+                    case AttackType.Melee:
+                        animData.meleeAttack = Input.GetKey(KeyCode.DownArrow);
+                        CanAttack(animData.meleeAttack);
+                        break;
+
+                    case AttackType.Ranged:
+                        animData.rangedAttack = Input.GetKey(KeyCode.DownArrow);
+                        CanAttack(animData.rangedAttack);
+                        break;    
                 }
 
                 OnSpecial(Input.GetKey(KeyCode.LeftArrow));
@@ -139,7 +156,16 @@ public abstract class Villager : MonoBehaviour
                         GetComponent<Rigidbody2D>().transform.position = actions[Game.t].pos;
                         animData.move = actions[Game.t].move;
                         animData.jump = actions[Game.t].jump;
-                        animData.attack = actions[Game.t].attack;
+                        switch (villagerAttackType)
+                        {
+                            case AttackType.Melee:
+                                animData.meleeAttack = actions[Game.t].meleeAttack;
+                                break;
+
+                            case AttackType.Ranged:
+                                animData.rangedAttack = actions[Game.t].rangedAttack;
+                                break;
+                        }
                         animData.shieldSpecial = actions[Game.t].special;
                         animData.canSpecial = actions[Game.t].canSpecial;
                         animData.dead = actions[Game.t].dead;
@@ -148,7 +174,7 @@ public abstract class Villager : MonoBehaviour
                     {
                         animData.move = 0;
                         animData.jump = false;
-                        animData.attack = false;
+                        animData.meleeAttack = false;
                         animData.dead = false;
                     }
 
@@ -169,6 +195,14 @@ public abstract class Villager : MonoBehaviour
         }
     }
 
+    public void CanAttack(bool attack)
+    {
+        if (!attack)
+        {
+            GetComponent<Animator>().SetBool("CanAttack", true);
+        }
+    }
+
     public void RecordFrame()
     {
         currentAction = new Action();
@@ -176,7 +210,16 @@ public abstract class Villager : MonoBehaviour
         currentAction.timeStamp = Time.timeSinceLevelLoad;
         currentAction.pos = transform.position;
         currentAction.move = xDir;
-        currentAction.attack = Input.GetKey(KeyCode.DownArrow);
+        switch (villagerAttackType)
+        {
+            case AttackType.Melee:
+                currentAction.meleeAttack = Input.GetKey(KeyCode.DownArrow);
+                break;
+
+            case AttackType.Ranged:
+                currentAction.rangedAttack = Input.GetKey(KeyCode.DownArrow);
+                break;
+        }
         currentAction.health = health;
         currentAction.special = Input.GetKey(KeyCode.LeftArrow);
         currentAction.canSpecial = animData.canSpecial;
@@ -210,7 +253,7 @@ public abstract class Villager : MonoBehaviour
                 animData.move = xDir;
                 animData.dead = false;
                 animData.jump = false;
-                animData.attack = false;
+                animData.meleeAttack = false;
                 m_Character.Move(animData);
                 break;
 
@@ -282,6 +325,24 @@ public abstract class Villager : MonoBehaviour
         {
             OnPastHit(collider);
         }
+    }
+
+    public void FireProjectile()
+    {
+        Debug.Log("Ranged Attack"); 
+        GameObject attack = Instantiate(rangedPrefab, rangedTrans.position, Quaternion.identity) as GameObject;
+
+        attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(rangedTrans.localPosition.x),0) * rangedStrength, ForceMode2D.Impulse);
+    }
+
+    public void CannotAttack()
+    {
+        GetComponentInChildren<MeleeAttack>().GetComponent<CircleCollider2D>().enabled = false;
+    }
+
+    public void CanAttack()
+    {
+        GetComponentInChildren<MeleeAttack>().GetComponent<CircleCollider2D>().enabled = true;
     }
 }
 

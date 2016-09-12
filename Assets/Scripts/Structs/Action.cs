@@ -8,7 +8,8 @@ public struct Action
     //Movement variables
     public Vector3 pos;
     public float move;
-    public bool attack;
+    public bool meleeAttack;
+    public bool rangedAttack;
     public bool dead;
     public bool jump;
 
@@ -21,7 +22,8 @@ public struct Action
     {
         pos = Vector3.zero;
         move = 0;
-        attack = true;
+        meleeAttack = true;
+        rangedAttack = true;
         dead = true;
         jump = false;
         health = 0;
