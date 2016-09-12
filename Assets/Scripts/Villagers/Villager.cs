@@ -81,6 +81,7 @@ public abstract class Villager : MonoBehaviour
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
         animData.canSpecial = true;
+        villagerState = VillagerState.Waiting;
     }
 
     public virtual void Update()
