@@ -96,6 +96,11 @@ public abstract class Villager : MonoBehaviour
 
                 animData.attack = Input.GetKey(KeyCode.DownArrow);
 
+                if (!animData.attack)
+                {
+                    GetComponent<Animator>().SetBool("CanAttack", true);
+                }
+
                 OnSpecial(Input.GetKey(KeyCode.LeftArrow));
 
                 if (!m_Jump)
