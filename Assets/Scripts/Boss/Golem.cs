@@ -23,6 +23,7 @@ public class Golem : BossManager {
         {
             if (leftArm.GetBool("S1Attack1") == true || rightArm.GetBool("S1Attack1") == true
                 || leftArm.GetBool("S1Attack2") == true || rightArm.GetBool("S1Attack2") == true
+				|| leftArm.GetBool("S1Attack3") == true || rightArm.GetBool("S1Attack3") == true
                 || leftArm.GetBool("S2Attack1") == true || rightArm.GetBool("S2Attack1") == true
                 || leftArm.GetBool("S2Attack2") == true || rightArm.GetBool("S2Attack2") == true
                 || leftArm.GetBool("S3Attack1") == true || rightArm.GetBool("S3Attack1") == true
@@ -52,7 +53,7 @@ public class Golem : BossManager {
     public override void StageOne ()
 	{
 		//Sets the amount of attacks possible this stage
-		attackCountStage = 4;
+		attackCountStage = 6;
 		// checks to make sure an attack is possible
 		if(!isAttacking)
 		{
@@ -110,6 +111,14 @@ public class Golem : BossManager {
 		if (attack == 3)
 		{
 			rightArm.SetBool("S1Attack2", true);
+		}
+		if (attack == 4)
+		{
+			leftArm.SetBool("S1Attack3", true);
+		}
+		if (attack == 5)
+		{
+			rightArm.SetBool("S1Attack3", true);
 		}
 	}// Selects the attack based on the given number
 	#endregion
