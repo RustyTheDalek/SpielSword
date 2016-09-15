@@ -15,7 +15,7 @@ public class Warrior : Villager
     {
         get
         {
-            if (shieldStrength > 0 && animData.shieldSpecial)
+            if (shieldStrength > 0 && animData.playerSpecial)
                 return true;
             else
                 return false;
@@ -48,12 +48,12 @@ public class Warrior : Villager
 
                 //When the player is trying to use the shield and the shield has 
                 //strength detract power  
-                if (animData.shieldSpecial && shieldStrength > 0)
+                if (animData.playerSpecial && shieldStrength > 0)
                 {
                     shieldStrength -= Time.deltaTime;
                 }
                 //otherwise if the shield is not in use and needs charging charge it up
-                else if (!animData.shieldSpecial && shieldStrength < 1)
+                else if (!animData.playerSpecial && shieldStrength < 1)
                 {
                     shieldStrength += Time.deltaTime;
                 }
@@ -68,7 +68,7 @@ public class Warrior : Villager
 
     public override void OnSpecial(bool playerSpecial)
     {
-        animData.shieldSpecial = playerSpecial;
+        animData.playerSpecial = playerSpecial;
     }
 
     public override void OnHit()

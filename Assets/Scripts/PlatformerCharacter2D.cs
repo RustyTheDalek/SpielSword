@@ -65,7 +65,7 @@ public class PlatformerCharacter2D : MonoBehaviour
 
         m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
         m_Anim.SetBool("RangedAttack", animData.rangedAttack);
-        m_Anim.SetBool("ShieldSpecial", animData.shieldSpecial);
+        m_Anim.SetBool("PlayerSpecial", animData.playerSpecial);
         m_Anim.SetBool("CanSpecial", animData.canSpecial);
         
         //only control the player if grounded or airControl is turned on

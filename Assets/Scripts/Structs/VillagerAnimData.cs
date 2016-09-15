@@ -10,7 +10,7 @@ public struct VillagerAnimData
     public bool jump;
     public bool meleeAttack;
     public bool rangedAttack;
-    public bool shieldSpecial;
+    public bool playerSpecial;
     public bool canSpecial;
     public bool dead;
 }

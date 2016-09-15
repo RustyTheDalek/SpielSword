@@ -166,7 +166,7 @@ public abstract class Villager : MonoBehaviour
                                 animData.rangedAttack = actions[Game.t].rangedAttack;
                                 break;
                         }
-                        animData.shieldSpecial = actions[Game.t].special;
+                        animData.playerSpecial = actions[Game.t].special;
                         animData.canSpecial = actions[Game.t].canSpecial;
                         animData.dead = actions[Game.t].dead;
                     }
