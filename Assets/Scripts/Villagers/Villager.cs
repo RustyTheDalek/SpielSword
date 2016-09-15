@@ -308,7 +308,7 @@ public abstract class Villager : MonoBehaviour
 
     public virtual void OnPastHit(Collider2D collider)
     {
-        if (collider.GetComponent<Attack>() && !animData.dead &&
+        if (collider.GetComponent<BossAttack>() && !animData.dead &&
             Game.timeState == TimeState.Forward)
         {
             Debug.Log("Past Villager Hit By Boss Attack");
@@ -332,7 +332,9 @@ public abstract class Villager : MonoBehaviour
         Debug.Log("Ranged Attack"); 
         GameObject attack = Instantiate(rangedPrefab, rangedTrans.position, Quaternion.identity) as GameObject;
 
-        attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(rangedTrans.localPosition.x),0) * rangedStrength, ForceMode2D.Impulse);
+        float direction = rangedTrans.position.x - transform.position.x;
+
+        attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction),0) * rangedStrength, ForceMode2D.Impulse);
     }
 
     public void CannotAttack()

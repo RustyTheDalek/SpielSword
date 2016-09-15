@@ -1,34 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Attack : MonoBehaviour
+/// <summary>
+/// Script for registering Boss attacks
+/// </summary>
+public class BossAttack : MonoBehaviour
 {
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void OnCollisionEnter2D(Collision2D coll)
     {
-        Debug.Log("Collided with " + coll.gameObject.name);
+        //Debug.Log("Collided with " + coll.gameObject.name);
+
+        //BossAttack can only damage Villagers, has to be enabled (In an attack 
+        //animation and God mode off for obvious reasons
         if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
             && !Game.GodMode)
         {
             coll.gameObject.GetComponent<Villager>().OnHit();
         }
-        else if (this.name.Contains("Range"))
-        {
-            Destroy(this.gameObject);
-        }
-
     }
 
     void OnTriggerEnter2D(Collider2D coll)

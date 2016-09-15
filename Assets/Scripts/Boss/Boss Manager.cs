@@ -268,9 +268,9 @@ public abstract class BossManager : MonoBehaviour {
 			}
 			sprite.GetComponent<PolygonCollider2D>().enabled = true;
 			
-			if(sprite.GetComponent<Attack>())
+			if(sprite.GetComponent<BossAttack>())
 			{
-				sprite.GetComponent<Attack>().enabled = false;
+				sprite.GetComponent<BossAttack>().enabled = false;
 			}
 			sprite.transform.DetachChildren();
 		}
