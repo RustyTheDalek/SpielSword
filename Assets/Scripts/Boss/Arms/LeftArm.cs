@@ -9,8 +9,12 @@ public class LeftArm : MonoBehaviour {
 
 	public Animator lArmRock1, lArmRock2, lArmRock3, lArmRock4, leftArm, rightCrystal;
 
+	bool flyOff;
 	// Use this for initialization
-	void Start () {}
+	void Start () 
+	{
+		flyOff = false;
+	}
 
 	/// <summary>
 	/// Causes the Left crystal to rise.
@@ -44,6 +48,7 @@ public class LeftArm : MonoBehaviour {
 	void LeftBoulderAttach ()
 	{
 		rockPileRight.GetComponent<SpriteRenderer>().enabled = false;
+		flyOff = false;
 		rockPileRight.transform.parent = this.transform;
 		rockPileRight.transform.position = this.transform.position;
 		rockPileRight.transform.rotation = this.transform.rotation;
@@ -56,7 +61,20 @@ public class LeftArm : MonoBehaviour {
 	void LeftBoulderDetach ()
 	{
 		rockPileRight.transform.parent = null;
-		rockPileRight.transform.position = new Vector3 (-8.5f, -7.5f, 0f);
-		rockPileRight.transform.rotation = new Quaternion (0, 0, 0, 0);
+		flyOff = true;
+	}
+	/// <summary>
+	/// Update the position and rotation of the rocks once they detatch.
+	/// </summary>
+	void Update ()
+	{
+		if(flyOff)
+		{
+			if(rockPileRight.transform.position.y <= 13)
+			{
+				rockPileRight.transform.Rotate (0, 0, 640 * Time.deltaTime, Space.World);
+				rockPileRight.transform.Translate(-10 * Time.deltaTime, 60 * Time.deltaTime, 0, Space.World);
+			}
+		}
 	}
 }

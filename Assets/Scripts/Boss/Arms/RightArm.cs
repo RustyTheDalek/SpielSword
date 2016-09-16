@@ -10,9 +10,11 @@ public class RightArm : MonoBehaviour {
 
 	public GameObject rockPileLeft;
 
+	bool flyOff;
 	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+	{
+		flyOff = false;
 	}
 
 	void SupportAttacks ()
@@ -43,6 +45,7 @@ public class RightArm : MonoBehaviour {
 	void RightBoulderAttach ()
 	{
 		rockPileLeft.GetComponent<SpriteRenderer>().enabled = false;
+		flyOff = false;
 		rockPileLeft.transform.parent = this.transform;
 		rockPileLeft.transform.position = this.transform.localPosition;
 		rockPileLeft.transform.rotation = this.transform.localRotation;
@@ -55,7 +58,20 @@ public class RightArm : MonoBehaviour {
 	void RightBoulderDetach ()
 	{
 		rockPileLeft.transform.parent = null;
-		rockPileLeft.transform.position = new Vector3 (8.5f, -7.5f, 0f);
-		rockPileLeft.transform.rotation = new Quaternion (0, 0, 0, 0);
+		flyOff = true;
+	}
+	/// <summary>
+	/// Update the position and rotation of the rocks once they detatch.
+	/// </summary>
+	void Update ()
+	{
+		if(flyOff)
+		{
+			if(rockPileLeft.transform.position.y <= 13)
+			{
+				rockPileLeft.transform.Rotate (0, 0, -640 * Time.deltaTime, Space.World);
+				rockPileLeft.transform.Translate(10 * Time.deltaTime, 60 * Time.deltaTime, 0, Space.World);
+			}
+		}
 	}
 }
