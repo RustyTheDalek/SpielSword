@@ -25,6 +25,16 @@ public class Warrior : Villager
     public override void Awake()
     {
         base.Awake();
+
+        specialType = SpecialType.Press;
+    }
+
+    // Use this for initialization
+    public override void Start()
+    {
+        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
+
+        base.Start();
     }
 
     public override void Update()

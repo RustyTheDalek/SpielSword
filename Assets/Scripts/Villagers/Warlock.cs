@@ -3,64 +3,76 @@ using System.Collections;
 
 public class Warlock : Villager
 {
+    #region Public Variables
+
     public static GameObject wardPrefab;
 
     public GameObject currentWard;
 
     public bool wardActive;
 
-    float holdTimer = 0;
+    #endregion
+
+    #region Protected Variables
+
+    protected GameObject teleportObj;
+    protected ParticleSystem teleport;
+
+    #endregion
+
+    #region Private Variables
+
+    #endregion
 
     public override void Awake()
     {
         base.Awake();
 
+        specialType = SpecialType.Press;
+        animData.playerSpecialIsTrigger = true;
+
         wardPrefab = Resources.Load("Ward") as GameObject;
+        teleportObj = Instantiate(Resources.Load("Particles/TeleportFX") as GameObject, transform, false);
+        teleport = teleportObj.GetComponent<ParticleSystem>();
     }
 
     // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	//public override void Update ()
- //   {
- //       base.Update();
+    public override void Start ()
+    {
+        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[0];
 
- //       switch (villagerState)
- //       {
- //           case VillagerState.CurrentVillager:
+        base.Start();
+    }
 
- //               //If the Ward is active and the player presses uses the special button 
- //               //again they need to teleport
- //               if (animData.playerSpecial && wardActive)
- //               {
- //                   transform.position = currentWard.transform.position;
- //               }
- //               break;
- //       }
-	//}
+    // Update is called once per frame
+    public override void Update()
+    {
+        base.Update();
+    }
 
-    public override void OnSpecial(bool playerSpecial)
+    public override void OnSpecial(bool _PlayerSpecial)
     {
         if (!wardActive)
         {
-            animData.playerSpecial = playerSpecial;
+            animData.playerSpecial = _PlayerSpecial;
         }
         else
         {
-            //NOT FINISHED
+            //TODO: Finalise functionality
             //If the Player presses the button once the Ward is active do the teleport
             //In future maybe destroyd current copy?
-            if (playerSpecial)
+            if (_PlayerSpecial)
             {
                 Debug.Log("Teleporting");
                 transform.position = currentWard.transform.position;
+                teleport.Play();
             }
         }
     }
 
+    /// <summary>
+    /// Called by the Animator to spawn the ward at the correct time
+    /// </summary>
     public void SpawnWard()
     {
         currentWard = Instantiate(wardPrefab, transform.position, Quaternion.identity) as GameObject;

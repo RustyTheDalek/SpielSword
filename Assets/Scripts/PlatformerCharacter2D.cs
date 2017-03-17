@@ -33,25 +33,28 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        m_Grounded = false;
-
-        // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
-        // This can be done using layers instead but Sample Assets will not overwrite your project settings.
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-        for (int i = 0; i < colliders.Length; i++)
+        if (m_Anim.runtimeAnimatorController)
         {
-            if (colliders[i].gameObject != gameObject)
+            m_Grounded = false;
+
+            // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+            // This can be done using layers instead but Sample Assets will not overwrite your project settings.
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+            for (int i = 0; i < colliders.Length; i++)
             {
-                m_Grounded = true;
+                if (colliders[i].gameObject != gameObject)
+                {
+                    m_Grounded = true;
+                }
             }
+
+            m_Anim.SetBool("Ground", m_Grounded);
+
+            // Set the vertical animation
+            m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+
+            m_Anim.SetFloat("TimeDirection", (float)Game.timeState);
         }
-
-        m_Anim.SetBool("Ground", m_Grounded);
-
-        // Set the vertical animation
-        m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
-
-        m_Anim.SetFloat("TimeDirection", (float)Game.timeState);
     }
 
 
@@ -65,7 +68,16 @@ public class PlatformerCharacter2D : MonoBehaviour
 
         m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
         m_Anim.SetBool("RangedAttack", animData.rangedAttack);
-        m_Anim.SetBool("PlayerSpecial", animData.playerSpecial);
+
+        if (animData.playerSpecialIsTrigger)
+        {
+            if(animData.playerSpecial)
+                m_Anim.SetTrigger("PlayerSpecial");
+        }
+        else
+        {
+            m_Anim.SetBool("PlayerSpecial", animData.playerSpecial);
+        }
         m_Anim.SetBool("CanSpecial", animData.canSpecial);
         
         //only control the player if grounded or airControl is turned on

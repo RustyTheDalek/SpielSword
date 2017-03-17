@@ -30,6 +30,8 @@ public class VillagerManager : MonoBehaviour {
 
     public List<Sprite> Hats;
 
+    public static RuntimeAnimatorController[] villagerAnimators = new RuntimeAnimatorController[2];
+
     public static int totalLives = 0;
 
 #if UNITY_EDITOR
@@ -44,6 +46,12 @@ public class VillagerManager : MonoBehaviour {
     /// Render Layer for CurrentVillager
     /// </summary>
     int currentVillagerLayer = 6;
+
+    void Awake()
+    {
+        //Retrieve Animators
+        villagerAnimators = Resources.LoadAll<RuntimeAnimatorController>("VAnimators");
+    }
 
     // Use this for initialization
     void Start ()

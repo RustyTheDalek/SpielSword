@@ -13,4 +13,5 @@ public struct VillagerAnimData
     public bool playerSpecial;
     public bool canSpecial;
     public bool dead;
+    public bool playerSpecialIsTrigger;
 }

@@ -9,17 +9,11 @@ using UnityStandardAssets._2D;
 [RequireComponent(typeof(PlatformerCharacter2D))]
 public abstract class Villager : MonoBehaviour
 {
+    #region Public Variables
+
     public VillagerState villagerState = VillagerState.Waiting;
     public AttackType villagerAttackType = AttackType.Melee;
 
-    Transform rangedTrans;
-
-    static GameObject rangedPrefab;
-
-    float rangedStrength = 25;
-
-    public PlatformerCharacter2D m_Character;
-    private bool m_Jump;
     public float xDir;
 
     public float health = 1;
@@ -29,11 +23,9 @@ public abstract class Villager : MonoBehaviour
     //Target X position for Villager to aim for when they're waiting in queue
     public float targetX;
 
-    public  VillagerAnimData animData;
+    public VillagerAnimData animData;
 
-    /// <summary>
-    /// Whether the Villager is advancing in the queue
-    /// </summary>
+    //Whether the Villager is advancing in the queue
     public bool advancing;
 
     public bool alive
@@ -71,8 +63,32 @@ public abstract class Villager : MonoBehaviour
 
     #endregion
 
+    #endregion
+
+    #region Protected Variables
+
+    protected PlatformerCharacter2D m_Character;
+    protected Animator m_Animator;
+
+    protected SpecialType specialType;
+
+    #endregion
+
+    #region Private Variables
+
+    float rangedProjectileStrength = 25;
+
+    bool m_Jump;
+
+    Transform rangedTrans;
+
+    #endregion
+
+    static GameObject rangedPrefab;
+
     public virtual void Awake()
     {
+        m_Animator = GetComponent<Animator>();
         m_Character = GetComponent<PlatformerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         startingPos = transform.position;
@@ -87,11 +103,20 @@ public abstract class Villager : MonoBehaviour
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
         animData.canSpecial = true;
+        animData.playerSpecialIsTrigger = false;
         villagerState = VillagerState.Waiting;
 
         if (!rangedPrefab)
         {
             rangedPrefab = (GameObject)Resources.Load("Range");
+        }
+    }
+
+    public virtual void Start()
+    {
+        if (!m_Animator.runtimeAnimatorController)
+        {
+            Debug.LogError("No Animator set for " + gameObject.name);
         }
     }
 
@@ -103,7 +128,7 @@ public abstract class Villager : MonoBehaviour
 
                 //Get PlayerMovement
                 xDir = 0;
-                xDir = ((Input.GetKey(KeyCode.D)) ? 1 : xDir);
+                xDir = ((Input.GetKey(KeyCode.D)) ?  1 : xDir);
                 xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
 
                 switch (villagerAttackType)
@@ -119,7 +144,17 @@ public abstract class Villager : MonoBehaviour
                         break;    
                 }
 
-                OnSpecial(Input.GetKey(KeyCode.LeftArrow));
+                switch (specialType)
+                {
+                    case SpecialType.Hold:
+                        OnSpecial(Input.GetKey(KeyCode.LeftArrow));
+                        break;
+
+                    case SpecialType.Press:
+                        OnSpecial(Input.GetKeyDown(KeyCode.LeftArrow));
+                        break;
+                }
+
 
                 if (!m_Jump)
                 {
@@ -185,7 +220,7 @@ public abstract class Villager : MonoBehaviour
                         {
                             //Debug.Break();
                             Debug.Log("Villager Un-Dying");
-                            GetComponent<Animator>().SetTrigger("ExitDeath");
+                            m_Animator.SetTrigger("ExitDeath");
                         }
                     }
 
@@ -199,7 +234,7 @@ public abstract class Villager : MonoBehaviour
     {
         if (!attack)
         {
-            GetComponent<Animator>().SetBool("CanAttack", true);
+            m_Animator.SetBool("CanAttack", true);
         }
     }
 
@@ -334,7 +369,7 @@ public abstract class Villager : MonoBehaviour
 
         float direction = rangedTrans.position.x - transform.position.x;
 
-        attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction),0) * rangedStrength, ForceMode2D.Impulse);
+        attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction),0) * rangedProjectileStrength, ForceMode2D.Impulse);
     }
 
     public void CannotAttack()
