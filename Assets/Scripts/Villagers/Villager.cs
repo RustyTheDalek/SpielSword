@@ -63,9 +63,6 @@ public abstract class Villager : MonoBehaviour
 
     #region pastVillager variables
 
-    public List<Action> actions = new List<Action>();
-    public Action currentAction;
-
     /// <summary>
     /// Special time in which Villagers "Finish" Dying.
     /// </summary>
@@ -114,7 +111,7 @@ public abstract class Villager : MonoBehaviour
 
         animData.canSpecial = true;
         animData.playerSpecialIsTrigger = false;
-        villagerState = VillagerState.Waiting;
+        //villagerState = VillagerState.Waiting;
 
         if (!rangedPrefab)
         {
@@ -165,14 +162,11 @@ public abstract class Villager : MonoBehaviour
                         break;
                 }
 
-
                 if (!m_Jump)
                 {
                     // Read the jump input in Update so button presses aren't missed.
                     m_Jump = Input.GetKeyDown(KeyCode.Space);
                 }
-
-                RecordFrame();
 
                 break;
 
@@ -192,50 +186,16 @@ public abstract class Villager : MonoBehaviour
 
             case VillagerState.PastVillager:
 
-                if (actions != null)
+                if (Game.timeState == TimeState.Backward)
                 {
-                    //So long as T is within Range
-                    if (Game.t < actions.Count && Game.t >= 0)
+                    if (reverseDeathTimeStamp != 0 &&
+                        reverseDeathTimeStamp == Game.t)
                     {
-                        //Set new position and adjust for Time Scale
-                        GetComponent<Rigidbody2D>().transform.position = actions[Game.t].pos;
-                        animData.move = actions[Game.t].move;
-                        animData.jump = actions[Game.t].jump;
-                        switch (villagerAttackType)
-                        {
-                            case AttackType.Melee:
-                                animData.meleeAttack = actions[Game.t].meleeAttack;
-                                break;
-
-                            case AttackType.Ranged:
-                                animData.rangedAttack = actions[Game.t].rangedAttack;
-                                break;
-                        }
-                        animData.playerSpecial = actions[Game.t].special;
-                        animData.canSpecial = actions[Game.t].canSpecial;
-                        animData.dead = actions[Game.t].dead;
+                        //Debug.Break();
+                        Debug.Log("Villager Un-Dying");
+                        m_Animator.SetTrigger("ExitDeath");
                     }
-                    else if (Game.t == actions.Count)
-                    {
-                        animData.move = 0;
-                        animData.jump = false;
-                        animData.meleeAttack = false;
-                        animData.dead = false;
-                    }
-
-                    if (Game.timeState == TimeState.Backward)
-                    {
-                        if (reverseDeathTimeStamp != 0 &&
-                            reverseDeathTimeStamp == Game.t)
-                        {
-                            //Debug.Break();
-                            Debug.Log("Villager Un-Dying");
-                            m_Animator.SetTrigger("ExitDeath");
-                        }
-                    }
-
                 }
-
                 break;
         }
     }
@@ -246,36 +206,6 @@ public abstract class Villager : MonoBehaviour
         {
             m_Animator.SetBool("CanAttack", true);
         }
-    }
-
-    public void RecordFrame()
-    {
-        currentAction = new Action();
-
-        currentAction.timeStamp = Time.timeSinceLevelLoad;
-        currentAction.pos = transform.position;
-        currentAction.move = xDir;
-        switch (villagerAttackType)
-        {
-            case AttackType.Melee:
-                currentAction.meleeAttack = Input.GetKey(KeyCode.DownArrow);
-                break;
-
-            case AttackType.Ranged:
-                currentAction.rangedAttack = Input.GetKey(KeyCode.DownArrow);
-                break;
-        }
-        currentAction.health = health;
-        currentAction.special = Input.GetKey(KeyCode.LeftArrow);
-        currentAction.canSpecial = animData.canSpecial;
-
-        actions.Add(currentAction);
-    }
-
-    public void actionsSetup(List<Action> _Actions)
-    {
-        actions = new List<Action>();
-        actions.AddRange(_Actions);
     }
 
     private void FixedUpdate()
@@ -304,18 +234,6 @@ public abstract class Villager : MonoBehaviour
 
             case VillagerState.PastVillager:
 
-                if (actions != null)
-                {
-                    if (Game.t < actions.Count &&
-                        Game.t >= 0)
-                    {
-                        m_Character.Move(animData);
-                    }
-                    else if (Game.t == actions.Count)
-                    {
-                        m_Character.Move(animData);
-                    }
-                }
                 break;
         }
     }

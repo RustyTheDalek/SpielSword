@@ -26,6 +26,9 @@ public class Warlock : Villager
 
     public override void Awake()
     {
+        //m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
+
+
         base.Awake();
 
         specialType = SpecialType.Press;
@@ -39,8 +42,6 @@ public class Warlock : Villager
     // Use this for initialization
     public override void Start ()
     {
-        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
-
         base.Start();
     }
 

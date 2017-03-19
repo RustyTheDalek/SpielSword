@@ -8,8 +8,8 @@ public static class Game
     /// <summary>
     /// Custom Time Variable for past Villagers
     /// </summary>
-    public static int t;
-
+    public static int t = 0;
+                          
     /// <summary>
     /// Scaling for Time Helps speed up reversal
     /// </summary>

@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Determines Time state for COntrolling Villagers and Boss' playback
+/// Determines Time state for Controlling Villagers and Boss' playback
 /// </summary>
 public enum TimeState
 {
