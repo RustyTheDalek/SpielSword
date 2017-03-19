@@ -38,7 +38,7 @@ public class Head : MonoBehaviour {
         if (coll.transform.name == "Melee" && boss.attackable)
         {
             //Debug.Log("Attack Succesful");
-            OnHit();
+            OnHit(coll.GetComponent<MeleeAttack>().damageMult);
         }
         else
         {
@@ -50,13 +50,14 @@ public class Head : MonoBehaviour {
     {
         if (coll.transform.name.Contains("Range") && boss.attackable)
         {
-            OnHit();
+            OnHit(1);
         }
     }
 
-    public void OnHit()
+    public void OnHit(int damageMultiplier)
     {
-        Golem.health--;
+        Debug.Log("Golem took " + 1 * damageMultiplier + " Damage!");
+        Golem.health -= 1 * damageMultiplier;
         GetComponent<SpriteRenderer>().sprite = damageHead;
         damageTimer.StartTimer();
     }

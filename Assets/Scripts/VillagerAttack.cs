@@ -6,16 +6,22 @@ using System.Collections;
 /// </summary>
 public class VillagerAttack : MonoBehaviour
 {
+
+    public int damageMult = 1;
+
     void OnTriggerEnter2D(Collider2D coll)
     {
         if (this.name.Contains("Range"))
         {
             if (coll.gameObject.GetComponent<Head>())
             {
-                coll.gameObject.GetComponent<Head>().OnHit();
+                coll.gameObject.GetComponent<Head>().OnHit(damageMult);
             }
 
-            Destroy(this.gameObject);
+            if (coll.tag != "Ethereal")
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 

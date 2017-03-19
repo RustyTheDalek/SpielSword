@@ -39,7 +39,7 @@ public class Warlock : Villager
     // Use this for initialization
     public override void Start ()
     {
-        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[0];
+        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
 
         base.Start();
     }
@@ -75,9 +75,12 @@ public class Warlock : Villager
     /// </summary>
     public void SpawnWard()
     {
-        currentWard = Instantiate(wardPrefab, transform.position, Quaternion.identity) as GameObject;
+        if (Game.timeState == TimeState.Forward)
+        {
+            currentWard = Instantiate(wardPrefab, transform.position, Quaternion.identity) as GameObject;
 
-        wardActive = true;
-        animData.canSpecial = false;
+            wardActive = true;
+            animData.canSpecial = false;
+        }
     }
 }

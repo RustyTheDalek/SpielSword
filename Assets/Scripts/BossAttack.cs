@@ -21,14 +21,16 @@ public class BossAttack : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if (this.name.Contains("Range"))
-        {
-            if (coll.gameObject.GetComponent<Head>())
-            {
-                coll.gameObject.GetComponent<Head>().OnHit();
-            }
+        //TODO: Potentially redudant code, have to come back and check this
+        //if (this.name.Contains("Range"))
+        //{
+        //    if (coll.gameObject.GetComponent<Head>())
+        //    {
+        //        Debug.Log("hit");
+        //        coll.gameObject.GetComponent<Head>().OnHit(1);
+        //    }
 
-            Destroy(this.gameObject);
-        }
+        //    Destroy(this.gameObject);
+        //}
     }
 }

@@ -32,6 +32,8 @@ public class VillagerManager : MonoBehaviour {
 
     public static RuntimeAnimatorController[] villagerAnimators = new RuntimeAnimatorController[2];
 
+    public static List<MageAura> auras = new List<MageAura>();
+
     public static int totalLives = 0;
 
 #if UNITY_EDITOR
@@ -90,6 +92,11 @@ public class VillagerManager : MonoBehaviour {
 
                 if(!activeVillager.alive)//Game world needs to be reset
                 {
+                    foreach (MageAura aura in auras)
+                    {
+                        aura.DecreaseStrength();
+                    }
+
                     //Reverse time
                     Game.timeState = TimeState.Backward;
 

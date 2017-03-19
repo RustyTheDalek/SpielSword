@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityStandardAssets._2D;
 
 /// <summary>
 /// Class for controller Villager
@@ -50,6 +49,17 @@ public abstract class Villager : MonoBehaviour
     public CircleCollider2D melee;
 
     public CircleCollider2D[] PlayerCollisions;
+
+    /// <summary>
+    /// If this is the current Villager (Villager being controlled by the player)
+    /// </summary>
+    public bool currentVillager
+    {
+        get
+        {
+            return villagerState == VillagerState.CurrentVillager;
+        }
+    }
 
     #region pastVillager variables
 
@@ -334,7 +344,7 @@ public abstract class Villager : MonoBehaviour
         PlayerCollisions[1].isTrigger = active;
     }
 
-    public abstract void OnSpecial(bool playerSpecial);
+    public abstract void OnSpecial(bool _PlayerSpecial);
 
     public virtual void OnHit()
     {
@@ -380,6 +390,12 @@ public abstract class Villager : MonoBehaviour
     public void CanAttack()
     {
         GetComponentInChildren<MeleeAttack>().GetComponent<CircleCollider2D>().enabled = true;
+    }
+
+    public void SetDamageMult(int val)
+    {
+        melee.GetComponent<MeleeAttack>().damageMult = val;
+        rangedPrefab.GetComponent<VillagerAttack>().damageMult = val;
     }
 }
 
