@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class Warrior : Villager
 {
-    float shieldStrength = 1;
+    public float shieldStrength = 1;
 
     /// <summary>
     /// Whether the Villager is shielded from damage
@@ -26,14 +26,14 @@ public class Warrior : Villager
     {
         base.Awake();
 
-        specialType = SpecialType.Press;
+        specialType = SpecialType.Hold;
     }
 
     // Use this for initialization
     public override void Start()
     {
-        //m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
-
+        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[2];
+        villagerAttackType = AttackType.Melee;
         base.Start();
     }
 
@@ -43,7 +43,7 @@ public class Warrior : Villager
 
         switch (villagerState)
         {
-            case VillagerState.CurrentVillager:
+            case VillagerState.PresentVillager:
 
                 //If the Shield has been used too long we need to disable the Players 
                 //ability to special and renable when the shield is not in use

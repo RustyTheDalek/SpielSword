@@ -4,9 +4,8 @@ using System.Collections;
 /// <summary>
 /// Script for VillagerRange
 /// </summary>
-public class VillagerAttack : MonoBehaviour
+public class VillagerAttack : SpawnableSpriteTimeObject
 {
-
     public int damageMult = 1;
 
     void OnTriggerEnter2D(Collider2D coll)
@@ -20,7 +19,7 @@ public class VillagerAttack : MonoBehaviour
 
             if (coll.tag != "Ethereal")
             {
-                Destroy(this.gameObject);
+                SetActive(false);
             }
         }
     }
@@ -29,7 +28,7 @@ public class VillagerAttack : MonoBehaviour
     {
         if (this.name.Contains("Range"))
         {
-            Destroy(this.gameObject);
+            SetActive(false);
         }
     }
 }

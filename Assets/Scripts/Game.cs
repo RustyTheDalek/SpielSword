@@ -23,5 +23,7 @@ public static class Game
     /// <summary>
     /// If the Boss is attackable
     /// </summary>
-    public static bool attackable = true; 
+    public static bool attackable = true;
+
+    public static bool debugText = true; 
 }

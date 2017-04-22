@@ -16,6 +16,7 @@ public class GameTime : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        text.text = "Time: " + Game.t;
+        text.text = "Time: " + Game.t +
+            "\nTimeState: " + Game.timeState;
 	}
 }

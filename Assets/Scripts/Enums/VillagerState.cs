@@ -3,7 +3,7 @@
 /// </summary>
 public enum VillagerState
 {
-    CurrentVillager,
+    PresentVillager,
     PastVillager,
     Waiting,
 }

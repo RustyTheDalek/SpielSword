@@ -13,8 +13,11 @@ public class VillagerFrameData : FrameData
 
     public bool     meleeAttack,
                     rangedAttack,
+                    meleeAttackEnd,
+                    rangedAttackEnd,
                     special,
                     canSpecial,
-                    dead;
+                    dead,
+                    deathEnd;
 
 }

@@ -47,7 +47,7 @@ public abstract class BossManager : MonoBehaviour {
 
     #region Variables for retracing the Boss' Actions
     //List of Boss parts that are tracked for rewind
-    List<ObjectTracking> trackedBossObjs = new List<ObjectTracking>();
+    List<Animator> bossAnims = new List<Animator>();
 
     public List<float> trackedHealth = new List<float>();
     #endregion
@@ -69,12 +69,9 @@ public abstract class BossManager : MonoBehaviour {
 
         //Get All objects that can be tracked
         //Currently assumes anything with an Animator needs to be tracked
-        Component[] objs = GetComponentsInChildren<Animator>();
+        Animator[] objs = GetComponentsInChildren<Animator>();
 
-        foreach (Component part in objs)
-        {
-            trackedBossObjs.Add(part.gameObject.AddComponent<ObjectTracking>());
-        }
+        bossAnims.AddRange(objs);
     }
 
     // Update is called once per frame
@@ -236,10 +233,10 @@ public abstract class BossManager : MonoBehaviour {
 
         health = 100;
 
-        foreach (ObjectTracking obj in trackedBossObjs)
-        {
-            obj.Reset();
-        } 
+        //foreach (ObjectTracking obj in trackedBossObjs)
+        //{
+        //    obj.Reset();
+        //} 
 
     }
 
@@ -280,7 +277,7 @@ public abstract class BossManager : MonoBehaviour {
 
     public void SetAnimators(bool enabled)
     {
-        foreach (ObjectTracking obj in trackedBossObjs)
+        foreach (Animator obj in bossAnims)
         {
             obj.GetComponent<Animator>().enabled = enabled;
         }

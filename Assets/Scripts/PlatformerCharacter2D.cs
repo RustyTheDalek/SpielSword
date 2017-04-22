@@ -53,7 +53,7 @@ public class PlatformerCharacter2D : MonoBehaviour
             // Set the vertical animation
             m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
 
-            m_Anim.SetFloat("TimeDirection", (float)Game.timeState);
+            //m_Anim.SetFloat("TimeDirection", (float)Game.timeState);
         }
     }
 
@@ -61,13 +61,32 @@ public class PlatformerCharacter2D : MonoBehaviour
     public void Move(VillagerAnimData animData)
     {
         //If dead and not in dead state
-        if (animData.dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        if (animData.dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death") && 
+            Game.timeState == TimeState.Forward)
         {
-            m_Anim.SetBool("Dead", animData.dead);
-        } 
+            m_Anim.SetTrigger("Dead");
+        }
 
-        m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
-        m_Anim.SetBool("RangedAttack", animData.rangedAttack);
+        if (animData.deathEnd && Game.timeState == TimeState.Backward)
+        {
+            Debug.Log("Exiting Death");
+            m_Anim.SetTrigger("ExitDeath");
+        }
+
+        if (Game.timeState == TimeState.Forward)
+        {
+            m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
+            m_Anim.SetBool("RangedAttack", animData.rangedAttack);
+        }
+
+        if (animData.meleeAttackEnd)
+            m_Anim.SetTrigger("MeleeAttackEnd");
+
+        if (animData.rangedAttackEnd)
+        {
+            Debug.Log("Reversing ranged attack");
+            m_Anim.SetTrigger("RangedAttackEnd");
+        }
 
         if (animData.playerSpecialIsTrigger)
         {

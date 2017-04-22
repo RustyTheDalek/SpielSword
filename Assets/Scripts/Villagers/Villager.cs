@@ -40,7 +40,7 @@ public abstract class Villager : MonoBehaviour
     {
         get
         {
-            return villagerState == VillagerState.CurrentVillager;
+            return villagerState == VillagerState.PresentVillager;
         }
     }
 
@@ -57,7 +57,7 @@ public abstract class Villager : MonoBehaviour
     {
         get
         {
-            return villagerState == VillagerState.CurrentVillager;
+            return villagerState == VillagerState.PresentVillager;
         }
     }
 
@@ -91,8 +91,6 @@ public abstract class Villager : MonoBehaviour
 
     #endregion
 
-    static GameObject rangedPrefab;
-
     public virtual void Awake()
     {
         m_Animator = GetComponent<Animator>();
@@ -113,10 +111,6 @@ public abstract class Villager : MonoBehaviour
         animData.playerSpecialIsTrigger = false;
         //villagerState = VillagerState.Waiting;
 
-        if (!rangedPrefab)
-        {
-            rangedPrefab = (GameObject)Resources.Load("Range");
-        }
     }
 
     public virtual void Start()
@@ -129,9 +123,11 @@ public abstract class Villager : MonoBehaviour
 
     public virtual void Update()
     {
+        animData.dead = !alive;
+
         switch(villagerState)
         {
-            case VillagerState.CurrentVillager:   
+            case VillagerState.PresentVillager:   
 
                 //Get PlayerMovement
                 xDir = 0;
@@ -168,6 +164,14 @@ public abstract class Villager : MonoBehaviour
                     m_Jump = Input.GetKeyDown(KeyCode.Space);
                 }
 
+#if UNITY_EDITOR
+
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+                    Kill();
+                }
+#endif
+
                 break;
 
             case VillagerState.Waiting:
@@ -193,11 +197,23 @@ public abstract class Villager : MonoBehaviour
                     {
                         //Debug.Break();
                         Debug.Log("Villager Un-Dying");
-                        m_Animator.SetTrigger("ExitDeath");
+                        //m_Animator.SetTrigger("ExitDeath");
                     }
                 }
                 break;
         }
+    }
+
+    internal void ReverseVillager()
+    {
+        m_Animator.SetLayerWeight(0, 0);
+        m_Animator.SetLayerWeight(1, 1);
+    }
+
+    internal void ForwardVillager()
+    {
+        m_Animator.SetLayerWeight(0, 1);
+        m_Animator.SetLayerWeight(1, 0);
     }
 
     public void CanAttack(bool attack)
@@ -212,7 +228,7 @@ public abstract class Villager : MonoBehaviour
     {
         switch (villagerState)
         {
-            case VillagerState.CurrentVillager:
+            case VillagerState.PresentVillager:
 
                 animData.move = xDir;
                 animData.jump = m_Jump;
@@ -292,12 +308,17 @@ public abstract class Villager : MonoBehaviour
 
     public void FireProjectile()
     {
-        Debug.Log("Ranged Attack"); 
-        GameObject attack = Instantiate(rangedPrefab, rangedTrans.position, Quaternion.identity) as GameObject;
+        if (villagerState == VillagerState.PresentVillager)
+        {
+            Debug.Log("Ranged Attack");
 
-        float direction = rangedTrans.position.x - transform.position.x;
+            GameObject attack = AssetManager.projectile.Spawn(rangedTrans.position);
 
-        attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction),0) * rangedProjectileStrength, ForceMode2D.Impulse);
+            float direction = rangedTrans.position.x - transform.position.x;
+
+            attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
+                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
+        }
     }
 
     public void CannotAttack()
@@ -313,7 +334,7 @@ public abstract class Villager : MonoBehaviour
     public void SetDamageMult(int val)
     {
         melee.GetComponent<MeleeAttack>().damageMult = val;
-        rangedPrefab.GetComponent<VillagerAttack>().damageMult = val;
+        AssetManager.projectile.GetComponent<VillagerAttack>().damageMult = val;
     }
 }
 

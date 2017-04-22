@@ -15,7 +15,7 @@ public class TimeObject : BaseTimeObject<FrameData>
 
         gameObject.SetActive(frames[currentFrame].enabled);
 
-        currentFrame++;
+        currentFrame += (int)Game.timeState;
     }
 
     protected override void TrackFrame()

@@ -18,7 +18,7 @@ public class VillagerManager : MonoBehaviour {
                         warpGateExit;
 
     
-    Villager activeVillager;
+    public Villager activeVillager;
 
     [SerializeField] List<Villager> remainingVillagers;
     List<Villager> pastVillagers;
@@ -49,6 +49,8 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     int currentVillagerLayer = 6;
 
+    VillagerClass ClassToSpawn = VillagerClass.Mage;
+
     void Awake()
     {
         //Retrieve Animators
@@ -63,13 +65,49 @@ public class VillagerManager : MonoBehaviour {
         pastVillagers = new List<Villager>();
 
         //Get all Villagers and add them to the Villager list
-        Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
-        remainingVillagers.AddRange(villagers);
+        //Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
+        //remainingVillagers.AddRange(villagers
+        Vector3 spawnOffset = Vector3.zero;
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject temp = AssetManager.Vilager.Spawn();
+
+            spawnOffset += new Vector3(-1, 0, 0);
+
+            SetupVillager(temp, spawnOffset);
+        }
 
         //Spawn a new villager and teleport them to the Arena
         NextVillager();
         EnterArena();
 	}
+
+    private void SetupVillager(GameObject villager, Vector3 spawnOffset)
+    {
+        villager.transform.SetParent(remainingVillagersTrans);
+        villager.transform.localPosition = spawnOffset;
+        villager.name = "Spiel " + -spawnOffset.x;
+
+        switch (ClassToSpawn)
+        {
+            case VillagerClass.Warrior:
+
+                villager.AddComponent<Warrior>();
+                break;
+
+            case VillagerClass.Mage:
+
+                villager.AddComponent<Mage>();
+                break;
+
+            case VillagerClass.Warlock:
+
+                villager.AddComponent<Warlock>();
+                break;
+        }
+
+        remainingVillagers.Add(villager.GetComponent<Villager>());
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -77,12 +115,26 @@ public class VillagerManager : MonoBehaviour {
 
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
 
-        myT = Game.t;
         //myTimeScale = Time.timeScale;
 
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             activeVillager.Kill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ClassToSpawn = VillagerClass.Warrior;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ClassToSpawn = VillagerClass.Mage;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ClassToSpawn = VillagerClass.Warlock;
         }
 #endif
 
@@ -92,6 +144,8 @@ public class VillagerManager : MonoBehaviour {
 
                 if(!activeVillager.alive)//Game world needs to be reset
                 {
+                    TimeObjectManager.SoftReset();
+
                     foreach (MageAura aura in auras)
                     {
                         aura.DecreaseStrength();
@@ -129,9 +183,9 @@ public class VillagerManager : MonoBehaviour {
 
             case TimeState.Backward:
 
-                float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-                float newTimeScale = -Mathf.Pow(x, 2) + (4 * x) + 1;
-                Time.timeScale = newTimeScale;
+                //float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
+                //float newTimeScale = -Mathf.Pow(x, 2) + (4 * x) + 1;
+                //Time.timeScale = newTimeScale;
 
                 break;
         }  
@@ -151,40 +205,11 @@ public class VillagerManager : MonoBehaviour {
         Game.t += (int)Time.timeScale * (int)Game.timeState;
 	}
 
-    void LateUpdate()
+    public void OnNewRound()
     {
-        switch (Game.timeState)
-        {
-            case TimeState.Forward:
-
-                //Store longest time for Scaling
-                if (Game.t > Game.longestTime)
-                    Game.longestTime = Game.t;
-
-                break;
-        }
-
-    }
-
-    void FixedUpdate()
-    {
-        switch (Game.timeState)
-        {
-            case TimeState.Backward:
-
-                if(Game.t <= 0)
-                {
-                    Game.t = 0;
-                    Time.timeScale = 1;
-                    currentBoss.Reset();
-
-                    Game.timeState = TimeState.Forward;
-
-                    NextVillager();
-                    EnterArena();
-                }
-                break;
-        }
+        currentBoss.Reset();
+        NextVillager();
+        EnterArena();
     }
 
     /// <summary>
@@ -204,9 +229,10 @@ public class VillagerManager : MonoBehaviour {
 
             //Get the next Villager
             activeVillager = remainingVillagers[0];
-            activeVillager.villagerState = VillagerState.CurrentVillager;
+            activeVillager.villagerState = VillagerState.PresentVillager;
             activeVillager.transform.parent = activeVillagerTrans;
             activeVillager.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
+            TimeObjectManager.vObjects.Add(activeVillager.GetComponent<VillagerTimeObject>());
             remainingVillagers.RemoveAt(0);
 
             currentVillagerLayer++;

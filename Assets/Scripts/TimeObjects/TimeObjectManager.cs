@@ -10,6 +10,10 @@ public class TimeObjectManager : MonoBehaviour
 
     public static List<TimeObject> tObjects = new List<TimeObject>();
     public static List<VillagerTimeObject> vObjects = new List<VillagerTimeObject>();
+    public static List<SpriteTimeObject> spriteObjects = new List<SpriteTimeObject>();
+    public static List<SpawnableSpriteTimeObject> vSpawnable = new List<SpawnableSpriteTimeObject>();
+
+    VillagerManager vilManager;
 
     // Use this for initialization
     void Start ()
@@ -28,6 +32,10 @@ public class TimeObjectManager : MonoBehaviour
         {
             vObjects.Add(vObj);
         }
+
+        AssetManager.projectile.name = "Range";
+
+        vilManager = GetComponentInChildren<VillagerManager>();
     }
 
     // Update is called once per frame
@@ -43,17 +51,63 @@ public class TimeObjectManager : MonoBehaviour
 
             foreach (TimeObject tObj in tObjects)
             {
-                tObj.Reset();
+                tObj.HardReset();
             }
 
             foreach (VillagerTimeObject vObj in vObjects)
             {
-                vObj.Reset();
+                vObj.HardReset();
             }
+
+            foreach (SpawnableSpriteTimeObject vAtt in vSpawnable)
+            {
+                vAtt.HardReset();
+            }
+
+            foreach (SpriteTimeObject sObj in spriteObjects)
+            {
+                sObj.HardReset();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            
         }
          
 #endif
+    }
 
+
+    public static void SoftReset()
+    {
+        //Game.timeState = TimeState.Backward;
+
+        //Time.timeScale = .25f;
+
+        foreach (TimeObject tObj in tObjects)
+        {
+            tObj.SoftReset();
+        }
+
+        foreach (VillagerTimeObject vObj in vObjects)
+        {
+            vObj.SoftReset();
+        }
+
+        foreach (SpawnableSpriteTimeObject vAtt in vSpawnable)
+        {
+            vAtt.SoftReset();
+        }
+
+        foreach (SpriteTimeObject sObj in spriteObjects)
+        {
+            sObj.SoftReset();
+        }
+    }
+
+    private void LateUpdate()
+    {
         //Increment Game time
         Game.t += (int)Time.timeScale * (int)Game.timeState;
 
@@ -61,6 +115,16 @@ public class TimeObjectManager : MonoBehaviour
         {
             if (Game.t > Game.longestTime)
                 Game.longestTime = Game.t;
+        }
+        else
+        {
+            if (Game.t <= 0)
+            {
+                Game.t = 0;
+                Game.timeState = TimeState.Forward;
+
+                vilManager.OnNewRound();
+            }
         }
     }
 }

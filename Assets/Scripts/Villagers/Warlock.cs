@@ -26,7 +26,7 @@ public class Warlock : Villager
 
     public override void Awake()
     {
-        //m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
+        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
 
 
         base.Awake();
@@ -43,6 +43,8 @@ public class Warlock : Villager
     public override void Start ()
     {
         base.Start();
+
+        villagerAttackType = AttackType.Ranged;
     }
 
     // Update is called once per frame

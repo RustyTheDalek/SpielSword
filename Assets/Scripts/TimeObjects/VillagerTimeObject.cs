@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,11 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
     protected PlatformerCharacter2D m_Character;
 
     VillagerAnimData vAnimData;
+
+    public bool attackStart, 
+                attackFinish,
+                deathFinish,
+                deathRecorded;
 
     protected override void Start()
     {
@@ -22,25 +28,31 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
     {
         vAnimData = new VillagerAnimData();
 
+        villager.health = frames[currentFrame].health;  
         vAnimData.move = frames[currentFrame].move;
         //villager.animData.jump = actions[Game.t].jump;
 
         switch (villager.villagerAttackType)
         {
             case AttackType.Melee:
-                vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
+                //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
                 villager.CanAttack(vAnimData.meleeAttack);
+                vAnimData.meleeAttackEnd = frames[currentFrame].meleeAttackEnd;
+                vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
                 break;
 
             case AttackType.Ranged:
-                vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
+                //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
                 villager.CanAttack(vAnimData.rangedAttack);
+                vAnimData.rangedAttackEnd = frames[currentFrame].rangedAttackEnd;
+                vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
                 break;
         }
 
         vAnimData.playerSpecial = frames[currentFrame].special;
         vAnimData.canSpecial = frames[currentFrame].canSpecial;
         vAnimData.dead = frames[currentFrame].dead;
+        vAnimData.deathEnd = frames[currentFrame].deathEnd;
 
         m_Character.Move(vAnimData);
 
@@ -49,11 +61,12 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
         gameObject.SetActive(frames[currentFrame].enabled);
 
-        currentFrame++;
+        currentFrame += (int)Game.timeState;
     }
 
     protected override void TrackFrame()
     {
+
         tempFrame = new VillagerFrameData();
 
         tempFrame.m_Position = transform.position;
@@ -68,11 +81,17 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         switch (villager.villagerAttackType)
         {
             case AttackType.Melee:
-                tempFrame.meleeAttack = villager.animData.meleeAttack;
+                //tempFrame.meleeAttack = villager.animData.meleeAttack;
+                tempFrame.meleeAttack = attackStart;
+                tempFrame.meleeAttackEnd = attackFinish;
+
                 break;
 
             case AttackType.Ranged:
-                tempFrame.rangedAttack = villager.animData.rangedAttack;
+                //tempFrame.rangedAttack = villager.animData.rangedAttack;
+                tempFrame.rangedAttack = attackStart;
+                tempFrame.rangedAttackEnd = attackFinish;
+
                 break;
         }
 
@@ -81,34 +100,44 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         tempFrame.canSpecial = villager.animData.canSpecial;
         tempFrame.dead = !villager.alive;
 
-        frames.Add(tempFrame);
-    }
-
-    protected new void Playback()
-    {
-        if (totalFrames > 0)
+        if (!deathRecorded && deathFinish)
         {
-            //If Game time matches start frame begin playback
-            if (Game.t == frames[0].timeStamp && !replaying)
-            {
-                replaying = true;
-            }
-
-            if (replaying)
-            {
-                PlayFrame();
-            }
-
-            if (Game.t == frames[frames.Count-1].timeStamp && replaying)
-            {
-                replaying = false;
-            }
+            tempFrame.deathEnd = deathFinish;
+            deathRecorded = true;
         }
+
+        frames.Add(tempFrame);
+
+        attackStart = false;
+        attackFinish = false;
+        deathFinish = false;
+
     }
 
+    protected override void OnStartPlayback()
+    {
+        villager.ForwardVillager();
+    }
+
+    /// <summary>
+    /// What happens when a Villager become a past incarnation
+    /// </summary>
     protected override void OnPast()
     {
         base.OnPast();
         villager.villagerState = VillagerState.PastVillager;
+        OnStartReverse();
+    }
+
+    protected override void OnStartReverse()
+    {
+        villager.ReverseVillager();
+    }
+
+    protected override void OnFinishPlayback()
+    {
+        vAnimData = new VillagerAnimData();
+        vAnimData.dead = true;
+        m_Character.Move(vAnimData);
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 /// Base Clas for objects to be controlled by time
 /// </summary>
 /// <typeparam name="T"> Frame Data to be used to replaying objects actions</typeparam>
-public abstract class BaseTimeObject <T> : MonoBehaviour where T : FrameData
+public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
 {
 
 #if UNITY_EDITOR
@@ -18,10 +18,7 @@ public abstract class BaseTimeObject <T> : MonoBehaviour where T : FrameData
     protected T tempFrame;
     protected List<T> frames = new List<T>();
 
-    /// <summary>
-    /// If the object is replaying it's past
-    /// </summary>
-    public bool replaying = false;
+    public int startFrame, finishFrame;
 
     protected TimeObjectState tObjectState = TimeObjectState.Present;
 
@@ -45,6 +42,8 @@ public abstract class BaseTimeObject <T> : MonoBehaviour where T : FrameData
     protected virtual void Start()
     {
 
+        startFrame = Game.t;
+
 #if UNITY_EDITOR
 
         debugText = GetComponentInChildren<TextMesh>();
@@ -53,29 +52,103 @@ public abstract class BaseTimeObject <T> : MonoBehaviour where T : FrameData
 
     }
 
-    protected void LateUpdate()
+    protected void Update()
     {
-        switch (tObjectState)
+        switch (Game.timeState)
         {
-            case TimeObjectState.Present:
+            case TimeState.Forward:
 
-                TrackFrame();
+                switch (tObjectState)
+                {
+                    case TimeObjectState.Present:
+
+                        TrackFrame();
+                        break;
+
+                    case TimeObjectState.PastStart:
+
+                        if (Game.t == startFrame)
+                        {
+                            tObjectState = TimeObjectState.PastPlaying;
+                            currentFrame = 0;
+                            OnStartPlayback();
+                        }
+
+                        break;
+
+                    case TimeObjectState.PastPlaying:
+
+                        if (Game.t >= finishFrame)
+                        {
+                            tObjectState = TimeObjectState.PastFinished;
+                            OnFinishPlayback();
+                            break;
+                        }
+
+                        Playback();
+
+                        break;
+
+                    case TimeObjectState.PastFinished:
+
+                        break;
+                }
+
                 break;
 
-            case TimeObjectState.Past:
+            case TimeState.Backward:
 
-                Playback();
+                switch (tObjectState)
+                {
+                    case TimeObjectState.PastStart:
+                        break;
+
+                    case TimeObjectState.PastPlaying:
+
+                        if (Game.t <= startFrame)
+                        {
+                            tObjectState = TimeObjectState.PastStart;
+
+                            OnFinishReverse();
+
+                            break;
+                        }
+
+                        Playback();
+
+                        break;
+
+                    case TimeObjectState.PastFinished:
+
+                        if (Game.t <= finishFrame)
+                        {
+                            tObjectState = TimeObjectState.PastPlaying;
+                            currentFrame = frames.Count - 1;
+                            OnStartReverse();
+                        }
+                        break;
+                }
+
                 break;
         }
 
 #if UNITY_EDITOR
 
-        debugText.text = "Time State : " + tObjectState.ToString() +
-                            "\nTotal Frames: " + totalFrames +
-                            "\nCurrent Frame: " + currentFrame +
-                            "\nStart Frame: " + frames[0].timeStamp +
-                            "\nFinish Frame: " + frames[frames.Count - 1].timeStamp;
-
+        if (debugText)
+        {
+            if (Game.debugText)
+            {
+                debugText.text = "Time State: " + tObjectState.ToString() +
+                                    "\nTotal Frames: " + totalFrames +
+                                    "\nCurrent Frame: " + currentFrame +
+                                    "\nStart Frame: " + frames[0].timeStamp +
+                                    "\nFinish Frame: " + frames[frames.Count - 1].timeStamp;
+            }
+            else
+            {
+                debugText.gameObject.SetActive(false);
+            }
+        }
 #endif
     }
 
@@ -83,28 +156,14 @@ public abstract class BaseTimeObject <T> : MonoBehaviour where T : FrameData
     {
         if (totalFrames > 0)
         {
-            //If Game time matches start frame begin playback
-            if (Game.t == frames[0].timeStamp && !replaying)
-            {
-                replaying = true;
-            }
-
-            if (replaying)
-            {
-                PlayFrame();
-            }
-
-            if (Game.t == frames[frames.Count - 1].timeStamp && replaying)
-            {
-                replaying = false;
-            }
+            PlayFrame();
         }
     }
 
     protected abstract void PlayFrame();
     protected abstract void TrackFrame();
 
-    public virtual void Reset()
+    public virtual void HardReset()
     {
         switch (tObjectState)
         {
@@ -112,15 +171,54 @@ public abstract class BaseTimeObject <T> : MonoBehaviour where T : FrameData
                 OnPast();
                 break;
 
-            case TimeObjectState.Past:
+            case TimeObjectState.PastPlaying:
+            case TimeObjectState.PastFinished:
+            case TimeObjectState.PastStart:
                 currentFrame = 0;
+                break;
+        }
+    }
+
+    public virtual void SoftReset()
+    {
+        switch (tObjectState)
+        {
+            case TimeObjectState.Present:
+                OnPast();
+                break;
+
+            case TimeObjectState.PastPlaying:
+            case TimeObjectState.PastFinished:
+            case TimeObjectState.PastStart:
+                OnStartReverse();
                 break;
         }
     }
 
     protected virtual void OnPast()
     {
-        tObjectState = TimeObjectState.Past;
+        tObjectState = TimeObjectState.PastFinished;
+        finishFrame = Game.t;
     }
+
+    /// <summary>
+    /// Called when an object finishes its rewind
+    /// </summary>
+    protected virtual void OnFinishReverse() { }
+
+    /// <summary>
+    /// Called when an objects starts its rewind
+    /// </summary>
+    protected virtual void OnStartReverse() { }
+
+    /// <summary>
+    /// Called when an object starts playback
+    /// </summary>
+    protected virtual void OnStartPlayback() { }
+
+    /// <summary>
+    /// Called when an object finishes playback
+    /// </summary>
+    protected virtual void OnFinishPlayback() { }
 }
                                                           

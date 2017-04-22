@@ -34,6 +34,7 @@ public class Mage : Villager {
     public override void Start ()
     {
         m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[0];
+        villagerAttackType = AttackType.Ranged;
         base.Start();	
 	}
 	
@@ -53,7 +54,7 @@ public class Mage : Villager {
 
     public void SpawnAura()
     {
-        if (Game.timeState == TimeState.Forward && villagerState == VillagerState.CurrentVillager)
+        if (Game.timeState == TimeState.Forward && villagerState == VillagerState.PresentVillager)
         {
             VillagerManager.auras.Add(Instantiate(auraPrefab, transform.position, Quaternion.identity).GetComponent<MageAura>());
 
