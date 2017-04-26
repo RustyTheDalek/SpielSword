@@ -67,7 +67,7 @@ public class PlatformerCharacter2D : MonoBehaviour
             m_Anim.SetTrigger("Dead");
         }
 
-        if (animData.deathEnd && Game.timeState == TimeState.Backward)
+        if (Game.timeState == TimeState.Backward)
         {
             Debug.Log("Exiting Death");
             m_Anim.SetTrigger("ExitDeath");
@@ -77,15 +77,6 @@ public class PlatformerCharacter2D : MonoBehaviour
         {
             m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
             m_Anim.SetBool("RangedAttack", animData.rangedAttack);
-        }
-
-        if (animData.meleeAttackEnd)
-            m_Anim.SetTrigger("MeleeAttackEnd");
-
-        if (animData.rangedAttackEnd)
-        {
-            Debug.Log("Reversing ranged attack");
-            m_Anim.SetTrigger("RangedAttackEnd");
         }
 
         if (animData.playerSpecialIsTrigger)

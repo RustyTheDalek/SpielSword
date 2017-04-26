@@ -11,10 +11,11 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
     VillagerAnimData vAnimData;
 
-    public bool attackStart, 
-                attackFinish,
+    public bool attackStart,
                 deathFinish,
                 deathRecorded;
+
+    SpriteRenderer _SRenderer;
 
     protected override void Start()
     {
@@ -22,6 +23,7 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
         villager = GetComponent<Villager>();
         m_Character = GetComponent<PlatformerCharacter2D>();
+        _SRenderer = GetComponent<SpriteRenderer>();
     }
 
     protected override void PlayFrame()
@@ -30,31 +32,45 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
         villager.health = frames[currentFrame].health;  
         vAnimData.move = frames[currentFrame].move;
-        //villager.animData.jump = actions[Game.t].jump;
 
-        switch (villager.villagerAttackType)
+        switch (Game.timeState)
         {
-            case AttackType.Melee:
-                //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
-                villager.CanAttack(vAnimData.meleeAttack);
-                vAnimData.meleeAttackEnd = frames[currentFrame].meleeAttackEnd;
-                vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
+            case TimeState.Forward:
+
+                //villager.animData.jump = actions[Game.t].jump;
+
+                switch (villager.villagerAttackType)
+                {
+                    case AttackType.Melee:
+                        //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
+                        villager.CanAttack(vAnimData.meleeAttack);
+                        vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
+                        break;
+
+                    case AttackType.Ranged:
+                        //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
+                        villager.CanAttack(vAnimData.rangedAttack);
+                        vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
+                        break;
+                }
+
+                vAnimData.playerSpecial = frames[currentFrame].special;
+                vAnimData.canSpecial = frames[currentFrame].canSpecial;
+                vAnimData.dead = frames[currentFrame].dead;
+                transform.localScale = frames[currentFrame].scale;
+
+                m_Character.Move(vAnimData);
+
                 break;
 
-            case AttackType.Ranged:
-                //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
-                villager.CanAttack(vAnimData.rangedAttack);
-                vAnimData.rangedAttackEnd = frames[currentFrame].rangedAttackEnd;
-                vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
+            case TimeState.Backward:
+
+                _SRenderer.sprite = AssetManager.villagerSprites[frames[currentFrame].spriteName];
+                villager.hat.localPosition = frames[currentFrame].hatPos;
+                transform.localScale = frames[currentFrame].scale;
+
                 break;
         }
-
-        vAnimData.playerSpecial = frames[currentFrame].special;
-        vAnimData.canSpecial = frames[currentFrame].canSpecial;
-        vAnimData.dead = frames[currentFrame].dead;
-        vAnimData.deathEnd = frames[currentFrame].deathEnd;
-
-        m_Character.Move(vAnimData);
 
         transform.position = frames[currentFrame].m_Position;
         transform.rotation = frames[currentFrame].m_Rotation;
@@ -77,25 +93,24 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         tempFrame.enabled = gameObject.activeSelf;
 
         tempFrame.move = villager.xDir;
+        tempFrame.health = villager.health;
+
+        tempFrame.spriteName = _SRenderer.sprite.name;
+        tempFrame.hatPos = villager.hat.localPosition;
+        tempFrame.scale = transform.localScale;
 
         switch (villager.villagerAttackType)
         {
             case AttackType.Melee:
                 //tempFrame.meleeAttack = villager.animData.meleeAttack;
                 tempFrame.meleeAttack = attackStart;
-                tempFrame.meleeAttackEnd = attackFinish;
-
                 break;
 
             case AttackType.Ranged:
                 //tempFrame.rangedAttack = villager.animData.rangedAttack;
                 tempFrame.rangedAttack = attackStart;
-                tempFrame.rangedAttackEnd = attackFinish;
-
                 break;
         }
-
-        tempFrame.health = villager.health;
         tempFrame.special = villager.animData.playerSpecial;
         tempFrame.canSpecial = villager.animData.canSpecial;
         tempFrame.dead = !villager.alive;
@@ -109,14 +124,16 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         frames.Add(tempFrame);
 
         attackStart = false;
-        attackFinish = false;
         deathFinish = false;
-
     }
 
     protected override void OnStartPlayback()
     {
-        villager.ForwardVillager();
+        //Debug.Break();
+        //Vector3 theScale = transform.localScale;
+        //theScale.x *= -1;
+        //transform.localScale = theScale;
+        //transform.localScale = Vector3.one;
     }
 
     /// <summary>
@@ -131,13 +148,14 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
     protected override void OnStartReverse()
     {
-        villager.ReverseVillager();
     }
 
     protected override void OnFinishPlayback()
     {
         vAnimData = new VillagerAnimData();
         vAnimData.dead = true;
+        vAnimData.move = 0;
+        vAnimData.jump = false;
         m_Character.Move(vAnimData);
     }
 }

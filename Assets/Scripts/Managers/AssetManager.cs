@@ -72,7 +72,7 @@ public static class AssetManager
 
     static GameObject _Villager;
 
-    public static GameObject Vilager
+    public static GameObject villager
     {
         get
         {
@@ -87,6 +87,36 @@ public static class AssetManager
             }
 
             return _Villager;
+        }
+    }
+
+    static Dictionary<string, Sprite> _VillagerSprites;
+
+    public static Dictionary<string, Sprite> villagerSprites
+    {
+        get
+        {
+            if (_VillagerSprites == null)
+            {
+                _VillagerSprites = new Dictionary<string, Sprite>();
+
+                objs = Resources.LoadAll("Sprites");
+                    
+                Sprite sprite;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as Sprite != null)
+                    {
+                        sprite = (Sprite)obj;
+
+                        Debug.Log(sprite.name);
+                        _VillagerSprites.Add(sprite.name, sprite);
+                    }
+                }
+            }
+
+            return _VillagerSprites;
         }
     }
 }

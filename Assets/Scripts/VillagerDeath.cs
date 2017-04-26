@@ -15,7 +15,7 @@ public class VillagerDeath : StateMachineBehaviour {
         if (stateInfo.normalizedTime >= 1 && animator.GetComponent<Villager>().villagerState == VillagerState.PresentVillager 
             && animator.GetComponent<VillagerTimeObject>().deathRecorded == false)
         {
-            Debug.Log("Death recorded");
+            //Debug.Log("Death recorded");
             animator.GetComponent<VillagerTimeObject>().deathFinish = true;
         }
         ////If Time is rewinding and the Villager is at the start of his death Animation, allow him to reverse out

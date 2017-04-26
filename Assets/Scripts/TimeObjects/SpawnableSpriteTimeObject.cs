@@ -21,8 +21,10 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
         GetComponent<SpriteRenderer>().color = frames[currentFrame].color;
         GetComponent<SpriteRenderer>().enabled = frames[currentFrame].active;
-        GetComponent<CircleCollider2D>().enabled = frames[currentFrame].active;
-        GetComponent<Rigidbody2D>().simulated = frames[currentFrame].active;
+        GetComponent<Collider2D>().enabled = frames[currentFrame].active;
+
+        if(GetComponent<Rigidbody2D>())
+            GetComponent<Rigidbody2D>().simulated = frames[currentFrame].active;
 
         gameObject.SetActive(frames[currentFrame].enabled);
 
@@ -59,7 +61,8 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
     protected void SetActive(bool active)
     {
         GetComponent<SpriteRenderer>().enabled = active;
-        GetComponent<CircleCollider2D>().enabled = active;
-        GetComponent<Rigidbody2D>().simulated = active;
+        GetComponent<Collider2D>().enabled = active;
+        if(GetComponent<Rigidbody2D>())
+            GetComponent<Rigidbody2D>().simulated = active;
     }
 }

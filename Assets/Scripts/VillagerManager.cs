@@ -49,7 +49,7 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     int currentVillagerLayer = 6;
 
-    VillagerClass ClassToSpawn = VillagerClass.Mage;
+    VillagerClass ClassToSpawn = VillagerClass.Warrior;
 
     void Awake()
     {
@@ -70,7 +70,7 @@ public class VillagerManager : MonoBehaviour {
         Vector3 spawnOffset = Vector3.zero;
         for (int i = 0; i < 5; i++)
         {
-            GameObject temp = AssetManager.Vilager.Spawn();
+            GameObject temp = AssetManager.villager.Spawn();
 
             spawnOffset += new Vector3(-1, 0, 0);
 
@@ -80,6 +80,8 @@ public class VillagerManager : MonoBehaviour {
         //Spawn a new villager and teleport them to the Arena
         NextVillager();
         EnterArena();
+
+        Debug.Log(AssetManager.villagerSprites.Count);
 	}
 
     private void SetupVillager(GameObject villager, Vector3 spawnOffset)
@@ -238,9 +240,9 @@ public class VillagerManager : MonoBehaviour {
             currentVillagerLayer++;
 
             //Add a random Hat to the active Villager
-            activeVillager.transform.Find("Hat").gameObject.AddComponent<SpriteRenderer>();
-            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count)];
-            activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
+            activeVillager.hat.gameObject.AddComponent<SpriteRenderer>();
+            activeVillager.hat.GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count)];
+            activeVillager.hat.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
 
             currentVillagerLayer++;
 

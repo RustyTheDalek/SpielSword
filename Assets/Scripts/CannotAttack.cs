@@ -28,11 +28,6 @@ public class CannotAttack : StateMachineBehaviour {
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (layerIndex == 0 && animator.GetComponent<Villager>().villagerState == VillagerState.PresentVillager)
-        {
-            //Debug.Log("End Attack");
-            animator.GetComponent<VillagerTimeObject>().attackFinish = true;
-        }
 
         if (Game.timeState == TimeState.Backward)
         {

@@ -118,7 +118,7 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            if (Game.t <= 0)
+            if (Game.t < 0)
             {
                 Game.t = 0;
                 Game.timeState = TimeState.Forward;

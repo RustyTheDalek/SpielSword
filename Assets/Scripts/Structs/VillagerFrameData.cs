@@ -17,7 +17,13 @@ public class VillagerFrameData : FrameData
                     rangedAttackEnd,
                     special,
                     canSpecial,
+                    specialEnd,
                     dead,
                     deathEnd;
+
+    public string   spriteName;
+
+    public Vector3  hatPos,
+                    scale;
 
 }

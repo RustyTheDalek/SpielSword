@@ -20,7 +20,7 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
 
     public int startFrame, finishFrame;
 
-    protected TimeObjectState tObjectState = TimeObjectState.Present;
+    public TimeObjectState tObjectState = TimeObjectState.Present;
 
     public int currentFrame;
 
@@ -67,10 +67,12 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
 
                     case TimeObjectState.PastStart:
 
-                        if (Game.t == startFrame)
+                        if (Game.t >= startFrame)
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            currentFrame = 0;
+                            //Just in case a frame or to is skipped we will attempt to 
+                            //keep object in sync by subtracting the difference between their start frame and current game time
+                            currentFrame = Game.t - startFrame;
                             OnStartPlayback();
                         }
 
@@ -123,7 +125,9 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
                         if (Game.t <= finishFrame)
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            currentFrame = frames.Count - 1;
+                            //Just in case a frame or to is skipped we will attempt to 
+                            //keep object in sync by subtracting the difference between their finish frame and current game time
+                            currentFrame =  (frames.Count - 1) - (finishFrame - Game.t);
                             OnStartReverse();
                         }
                         break;
@@ -134,7 +138,7 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
 
 #if UNITY_EDITOR
 
-        if (debugText)
+        if (debugText && frames != null)
         {
             if (Game.debugText)
             {

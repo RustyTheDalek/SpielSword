@@ -50,6 +50,8 @@ public abstract class Villager : MonoBehaviour
 
     public CircleCollider2D[] PlayerCollisions;
 
+    public Transform hat;
+
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
     /// </summary>
@@ -110,6 +112,8 @@ public abstract class Villager : MonoBehaviour
         animData.canSpecial = true;
         animData.playerSpecialIsTrigger = false;
         //villagerState = VillagerState.Waiting;
+
+        hat = transform.Find("Hat");
 
     }
 
@@ -202,18 +206,6 @@ public abstract class Villager : MonoBehaviour
                 }
                 break;
         }
-    }
-
-    internal void ReverseVillager()
-    {
-        m_Animator.SetLayerWeight(0, 0);
-        m_Animator.SetLayerWeight(1, 1);
-    }
-
-    internal void ForwardVillager()
-    {
-        m_Animator.SetLayerWeight(0, 1);
-        m_Animator.SetLayerWeight(1, 0);
     }
 
     public void CanAttack(bool attack)
