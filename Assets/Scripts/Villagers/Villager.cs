@@ -52,6 +52,8 @@ public abstract class Villager : MonoBehaviour
 
     public Transform hat;
 
+    public VillagerTimeObject vTO;
+
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
     /// </summary>
@@ -98,6 +100,7 @@ public abstract class Villager : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Character = GetComponent<PlatformerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
+        vTO = GetComponent<VillagerTimeObject>();
         startingPos = transform.position;
 
         rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;

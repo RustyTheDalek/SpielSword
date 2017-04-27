@@ -24,6 +24,8 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         villager = GetComponent<Villager>();
         m_Character = GetComponent<PlatformerCharacter2D>();
         _SRenderer = GetComponent<SpriteRenderer>();
+
+        //tObjectState = TimeObjectState.Void;
     }
 
     protected override void PlayFrame()
@@ -154,8 +156,6 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
     {
         vAnimData = new VillagerAnimData();
         vAnimData.dead = true;
-        vAnimData.move = 0;
-        vAnimData.jump = false;
         m_Character.Move(vAnimData);
     }
 }

@@ -26,12 +26,12 @@ public class TimeObjectManager : MonoBehaviour
             tObjects.Add(tObj);
         }
 
-        VillagerTimeObject[] vObjs = GetComponentsInChildren<VillagerTimeObject>();
+        //VillagerTimeObject[] vObjs = GetComponentsInChildren<VillagerTimeObject>();
 
-        foreach (VillagerTimeObject vObj in vObjs)
-        {
-            vObjects.Add(vObj);
-        }
+        //foreach (VillagerTimeObject vObj in vObjs)
+        //{
+        //    vObjects.Add(vObj);
+        //}
 
         AssetManager.projectile.name = "Range";
 

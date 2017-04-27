@@ -20,7 +20,7 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
 
     public int startFrame, finishFrame;
 
-    public TimeObjectState tObjectState = TimeObjectState.Present;
+    public TimeObjectState tObjectState = TimeObjectState.Void;
 
     public int currentFrame;
 
@@ -72,7 +72,7 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
                             tObjectState = TimeObjectState.PastPlaying;
                             //Just in case a frame or to is skipped we will attempt to 
                             //keep object in sync by subtracting the difference between their start frame and current game time
-                            currentFrame = Game.t - startFrame;
+                            currentFrame = startFrame;
                             OnStartPlayback();
                         }
 
@@ -127,7 +127,8 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
                             tObjectState = TimeObjectState.PastPlaying;
                             //Just in case a frame or to is skipped we will attempt to 
                             //keep object in sync by subtracting the difference between their finish frame and current game time
-                            currentFrame =  (frames.Count - 1) - (finishFrame - Game.t);
+                            //- (finishFrame - Game.t)
+                            currentFrame =  (frames.Count - 1) ;
                             OnStartReverse();
                         }
                         break;
@@ -145,8 +146,8 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
                 debugText.text = "Time State: " + tObjectState.ToString() +
                                     "\nTotal Frames: " + totalFrames +
                                     "\nCurrent Frame: " + currentFrame +
-                                    "\nStart Frame: " + frames[0].timeStamp +
-                                    "\nFinish Frame: " + frames[frames.Count - 1].timeStamp;
+                                    "\nStart Frame: " + startFrame +
+                                    "\nFinish Frame: " + finishFrame;
             }
             else
             {

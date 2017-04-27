@@ -69,7 +69,7 @@ public class PlatformerCharacter2D : MonoBehaviour
 
         if (Game.timeState == TimeState.Backward)
         {
-            Debug.Log("Exiting Death");
+            //Debug.Log("Exiting Death");
             m_Anim.SetTrigger("ExitDeath");
         }
 

@@ -162,9 +162,7 @@ public class VillagerManager : MonoBehaviour {
                     activeVillager.transform.parent = pastVillagersTrans;
                     activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
                     activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-                    activeVillager.SetTrigger(true);
-                    activeVillager.GetComponent<Rigidbody2D>().gravityScale = 0;
-
+                    //activeVillager.SetTrigger(true);
 
                     activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
                                                                                     activeVillager.GetComponent<SpriteRenderer>().color.g,
@@ -232,6 +230,7 @@ public class VillagerManager : MonoBehaviour {
             //Get the next Villager
             activeVillager = remainingVillagers[0];
             activeVillager.villagerState = VillagerState.PresentVillager;
+            activeVillager.vTO.tObjectState = TimeObjectState.Present;
             activeVillager.transform.parent = activeVillagerTrans;
             activeVillager.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
             TimeObjectManager.vObjects.Add(activeVillager.GetComponent<VillagerTimeObject>());
