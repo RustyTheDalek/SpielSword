@@ -157,7 +157,8 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
     {
         vAnimData = new VillagerAnimData()
         {
-            dead = true
+            dead = true,
+            move = 0,
         };
 
         m_Character.Move(vAnimData);

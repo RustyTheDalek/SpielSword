@@ -36,7 +36,7 @@ public abstract class Villager : MonoBehaviour
     }
 
     //Whether it's currently in control by the player
-    public bool activePlayer
+    public bool ActivePlayer
     {
         get
         {
