@@ -34,7 +34,7 @@ public class MageAura : MonoBehaviour {
         {
             Villager temp = coll.GetComponent<Villager>();
 
-            if (temp.currentVillager)
+            if (temp.CurrentVillager)
             {
                 Debug.Log("Entered Buff aura");
                 coll.GetComponent<Villager>().SetDamageMult( ( (int)health + 1) / 2);
@@ -48,7 +48,7 @@ public class MageAura : MonoBehaviour {
         {
             Villager temp = coll.GetComponent<Villager>();
 
-            if (temp.currentVillager)
+            if (temp.CurrentVillager)
             {
                 Debug.Log("Exited Buff aura");
                 coll.GetComponent<Villager>().SetDamageMult(1);

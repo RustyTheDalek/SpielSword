@@ -144,7 +144,7 @@ public class VillagerManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
-                if(!activeVillager.alive)//Game world needs to be reset
+                if(!activeVillager.Alive)//Game world needs to be reset
                 {
                     TimeObjectManager.SoftReset();
 

@@ -85,21 +85,22 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
     protected override void TrackFrame()
     {
 
-        tempFrame = new VillagerFrameData();
+        tempFrame = new VillagerFrameData()
+        {
+            m_Position = transform.position,
+            m_Rotation = transform.rotation,
 
-        tempFrame.m_Position = transform.position;
-        tempFrame.m_Rotation = transform.rotation;
+            timeStamp = Game.t,
 
-        tempFrame.timeStamp = Game.t;
+            enabled = gameObject.activeSelf,
 
-        tempFrame.enabled = gameObject.activeSelf;
+            move = villager.xDir,
+            health = villager.health,
 
-        tempFrame.move = villager.xDir;
-        tempFrame.health = villager.health;
-
-        tempFrame.spriteName = _SRenderer.sprite.name;
-        tempFrame.hatPos = villager.hat.localPosition;
-        tempFrame.scale = transform.localScale;
+            spriteName = _SRenderer.sprite.name,
+            hatPos = villager.hat.localPosition,
+            scale = transform.localScale
+        };
 
         switch (villager.villagerAttackType)
         {
@@ -115,7 +116,7 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         }
         tempFrame.special = villager.animData.playerSpecial;
         tempFrame.canSpecial = villager.animData.canSpecial;
-        tempFrame.dead = !villager.alive;
+        tempFrame.dead = !villager.Alive;
 
         if (!deathRecorded && deathFinish)
         {
@@ -154,8 +155,11 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
     protected override void OnFinishPlayback()
     {
-        vAnimData = new VillagerAnimData();
-        vAnimData.dead = true;
+        vAnimData = new VillagerAnimData()
+        {
+            dead = true
+        };
+
         m_Character.Move(vAnimData);
     }
 }

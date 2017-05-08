@@ -27,7 +27,7 @@ public abstract class Villager : MonoBehaviour
     //Whether the Villager is advancing in the queue
     public bool advancing;
 
-    public bool alive
+    public bool Alive
     {
         get
         {
@@ -57,7 +57,7 @@ public abstract class Villager : MonoBehaviour
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
     /// </summary>
-    public bool currentVillager
+    public bool CurrentVillager
     {
         get
         {
@@ -130,7 +130,7 @@ public abstract class Villager : MonoBehaviour
 
     public virtual void Update()
     {
-        animData.dead = !alive;
+        animData.dead = !Alive;
 
         switch(villagerState)
         {
