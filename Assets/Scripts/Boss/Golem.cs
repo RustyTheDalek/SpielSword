@@ -17,7 +17,7 @@ public class Golem : BossManager {
     /// <summary>
     /// Checks whether the the Boss is attacking
     /// </summary>
-    public bool isAttacking
+    public bool IsAttacking
     {
         get
         {
@@ -55,7 +55,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 6;
 		// checks to make sure an attack is possible
-		if(!isAttacking)
+		if(!IsAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList.Count > currentCount && playList)
@@ -82,7 +82,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount; i <= attackList.Count; i++)
 		{
-			if(isAttacking)
+			if(IsAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -137,7 +137,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 5;
 		// checks to make sure an attack is possible
-		if(!isAttacking)
+		if(!IsAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList2.Count > currentCount2 && playList2)
@@ -164,7 +164,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount2; i <= attackList2.Count; i++)
 		{
-			if(isAttacking)
+			if(IsAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -209,7 +209,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 4;
 		// checks to make sure an attack is possible
-		if(!isAttacking)
+		if(!IsAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList3.Count > currentCount3 && playList3)
@@ -236,7 +236,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount3; i <= attackList3.Count; i++)
 		{
-			if(isAttacking)
+			if(IsAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -283,7 +283,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 6;
 		// checks to make sure an attack is possible
-		if(!isAttacking)
+		if(!IsAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList4.Count > currentCount4 && playList4)
@@ -310,7 +310,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount4; i <= attackList4.Count; i++)
 		{
-			if(isAttacking)
+			if(IsAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;
@@ -359,7 +359,7 @@ public class Golem : BossManager {
 		//Sets the amount of attacks possible this stage
 		attackCountStage = 4;
 		// checks to make sure an attack is possible
-		if(!isAttacking)
+		if(!IsAttacking)
 		{
 			// Checks to make sure the list hasn't been run and that there is a list
 			if (attackList5.Count > currentCount5 && playList5)
@@ -385,7 +385,7 @@ public class Golem : BossManager {
 		//pulls up the next attack in sequence
 		for(int i = currentCount5; i <= attackList5.Count; i++)
 		{
-			if(isAttacking)
+			if(IsAttacking)
 			{
 				// makes sure a attack isn't already playing befor continuing
 				return;

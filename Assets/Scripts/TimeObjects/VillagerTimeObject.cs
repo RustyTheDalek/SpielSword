@@ -67,7 +67,7 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
             case TimeState.Backward:
 
-                _SRenderer.sprite = AssetManager.villagerSprites[frames[currentFrame].spriteName];
+                _SRenderer.sprite = AssetManager.VillagerSprites[frames[currentFrame].spriteName];
                 villager.hat.localPosition = frames[currentFrame].hatPos;
                 transform.localScale = frames[currentFrame].scale;
 
@@ -84,7 +84,6 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
     protected override void TrackFrame()
     {
-
         tempFrame = new VillagerFrameData()
         {
             m_Position = transform.position,

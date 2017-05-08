@@ -9,6 +9,8 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
     {
         base.Start();
 
+        tObjectState = TimeObjectState.Present;
+
         TimeObjectManager.vSpawnable.Add(this);
     }
 
@@ -21,7 +23,9 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
         GetComponent<SpriteRenderer>().color = frames[currentFrame].color;
         GetComponent<SpriteRenderer>().enabled = frames[currentFrame].active;
-        GetComponent<Collider2D>().enabled = frames[currentFrame].active;
+
+        if(GetComponent<Collider2D>())
+            GetComponent<Collider2D>().enabled = frames[currentFrame].active;
 
         if(GetComponent<Rigidbody2D>())
             GetComponent<Rigidbody2D>().simulated = frames[currentFrame].active;
@@ -33,17 +37,18 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
     protected override void TrackFrame()
     {
-        tempFrame = new SpawnableFrameData();
+        tempFrame = new SpawnableFrameData()
+        {
+            m_Position = transform.position,
+            m_Rotation = transform.rotation,
 
-        tempFrame.m_Position = transform.position;
-        tempFrame.m_Rotation = transform.rotation;
+            color = GetComponent<SpriteRenderer>().color,
+            active = GetComponent<SpriteRenderer>().enabled,
 
-        tempFrame.color = GetComponent<SpriteRenderer>().color;
-        tempFrame.active = GetComponent<SpriteRenderer>().enabled;
+            timeStamp = Game.t,
 
-        tempFrame.timeStamp = Game.t;
-
-        tempFrame.enabled = gameObject.activeSelf;
+            enabled = gameObject.activeSelf,
+        };
 
         frames.Add(tempFrame);
     }
@@ -61,7 +66,10 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
     protected void SetActive(bool active)
     {
         GetComponent<SpriteRenderer>().enabled = active;
-        GetComponent<Collider2D>().enabled = active;
+
+        if(GetComponent<Collider2D>())
+            GetComponent<Collider2D>().enabled = active;
+
         if(GetComponent<Rigidbody2D>())
             GetComponent<Rigidbody2D>().simulated = active;
     }

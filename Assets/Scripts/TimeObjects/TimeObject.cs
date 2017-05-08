@@ -20,15 +20,15 @@ public class TimeObject : BaseTimeObject<FrameData>
 
     protected override void TrackFrame()
     {
-        tempFrame = new FrameData();
+        tempFrame = new FrameData()
+        {
+            m_Position = transform.position,
+            m_Rotation = transform.rotation,
 
-        tempFrame.m_Position = transform.position;
-        tempFrame.m_Rotation = transform.rotation;
+            timeStamp = Game.t,
 
-        tempFrame.timeStamp = Game.t;
-
-        tempFrame.enabled = gameObject.activeSelf;
-
+            enabled = gameObject.activeSelf
+        };
         frames.Add(tempFrame);
     }
 }

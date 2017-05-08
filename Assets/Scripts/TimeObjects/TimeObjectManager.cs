@@ -33,7 +33,7 @@ public class TimeObjectManager : MonoBehaviour
         //    vObjects.Add(vObj);
         //}
 
-        AssetManager.projectile.name = "Range";
+        AssetManager.Projectile.name = "Range";
 
         vilManager = GetComponentInChildren<VillagerManager>();
     }

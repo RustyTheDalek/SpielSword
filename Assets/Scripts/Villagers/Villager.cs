@@ -307,7 +307,7 @@ public abstract class Villager : MonoBehaviour
         {
             Debug.Log("Ranged Attack");
 
-            GameObject attack = AssetManager.projectile.Spawn(rangedTrans.position);
+            GameObject attack = AssetManager.Projectile.Spawn(rangedTrans.position);
 
             float direction = rangedTrans.position.x - transform.position.x;
 
@@ -329,7 +329,7 @@ public abstract class Villager : MonoBehaviour
     public void SetDamageMult(int val)
     {
         melee.GetComponent<MeleeAttack>().damageMult = val;
-        AssetManager.projectile.GetComponent<VillagerAttack>().damageMult = val;
+        AssetManager.Projectile.GetComponent<VillagerAttack>().damageMult = val;
     }
 }
 

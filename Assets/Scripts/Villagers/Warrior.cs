@@ -11,7 +11,7 @@ public class Warrior : Villager
     /// <summary>
     /// Whether the Villager is shielded from damage
     /// </summary>
-    public bool shielded
+    public bool Shielded
     {
         get
         {
@@ -83,7 +83,7 @@ public class Warrior : Villager
 
     public override void OnHit()
     {
-        if (!shielded)
+        if (!Shielded)
         {
             base.OnHit();
         }
@@ -91,7 +91,7 @@ public class Warrior : Villager
 
     public override void OnPastHit(Collider2D collider)
     {
-        if (!shielded)
+        if (!Shielded)
         {
             base.OnPastHit(collider);
         }

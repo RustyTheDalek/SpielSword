@@ -27,12 +27,12 @@ public class SpriteTimeObject : BaseTimeObject<FrameData>
 
     protected override void TrackFrame()
     {
-        tempFrame = new FrameData();
-
-        tempFrame.m_Position = gameObject.transform.position;
-        tempFrame.m_Rotation = gameObject.transform.rotation;
-        tempFrame.color = m_Sprite.color;
-
+        tempFrame = new FrameData()
+        {
+            m_Position = gameObject.transform.position,
+            m_Rotation = gameObject.transform.rotation,
+            color = m_Sprite.color
+        };
         frames.Add(tempFrame);
     }
 

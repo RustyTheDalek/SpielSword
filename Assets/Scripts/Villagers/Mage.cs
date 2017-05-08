@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class Mage : Villager {
 
-    #region Public
-
-    public static GameObject auraPrefab;
-    #endregion
-
     #region Protected
 
     #endregion
@@ -27,7 +22,6 @@ public class Mage : Villager {
         specialType = SpecialType.Press;
         animData.playerSpecialIsTrigger = true;
 
-        auraPrefab = Resources.Load("MageAura") as GameObject;
     }
 
     // Use this for initialization
@@ -54,9 +48,9 @@ public class Mage : Villager {
 
     public void SpawnAura()
     {
-        if (Game.timeState == TimeState.Forward && villagerState == VillagerState.PresentVillager)
+        if (villagerState == VillagerState.PresentVillager)
         {
-            VillagerManager.auras.Add(Instantiate(auraPrefab, transform.position, Quaternion.identity).GetComponent<MageAura>());
+            VillagerManager.auras.Add(AssetManager.Aura.Spawn(transform.position).GetComponent<MageAura>());
 
             AuraActive = true;
             animData.canSpecial = false;

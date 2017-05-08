@@ -5,8 +5,6 @@ public class Warlock : Villager
 {
     #region Public Variables
 
-    public static GameObject wardPrefab;
-
     public GameObject currentWard;
 
     public bool wardActive;
@@ -26,15 +24,11 @@ public class Warlock : Villager
 
     public override void Awake()
     {
-        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
-
-
         base.Awake();
 
         specialType = SpecialType.Press;
         animData.playerSpecialIsTrigger = true;
 
-        wardPrefab = Resources.Load("Ward") as GameObject;
         teleportObj = Instantiate(Resources.Load("Particles/TeleportFX") as GameObject, transform, false);
         teleport = teleportObj.GetComponent<ParticleSystem>();
     }
@@ -42,6 +36,8 @@ public class Warlock : Villager
     // Use this for initialization
     public override void Start ()
     {
+        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
+
         base.Start();
 
         villagerAttackType = AttackType.Ranged;
@@ -78,9 +74,9 @@ public class Warlock : Villager
     /// </summary>
     public void SpawnWard()
     {
-        if (Game.timeState == TimeState.Forward)
+        if (villagerState == VillagerState.PresentVillager)
         {
-            currentWard = Instantiate(wardPrefab, transform.position, Quaternion.identity) as GameObject;
+            currentWard = AssetManager.Ward.Spawn(transform.position);
 
             wardActive = true;
             animData.canSpecial = false;

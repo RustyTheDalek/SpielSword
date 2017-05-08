@@ -52,7 +52,7 @@ public static class AssetManager
 
     static GameObject _Projectile;
 
-    public static GameObject projectile
+    public static GameObject Projectile
     {
         get
         {
@@ -72,7 +72,7 @@ public static class AssetManager
 
     static GameObject _Villager;
 
-    public static GameObject villager
+    public static GameObject Villager
     {
         get
         {
@@ -92,7 +92,7 @@ public static class AssetManager
 
     static Dictionary<string, Sprite> _VillagerSprites;
 
-    public static Dictionary<string, Sprite> villagerSprites
+    public static Dictionary<string, Sprite> VillagerSprites
     {
         get
         {
@@ -117,6 +117,46 @@ public static class AssetManager
             }
 
             return _VillagerSprites;
+        }
+    }
+
+    static GameObject _Ward;
+
+    public static GameObject Ward
+    {
+        get
+        {
+            if (_Ward == null)
+            {
+                _Ward = new GameObject();
+
+                obj = Resources.Load("Ward");
+
+                _Ward = (GameObject)obj;
+                _Ward.CreatePool(25);
+            }
+
+            return _Ward;
+        }
+    }
+
+    static GameObject _Aura;
+
+    public static GameObject Aura
+    {
+        get
+        {
+            if (_Aura == null)
+            {
+                _Aura = new GameObject();
+
+                obj = Resources.Load("MageAura");
+
+                _Aura = (GameObject)obj;
+                _Aura.CreatePool(25);
+            }
+
+            return _Aura;
         }
     }
 }

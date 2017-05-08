@@ -49,7 +49,7 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     int currentVillagerLayer = 6;
 
-    VillagerClass ClassToSpawn = VillagerClass.Warrior;
+    VillagerClass ClassToSpawn = VillagerClass.Warlock;
 
     void Awake()
     {
@@ -68,9 +68,9 @@ public class VillagerManager : MonoBehaviour {
         //Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
         //remainingVillagers.AddRange(villagers
         Vector3 spawnOffset = Vector3.zero;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
-            GameObject temp = AssetManager.villager.Spawn();
+            GameObject temp = AssetManager.Villager.Spawn();
 
             spawnOffset += new Vector3(-1, 0, 0);
 
@@ -81,7 +81,7 @@ public class VillagerManager : MonoBehaviour {
         NextVillager();
         EnterArena();
 
-        Debug.Log(AssetManager.villagerSprites.Count);
+        Debug.Log(AssetManager.VillagerSprites.Count);
 	}
 
     private void SetupVillager(GameObject villager, Vector3 spawnOffset)
@@ -201,8 +201,6 @@ public class VillagerManager : MonoBehaviour {
                 remainingVillagers[i].SetTarget(i * - 2);
             }
         }
-
-        Game.t += (int)Time.timeScale * (int)Game.timeState;
 	}
 
     public void OnNewRound()
