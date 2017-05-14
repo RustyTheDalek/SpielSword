@@ -68,7 +68,7 @@ public class VillagerManager : MonoBehaviour {
         //Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
         //remainingVillagers.AddRange(villagers
         Vector3 spawnOffset = Vector3.zero;
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 5; i++)
         {
             GameObject temp = AssetManager.Villager.Spawn();
 
@@ -178,14 +178,6 @@ public class VillagerManager : MonoBehaviour {
 
                     currentBoss.GetComponent<BossManager>().SetAnimators(false);
                 }
-
-                break;
-
-            case TimeState.Backward:
-
-                //float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-                //float newTimeScale = -Mathf.Pow(x, 2) + (4 * x) + 1;
-                //Time.timeScale = newTimeScale;
 
                 break;
         }  

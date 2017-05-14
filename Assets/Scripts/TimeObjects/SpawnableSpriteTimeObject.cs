@@ -146,7 +146,7 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
         gameObject.SetActive(frames[currentFrame].enabled);
 
-        currentFrame += (int)Game.timeState;
+        currentFrame += Game.GameScale;
     }
 
     protected override void TrackFrame()

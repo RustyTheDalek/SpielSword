@@ -109,7 +109,7 @@ public class TimeObjectManager : MonoBehaviour
     private void LateUpdate()
     {
         //Increment Game time
-        Game.t += (int)Time.timeScale * (int)Game.timeState;
+        Game.t += (int)Time.timeScale * (int)Game.timeState * Game.PastTimeScale;
 
         if (Game.timeState == TimeState.Forward)
         {
@@ -118,6 +118,10 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
+            float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
+            float newTimeScale = -Mathf.Pow(x, 2) + (4 * x) + 1;
+            Time.timeScale = newTimeScale;
+
             if (Game.t < 0)
             {
                 Game.t = 0;

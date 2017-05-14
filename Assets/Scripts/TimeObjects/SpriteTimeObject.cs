@@ -22,7 +22,7 @@ public class SpriteTimeObject : BaseTimeObject<FrameData>
 
             m_Sprite.color = frames[currentFrame].color;
 
-            currentFrame += (int)Game.timeState;
+            currentFrame += Game.GameScale;
     }
 
     protected override void TrackFrame()

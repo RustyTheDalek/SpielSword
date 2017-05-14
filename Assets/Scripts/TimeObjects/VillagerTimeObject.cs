@@ -79,7 +79,7 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
         gameObject.SetActive(frames[currentFrame].enabled);
 
-        currentFrame += (int)Game.timeState;
+        currentFrame += Game.GameScale;
     }
 
     protected override void TrackFrame()

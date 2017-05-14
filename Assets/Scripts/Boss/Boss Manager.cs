@@ -13,7 +13,7 @@ public abstract class BossManager : MonoBehaviour {
     /// <summary>
     /// Whether the Boss is currently attackble by the Player 
     /// </summary>
-    public bool attackable = true;
+    //public bool Game.PastTimeScale = 1;
 
     public static float health = 100;
 
@@ -123,11 +123,13 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList.Count != currentCount)
                     {
                         StageOne();
-                        attackable = false;
+                        //Game.PastTimeScale = 2;
+                        Game.PastTimeScale = 2;
                     }
                     else
                     {
-                        attackable = true;
+                        //Game.PastTimeScale = 1;
+                        Game.PastTimeScale = 1;
                         StageTwo();
                     }
                 }
@@ -136,11 +138,11 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList2.Count != currentCount2)
                     {
                         StageTwo();
-                        attackable = false;
+                        Game.PastTimeScale = 2;
                     }
                     else
                     {
-                        attackable = true;
+                        Game.PastTimeScale = 1;
                         StageThree();
                     }
                 }
@@ -149,11 +151,11 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList3.Count != currentCount3)
                     {
                         StageThree();
-                        attackable = false;
+                        Game.PastTimeScale = 2;
                     }
                     else
                     {
-                        attackable = true;
+                        Game.PastTimeScale = 1;
                         StageFour();
                     }
                 }
@@ -162,11 +164,11 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList4.Count != currentCount4)
                     {
                         StageFour();
-                        attackable = false;
+                        Game.PastTimeScale = 2;
                     }
                     else
                     {
-                        attackable = true;
+                        Game.PastTimeScale = 1;
                         StageFive();
                     }
                 }
@@ -186,7 +188,7 @@ public abstract class BossManager : MonoBehaviour {
                         trackedHealth.Add(health);
                     }
 
-                    if (attackable)
+                    if (Game.PastTimeScale == 1)
                     {
                         bossHealthBar.SetHealthBar(HealthBarState.Standard);
                     }
@@ -229,7 +231,7 @@ public abstract class BossManager : MonoBehaviour {
         playList4 = true;
         playList5 = true;
 
-        attackable = true;
+        Game.PastTimeScale = 1;
 
         health = 100;
 

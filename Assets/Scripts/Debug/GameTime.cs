@@ -17,6 +17,8 @@ public class GameTime : MonoBehaviour {
 	void Update () {
 
         text.text = "Time: " + Game.t +
-            "\nTimeState: " + Game.timeState;
+            "\nTimeState: " + Game.timeState +
+            "\nTimeScale: " + Time.timeScale + 
+            "\nPastTimeScale; " + Game.PastTimeScale;
 	}
 }

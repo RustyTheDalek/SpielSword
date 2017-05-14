@@ -9,7 +9,7 @@ public static class Game
     /// Custom Time Variable for past Villagers
     /// </summary>
     public static int t = 0;
-                          
+
     /// <summary>
     /// Scaling for Time Helps speed up reversal
     /// </summary>
@@ -25,5 +25,18 @@ public static class Game
     /// </summary>
     public static bool attackable = true;
 
-    public static bool debugText = true; 
+    public static bool debugText = true;
+
+    /// <summary>
+    /// Scaling for fastforward of boss and past objects
+    /// </summary>
+    public static int PastTimeScale = 1;
+
+    public static int GameScale
+    {
+        get
+        {
+            return (int)Game.timeState * (int)Time.timeScale * PastTimeScale;
+        }
+    }
 }
