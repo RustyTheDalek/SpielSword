@@ -14,6 +14,120 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
         TimeObjectManager.vSpawnable.Add(this);
     }
 
+    protected override void Update()
+    {
+        switch (Game.timeState)
+        {
+            case TimeState.Forward:
+
+                switch (tObjectState)
+                {
+                    case TimeObjectState.Present:
+
+                        if (GetComponent<SpriteRenderer>().enabled)
+                        {
+                            TrackFrame();
+                        }
+                        else
+                        {
+                            tObjectState = TimeObjectState.PresentDead;
+                            finishFrame = Game.t;
+                        }
+
+                        break;
+
+                    case TimeObjectState.PastStart:
+
+                        if (Game.t >= startFrame)
+                        {
+                            tObjectState = TimeObjectState.PastPlaying;
+                            //Just in case a frame or to is skipped we will attempt to 
+                            //keep object in sync by subtracting the difference between their start frame and current game time
+                            currentFrame = 0;
+                            OnStartPlayback();
+                        }
+
+                        break;
+
+                    case TimeObjectState.PastPlaying:
+
+                        if (Game.t >= finishFrame)
+                        {
+                            tObjectState = TimeObjectState.PastFinished;
+                            OnFinishPlayback();
+                            break;
+                        }
+
+                        Playback();
+
+                        break;
+
+                    case TimeObjectState.PastFinished:
+
+                        break;
+                }
+
+                break;
+
+            case TimeState.Backward:
+
+                switch (tObjectState)
+                {
+                    case TimeObjectState.PastStart:
+                        break;
+
+                    case TimeObjectState.PastPlaying:
+
+                        if (Game.t <= startFrame)
+                        {
+                            tObjectState = TimeObjectState.PastStart;
+
+                            OnFinishReverse();
+
+                            break;
+                        }
+
+                        Playback();
+
+                        break;
+
+                    case TimeObjectState.PastFinished:
+
+                        if (Game.t <= finishFrame)
+                        {
+                            tObjectState = TimeObjectState.PastPlaying;
+                            //Just in case a frame or to is skipped we will attempt to 
+                            //keep object in sync by subtracting the difference between their finish frame and current game time
+                            //- (finishFrame - Game.t)
+                            currentFrame = (frames.Count - 1);
+                            OnStartReverse();
+                        }
+                        break;
+                }
+
+                break;
+        }
+
+#if UNITY_EDITOR
+
+        if (debugText && frames != null)
+        {
+            if (Game.debugText)
+            {
+                debugText.text = "Time State: " + tObjectState.ToString() +
+                                    "\nTotal Frames: " + TotalFrames +
+                                    "\nCurrent Frame: " + currentFrame +
+                                    "\nStart Frame: " + startFrame +
+                                    "\nFinish Frame: " + finishFrame;
+            }
+            else
+            {
+                debugText.gameObject.SetActive(false);
+            }
+        }
+#endif
+    }
+
     protected override void PlayFrame()
     {
         //Debug.Log(currentFrame);
@@ -72,5 +186,10 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
         if(GetComponent<Rigidbody2D>())
             GetComponent<Rigidbody2D>().simulated = active;
+    }
+
+    protected override void OnPast()
+    {
+        tObjectState = TimeObjectState.PastFinished;
     }
 }

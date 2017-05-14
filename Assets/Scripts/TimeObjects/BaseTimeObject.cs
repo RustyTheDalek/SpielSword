@@ -52,7 +52,7 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
 
     }
 
-    protected void Update()
+    protected virtual void Update()
     {
         switch (Game.timeState)
         {
@@ -173,6 +173,7 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
         switch (tObjectState)
         {
             case TimeObjectState.Present:
+            case TimeObjectState.PresentDead:
                 OnPast();
                 break;
 
@@ -189,6 +190,7 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
         switch (tObjectState)
         {
             case TimeObjectState.Present:
+            case TimeObjectState.PresentDead:
                 OnPast();
                 break;
 

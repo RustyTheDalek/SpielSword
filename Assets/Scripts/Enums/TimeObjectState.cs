@@ -9,4 +9,5 @@ public enum TimeObjectState
     PastPlaying,    //Object that has already been created and is simply reliving it's existence
     PastFinished,   //Object that is in the past and finished it's playback
     Void,           //Not to be tracked
+    PresentDead,    //Spawnable objects use this state when they have 'lived'
 };
