@@ -30,13 +30,13 @@ public static class Game
     /// <summary>
     /// Scaling for fastforward of boss and past objects
     /// </summary>
-    public static int PastTimeScale = 1;
+    public static float PastTimeScale = 1;
 
     public static int GameScale
     {
         get
         {
-            return (int)Game.timeState * (int)Time.timeScale * PastTimeScale;
+            return (int)Game.timeState * (int)Time.timeScale * (int)PastTimeScale;
         }
     }
 }

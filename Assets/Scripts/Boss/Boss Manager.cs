@@ -13,7 +13,7 @@ public abstract class BossManager : MonoBehaviour {
     /// <summary>
     /// Whether the Boss is currently attackble by the Player 
     /// </summary>
-    //public bool Game.PastTimeScale = 1;
+    public bool skippingStage;
 
     public static float health = 100;
 
@@ -26,8 +26,10 @@ public abstract class BossManager : MonoBehaviour {
 	public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
 	// Makes sure the list isn't run more then once per stage
 	public bool playList, playList2, playList3, playList4, playList5;
-		
-	public bool alive
+
+    int[] stageEntry = { 0, 0, 0, 0 };
+
+    public bool alive
 	{
 		get
 		{
@@ -123,13 +125,28 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList.Count != currentCount)
                     {
                         StageOne();
-                        //Game.PastTimeScale = 2;
-                        Game.PastTimeScale = 2;
+                        skippingStage = true;
+
+                        if (skippingStage)
+                        {
+                            Game.PastTimeScale = Tools.BellCurve(0, stageEntry[0]);
+                        }
+                        else
+                        {
+                            Game.PastTimeScale = 1;
+                        }
                     }
                     else
                     {
+                        //This checks if Stage 2 has been entered before and if not
+                        //track the frame that it does this on so if the stage is 
+                        //entered early we can scale time accordingly
+                        if (stageEntry[0] == 0)
+                        {
+                            stageEntry[0] = Game.t;
+                        }
                         //Game.PastTimeScale = 1;
-                        Game.PastTimeScale = 1;
+                        skippingStage = false;
                         StageTwo();
                     }
                 }
@@ -138,11 +155,24 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList2.Count != currentCount2)
                     {
                         StageTwo();
-                        Game.PastTimeScale = 2;
+                        skippingStage = true;
+
+                        if (skippingStage)
+                        {
+                            Game.PastTimeScale = Tools.BellCurve(stageEntry[0], stageEntry[1]);
+                        }
+                        else
+                        {
+                            Game.PastTimeScale = 1;
+                        }
                     }
                     else
                     {
-                        Game.PastTimeScale = 1;
+                        if (stageEntry[1] == 0)
+                        {
+                            stageEntry[1] = Game.t;
+                        }
+                        skippingStage = false;
                         StageThree();
                     }
                 }
@@ -151,11 +181,24 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList3.Count != currentCount3)
                     {
                         StageThree();
-                        Game.PastTimeScale = 2;
+                        skippingStage = true;
+
+                        if (skippingStage)
+                        {
+                            Game.PastTimeScale = Tools.BellCurve(stageEntry[1], stageEntry[2]);
+                        }
+                        else
+                        {
+                            Game.PastTimeScale = 1;
+                        }
                     }
                     else
                     {
-                        Game.PastTimeScale = 1;
+                        if (stageEntry[2] == 0)
+                        {
+                            stageEntry[2] = Game.t;
+                        }
+                        skippingStage = false;
                         StageFour();
                     }
                 }
@@ -164,11 +207,24 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList4.Count != currentCount4)
                     {
                         StageFour();
-                        Game.PastTimeScale = 2;
+                        skippingStage = true;
+
+                        if (skippingStage)
+                        {
+                            Game.PastTimeScale = Tools.BellCurve(stageEntry[2], stageEntry[3]);
+                        }
+                        else
+                        {
+                            Game.PastTimeScale = 1;
+                        }
                     }
                     else
                     {
-                        Game.PastTimeScale = 1;
+                        if (stageEntry[3] == 0)
+                        {
+                            stageEntry[3] = Game.t;
+                        }
+                        skippingStage = false;
                         StageFive();
                     }
                 }

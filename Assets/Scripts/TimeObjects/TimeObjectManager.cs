@@ -109,7 +109,7 @@ public class TimeObjectManager : MonoBehaviour
     private void LateUpdate()
     {
         //Increment Game time
-        Game.t += (int)Time.timeScale * (int)Game.timeState * Game.PastTimeScale;
+        Game.t += (int)Time.timeScale * (int)Game.timeState * (int)Game.PastTimeScale;
 
         if (Game.timeState == TimeState.Forward)
         {
