@@ -147,6 +147,7 @@ public abstract class BossManager : MonoBehaviour {
                         }
                         //Game.PastTimeScale = 1;
                         skippingStage = false;
+                        Game.PastTimeScale = 1;
                         StageTwo();
                     }
                 }
@@ -173,6 +174,7 @@ public abstract class BossManager : MonoBehaviour {
                             stageEntry[1] = Game.t;
                         }
                         skippingStage = false;
+                        Game.PastTimeScale = 1;
                         StageThree();
                     }
                 }
@@ -199,6 +201,7 @@ public abstract class BossManager : MonoBehaviour {
                             stageEntry[2] = Game.t;
                         }
                         skippingStage = false;
+                        Game.PastTimeScale = 1;
                         StageFour();
                     }
                 }
@@ -225,6 +228,7 @@ public abstract class BossManager : MonoBehaviour {
                             stageEntry[3] = Game.t;
                         }
                         skippingStage = false;
+                        Game.PastTimeScale = 1;
                         StageFive();
                     }
                 }
