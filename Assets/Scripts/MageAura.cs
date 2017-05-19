@@ -2,20 +2,58 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MageAura : MonoBehaviour {
-
+public class MageAura : SpawnableSpriteTimeObject
+{
     public float health = 4;
 
-    //TODO: Add timer that make sure the Aura only lasts a certain amount of time
+
+    bool auraActive = false;
+
+    float   auraLife = 5,
+            auraTimer = 0;
+
 	// Use this for initialization
-	void Start () {
-		
+	protected override void Start ()
+    {
+        base.Start();
+
+        auraActive = true;
+        auraTimer = auraLife;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    protected override void Update()
+    {
+        if (auraTimer > 0 && (tObjectState == TimeObjectState.Present || tObjectState == TimeObjectState.PastPlaying))
+        {
+            auraTimer -= Time.deltaTime;
+        }
+        else if (auraTimer <= 0 && auraActive)
+        {
+            SetActive(false);
+
+            finishFrame = Game.t;
+
+            auraActive = false;
+        }
+
+        base.Update();
+    }
+
+    protected override void PlayFrame()
+    {
+        GetComponent<SpriteRenderer>().enabled = frames[currentFrame].active;
+
+        if (GetComponent<Collider2D>())
+            GetComponent<Collider2D>().enabled = frames[currentFrame].active;
+
+        if (GetComponent<Rigidbody2D>())
+            GetComponent<Rigidbody2D>().simulated = frames[currentFrame].active;
+
+        gameObject.SetActive(frames[currentFrame].enabled);
+
+        currentFrame += Game.GameScale;
+    }
 
     public void DecreaseStrength()
     {
@@ -30,7 +68,7 @@ public class MageAura : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if (coll.GetComponent<Villager>())
+        if (auraTimer > 5 && coll.GetComponent<Villager>())
         {
             Villager temp = coll.GetComponent<Villager>();
 
@@ -44,7 +82,7 @@ public class MageAura : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D coll)
     {
-        if (coll.GetComponent<Villager>())
+        if (auraTimer > 5 && coll.GetComponent<Villager>())
         {
             Villager temp = coll.GetComponent<Villager>();
 

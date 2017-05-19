@@ -51,10 +51,19 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
                     case TimeObjectState.PastPlaying:
 
-                        if (Game.t >= finishFrame)
+                        if ((Game.t >= finishFrame && finishFrame != 0) || 
+                            (finishFrame == 0 && Game.t >= frames[frames.Count - 1].timeStamp))
                         {
-                            tObjectState = TimeObjectState.PastFinished;
-                            OnFinishPlayback();
+                            if (finishFrame == 0)
+                            {
+                                tObjectState = TimeObjectState.Present;
+                                TrackFrame();
+                            }
+                            else
+                            {
+                                tObjectState = TimeObjectState.PastFinished;
+                                OnFinishPlayback();
+                            }
                             break;
                         }
 
@@ -93,7 +102,7 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
                     case TimeObjectState.PastFinished:
 
-                        if (Game.t <= finishFrame)
+                        if (Game.t <= finishFrame || (finishFrame == 0 && Game.t <= frames[frames.Count-1].timeStamp))
                         {
                             tObjectState = TimeObjectState.PastPlaying;
                             //Just in case a frame or to is skipped we will attempt to 

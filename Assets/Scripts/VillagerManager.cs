@@ -148,11 +148,6 @@ public class VillagerManager : MonoBehaviour {
                 {
                     TimeObjectManager.SoftReset();
 
-                    foreach (MageAura aura in auras)
-                    {
-                        aura.DecreaseStrength();
-                    }
-
                     //Reverse time
                     Game.timeState = TimeState.Backward;
 
@@ -200,6 +195,15 @@ public class VillagerManager : MonoBehaviour {
         currentBoss.Reset();
         NextVillager();
         EnterArena();
+        WeakenAuras();
+    }
+
+    private void WeakenAuras()
+    {
+        foreach (MageAura aura in auras)
+        {
+            aura.DecreaseStrength();
+        }
     }
 
     /// <summary>
