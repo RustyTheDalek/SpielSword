@@ -5,12 +5,15 @@ using System.Collections.Generic;
 /// </summary>
 public class Golem : BossManager {
 
+    [HideInInspector]
 	public Animator lArmRock1, lArmRock2, lArmRock3,
 	rArmRock1, rArmRock2, rArmRock3, headAnim, leftArm, rightArm,
 	leftCrystal, rightCrystal;
 
+    [HideInInspector]
 	public GameObject rockPileLeft, rockPileRight, lArm, rArm;
 
+    [HideInInspector]
 	public List<Sprite> headStages, bodyStages, lArmStages, rArmStages,
 						utilityA, utilityB, utilityC;
 
