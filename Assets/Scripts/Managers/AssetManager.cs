@@ -110,7 +110,7 @@ public static class AssetManager
                     {
                         sprite = (Sprite)obj;
 
-                        Debug.Log(sprite.name);
+                        //Debug.Log(sprite.name);
                         _VillagerSprites.Add(sprite.name, sprite);
                     }
                 }
