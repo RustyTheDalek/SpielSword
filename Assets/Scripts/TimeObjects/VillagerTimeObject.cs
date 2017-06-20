@@ -17,6 +17,8 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
 
     SpriteRenderer _SRenderer;
 
+    VHSEffect vhsEffect;
+
     protected override void Start()
     {
         base.Start();
@@ -24,6 +26,15 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         villager = GetComponent<Villager>();
         m_Character = GetComponent<PlatformerCharacter2D>();
         _SRenderer = GetComponent<SpriteRenderer>();
+
+        if (GetComponent<VHSEffect>())
+        {
+            vhsEffect = GetComponent<VHSEffect>();
+        }
+        else
+        {
+            vhsEffect = gameObject.AddComponent<VHSEffect>();
+        }
 
         //tObjectState = TimeObjectState.Void;
     }
@@ -148,10 +159,6 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         OnStartReverse();
     }
 
-    protected override void OnStartReverse()
-    {
-    }
-
     protected override void OnFinishPlayback()
     {
         vAnimData = new VillagerAnimData()
@@ -161,5 +168,35 @@ public class VillagerTimeObject : BaseTimeObject<VillagerFrameData>
         };
 
         m_Character.Move(vAnimData);
+    }
+
+    protected override void OnFinishReverse()
+    {
+        base.OnFinishReverse();
+
+        _SRenderer.material = AssetManager.SpriteMaterials[0];
+        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[0];
+        villager.hat.GetComponent<VHSEffect>().enabled = false;
+        vhsEffect.enabled = false;
+
+        _SRenderer.color = new Color(   _SRenderer.color.r,
+                                        _SRenderer.color.g,
+                                        _SRenderer.color.b,
+                                        .5f);
+
+        villager.hat.GetComponent<SpriteRenderer>().color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
+                                                                        villager.hat.GetComponent<SpriteRenderer>().color.g,
+                                                                        villager.hat.GetComponent<SpriteRenderer>().color.b,
+                                                                        .5f);
+    }
+
+    protected override void OnStartReverse()
+    {
+        base.OnStartReverse();
+
+        _SRenderer.material = AssetManager.SpriteMaterials[1];
+        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
+        villager.hat.GetComponent<VHSEffect>().enabled = true;
+        vhsEffect.enabled = true;
     }
 }

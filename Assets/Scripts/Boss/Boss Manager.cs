@@ -257,10 +257,14 @@ public abstract class BossManager : MonoBehaviour {
                     if (!skippingStage)
                     {
                         bossHealthBar.SetHealthBar(HealthBarState.Standard);
+
+                        SetVHSEffect(false);
                     }
                     else
                     {
                         bossHealthBar.SetHealthBar(HealthBarState.Invincible);
+
+                        SetVHSEffect(true);
                     }
                 }
                 else//Death of boss
@@ -348,6 +352,16 @@ public abstract class BossManager : MonoBehaviour {
         foreach (Animator obj in bossAnims)
         {
             obj.GetComponent<Animator>().enabled = enabled;
+        }
+    }
+
+    void SetVHSEffect(bool enable)
+    {
+        foreach (SpriteRenderer part in bossParts)
+        {
+            int val = (enable == true) ? 1 : 0;
+            part.material = AssetManager.SpriteMaterials[val];
+            part.GetComponent<VHSEffect>().enabled = enable;
         }
     }
 }

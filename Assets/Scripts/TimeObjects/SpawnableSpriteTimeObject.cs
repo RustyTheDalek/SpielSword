@@ -178,11 +178,14 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
     protected override void OnFinishReverse()
     {
+        base.OnStartReverse();
         SetActive(false);
     }
 
     protected override void OnStartReverse()
     {
+        Debug.Log("am here");
+        base.OnStartReverse();
         SetActive(true);
     }
 
@@ -200,5 +203,6 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
     protected override void OnPast()
     {
         tObjectState = TimeObjectState.PastFinished;
+        base.OnPast();
     }
 }

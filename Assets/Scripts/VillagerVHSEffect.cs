@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class VHSEffect : MonoBehaviour {
+public class VillagerVHSEffect : MonoBehaviour {
 
     private SpriteRenderer sRenderer;
 
@@ -11,7 +11,7 @@ public class VHSEffect : MonoBehaviour {
         
     public float yScanLine;
 
-    [Range(-1, 1)] public float noiseStrength = 1;
+    [Range(0, 1)] public float noiseStrength = 1;
     [Range(0, 1)] public float scanJitter = .695f;
 
 
@@ -47,18 +47,18 @@ public class VHSEffect : MonoBehaviour {
             MaterialPropertyBlock mpb = new MaterialPropertyBlock();
             sRenderer.GetPropertyBlock(mpb);
 
-            yScanLine += Time.deltaTime * yScanSpeed * (int)Game.timeState;
+            yScanLine += Time.deltaTime * yScanSpeed;
 
-            for (int i = 0; i < xScanLines.Length; i++)
+            for(int i = 0; i < xScanLines.Length; i++)
             {
-                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i+1);
+                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i);
                 xScanLines[i] = XScanLineLogic(xScanLines[i]);
                 mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * Time.timeScale * Game.PastTimeScale);
             }
 
             if (yScanLine >= .75f || yScanLine <= 0)
             {
-                yScanSpeed *= -1 * Random.Range(0.1f, 1);
+                yScanSpeed *= -1;
             }
 
             //yScanLine = yScanLine % 1;

@@ -78,7 +78,6 @@ public class TimeObjectManager : MonoBehaviour
 #endif
     }
 
-
     public static void SoftReset()
     {
         //Game.timeState = TimeState.Backward;

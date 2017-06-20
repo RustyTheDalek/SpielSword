@@ -5,12 +5,22 @@ using UnityEngine;
 public class SpriteTimeObject : BaseTimeObject<FrameData>
 {
     SpriteRenderer m_Sprite;
+    VHSEffect vhsEffect;
 
     protected override void Start()
     {
         base.Start();
 
         m_Sprite = GetComponent<SpriteRenderer>();
+
+        if (GetComponent<VHSEffect>())
+        {
+            vhsEffect = GetComponent<VHSEffect>();
+        }
+        else
+        {
+            vhsEffect = gameObject.AddComponent<VHSEffect>();
+        }
 
         TimeObjectManager.spriteObjects.Add(this);
     }
@@ -36,5 +46,26 @@ public class SpriteTimeObject : BaseTimeObject<FrameData>
         frames.Add(tempFrame);
     }
 
-    
+    protected override void OnFinishReverse()
+    {
+        base.OnFinishReverse();
+
+        m_Sprite.material = AssetManager.SpriteMaterials[0];
+        vhsEffect.enabled = false;
+    }
+
+    protected override void OnStartReverse()
+    {
+        base.OnStartReverse();
+
+        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        vhsEffect.enabled = true;
+    }
+
+    protected override void OnPast()
+    {
+        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        vhsEffect.enabled = true;
+        base.OnPast();
+    }
 }

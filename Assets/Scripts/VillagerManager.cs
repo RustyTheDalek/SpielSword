@@ -146,8 +146,6 @@ public class VillagerManager : MonoBehaviour {
 
                 if(!activeVillager.Alive)//Game world needs to be reset
                 {
-                    TimeObjectManager.SoftReset();
-
                     //Reverse time
                     Game.timeState = TimeState.Backward;
 
@@ -159,19 +157,22 @@ public class VillagerManager : MonoBehaviour {
                     activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
                     //activeVillager.SetTrigger(true);
 
-                    activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                                                                                    activeVillager.GetComponent<SpriteRenderer>().color.g,
-                                                                                    activeVillager.GetComponent<SpriteRenderer>().color.b,
-                                                                                    .5f);
+                    //activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+                    //                                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
+                    //                                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
+                    //                                                                .5f);
 
-                    activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                                                                    activeVillager.GetComponent<SpriteRenderer>().color.g,
-                                                                    activeVillager.GetComponent<SpriteRenderer>().color.b,
-                                                                    .5f);
+                    //activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+                    //                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
+                    //                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
+                    //                                                .5f);
 
                     pastVillagers.Add(activeVillager);
 
                     currentBoss.GetComponent<BossManager>().SetAnimators(false);
+
+                    TimeObjectManager.SoftReset();
+
                 }
 
                 break;

@@ -159,4 +159,26 @@ public static class AssetManager
             return _Aura;
         }
     }
+
+    static List<Material> _SpriteMaterials;
+
+    public static List<Material> SpriteMaterials
+    {
+        get
+        {
+            if (_SpriteMaterials == null)
+            {
+                _SpriteMaterials = new List<Material>();
+
+                objs = Resources.LoadAll("Materials");
+
+                foreach (object obj in objs)
+                {
+                    _SpriteMaterials.Add((Material)obj);
+                }
+            }
+
+            return _SpriteMaterials;
+        }
+    }
 }

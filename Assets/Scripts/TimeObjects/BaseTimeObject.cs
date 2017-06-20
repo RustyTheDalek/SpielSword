@@ -202,6 +202,9 @@ public abstract class BaseTimeObject<T> : MonoBehaviour where T : FrameData
         }
     }
 
+    /// <summary>
+    /// Called when an object becomes a past object
+    /// </summary>
     protected virtual void OnPast()
     {
         tObjectState = TimeObjectState.PastFinished;
