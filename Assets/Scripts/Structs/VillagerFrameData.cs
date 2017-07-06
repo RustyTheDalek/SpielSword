@@ -1,29 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-/// <summary>
-/// Frame Data for Villagers contains info relating to animation
-/// </summary>
-public class VillagerFrameData : FrameData
+public struct VillagerFrameData
 {
+    public float move,
+                 health;
 
-    public float    move,
-                    health;
+    public bool meleeAttack,
+                rangedAttack,
+                meleeAttackEnd,
+                rangedAttackEnd,
+                special,
+                canSpecial,
+                specialEnd,
+                dead,
+                deathEnd;
 
-    public bool     meleeAttack,
-                    rangedAttack,
-                    meleeAttackEnd,
-                    rangedAttackEnd,
-                    special,
-                    canSpecial,
-                    specialEnd,
-                    dead,
-                    deathEnd;
+    public string spriteName;
 
-    public string   spriteName;
-
-    public Vector3  hatPos,
+    public Vector3 hatPos,
                     scale;
-
 }

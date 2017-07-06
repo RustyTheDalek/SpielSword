@@ -12,8 +12,8 @@ public class MageAura : SpawnableSpriteTimeObject
     float   auraLife = 5,
             auraTimer = 0;
 
-	// Use this for initialization
-	protected override void Start ()
+    // Use this for initialization
+    protected override void Start ()
     {
         base.Start();
 
@@ -42,17 +42,18 @@ public class MageAura : SpawnableSpriteTimeObject
 
     protected override void PlayFrame()
     {
-        GetComponent<SpriteRenderer>().enabled = frames[currentFrame].active;
+        base.PlayFrame();
 
-        if (GetComponent<Collider2D>())
-            GetComponent<Collider2D>().enabled = frames[currentFrame].active;
+        if (Tools.WithinRange(currentFrame, sSFrames))
+        {
+            GetComponent<SpriteRenderer>().enabled = sSFrames[currentFrame].active;
 
-        if (GetComponent<Rigidbody2D>())
-            GetComponent<Rigidbody2D>().simulated = frames[currentFrame].active;
+            if (GetComponent<Collider2D>())
+                GetComponent<Collider2D>().enabled = sSFrames[currentFrame].active;
 
-        gameObject.SetActive(frames[currentFrame].enabled);
-
-        currentFrame += Game.GameScale;
+            if (GetComponent<Rigidbody2D>())
+                GetComponent<Rigidbody2D>().simulated = sSFrames[currentFrame].active;
+        }
     }
 
     public void DecreaseStrength()
@@ -93,6 +94,4 @@ public class MageAura : SpawnableSpriteTimeObject
             }
         }
     }
-
-
 }

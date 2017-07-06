@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Basic Frame Data for Time Objects
+/// Base data for a object to be controlled by time
 /// </summary>
-public class FrameData
+public struct BaseFrameData
 {
     public int timeStamp;
 

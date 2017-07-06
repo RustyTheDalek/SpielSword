@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
+public class SpawnableSpriteTimeObject : SpriteTimeObject
 {
+    protected SpawnableSpriteFrameData tempSSFrame;
+    protected List<SpawnableSpriteFrameData> sSFrames = new List<SpawnableSpriteFrameData>();
 
     protected override void Start()
     {
@@ -51,8 +53,8 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
                     case TimeObjectState.PastPlaying:
 
-                        if ((Game.t >= finishFrame && finishFrame != 0) || 
-                            (finishFrame == 0 && Game.t >= frames[frames.Count - 1].timeStamp))
+                        if ((Game.t >= finishFrame && finishFrame != 0) ||
+                            (finishFrame == 0 && Game.t >= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             if (finishFrame == 0)
                             {
@@ -87,7 +89,7 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
                     case TimeObjectState.PastPlaying:
 
-                        if (Game.t <= startFrame)
+                        if (Game.t <= startFrame || currentFrame < 0)
                         {
                             tObjectState = TimeObjectState.PastStart;
 
@@ -102,13 +104,13 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
                     case TimeObjectState.PastFinished:
 
-                        if (Game.t <= finishFrame || (finishFrame == 0 && Game.t <= frames[frames.Count-1].timeStamp))
+                        if (Game.t <= finishFrame || (finishFrame == 0 && Game.t <= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             tObjectState = TimeObjectState.PastPlaying;
                             //Just in case a frame or to is skipped we will attempt to 
                             //keep object in sync by subtracting the difference between their finish frame and current game time
                             //- (finishFrame - Game.t)
-                            currentFrame = (frames.Count - 1);
+                            currentFrame = (bFrames.Count - 1);
                             OnStartReverse();
                         }
                         break;
@@ -119,7 +121,7 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
 #if UNITY_EDITOR
 
-        if (debugText && frames != null)
+        if (debugText && bFrames != null)
         {
             if (Game.debugText)
             {
@@ -139,46 +141,29 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
 
     protected override void PlayFrame()
     {
-        //Debug.Log(currentFrame);
+        base.PlayFrame();
 
-        transform.position = frames[currentFrame].m_Position;
-        transform.rotation = frames[currentFrame].m_Rotation;
-
-        GetComponent<SpriteRenderer>().color = frames[currentFrame].color;
-        GetComponent<SpriteRenderer>().enabled = frames[currentFrame].active;
-
-        if(GetComponent<Collider2D>())
-            GetComponent<Collider2D>().enabled = frames[currentFrame].active;
-
-        if(GetComponent<Rigidbody2D>())
-            GetComponent<Rigidbody2D>().simulated = frames[currentFrame].active;
-
-        gameObject.SetActive(frames[currentFrame].enabled);
-
-        currentFrame += Game.GameScale;
+        if (Tools.WithinRange(currentFrame, sSFrames))
+        {
+            gameObject.SetActive(sSFrames[currentFrame].active);
+        }
     }
 
     protected override void TrackFrame()
     {
-        tempFrame = new SpawnableFrameData()
+        base.TrackFrame();
+
+        tempSSFrame = new SpawnableSpriteFrameData()
         {
-            m_Position = transform.position,
-            m_Rotation = transform.rotation,
-
-            color = GetComponent<SpriteRenderer>().color,
-            active = GetComponent<SpriteRenderer>().enabled,
-
-            timeStamp = Game.t,
-
-            enabled = gameObject.activeSelf,
+            active = gameObject.activeSelf,
         };
 
-        frames.Add(tempFrame);
+        sSFrames.Add(tempSSFrame);
     }
 
     protected override void OnFinishReverse()
     {
-        base.OnStartReverse();
+        base.OnFinishReverse();
         SetActive(false);
     }
 
@@ -193,10 +178,10 @@ public class SpawnableSpriteTimeObject : BaseTimeObject<SpawnableFrameData>
     {
         GetComponent<SpriteRenderer>().enabled = active;
 
-        if(GetComponent<Collider2D>())
+        if (GetComponent<Collider2D>())
             GetComponent<Collider2D>().enabled = active;
 
-        if(GetComponent<Rigidbody2D>())
+        if (GetComponent<Rigidbody2D>())
             GetComponent<Rigidbody2D>().simulated = active;
     }
 
