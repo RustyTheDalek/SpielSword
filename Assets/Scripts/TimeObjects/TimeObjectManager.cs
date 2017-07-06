@@ -17,7 +17,7 @@ public class TimeObjectManager : MonoBehaviour
 
     // Use this for initialization
     void Start ()
-    {                                   
+    {
         //Retreive all relevant Time Objects
         TimeObject[] tObjs = GetComponentsInChildren<TimeObject>();
 
@@ -72,7 +72,9 @@ public class TimeObjectManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            
+            Game.timeState = TimeState.Backward;
+
+            SoftReset();
         }
          
 #endif
@@ -126,7 +128,14 @@ public class TimeObjectManager : MonoBehaviour
                 Game.t = 0;
                 Game.timeState = TimeState.Forward;
 
-                vilManager.OnNewRound();
+                try
+                {
+                    vilManager.OnNewRound();
+                }
+                catch
+                {
+                    Debug.LogWarning("No Villager manager found, are you testing Time stuff without it?");
+                }
             }
         }
     }

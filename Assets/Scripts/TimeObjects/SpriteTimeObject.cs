@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpriteTimeObject : BaseTimeObject<FrameData>
+public class SpriteTimeObject : TimeObject
 {
-    SpriteRenderer m_Sprite;
-    VHSEffect vhsEffect;
+    protected SpriteRenderer m_Sprite;
+    protected VHSEffect vhsEffect;
+
+    protected SpriteFrameData tempSFrame;
+    protected List<SpriteFrameData> sFrames = new List<SpriteFrameData>();
 
     protected override void Start()
     {
@@ -27,23 +30,24 @@ public class SpriteTimeObject : BaseTimeObject<FrameData>
 
     protected override void PlayFrame()
     {
-            transform.position = frames[currentFrame].m_Position;
-            transform.rotation = frames[currentFrame].m_Rotation;
+        base.PlayFrame();
 
-            m_Sprite.color = frames[currentFrame].color;
-
-            currentFrame += Game.GameScale;
+        if (Tools.WithinRange(currentFrame, sFrames))
+        {
+            m_Sprite.color = sFrames[currentFrame].color;
+        }
     }
 
     protected override void TrackFrame()
     {
-        tempFrame = new FrameData()
+        base.TrackFrame();
+
+        tempSFrame = new SpriteFrameData()
         {
-            m_Position = gameObject.transform.position,
-            m_Rotation = gameObject.transform.rotation,
-            color = m_Sprite.color
+            color = m_Sprite.color,
         };
-        frames.Add(tempFrame);
+
+        sFrames.Add(tempSFrame);
     }
 
     protected override void OnFinishReverse()

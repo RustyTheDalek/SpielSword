@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BossTimeObject : SpriteTimeObject {
 
+    private SpriteFrameData tempFrame;
+    private List<SpriteFrameData> frames = new List<SpriteFrameData>();
+
     Animator _Animator;
 
     protected override void Start()
