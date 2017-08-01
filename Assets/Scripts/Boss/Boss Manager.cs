@@ -32,7 +32,7 @@ public abstract class BossManager : MonoBehaviour {
 
     public AnimationCurve bossSpeedUp;
 
-    public bool alive
+    public bool Alive
 	{
 		get
 		{
@@ -60,7 +60,7 @@ public abstract class BossManager : MonoBehaviour {
     /// <summary>
     /// Uses Normalised time from Boss animations to smooth the speed up for stage skipping
     /// </summary>
-    float smoothing
+    float Smoothing
     {
         get
         {
@@ -89,6 +89,21 @@ public abstract class BossManager : MonoBehaviour {
 
         bossAnims.AddRange(objs);
     }
+
+    #region Stage skipping ideas
+
+    //Idea 1 : Boss Fast forwards between stages when skipping attacks aren't
+    public void FastforwardSkip()
+    {
+        //Here we're trying to get a percentage of how far into the Stage the boss is
+        //We use the attack list as a rudimentry method then use the smoothing value 
+        //to have it interoplate between the values
+        float value = (float)((float)(currentCount + Smoothing) / (float)attackList.Count);
+        Debug.Log(value + " : " + Smoothing + " : " + bossSpeedUp.Evaluate(value));
+        Game.PastTimeScale = bossSpeedUp.Evaluate(value);
+    }
+
+    #endregion
 
     // Update is called once per frame
     public virtual void Update()
@@ -140,20 +155,6 @@ public abstract class BossManager : MonoBehaviour {
                     {
                         StageOne();
                         skippingStage = true;
-
-                        if (skippingStage)
-                        {
-                            //Here we're trying to get a percentage of how far into the Stage the boss is
-                            //We use the attack list as a rudimentry method then use the smoothing value 
-                            //to have it interoplate between the values
-                            float value = (float)((float)(currentCount + smoothing) / (float)attackList.Count);
-                            Debug.Log(value + " : " + smoothing + " : " + bossSpeedUp.Evaluate(value));
-                            Game.PastTimeScale = bossSpeedUp.Evaluate(value);
-                        }
-                        else
-                        {
-                            Game.PastTimeScale = 1;
-                        }
                     }
                     else
                     {
@@ -169,17 +170,6 @@ public abstract class BossManager : MonoBehaviour {
                     {
                         StageTwo();
                         skippingStage = true;
-
-                        if (skippingStage)
-                        {
-                            float value = (float)((float)(currentCount2 + smoothing) / (float)attackList2.Count);
-                            Debug.Log(value + " : " + smoothing + " : " + bossSpeedUp.Evaluate(value));
-                            Game.PastTimeScale = bossSpeedUp.Evaluate(value);
-                        }
-                        else
-                        {
-                            Game.PastTimeScale = 1;
-                        }
                     }
                     else
                     {
@@ -194,17 +184,6 @@ public abstract class BossManager : MonoBehaviour {
                     {
                         StageThree();
                         skippingStage = true;
-
-                        if (skippingStage)
-                        {
-                            float value = (float)((float)(currentCount3 + smoothing) / (float)attackList3.Count);
-                            Debug.Log(value + " : " + smoothing + " : " + bossSpeedUp.Evaluate(value));
-                            Game.PastTimeScale = bossSpeedUp.Evaluate(value);
-                        }
-                        else
-                        {
-                            Game.PastTimeScale = 1;
-                        }
                     }
                     else
                     {
@@ -219,17 +198,6 @@ public abstract class BossManager : MonoBehaviour {
                     {
                         StageFour();
                         skippingStage = true;
-
-                        if (skippingStage)
-                        {
-                            float value = (float)((float)(currentCount4 + smoothing) / (float)attackList4.Count);
-                            Debug.Log(value + " : " + smoothing + " : " + bossSpeedUp.Evaluate(value));
-                            Game.PastTimeScale = bossSpeedUp.Evaluate(value);
-                        }
-                        else
-                        {
-                            Game.PastTimeScale = 1;
-                        }
                     }
                     else
                     {
@@ -240,7 +208,7 @@ public abstract class BossManager : MonoBehaviour {
                 }
                 #endregion
 
-                if (alive)
+                if (Alive)
                 {
                     if (Game.t < trackedHealth.Count)
                     {

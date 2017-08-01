@@ -7,9 +7,14 @@ public class GameTime : MonoBehaviour {
 
     Text text;
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 
         text = GetComponent<Text>();
+
+        text.enabled = Game.debugText;
+            
+
 		
 	}
 	

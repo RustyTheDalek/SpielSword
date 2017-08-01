@@ -13,7 +13,7 @@ public class TimeObjectManager : MonoBehaviour
     public static List<SpriteTimeObject> spriteObjects = new List<SpriteTimeObject>();
     public static List<SpawnableSpriteTimeObject> vSpawnable = new List<SpawnableSpriteTimeObject>();
 
-    VillagerManager vilManager;
+    public bool newRoundReady;
 
     // Use this for initialization
     void Start ()
@@ -34,8 +34,6 @@ public class TimeObjectManager : MonoBehaviour
         //}
 
         AssetManager.Projectile.name = "Range";
-
-        vilManager = GetComponentInChildren<VillagerManager>();
     }
 
     // Update is called once per frame
@@ -130,7 +128,7 @@ public class TimeObjectManager : MonoBehaviour
 
                 try
                 {
-                    vilManager.OnNewRound();
+                    newRoundReady = true;
                 }
                 catch
                 {

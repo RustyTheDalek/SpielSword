@@ -25,7 +25,7 @@ public static class Game
     /// </summary>
     public static bool attackable = true;
 
-    public static bool debugText = true;
+    public static bool debugText = false;
 
     /// <summary>
     /// Scaling for fastforward of boss and past objects

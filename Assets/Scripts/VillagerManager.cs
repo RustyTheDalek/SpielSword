@@ -25,9 +25,6 @@ public class VillagerManager : MonoBehaviour {
 
     Action currentAction;
 
-    public BossManager   bossTemplate,
-                        currentBoss;
-
     public List<Sprite> Hats;
 
     public static RuntimeAnimatorController[] villagerAnimators = new RuntimeAnimatorController[2];
@@ -139,45 +136,6 @@ public class VillagerManager : MonoBehaviour {
             ClassToSpawn = VillagerClass.Warlock;
         }
 #endif
-
-        switch (Game.timeState)
-        {
-            case TimeState.Forward:
-
-                if(!activeVillager.Alive)//Game world needs to be reset
-                {
-                    //Reverse time
-                    Game.timeState = TimeState.Backward;
-
-                    //Turn active Villager into Past Villager
-                    activeVillager.deathEffect.Play();
-                    activeVillager.villagerState = VillagerState.PastVillager;
-                    activeVillager.transform.parent = pastVillagersTrans;
-                    activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-                    activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-                    //activeVillager.SetTrigger(true);
-
-                    //activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                    //                                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
-                    //                                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
-                    //                                                                .5f);
-
-                    //activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-                    //                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
-                    //                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
-                    //                                                .5f);
-
-                    pastVillagers.Add(activeVillager);
-
-                    currentBoss.GetComponent<BossManager>().SetAnimators(false);
-
-                    TimeObjectManager.SoftReset();
-
-                }
-
-                break;
-        }  
-
         //Set remaining Villagers to Queue appropriately
         for(int i = 0; i < remainingVillagers.Count; i++)
         {
@@ -191,9 +149,32 @@ public class VillagerManager : MonoBehaviour {
         }
 	}
 
+    public void OnVillagerDeath()
+    {
+
+        //Turn active Villager into Past Villager
+        activeVillager.deathEffect.Play();
+        activeVillager.villagerState = VillagerState.PastVillager;
+        activeVillager.transform.parent = pastVillagersTrans;
+        activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+        activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+        //activeVillager.SetTrigger(true);
+
+        //activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+        //                                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
+        //                                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
+        //                                                                .5f);
+
+        //activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
+        //                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
+        //                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
+        //                                                .5f);
+
+        pastVillagers.Add(activeVillager);
+    }
+
     public void OnNewRound()
     {
-        currentBoss.Reset();
         NextVillager();
         EnterArena();
         WeakenAuras();
