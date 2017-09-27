@@ -67,6 +67,8 @@
 				
 				c.rgb = lerp(c.rgb, fixed3(1,1,1), noise.x);
 
+				c.rgb = saturate(c.rgb);
+
 				c.rgb *= c.a;
 
 				return c;

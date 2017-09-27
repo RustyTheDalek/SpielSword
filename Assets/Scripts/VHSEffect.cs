@@ -85,7 +85,7 @@ public class VHSEffect : MonoBehaviour {
 
     float XScanLineLogic(float val)
     {
-        if (val <= 0 || Random.value < 0.01)
+        if (val <= 0 /*|| Random.value < 0.01*/)
         {
             return Random.value;
         }
