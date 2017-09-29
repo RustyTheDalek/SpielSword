@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// Script for VillagerRange
+/// Script for handling attacks against the boss
 /// </summary>
 public class VillagerAttack : SpawnableSpriteTimeObject
 {
@@ -10,7 +10,7 @@ public class VillagerAttack : SpawnableSpriteTimeObject
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if (this.name.Contains("Range"))
+        if (this.name.Contains("Range") || this.name.Contains("Imp"))
         {
             if (coll.gameObject.GetComponent<Head>())
             {

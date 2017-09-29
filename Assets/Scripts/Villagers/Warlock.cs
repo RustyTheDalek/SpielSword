@@ -82,4 +82,19 @@ public class Warlock : Villager
             animData.canSpecial = false;
         }
     }
+
+    public override void FireProjectile()
+    {
+        if (villagerState == VillagerState.PresentVillager)
+        {
+            Debug.Log("Warlock Ranged Attack");
+
+            rangedAtk = AssetManager.WarlockImp.Spawn(rangedTrans.position);
+
+            //float direction = rangedTrans.position.x - transform.position.x;
+
+            /*rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
+                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);*/
+        }
+    }
 }

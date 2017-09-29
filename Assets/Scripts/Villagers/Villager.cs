@@ -54,6 +54,7 @@ public abstract class Villager : MonoBehaviour
 
     public VillagerTimeObject vTO;
 
+
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
     /// </summary>
@@ -83,6 +84,16 @@ public abstract class Villager : MonoBehaviour
 
     protected SpecialType specialType;
 
+    /// <summary>
+    /// Temporary GameObject for tracking Ranged attack
+    /// </summary>
+    protected GameObject rangedAtk;
+
+    /// <summary>
+    /// Spawn position for Ranged projectiles
+    /// </summary>
+    protected Transform rangedTrans;
+
     #endregion
 
     #region Private Variables
@@ -90,8 +101,6 @@ public abstract class Villager : MonoBehaviour
     float rangedProjectileStrength = 25;
 
     bool m_Jump;
-
-    Transform rangedTrans;
 
     #endregion
 
@@ -301,17 +310,17 @@ public abstract class Villager : MonoBehaviour
         }
     }
 
-    public void FireProjectile()
+    public virtual void FireProjectile()
     {
         if (villagerState == VillagerState.PresentVillager)
         {
             Debug.Log("Ranged Attack");
 
-            GameObject attack = AssetManager.Projectile.Spawn(rangedTrans.position);
+            rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
 
             float direction = rangedTrans.position.x - transform.position.x;
 
-            attack.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
+            rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
                 , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
         }
     }

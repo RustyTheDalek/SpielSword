@@ -43,6 +43,7 @@ public static class AssetManager
     //            obj = Resources.Load("Filename");
 
     //            _Asset = (GameObject)obj;
+    //            _Asset.CreatePool(0);
     //        }
 
     //        return _Asset;
@@ -179,6 +180,26 @@ public static class AssetManager
             }
 
             return _SpriteMaterials;
+        }
+    }
+
+    static GameObject _WarlockImp;
+
+    public static GameObject WarlockImp
+    {
+        get
+        {
+            if (_WarlockImp == null)
+            {
+                _WarlockImp = new GameObject();
+
+                obj = Resources.Load("Imp");
+
+                _WarlockImp = (GameObject)obj;
+                _WarlockImp.CreatePool(100);
+            }
+
+            return _WarlockImp;
         }
     }
 }

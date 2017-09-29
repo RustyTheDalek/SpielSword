@@ -60,19 +60,21 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     public void Move(VillagerAnimData animData)
     {
-        //If dead and not in dead state
+        //If dead and not in dead state we want to trigger the death animation
         if (animData.dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death") && 
             Game.timeState == TimeState.Forward)
         {
             m_Anim.SetTrigger("Dead");
         }
 
+        //Want to make sure the Villager reverses from death if time is moving backwards
         if (Game.timeState == TimeState.Backward)
         {
             //Debug.Log("Exiting Death");
             m_Anim.SetTrigger("ExitDeath");
         }
 
+        //We want to make sure attacks are triggered only when time is moving forwards
         if (Game.timeState == TimeState.Forward)
         {
             m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
