@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
 
     public TimeObjectManager timeManager;
 
+    public UnityStandardAssets._2D.Camera2DFollow trackCam;
+
     /// <summary>
     /// What kind of skipping stage technique are we using?
     /// </summary>
@@ -46,6 +48,11 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        if (trackCam.target == null || trackCam.target != vilManager.activeVillager)
+        {
+            trackCam.target = vilManager.activeVillager.transform;
+        }
+
         switch (Game.timeState)
         {
             case TimeState.Forward:
