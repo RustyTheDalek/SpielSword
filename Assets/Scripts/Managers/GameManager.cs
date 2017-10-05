@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour {
                     TimeObjectManager.SoftReset();
                 }
 
-                if (currentBoss.skippingStage)
+                if (Game.skippingStage)
                 {
                     switch (skipStageType)
                     {

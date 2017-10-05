@@ -35,7 +35,7 @@ public class Head : MonoBehaviour {
     {
         //Debug.Log("Collision");
 
-        if (coll.transform.name == "Melee" && !boss.skippingStage)
+        if (coll.transform.name == "Melee" && !Game.skippingStage)
         {
             //Debug.Log("Attack Succesful");
             OnHit(coll.GetComponent<MeleeAttack>().damageMult);
@@ -48,7 +48,7 @@ public class Head : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.transform.name.Contains("Range") && !boss.skippingStage)
+        if (coll.transform.name.Contains("Range") && !Game.skippingStage)
         {
             OnHit(1);
         }

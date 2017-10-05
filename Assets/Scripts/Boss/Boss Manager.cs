@@ -10,11 +10,6 @@ public abstract class BossManager : MonoBehaviour {
 
 	public Head head;
 
-    /// <summary>
-    /// Whether the Boss is currently attackble by the Player 
-    /// </summary>
-    public bool skippingStage;
-
     public static float health = 100;
 
     public List<int> attackList, 
@@ -154,12 +149,14 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList.Count != currentCount)
                     {
                         StageOne();
-                        skippingStage = true;
+                        Game.skippingStage = true;
+                        SetColliders(Game.skippingStage);
                     }
                     else
                     {
                         //Game.PastTimeScale = 1;
-                        skippingStage = false;
+                        Game.skippingStage = false;
+                        SetColliders(Game.skippingStage);
                         Game.PastTimeScale = 1;
                         StageTwo();
                     }
@@ -169,11 +166,13 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList2.Count != currentCount2)
                     {
                         StageTwo();
-                        skippingStage = true;
+                        Game.skippingStage = true;
+                        SetColliders(Game.skippingStage);
                     }
                     else
                     {
-                        skippingStage = false;
+                        Game.skippingStage = false;
+                        SetColliders(Game.skippingStage);
                         Game.PastTimeScale = 1;
                         StageThree();
                     }
@@ -183,11 +182,13 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList3.Count != currentCount3)
                     {
                         StageThree();
-                        skippingStage = true;
+                        Game.skippingStage = true;
+                        SetColliders(Game.skippingStage);
                     }
                     else
                     {
-                        skippingStage = false;
+                        Game.skippingStage = false;
+                        SetColliders(Game.skippingStage);
                         Game.PastTimeScale = 1;
                         StageFour();
                     }
@@ -197,11 +198,13 @@ public abstract class BossManager : MonoBehaviour {
                     if (attackList4.Count != currentCount4)
                     {
                         StageFour();
-                        skippingStage = true;
+                        Game.skippingStage = true;
+                        SetColliders(Game.skippingStage);
                     }
                     else
                     {
-                        skippingStage = false;
+                        Game.skippingStage = false;
+                        SetColliders(Game.skippingStage);
                         Game.PastTimeScale = 1;
                         StageFive();
                     }
@@ -222,7 +225,7 @@ public abstract class BossManager : MonoBehaviour {
                         trackedHealth.Add(health);
                     }
 
-                    if (!skippingStage)
+                    if (!Game.skippingStage)
                     {
                         bossHealthBar.SetHealthBar(HealthBarState.Standard);
 
@@ -330,6 +333,14 @@ public abstract class BossManager : MonoBehaviour {
             int val = (enable == true) ? 1 : 0;
             part.material = AssetManager.SpriteMaterials[val];
             part.GetComponent<VHSEffect>().enabled = enable;
+        }
+    }
+
+    void SetColliders(bool active)
+    {
+        foreach (Animator bossAttack in bossAnims)
+        {
+            bossAttack.GetComponent<Collider2D>().isTrigger = active;
         }
     }
 }
