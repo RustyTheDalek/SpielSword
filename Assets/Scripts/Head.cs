@@ -38,7 +38,7 @@ public class Head : MonoBehaviour {
         if (coll.transform.name == "Melee" && !Game.skippingStage)
         {
             //Debug.Log("Attack Succesful");
-            OnHit(coll.GetComponent<MeleeAttack>().damageMult);
+            OnHit(coll.GetComponent<MeleeAttack>().Damage);
         }
         else
         {

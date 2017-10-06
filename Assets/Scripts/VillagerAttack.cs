@@ -6,7 +6,23 @@ using System.Collections;
 /// </summary>
 public class VillagerAttack : SpawnableSpriteTimeObject
 {
+    public int damage = 1;
     public int damageMult = 1;
+
+    public float lifeTime = 1;
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (lifeTime < 0)
+        {
+            SetActive(false);
+        }
+
+        lifeTime -= Time.deltaTime;
+
+    }
 
     void OnTriggerEnter2D(Collider2D coll)
     {
@@ -14,7 +30,7 @@ public class VillagerAttack : SpawnableSpriteTimeObject
         {
             if (coll.gameObject.GetComponent<Head>())
             {
-                coll.gameObject.GetComponent<Head>().OnHit(damageMult);
+                coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
             }
 
             if (coll.tag != "Ethereal")

@@ -46,7 +46,7 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     int currentVillagerLayer = 6;
 
-    VillagerClass ClassToSpawn = VillagerClass.Warlock;
+    public VillagerClass ClassToSpawn = VillagerClass.Warlock;
 
     void Awake()
     {

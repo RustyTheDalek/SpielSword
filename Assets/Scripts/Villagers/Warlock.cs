@@ -89,12 +89,14 @@ public class Warlock : Villager
         {
             Debug.Log("Warlock Ranged Attack");
 
-            rangedAtk = AssetManager.WarlockImp.Spawn(rangedTrans.position);
+            rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
 
-            //float direction = rangedTrans.position.x - transform.position.x;
+            float direction = rangedTrans.position.x - transform.position.x;
 
-            /*rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
-                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);*/
+            rangedAtk.GetComponent<VillagerAttack>().lifeTime = .25f;
+            rangedAtk.GetComponent<VillagerAttack>().damage = 2;
+            rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
+                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
         }
     }
 }

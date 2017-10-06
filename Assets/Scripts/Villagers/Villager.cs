@@ -94,11 +94,11 @@ public abstract class Villager : MonoBehaviour
     /// </summary>
     protected Transform rangedTrans;
 
+    protected float rangedProjectileStrength = 25;
+
     #endregion
 
     #region Private Variables
-
-    float rangedProjectileStrength = 25;
 
     bool m_Jump;
 

@@ -32,7 +32,7 @@ public class Warrior : Villager
     // Use this for initialization
     public override void Start()
     {
-        //m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[2];
+        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[2];
         villagerAttackType = AttackType.Melee;
         base.Start();
     }
