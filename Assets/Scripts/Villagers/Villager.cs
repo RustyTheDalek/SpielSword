@@ -79,7 +79,7 @@ public abstract class Villager : MonoBehaviour
 
     #region Protected Variables
 
-    protected PlatformerCharacter2D m_Character;
+    protected VillagerCharacter2D m_Character;
     protected Animator m_Animator;
 
     protected SpecialType specialType;
@@ -107,7 +107,7 @@ public abstract class Villager : MonoBehaviour
     public virtual void Awake()
     {
         m_Animator = GetComponent<Animator>();
-        m_Character = GetComponent<PlatformerCharacter2D>();
+        m_Character = GetComponent<VillagerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         vTO = GetComponent<VillagerTimeObject>();
         startingPos = transform.position;
@@ -121,6 +121,7 @@ public abstract class Villager : MonoBehaviour
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
+        animData = new VillagerAnimData();
         animData.canSpecial = true;
         animData.playerSpecialIsTrigger = false;
         //villagerState = VillagerState.Waiting;

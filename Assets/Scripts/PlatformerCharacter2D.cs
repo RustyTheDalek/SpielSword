@@ -6,20 +6,21 @@ using UnityEngine;
 /// </summary>
 public class PlatformerCharacter2D : MonoBehaviour
 {
-    [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.
-    [SerializeField] private float m_JumpForce = 400f;                  // Amount of force added when the player jumps.
-    //[Range(0, 1)] [SerializeField] private float m_CrouchSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
     [SerializeField] private bool m_AirControl = true;                 // Whether or not a player can steer while jumping;
+    [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the character can travel in the x axis.
+    [SerializeField] private float m_JumpForce = 400f;                  // Amount of force added when the character jumps.
+    //[Range(0, 1)] [SerializeField] private float m_CrouchSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
     [SerializeField] private LayerMask m_WhatIsGround;                  // A mask determining what is ground to the character
 
-    private Transform m_GroundCheck;    // A position marking where to check if the player is grounded.
+    private Transform m_GroundCheck;    // A position marking where to check if the character is grounded.
     const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-    private bool m_Grounded;            // Whether or not the player is grounded.
+    private bool m_Grounded;            // Whether or not the character is grounded.
     private Transform m_CeilingCheck;   // A position marking where to check for ceilings
-    const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
-    private Animator m_Anim;            // Reference to the player's animator component.
+    const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the character can stand up
+
+    protected Animator m_Anim;            // Reference to the character's animator component.
     private Rigidbody2D m_Rigidbody2D;
-    private bool m_FacingRight = true;  // For determining which way the player is currently facing.
+    private bool m_FacingRight = true;  // For determining which way the character is currently facing.
 
     private void Awake()
     {
@@ -37,7 +38,7 @@ public class PlatformerCharacter2D : MonoBehaviour
         {
             m_Grounded = false;
 
-            // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+            // The character is grounded if a circlecast to the groundcheck position hits anything designated as ground
             // This can be done using layers instead but Sample Assets will not overwrite your project settings.
             Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
             for (int i = 0; i < colliders.Length; i++)
@@ -58,7 +59,7 @@ public class PlatformerCharacter2D : MonoBehaviour
     }
 
 
-    public void Move(VillagerAnimData animData)
+    public virtual void Move(PlatformerAnimData animData)
     {
         //If dead and not in dead state we want to trigger the death animation
         if (animData.dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death") && 
@@ -67,7 +68,7 @@ public class PlatformerCharacter2D : MonoBehaviour
             m_Anim.SetTrigger("Dead");
         }
 
-        //Want to make sure the Villager reverses from death if time is moving backwards
+        //Want to make sure the Character reverses from death if time is moving backwards
         if (Game.timeState == TimeState.Backward)
         {
             //Debug.Log("Exiting Death");
@@ -80,17 +81,6 @@ public class PlatformerCharacter2D : MonoBehaviour
             m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
             m_Anim.SetBool("RangedAttack", animData.rangedAttack);
         }
-
-        if (animData.playerSpecialIsTrigger)
-        {
-            if(animData.playerSpecial)
-                m_Anim.SetTrigger("PlayerSpecial");
-        }
-        else
-        {
-            m_Anim.SetBool("PlayerSpecial", animData.playerSpecial);
-        }
-        m_Anim.SetBool("CanSpecial", animData.canSpecial);
         
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl && !animData.dead)

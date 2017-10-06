@@ -7,7 +7,7 @@ public class VillagerTimeObject : SpriteTimeObject
 {
     Villager villager;
 
-    protected PlatformerCharacter2D m_Character;
+    protected VillagerCharacter2D m_Character;
 
     VillagerAnimData vAnimData;
 
@@ -25,7 +25,7 @@ public class VillagerTimeObject : SpriteTimeObject
         base.Start();
 
         villager = GetComponent<Villager>();
-        m_Character = GetComponent<PlatformerCharacter2D>();
+        m_Character = GetComponent<VillagerCharacter2D>();
         _SRenderer = GetComponent<SpriteRenderer>();
 
         if (GetComponent<VHSEffect>())
