@@ -6,7 +6,6 @@ public class MinionsManager : MonoBehaviour {
 
     public int health;
     public float xDir;
-    protected Animator m_Animator;
     public bool alive
     {
         get
@@ -17,7 +16,6 @@ public class MinionsManager : MonoBehaviour {
     // Use this for initialization
     public void Start () {
         health = 0;
-        m_Animator = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
