@@ -340,7 +340,10 @@ public abstract class BossManager : MonoBehaviour {
     {
         foreach (Animator bossAttack in bossAnims)
         {
-            bossAttack.GetComponent<Collider2D>().isTrigger = active;
+            if (bossAttack.GetComponent<BossAttack>())
+            {
+                bossAttack.GetComponent<Collider2D>().isTrigger = active;
+            }
         }
     }
 }
