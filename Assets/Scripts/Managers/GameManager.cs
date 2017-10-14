@@ -81,6 +81,11 @@ public class GameManager : MonoBehaviour {
 
                             currentBoss.FastforwardSkip();
                             break;
+
+                        case SkipStageType.VillagerWipe:
+                            currentBoss.NextStage();
+
+                            break;
                     }
                 }
                 else

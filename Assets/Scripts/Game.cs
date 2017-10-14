@@ -18,7 +18,7 @@ public static class Game
     /// <summary>
     /// Invcinibilty mode for testing
     /// </summary>
-    public static bool GodMode = false;
+    public static bool GodMode = true;
 
     /// <summary>
     /// Whether the Boss is currently attackble by the Player 
