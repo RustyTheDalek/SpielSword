@@ -25,6 +25,11 @@ public class TimeObject : BaseTimeObject2
 
     protected virtual void Update()
     {
+
+        if (currentFrame < 0)
+        {
+            Debug.Break();
+        }
         switch (Game.timeState)
         {
             case TimeState.Forward:
@@ -41,9 +46,7 @@ public class TimeObject : BaseTimeObject2
                         if (Game.t >= startFrame)
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            //Just in case a frame or to is skipped we will attempt to 
-                            //keep object in sync by subtracting the difference between their start frame and current game time
-                            currentFrame = 0;
+                            currentFrame = Game.t - startFrame;
                             OnStartPlayback();
                         }
 
@@ -80,10 +83,7 @@ public class TimeObject : BaseTimeObject2
 
                         if (Game.t <= startFrame)
                         {
-                            tObjectState = TimeObjectState.PastStart;
-
-                            OnFinishReverse();
-
+                            OnStartTime();
                             break;
                         }
 
@@ -99,7 +99,7 @@ public class TimeObject : BaseTimeObject2
                             //Just in case a frame or to is skipped we will attempt to 
                             //keep object in sync by subtracting the difference between their finish frame and current game time
                             //- (finishFrame - Game.t)
-                            currentFrame = (bFrames.Count - 1);
+                            currentFrame = (bFrames.Count - Mathf.Abs(finishFrame -Game.t) - 1);
                             OnStartReverse();
                         }
                         break;
@@ -204,5 +204,13 @@ public class TimeObject : BaseTimeObject2
     {
         tObjectState = TimeObjectState.PastFinished;
         finishFrame = Game.t;
+    }
+
+   
+    public override void OnStartTime()
+    {
+        tObjectState = TimeObjectState.PastStart;
+        currentFrame = 0;
+        OnFinishReverse();
     }
 }

@@ -4,6 +4,8 @@ using System.Collections;
 public static class Game
 {
     public static TimeState timeState = TimeState.Forward;
+    public static SkipStageType skipStageType = SkipStageType.VillagerWipe;
+    public static BossState bossState = BossState.Waking;
 
     /// <summary>
     /// Custom Time Variable for past Villagers
@@ -21,16 +23,18 @@ public static class Game
     public static bool GodMode = true;
 
     /// <summary>
-    /// Whether the Boss is currently attackble by the Player 
+    /// Whether the stage was met early.
     /// </summary>
-    public static bool skippingStage;
+    public static bool StageMetEarly;
 
+    public static bool bossReady = false;
+    
     /// <summary>
     /// If the Boss is attackable
     /// </summary>
     public static bool attackable = true;
 
-    public static bool debugText = false;
+    public static bool debugText = true;
 
     /// <summary>
     /// Scaling for fastforward of boss and past objects

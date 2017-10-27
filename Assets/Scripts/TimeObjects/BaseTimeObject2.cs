@@ -59,5 +59,10 @@ public abstract class BaseTimeObject2 : MonoBehaviour
     /// Called when an object finishes playback
     /// </summary>
     protected virtual void OnFinishPlayback() { }
+
+    /// <summary>
+    /// Called when time goes back to 0 and begins again
+    /// </summary>
+    public virtual void OnStartTime() { }
 }
                                                           

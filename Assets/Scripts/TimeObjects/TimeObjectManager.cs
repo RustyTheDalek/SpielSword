@@ -15,6 +15,8 @@ public class TimeObjectManager : MonoBehaviour
 
     public bool newRoundReady;
 
+    public AnimationCurve rewindCurve;
+
     // Use this for initialization
     void Start ()
     {
@@ -105,6 +107,18 @@ public class TimeObjectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Function that forces time objects to reset properly at beginning of time
+    /// </summary>
+    public void OnStartTime()
+    {
+        //TODO:Add to this as needed
+        foreach (VillagerTimeObject vObj in vObjects)
+        {
+            vObj.OnStartTime();
+        }
+    }
+
     private void LateUpdate()
     {
         //Increment Game time
@@ -118,13 +132,15 @@ public class TimeObjectManager : MonoBehaviour
         else
         {
             float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-            float newTimeScale = -Mathf.Pow(x, 2) + (4 * x) + 1;
+            float newTimeScale = 5;
             Time.timeScale = newTimeScale;
 
             if (Game.t < 0)
             {
+                OnStartTime();
                 Game.t = 0;
                 Game.timeState = TimeState.Forward;
+                Time.timeScale = 1;
 
                 try
                 {

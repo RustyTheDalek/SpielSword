@@ -19,27 +19,6 @@ public class GameManager : MonoBehaviour {
 
     public UnityStandardAssets._2D.Camera2DFollow trackCam;
 
-    /// <summary>
-    /// What kind of skipping stage technique are we using?
-    /// </summary>
-    enum SkipStageType
-    {
-        /// <summary>
-        /// Simple speed up of boss
-        /// </summary>
-        FastForward,
-        /// <summary>
-        /// Spawns a 'punching bag' to give the player something to fight while the boss catches up.
-        /// </summary>
-        Punchbag,
-        /// <summary>
-        /// Wipes all the Villagers when the paradox is reached and boss begins at new wave.
-        /// </summary>
-        VillagerWipe
-    };
-
-    SkipStageType skipStageType = SkipStageType.FastForward;
-
     // Use this for initialization
     void Start () {
 		
@@ -73,32 +52,74 @@ public class GameManager : MonoBehaviour {
                     TimeObjectManager.SoftReset();
                 }
 
-                if (Game.skippingStage)
+                switch (Game.bossState)
                 {
-                    switch (skipStageType)
-                    {
-                        case SkipStageType.FastForward:
+                    case BossState.Waking:
 
-                            currentBoss.FastforwardSkip();
-                            break;
-
-                        case SkipStageType.VillagerWipe:
+                        if (Game.bossReady)
+                        {
                             currentBoss.NextStage();
+                            Game.bossState = BossState.Attacking;
+                        }
 
-                            break;
-                    }
+                        break;
+
+                    case BossState.Attacking:
+
+                        if (Game.StageMetEarly)
+                        {
+                            Game.bossState = BossState.StartSkippingStage;
+                        }
+                        break;
+
+                    case BossState.StartSkippingStage:
+
+                        switch (Game.skipStageType)
+                        {
+                            case SkipStageType.FastForward:
+
+                                currentBoss.SetTriggers(Game.StageMetEarly);
+                                Game.bossState = BossState.SkippingStage;
+                                break;
+
+                            case SkipStageType.VillagerWipe:
+
+                                currentBoss.TrimStage();
+                                currentBoss.NextStage();
+
+                                vilManager.TrimVillagers();
+
+                                Game.bossState = BossState.SkippingStage;
+
+                                break;
+                        }
+
+                        break;
+
+                    case BossState.SkippingStage:
+
+                        switch (Game.skipStageType)
+                        {
+                            case SkipStageType.FastForward:
+
+                                if (Game.StageMetEarly)
+                                {
+                                    currentBoss.FastforwardSkip();
+                                }
+                                else
+                                {
+                                    Game.PastTimeScale = 1;
+                                }
+                                break;
+
+                            case SkipStageType.VillagerWipe:
+
+
+                                break;
+                        }
+                        break;
+
                 }
-                else
-                {
-                    switch (skipStageType)
-                    {
-                        case SkipStageType.FastForward:
-
-                            Game.PastTimeScale = 1;
-                            break;
-                    }
-                }
-
                 break;
 
             //case TimeState.Backward:

@@ -4,23 +4,15 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System;
 
-public abstract class BossManager : MonoBehaviour {
-
-    public int stage = 0;
-
-	public Head head;
+public abstract class BossManager : MonoBehaviour
+{
+    public Head head;
 
     public static float health = 100;
 
-    public List<int>    attackList,
-                        attackList2,
-                        attackList3,
-                        attackList4,
-                        attackList5 = new List<int>();
-
     public List<List<int>> stageAttacks = new List<List<int>>();
 
-    public List<int> CurrentStageList
+    public List<int> CurrentStageAtttacks
     {
         get
         {
@@ -28,11 +20,10 @@ public abstract class BossManager : MonoBehaviour {
         }
     }
 
-	public int attackCountStage;
+    public int attackCountStage;
     // Values stored in these ints are used to track the progress in the attack list
     // number system determins the stage they are in charge of
     //Stores how many attacks are in each stage
-    //public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
     List<int> numberOAttacks = new List<int>(5);
 
     public int NumberOAttacks4Stage
@@ -49,8 +40,22 @@ public abstract class BossManager : MonoBehaviour {
     }
 
     //public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
-	// Makes sure the list isn't run more then once per stage
-	public bool playList, playList2, playList3, playList4, playList5;
+    // Makes sure the list isn't run more then once per stage
+
+    public List<bool> stageReplaying;
+
+    public bool CurrentStageReplay
+    {
+        get
+        {
+            return stageReplaying[(int)bossStage];
+        }
+
+        set
+        {
+            stageReplaying[(int)bossStage] = value;
+        }
+}
 
     public AnimationCurve bossSpeedUp;
 
@@ -79,7 +84,7 @@ public abstract class BossManager : MonoBehaviour {
     public List<float> trackedHealth = new List<float>();
     #endregion
 
-    public BossStage bossStage = BossStage.One;
+    public BossStage bossStage = BossStage.None;
 
     /// <summary>
     /// Uses Normalised time from Boss animations to smooth the speed up for stage skipping
@@ -92,14 +97,17 @@ public abstract class BossManager : MonoBehaviour {
         }
     }
 
-    public abstract bool Attacking { get; }
+    public abstract bool Attacking { get; } 
 
     public virtual void Start ()
 	{
         //Sets the counter for the list to zero
-        for(int i = 0; i < numberOAttacks.Capacity; i++)
+        for(int i = 0; i < 5; i++)
         {
+            Debug.Log(i);
             numberOAttacks.Add(0);
+            stageAttacks.Add(new List<int>());
+            stageReplaying.Add(true);
         }
 
 
@@ -107,12 +115,6 @@ public abstract class BossManager : MonoBehaviour {
         {
             stageAttacks[i] = new List<int>();
         }
-        // sets the bool to true so they run first time
-        playList = true;
-		playList2 = true;
-		playList3 = true;
-		playList4 = true;
-		playList5 = true;
 
         //Get All objects that can be tracked
         //Currently assumes anything with an Animator needs to be tracked
@@ -121,6 +123,33 @@ public abstract class BossManager : MonoBehaviour {
         bossAnims.AddRange(objs);
 
         OnStageOne();
+
+        switch (bossStage)
+        {
+            case BossStage.Two:
+
+                OnStageTwo();
+                health = 79;
+                break;
+
+            case BossStage.Three:
+
+                OnStageThree();
+                health = 59;
+                break;
+
+            case BossStage.Four:
+
+                OnStageFour();
+                health = 39;
+                break;
+
+            case BossStage.Five:
+
+                OnStageFive();
+                health = 19;
+                break;
+        }
     }
 
     #region Stage skipping ideas
@@ -143,35 +172,46 @@ public abstract class BossManager : MonoBehaviour {
         bossStage += 1;
     }
 
+    public void TrimStage()
+    {
+        for (int i = NumberOAttacks4Stage; i < CurrentStageAtttacks.Count; i++)
+        {
+            CurrentStageAtttacks.RemoveAt(i);
+        }
+    }
+
     #endregion
 
-    bool SkipStageCheck()
+    /// <summary>
+    /// This helps to see if stage was entered early by seeing if the boss still has 
+    /// attacks to perform in this stage
+    /// </summary>
+    /// <returns></returns>
+    bool EarlyStageCheck()
     {
-        if (stageAttacks[(int)bossStage].Count != numberOAttacks[(int)bossStage])
+        if (NumberOAttacks4Stage != CurrentStageAtttacks.Count)
         {
-            Game.skippingStage = true;
+            Game.StageMetEarly = true;
         }
         else
         {
-            Game.skippingStage = false;
+            Game.StageMetEarly = false;
         }
 
-        SetColliders(Game.skippingStage);
-
-        return Game.skippingStage;
+        return Game.StageMetEarly;
     }
 
     void StageListings(Action<int> stageAttacks)
     {
         //pulls up the next attack in sequence
-        for (int i = NumberOAttacks4Stage; i <= CurrentStageList.Count; i++)
+        for (int i = NumberOAttacks4Stage; i <= CurrentStageAtttacks.Count; i++)
         {
             if (Attacking)
             {
                 // makes sure a attack isn't already playing befor continuing
                 return;
             }
-            int attack = CurrentStageList[i];
+            int attack = CurrentStageAtttacks[i];
             stageAttacks(attack);
             // remembers the place in the list if exited out by above
             NumberOAttacks4Stage++;
@@ -184,19 +224,19 @@ public abstract class BossManager : MonoBehaviour {
         if (!Attacking)
         {
             // Checks to make sure the list hasn't been run and that there is a list
-            if (attackList.Count > NumberOAttacks4Stage && playList)
+            if (CurrentStageAtttacks.Count > NumberOAttacks4Stage && CurrentStageReplay)
             {
                 StageListings(stageAttacks);
             }
             else
             {
                 //Prevents access to the list once at this part
-                playList = false;
+                CurrentStageReplay = false;
                 // Rolls a random number based on no of attacks
                 int newAttack = UnityEngine.Random.Range(0, attackCountStage);
                 // Adds attack to list
-                attackList.Add(newAttack);
-                NumberOAttacks4Stage = attackList.Count;
+                CurrentStageAtttacks.Add(newAttack);
+                NumberOAttacks4Stage = CurrentStageAtttacks.Count;
                 // Runs the attack assosiated with that number
                 stageAttacks(newAttack);
             }
@@ -247,169 +287,57 @@ public abstract class BossManager : MonoBehaviour {
                 {
                     case BossStage.One:
 
-                        if (health > 80)
-                        {
-                            StageAttackLogic(StageOneAttacks);
-                        }
-                        else
-                        {
-                            //This check helps decide if the Boss has entered a stage early
-                            //If The attackList doesn't match the current amount of 
-                            //attacks then it was entered early
-                            if (SkipStageCheck())
-                            {
-                                StageAttackLogic(StageOneAttacks);
-                            }
-                            else
-                            {
-                                bossStage = BossStage.Two;
-                                OnStageTwo();
-                            }
-                        }
+                        StageAttackLogic(StageOneAttacks);
 
+                        if (health < 80 && !EarlyStageCheck())
+                        {
+                            bossStage = BossStage.Two;
+                            OnStageTwo();        
+                        }
                         break;
 
                     case BossStage.Two:
 
-                        if (health > 60)
+                        StageAttackLogic(StageTwoAttacks);
+
+                        if (health < 60 && !EarlyStageCheck())
                         {
-                            StageAttackLogic(StageOneAttacks);
-                        }
-                        else
-                        {
-                            if (SkipStageCheck())
-                            {
-                                StageAttackLogic(StageTwoAttacks);
-                            }
-                            else
-                            {
-                                bossStage = BossStage.Three;
-                                OnStageThree();
-                            }
+                            bossStage = BossStage.Three;
+                            OnStageThree();
                         }
 
                         break;
 
                     case BossStage.Three:
 
-                        if (health > 40)
+                        StageAttackLogic(StageThreeAttacks);
+
+                        if (health < 40 && !EarlyStageCheck())
                         {
-                            StageAttackLogic(StageOneAttacks);
+                            bossStage = BossStage.Four;
+                            OnStageFour();
                         }
-                        else
-                        {
-                            if (SkipStageCheck())
-                            {
-                                StageAttackLogic(StageThreeAttacks);
-                            }
-                            else
-                            {
-                                bossStage = BossStage.Four;
-                                OnStageFour();
-                            }
-                        }
+
                         break;
 
                     case BossStage.Four:
 
-                        if (health > 20)
-                        {
-                            StageAttackLogic(StageOneAttacks);
-                        }
-                        else
-                        {
-                            if (SkipStageCheck())
-                            {
-                                StageAttackLogic(StageFourAttacks);
+                        StageAttackLogic(StageFourAttacks);
 
-                            }
-                            else
-                            {
-                                bossStage = BossStage.Five;
-                                OnStageFive();
-                            }
+                        if (health < 20 && !EarlyStageCheck())
+                        {
+                            bossStage = BossStage.Five;
+                            OnStageFive();
                         }
+
                         break;
 
                     case BossStage.Five:
 
-                        if (health > 0)
-                        {
-                            StageAttackLogic(StageFiveAttacks);
-                        }
+                        StageAttackLogic(StageFiveAttacks);
+
                         break;
                 }
-                //#region Stage select
-                //if (health > 80)
-                //{
-                //    StageOne();
-                //}
-                //else if (health < 80 && health > 60)
-                //{
-                //    if (attackList.Count != currentCount)
-                //    {
-                //        StageOne();
-                //        Game.skippingStage = true;
-                //        SetColliders(Game.skippingStage);
-                //    }
-                //    else
-                //    {
-                //        //Game.PastTimeScale = 1;
-                //        Game.skippingStage = false;
-                //        SetColliders(Game.skippingStage);
-                //        Game.PastTimeScale = 1;
-                //        StageTwo();
-                //    }
-                //}
-                //else if (health < 60 && health > 40)
-                //{
-                //    if (attackList2.Count != currentCount2)
-                //    {
-                //        StageTwo();
-                //        Game.skippingStage = true;
-                //        SetColliders(Game.skippingStage);
-                //    }
-                //    else
-                //    {
-                //        Game.skippingStage = false;
-                //        SetColliders(Game.skippingStage);
-                //        Game.PastTimeScale = 1;
-                //        StageThree();
-                //    }
-                //}
-                //else if (health < 40 && health > 20)
-                //{
-                //    if (attackList3.Count != currentCount3)
-                //    {
-                //        StageThree();
-                //        Game.skippingStage = true;
-                //        SetColliders(Game.skippingStage);
-                //    }
-                //    else
-                //    {
-                //        Game.skippingStage = false;
-                //        SetColliders(Game.skippingStage);
-                //        Game.PastTimeScale = 1;
-                //        StageFour();
-                //    }
-                //}
-                //else if (health > 0 && health < 20)
-                //{
-                //    if (attackList4.Count != currentCount4)
-                //    {
-                //        StageFour();
-                //        Game.skippingStage = true;
-                //        SetColliders(Game.skippingStage);
-                //    }
-                //    else
-                //    {
-                //        Game.skippingStage = false;
-                //        SetColliders(Game.skippingStage);
-                //        Game.PastTimeScale = 1;
-                //        StageFive();
-                //    }
-                //}
-                //#endregion
 
                 if (Alive)
                 {
@@ -425,7 +353,7 @@ public abstract class BossManager : MonoBehaviour {
                         trackedHealth.Add(health);
                     }
 
-                    if (!Game.skippingStage)
+                    if (!Game.StageMetEarly)
                     {
                         bossHealthBar.SetHealthBar(HealthBarState.Standard);
 
@@ -459,17 +387,19 @@ public abstract class BossManager : MonoBehaviour {
     {
         SetAnimators(true);
 
+        bossStage = BossStage.One;
+        OnStageOne();
+
         for (int i = 0; i < numberOAttacks.Count; i++)
         {
             numberOAttacks[i] = 0;
         }
 
         // sets the bool to true so they run first time
-        playList = true;
-        playList2 = true;
-        playList3 = true;
-        playList4 = true;
-        playList5 = true;
+        for (int i = 0; i < stageReplaying.Count; i++)
+        {
+            stageReplaying[i] = true;
+        }
 
         Game.PastTimeScale = 1;
 
@@ -494,7 +424,6 @@ public abstract class BossManager : MonoBehaviour {
     protected abstract void StageThreeAttacks(int attack);
     protected abstract void StageFourAttacks(int attack);
     protected abstract void StageFiveAttacks(int attack);
-
 
     public virtual void SetBossParts() { }
 
@@ -543,13 +472,17 @@ public abstract class BossManager : MonoBehaviour {
         }
     }
 
-    void SetColliders(bool active)
+    /// <summary>
+    /// Turns Boss animations parts into Triggers based on Boolean
+    /// </summary>
+    /// <param name="trigger"> Whether we want Colldiers to become triggers</param>
+    public void SetTriggers(bool trigger)
     {
         foreach (Animator bossAttack in bossAnims)
         {
             if (bossAttack.GetComponent<BossAttack>())
             {
-                bossAttack.GetComponent<Collider2D>().isTrigger = active;
+                bossAttack.GetComponent<Collider2D>().isTrigger = trigger;
             }
         }
     }

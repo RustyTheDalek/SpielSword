@@ -7,7 +7,7 @@ using System;
 public class Golem : BossManager {
 
     [HideInInspector]
-	public Animator lArmRock1, lArmRock2, lArmRock3,
+	public Animator lArmRock1, lArmRock2, lArmRock3, lArmRock4,
 	rArmRock1, rArmRock2, rArmRock3, headAnim, leftArm, rightArm,
 	leftCrystal, rightCrystal;
 
@@ -25,24 +25,17 @@ public class Golem : BossManager {
     {
         get
         {
-            //if (!leftArm.GetCurrentAnimatorStateInfo(0).IsName("Base.LeftIdle") == true ||
-            //    !rightArm.GetCurrentAnimatorStateInfo(0).IsName("Base.RightIdle") == true)
-            //{
-            //    return true;
-            //}
-            if (leftArm.GetBool("S1Attack1") == true || rightArm.GetBool("S1Attack1") == true
-                || leftArm.GetBool("S1Attack2") == true || rightArm.GetBool("S1Attack2") == true
-                || leftArm.GetBool("S1Attack3") == true || rightArm.GetBool("S1Attack3") == true
-                || leftArm.GetBool("S2Attack1") == true || rightArm.GetBool("S2Attack1") == true
-                || leftArm.GetBool("S2Attack2") == true || rightArm.GetBool("S2Attack2") == true
-                || leftArm.GetBool("S3Attack1") == true || rightArm.GetBool("S3Attack1") == true
-                || leftArm.GetBool("S3Attack2") == true || rightArm.GetBool("S3Attack2") == true
-                || leftArm.GetBool("S4Attack1") == true || rightArm.GetBool("S4Attack1") == true
-                || leftArm.GetBool("S4Special") == true || rightArm.GetBool("S4Special") == true
-                || leftArm.GetBool("S4Stun") == true || rightArm.GetBool("S4Stun") == true
-                || leftArm.GetBool("S5Attack1") == true || rightArm.GetBool("S5Attack1") == true
-                || leftArm.GetBool("S5Attack2") == true || rightArm.GetBool("S5Attack2") == true
-                || leftArm.GetBool("S5SpecialStun") == true || rightArm.GetBool("S5SpecialStun") == true)
+            if (leftArm.GetComponent<BossAttack>().attacking ||
+                rightArm.GetComponent<BossAttack>().attacking ||
+                lArmRock1.GetComponent<BossAttack>().attacking ||
+                lArmRock2.GetComponent<BossAttack>().attacking ||
+                lArmRock3.GetComponent<BossAttack>().attacking ||
+                lArmRock4.GetComponent<BossAttack>().attacking ||
+                rArmRock2.GetComponent<BossAttack>().attacking ||
+                rArmRock3.GetComponent<BossAttack>().attacking ||
+                rightArm.GetComponent<BossAttack>().attacking ||
+                leftCrystal.GetComponent<BossAttack>().attacking ||
+                rightCrystal.GetComponent<BossAttack>().attacking )
             {
                 return true;
             }
@@ -64,28 +57,34 @@ public class Golem : BossManager {
 		if (attack == 0)
 		{
 			leftArm.SetBool("S1Attack1", true);
+            leftArm.GetComponent<BossAttack>().attacking = true;
 		}
 		if (attack == 1)
 		{
 			rightArm.SetBool("S1Attack1", true);
-		}
-		if (attack == 2)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 2)
 		{
 			leftArm.SetBool("S1Attack2", true);
-		}
-		if (attack == 3)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 3)
 		{
 			rightArm.SetBool("S1Attack2", true);
-		}
-		if (attack == 4)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 4)
 		{
 			leftArm.SetBool("S1Attack3", true);
-		}
-		if (attack == 5)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 5)
 		{
 			rightArm.SetBool("S1Attack3", true);
-		}
-	}// Selects the attack based on the given number
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+    }// Selects the attack based on the given number
     #endregion
 
     #region Stage Two
@@ -108,26 +107,33 @@ public class Golem : BossManager {
 		if (attack == 0)
 		{
 			leftArm.SetBool("S1Attack1", true);
-		}
-		if (attack == 1)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 1)
 		{
 			rightArm.SetBool("S1Attack1", true);
-		}
-		if (attack == 2)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 2)
 		{
 			leftArm.SetBool("S2Attack1", true);
-		}
-		if (attack == 3)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 3)
 		{
 			rightArm.SetBool("S2Attack1", true);
-		}
-		if (attack == 4)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 4)
 		{
 			rightArm.SetBool("S2Attack2", true);
-			leftArm.SetBool("S2Attack2", true);
-		}
+            rightArm.GetComponent<BossAttack>().attacking = true;
 
-	}// Selects the attack based on the given number
+            leftArm.SetBool("S2Attack2", true);
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+
+    }// Selects the attack based on the given number
     #endregion
 
     #region Stage Three
@@ -142,20 +148,24 @@ public class Golem : BossManager {
 		if (attack == 0)
 		{
 			leftArm.SetBool("S3Attack1", true);
-		}
-		if (attack == 1)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 1)
 		{
 			rightArm.SetBool("S3Attack1", true);
-		}
-		if (attack == 2)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 2)
 		{
 			leftArm.SetBool("S3Attack2", true);
-		}
-		if (attack == 3)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 3)
 		{
 			rightArm.SetBool("S3Attack2", true);
-		}
-	}// Selects the attack based on the given number
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+    }// Selects the attack based on the given number
     #endregion
 
     #region Stage Four
@@ -178,30 +188,41 @@ public class Golem : BossManager {
 		if (attack == 0)
 		{
 			leftArm.SetBool("S1Attack1", true);
-		}
-		if (attack == 1)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 1)
 		{
 			rightArm.SetBool("S1Attack1", true);
-		}
-		if (attack == 2)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 2)
 		{
 			leftArm.SetBool("S4Attack1", true);
-		}
-		if (attack == 3)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 3)
 		{
 			rightArm.SetBool("S4Attack1", true);
-		}
-		if (attack == 4)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 4)
 		{
 			leftArm.SetBool("S4Special", true);
-			rightArm.SetBool("S4Special", true);
-		}
-		if (attack == 5)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+
+            rightArm.SetBool("S4Special", true);
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 5)
 		{
 			rightArm.SetBool("S4Stun", true);
-			leftArm.SetBool("S4Stun", true);
-		}
-	}// Selects the attack based on the given number
+            rightArm.GetComponent<BossAttack>().attacking = true;
+
+            leftArm.SetBool("S4Stun", true);
+            leftArm.GetComponent<BossAttack>().attacking = true;
+
+        }
+    }// Selects the attack based on the given number
     #endregion
 
     #region Stage Five
@@ -216,25 +237,32 @@ public class Golem : BossManager {
 		if (attack == 0)
 		{
 			leftArm.SetBool("S5Attack1", true);
-		}
-		if (attack == 1)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 1)
 		{
 			rightArm.SetBool("S5Attack1", true);
-		}
-		if (attack == 2)
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 2)
 		{
 			leftArm.SetBool("S5Attack2", true);
-		}
-		if (attack == 3)
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+        if (attack == 3)
 		{
 			rightArm.SetBool("S5Attack2", true);
-		}
+            rightArm.GetComponent<BossAttack>().attacking = true;
+        }
 		if (attack == 4)
 		{
 			rightArm.SetBool("S5SpecialStun", true);
+            rightArm.GetComponent<BossAttack>().attacking = true;
+
 			leftArm.SetBool("S5SpecialStun", true);
-		}
-	}// Selects the attack based on the given number
+            leftArm.GetComponent<BossAttack>().attacking = true;
+        }
+    }// Selects the attack based on the given number
 	#endregion
 
     public override void Reset()

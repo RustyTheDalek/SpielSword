@@ -75,6 +75,7 @@ public class VillagerTimeObject : SpriteTimeObject
                     vAnimData.playerSpecial = vFrames[currentFrame].special;
                     vAnimData.canSpecial = vFrames[currentFrame].canSpecial;
                     vAnimData.dead = vFrames[currentFrame].dead;
+                    vAnimData.martyed = vFrames[currentFrame].marty;
                     transform.localScale = vFrames[currentFrame].scale;
 
                     m_Character.Move(vAnimData);
@@ -192,5 +193,21 @@ public class VillagerTimeObject : SpriteTimeObject
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
         villager.hat.GetComponent<VHSEffect>().enabled = true;
         vhsEffect.enabled = true;
+    }
+
+    public void SetMartyPoint()
+    {
+        tempFrame = vFrames[currentFrame];
+        tempFrame.marty = true;
+        vFrames[currentFrame] = tempFrame;
+
+        finishFrame = currentFrame;
+
+        for (int i = currentFrame+1; i < bFrames.Count; i++)
+        {
+            bFrames.RemoveAt(i);
+            vFrames.RemoveAt(i);
+            sFrames.RemoveAt(i);
+        }
     }
 }

@@ -239,4 +239,20 @@ public class VillagerManager : MonoBehaviour {
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = false;
     }
 
+    /// <summary>
+    /// Removes all Villagers that are still alive at time of boss skipping
+    /// </summary>
+    public void TrimVillagers()
+    {
+        Debug.Log("Martying Villagers");
+        for (int i = 0; i < pastVillagers.Count; i++)
+        {
+            if (pastVillagers[i].Alive)
+            {
+                pastVillagers[i].animData.martyed = true;
+                pastVillagers[i].GetComponent<VillagerTimeObject>().SetMartyPoint();
+            }
+        }
+    }
+
 }

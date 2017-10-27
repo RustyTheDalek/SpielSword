@@ -6,6 +6,8 @@ using System.Collections;
 /// </summary>
 public class BossAttack : MonoBehaviour
 {
+    public bool attacking = false;
+
     void OnCollisionEnter2D(Collision2D coll)
     {
         //Debug.Log("Collided with " + coll.gameObject.name);
@@ -13,7 +15,7 @@ public class BossAttack : MonoBehaviour
         //BossAttack can only damage Villagers, has to be enabled (In an attack 
         //animation and God mode off for obvious reasons
         if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
-            && !Game.GodMode && !Game.skippingStage)
+            && !Game.GodMode && !Game.StageMetEarly)
         {
             coll.gameObject.GetComponent<Villager>().OnHit();
         }

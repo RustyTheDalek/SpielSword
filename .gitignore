@@ -74,3 +74,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+.vs/SpielSword/v15/Server/sqlite3/db.lock
+.vs/SpielSword/v15/Server/sqlite3/storage.ide
+.vs/SpielSword/v15/Server/sqlite3/storage.ide-shm
+.vs/SpielSword/v15/Server/sqlite3/storage.ide-wal

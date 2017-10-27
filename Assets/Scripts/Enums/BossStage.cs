@@ -1,5 +1,6 @@
 ﻿public enum BossStage
 {
+    None    =-1,
     One     = 0,
     Two     = 1,
     Three   = 2,
