@@ -12,8 +12,9 @@ public class VillagerTimeObject : SpriteTimeObject
     VillagerAnimData vAnimData;
 
     public bool attackStart,
-                deathFinish,
-                deathRecorded;
+                endFinish,
+                endRecorded,
+                deathOrMarty = true; //Whether te villager is going to die or fade from existence
 
     SpriteRenderer _SRenderer;
 
@@ -123,16 +124,23 @@ public class VillagerTimeObject : SpriteTimeObject
         tempFrame.canSpecial = villager.animData.canSpecial;
         tempFrame.dead = !villager.Alive;
 
-        if (!deathRecorded && deathFinish)
+        if (!endRecorded && endFinish)
         {
-            tempFrame.deathEnd = deathFinish;
-            deathRecorded = true;
+            if (deathOrMarty)
+            {
+                tempFrame.deathEnd = endFinish;
+            }
+            else
+            {
+                tempFrame.marty = endFinish;
+            }
+            endRecorded = true;
         }
 
         vFrames.Add(tempFrame);
 
         attackStart = false;
-        deathFinish = false;
+        endFinish = false;
     }
 
     protected override void OnStartPlayback()
@@ -158,7 +166,8 @@ public class VillagerTimeObject : SpriteTimeObject
     {
         vAnimData = new VillagerAnimData()
         {
-            dead = true,
+            dead = deathOrMarty,
+            martyed = !deathOrMarty,
             move = 0,
         };
 
@@ -197,6 +206,7 @@ public class VillagerTimeObject : SpriteTimeObject
 
     public void SetMartyPoint()
     {
+        deathOrMarty = false;
         tempFrame = vFrames[currentFrame];
         tempFrame.marty = true;
         vFrames[currentFrame] = tempFrame;

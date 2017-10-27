@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VillagerDeath : StateMachineBehaviour {
+public class VillagerMarty : StateMachineBehaviour {
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -14,7 +14,7 @@ public class VillagerDeath : StateMachineBehaviour {
         //Tracks the in which the Villager dies so the Aninmation can be reversed when needed
         if (stateInfo.normalizedTime >= 1 && animator.GetComponent<Villager>().villagerState == VillagerState.PresentVillager 
             && animator.GetComponent<VillagerTimeObject>().endRecorded == false && 
-            animator.GetComponent<VillagerTimeObject>().deathOrMarty == true)
+            animator.GetComponent<VillagerTimeObject>().deathOrMarty == false)
         {
             //Debug.Log("Death recorded");
             animator.GetComponent<VillagerTimeObject>().endFinish = true;
