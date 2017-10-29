@@ -7,6 +7,8 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
     protected SpawnableSpriteFrameData tempSSFrame;
     protected List<SpawnableSpriteFrameData> sSFrames = new List<SpawnableSpriteFrameData>();
 
+    protected Animator m_anim;
+
     protected override void Start()
     {
         base.Start();
@@ -14,6 +16,8 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
         tObjectState = TimeObjectState.Present;
 
         TimeObjectManager.vSpawnable.Add(this);
+
+        m_anim = GetComponent<Animator>();
     }
 
     protected override void Update()
@@ -146,6 +150,17 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
         if (Tools.WithinRange(currentFrame, sSFrames))
         {
             gameObject.SetActive(sSFrames[currentFrame].active);
+            m_Sprite.enabled = sSFrames[currentFrame].active;
+
+            if (sSFrames[currentFrame].marty)
+            {
+                m_anim.SetTrigger("Marty");
+            }
+
+            if (sSFrames[currentFrame].unMarty)
+            {
+                m_anim.SetTrigger("UnMarty");
+            }
         }
     }
 
@@ -185,9 +200,33 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
             GetComponent<Rigidbody2D>().simulated = active;
     }
 
+    protected override void OnFinishPlayback()
+    {
+        base.OnFinishPlayback();
+
+        m_Sprite.enabled = false;
+    }
+
     protected override void OnPast()
     {
         tObjectState = TimeObjectState.PastFinished;
         base.OnPast();
+    }
+
+    public void SetMartyPoint()
+    {
+        //deathOrMarty = false;
+        tempSSFrame = sSFrames[currentFrame];
+        tempSSFrame.marty = true;
+        sSFrames[currentFrame] = tempSSFrame;
+
+        finishFrame = currentFrame;
+
+        for (int i = currentFrame + 1; i < bFrames.Count; i++)
+        {
+            bFrames.RemoveAt(i);
+            sSFrames.RemoveAt(i);
+            sFrames.RemoveAt(i);
+        }
     }
 }

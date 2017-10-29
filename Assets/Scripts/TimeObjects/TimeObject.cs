@@ -25,11 +25,6 @@ public class TimeObject : BaseTimeObject2
 
     protected virtual void Update()
     {
-
-        if (currentFrame < 0)
-        {
-            Debug.Break();
-        }
         switch (Game.timeState)
         {
             case TimeState.Forward:

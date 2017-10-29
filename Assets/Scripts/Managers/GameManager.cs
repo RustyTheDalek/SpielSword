@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour {
                                 currentBoss.NextStage();
 
                                 vilManager.TrimVillagers();
+                                vilManager.TrimSpawnables();
 
                                 Game.bossState = BossState.SkippingStage;
 

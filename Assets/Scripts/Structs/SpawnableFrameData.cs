@@ -1,4 +1,6 @@
 ﻿public struct SpawnableSpriteFrameData
 {
-    public bool active;
+    public bool active,
+                marty,
+                unMarty;
 }

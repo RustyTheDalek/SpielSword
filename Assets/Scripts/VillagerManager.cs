@@ -30,6 +30,7 @@ public class VillagerManager : MonoBehaviour {
     public static RuntimeAnimatorController[] villagerAnimators = new RuntimeAnimatorController[2];
 
     public static List<MageAura> auras = new List<MageAura>();
+    public static List<SpawnableSpriteTimeObject> attacks = new List<SpawnableSpriteTimeObject>();
 
     public static int totalLives = 0;
 
@@ -171,6 +172,7 @@ public class VillagerManager : MonoBehaviour {
         //                                                .5f);
 
         pastVillagers.Add(activeVillager);
+
     }
 
     public void OnNewRound()
@@ -251,6 +253,19 @@ public class VillagerManager : MonoBehaviour {
             {
                 pastVillagers[i].animData.martyed = true;
                 pastVillagers[i].GetComponent<VillagerTimeObject>().SetMartyPoint();
+            }
+        }
+    }
+
+    internal void TrimSpawnables()
+    {
+        Debug.Log("Martying Spawnables");
+
+        for (int i = 0; i < attacks.Count; i++)
+        {
+            if (attacks[i].finishFrame > Game.t)
+            {
+                attacks[i].SetMartyPoint();
             }
         }
     }
