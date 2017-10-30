@@ -4,17 +4,15 @@ using System.Collections;
 /// <summary>
 /// Script for handling attacks against the boss
 /// </summary>
-public class VillagerAttack : SpawnableSpriteTimeObject
+public class VillagerAttack : MonoBehaviour
 {
     public int damage = 1;
     public int damageMult = 1;
 
     public float lifeTime = 1;
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
-
         if (lifeTime < 0)
         {
             SetActive(false);
@@ -33,6 +31,8 @@ public class VillagerAttack : SpawnableSpriteTimeObject
                 coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
             }
 
+            //TODO: add logic so projectile does not collide with self 
+            //(Could be done with Tags)
             if (coll.tag != "Ethereal")
             {
                 SetActive(false);
@@ -45,6 +45,22 @@ public class VillagerAttack : SpawnableSpriteTimeObject
         if (this.name.Contains("Range"))
         {
             SetActive(false);
+        }
+    }
+
+    protected void SetActive(bool active)
+    {
+        GetComponent<SpriteRenderer>().enabled = active;
+
+        if (GetComponent<Collider2D>())
+            GetComponent<Collider2D>().enabled = active;
+
+        if (GetComponent<Rigidbody2D>())
+            GetComponent<Rigidbody2D>().simulated = active;
+
+        if (!active)
+        {
+            this.enabled = false;
         }
     }
 }

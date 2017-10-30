@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class VillagerVHSEffect : MonoBehaviour {
+public class VHSEffect : MonoBehaviour {
 
     private SpriteRenderer sRenderer;
 
@@ -11,13 +11,14 @@ public class VillagerVHSEffect : MonoBehaviour {
         
     public float yScanLine;
 
-    [Range(0, 1)] public float noiseStrength = 1;
+    [Range(-1, 1)] public float noiseStrength = 1;
     [Range(0, 1)] public float scanJitter = .695f;
 
+    public MaterialPropertyBlock mpb;
 
     public float xScanSpeed, yScanSpeed;
 
-    public void Start()
+    public virtual void Start()
     {
         xScanSpeed = Random.Range(0.01f, .2f);
         yScanSpeed = Random.Range(0.01f, .2f);
@@ -40,25 +41,25 @@ public class VillagerVHSEffect : MonoBehaviour {
         UpdateVHS(true);
     }
 
-    void UpdateVHS(bool vhs)
+    public virtual void UpdateVHS(bool vhs)
     {
         if (vhs)
         {
-            MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+            mpb = new MaterialPropertyBlock();
             sRenderer.GetPropertyBlock(mpb);
 
-            yScanLine += Time.deltaTime * yScanSpeed;
+            yScanLine += Time.deltaTime * yScanSpeed * (int)Game.timeState;
 
-            for(int i = 0; i < xScanLines.Length; i++)
+            for (int i = 0; i < xScanLines.Length; i++)
             {
-                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i);
+                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i+1);
                 xScanLines[i] = XScanLineLogic(xScanLines[i]);
                 mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * Time.timeScale * Game.PastTimeScale);
             }
 
             if (yScanLine >= .75f || yScanLine <= 0)
             {
-                yScanSpeed *= -1;
+                yScanSpeed *= -1 * Random.Range(0.1f, 1);
             }
 
             //yScanLine = yScanLine % 1;
@@ -85,7 +86,7 @@ public class VillagerVHSEffect : MonoBehaviour {
 
     float XScanLineLogic(float val)
     {
-        if (val <= 0 || Random.value < 0.01)
+        if (val <= 0 /*|| Random.value < 0.01*/)
         {
             return Random.value;
         }

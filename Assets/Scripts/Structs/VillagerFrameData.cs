@@ -13,7 +13,9 @@ public struct VillagerFrameData
                 canSpecial,
                 specialEnd,
                 dead,
-                deathEnd;
+                deathEnd,
+                marty,
+                unmarty;
 
     public string spriteName;
 

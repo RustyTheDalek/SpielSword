@@ -15,4 +15,6 @@ public class VillagerAnimData : PlatformerAnimData
     public bool canSpecial;
     //public bool dead;
     public bool playerSpecialIsTrigger;
+
+    public bool martyed;
 }

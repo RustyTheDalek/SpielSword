@@ -54,6 +54,7 @@ public class SpriteTimeObject : TimeObject
     {
         base.OnFinishReverse();
 
+        currentFrame = 0;
         m_Sprite.material = AssetManager.SpriteMaterials[0];
         vhsEffect.enabled = false;
     }

@@ -24,6 +24,6 @@ public class GameTime : MonoBehaviour {
         text.text = "Time: " + Game.t +
             "\nTimeState: " + Game.timeState +
             "\nTimeScale: " + Time.timeScale + 
-            "\nPastTimeScale; " + Game.PastTimeScale;
+            "\nPastTimeScale: " + Game.PastTimeScale;
 	}
 }

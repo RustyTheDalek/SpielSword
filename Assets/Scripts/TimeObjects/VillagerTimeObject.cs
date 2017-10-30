@@ -12,8 +12,9 @@ public class VillagerTimeObject : SpriteTimeObject
     VillagerAnimData vAnimData;
 
     public bool attackStart,
-                deathFinish,
-                deathRecorded;
+                endFinish,
+                endRecorded,
+                deathOrMarty = true; //Whether te villager is going to die or fade from existence
 
     SpriteRenderer _SRenderer;
 
@@ -75,6 +76,7 @@ public class VillagerTimeObject : SpriteTimeObject
                     vAnimData.playerSpecial = vFrames[currentFrame].special;
                     vAnimData.canSpecial = vFrames[currentFrame].canSpecial;
                     vAnimData.dead = vFrames[currentFrame].dead;
+                    vAnimData.martyed = vFrames[currentFrame].marty;
                     transform.localScale = vFrames[currentFrame].scale;
 
                     m_Character.Move(vAnimData);
@@ -122,25 +124,23 @@ public class VillagerTimeObject : SpriteTimeObject
         tempFrame.canSpecial = villager.animData.canSpecial;
         tempFrame.dead = !villager.Alive;
 
-        if (!deathRecorded && deathFinish)
+        if (!endRecorded && endFinish)
         {
-            tempFrame.deathEnd = deathFinish;
-            deathRecorded = true;
+            if (deathOrMarty)
+            {
+                tempFrame.deathEnd = endFinish;
+            }
+            else
+            {
+                tempFrame.marty = endFinish;
+            }
+            endRecorded = true;
         }
 
         vFrames.Add(tempFrame);
 
         attackStart = false;
-        deathFinish = false;
-    }
-
-    protected override void OnStartPlayback()
-    {
-        //Debug.Break();
-        //Vector3 theScale = transform.localScale;
-        //theScale.x *= -1;
-        //transform.localScale = theScale;
-        //transform.localScale = Vector3.one;
+        endFinish = false;
     }
 
     /// <summary>
@@ -157,7 +157,8 @@ public class VillagerTimeObject : SpriteTimeObject
     {
         vAnimData = new VillagerAnimData()
         {
-            dead = true,
+            dead = deathOrMarty,
+            martyed = !deathOrMarty,
             move = 0,
         };
 
@@ -192,5 +193,22 @@ public class VillagerTimeObject : SpriteTimeObject
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
         villager.hat.GetComponent<VHSEffect>().enabled = true;
         vhsEffect.enabled = true;
+    }
+
+    public void SetMartyPoint()
+    {
+        deathOrMarty = false;
+        tempFrame = vFrames[currentFrame];
+        tempFrame.marty = true;
+        vFrames[currentFrame] = tempFrame;
+
+        finishFrame = bFrames[currentFrame].timeStamp;
+
+        for (int i = currentFrame+1; i < bFrames.Count; i++)
+        {
+            bFrames.RemoveAt(i);
+            vFrames.RemoveAt(i);
+            sFrames.RemoveAt(i);
+        }
     }
 }

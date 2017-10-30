@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class SpawnableSpriteTimeObject : SpriteTimeObject
 {
     protected SpawnableSpriteFrameData tempSSFrame;
     protected List<SpawnableSpriteFrameData> sSFrames = new List<SpawnableSpriteFrameData>();
+
+    protected Animator m_anim;
 
     protected override void Start()
     {
@@ -14,6 +17,8 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
         tObjectState = TimeObjectState.Present;
 
         TimeObjectManager.vSpawnable.Add(this);
+
+        m_anim = GetComponent<Animator>();
     }
 
     protected override void Update()
@@ -89,7 +94,7 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
 
                     case TimeObjectState.PastPlaying:
 
-                        if (Game.t <= startFrame || currentFrame < 0)
+                        if (Game.t <= startFrame)
                         {
                             tObjectState = TimeObjectState.PastStart;
 
@@ -118,26 +123,27 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
 
                 break;
         }
+    }
 
 #if UNITY_EDITOR
 
-        if (debugText && bFrames != null)
+    private void OnDrawGizmos()
+    {
+        if (Game.debugText)
         {
-            if (Game.debugText)
-            {
-                debugText.text = "Time State: " + tObjectState.ToString() +
-                                    "\nTotal Frames: " + TotalFrames +
-                                    "\nCurrent Frame: " + currentFrame +
-                                    "\nStart Frame: " + startFrame +
-                                    "\nFinish Frame: " + finishFrame;
-            }
-            else
-            {
-                debugText.gameObject.SetActive(false);
-            }
+            Handles.Label(transform.position, "Time State: " + tObjectState.ToString() +
+                                "\nTotal Frames: " + TotalFrames +
+                                "\nCurrent Frame: " + currentFrame +
+                                "\nStart Frame: " + startFrame +
+                                "\nFinish Frame: " + finishFrame);
         }
-#endif
+        //else
+        //{
+        //    debugText.gameObject.SetActive(false);
+        //}
     }
+
+#endif
 
     protected override void PlayFrame()
     {
@@ -146,6 +152,28 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
         if (Tools.WithinRange(currentFrame, sSFrames))
         {
             gameObject.SetActive(sSFrames[currentFrame].active);
+            m_Sprite.enabled = sSFrames[currentFrame].active;
+
+            switch (Game.timeState)
+            {
+                case TimeState.Forward:
+
+                    if (sSFrames[currentFrame].marty)
+                    {
+                        Debug.Log(this.name + " Martyed");
+                        m_anim.SetTrigger("Marty");
+                    }
+                    break;
+
+                case TimeState.Backward:
+
+                    if (sSFrames[currentFrame].marty)
+                    {
+                        Debug.Log(this.name + " UnMartyed");
+                        m_anim.SetTrigger("UnMarty");
+                    }
+                    break;
+            }
         }
     }
 
@@ -164,14 +192,13 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
     protected override void OnFinishReverse()
     {
         base.OnFinishReverse();
-        SetActive(false);
+        m_Sprite.enabled = false;
     }
 
     protected override void OnStartReverse()
     {
-        Debug.Log("am here");
         base.OnStartReverse();
-        SetActive(true);
+        //m_Sprite.enabled = true;
     }
 
     protected void SetActive(bool active)
@@ -185,9 +212,34 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
             GetComponent<Rigidbody2D>().simulated = active;
     }
 
+    protected override void OnFinishPlayback()
+    {
+        base.OnFinishPlayback();
+
+        m_Sprite.enabled = false;
+    }
+
     protected override void OnPast()
     {
         tObjectState = TimeObjectState.PastFinished;
         base.OnPast();
+    }
+
+    public void SetMartyPoint()
+    {
+        //deathOrMarty = false;
+        tempSSFrame = sSFrames[currentFrame];
+        tempSSFrame.marty = true;
+        m_anim.SetTrigger("Marty");
+        sSFrames[currentFrame] = tempSSFrame;
+
+        finishFrame = bFrames[currentFrame].timeStamp;
+
+        for (int i = currentFrame + 1; i < bFrames.Count; i++)
+        {
+            bFrames.RemoveAt(i);
+            sSFrames.RemoveAt(i);
+            sFrames.RemoveAt(i);
+        }
     }
 }

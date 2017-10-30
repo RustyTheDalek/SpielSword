@@ -15,6 +15,8 @@ public class TimeObjectManager : MonoBehaviour
 
     public bool newRoundReady;
 
+    public AnimationCurve rewindCurve;
+
     // Use this for initialization
     void Start ()
     {
@@ -118,13 +120,14 @@ public class TimeObjectManager : MonoBehaviour
         else
         {
             float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-            float newTimeScale = -Mathf.Pow(x, 2) + (4 * x) + 1;
+            float newTimeScale = 1;
             Time.timeScale = newTimeScale;
 
             if (Game.t < 0)
             {
                 Game.t = 0;
                 Game.timeState = TimeState.Forward;
+                Time.timeScale = 1;
 
                 try
                 {

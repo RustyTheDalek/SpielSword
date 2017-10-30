@@ -13,10 +13,11 @@ public class VillagerDeath : StateMachineBehaviour {
     {
         //Tracks the in which the Villager dies so the Aninmation can be reversed when needed
         if (stateInfo.normalizedTime >= 1 && animator.GetComponent<Villager>().villagerState == VillagerState.PresentVillager 
-            && animator.GetComponent<VillagerTimeObject>().deathRecorded == false)
+            && animator.GetComponent<VillagerTimeObject>().endRecorded == false && 
+            animator.GetComponent<VillagerTimeObject>().deathOrMarty == true)
         {
             //Debug.Log("Death recorded");
-            animator.GetComponent<VillagerTimeObject>().deathFinish = true;
+            animator.GetComponent<VillagerTimeObject>().endFinish = true;
         }
         ////If Time is rewinding and the Villager is at the start of his death Animation, allow him to reverse out
         //if (stateInfo.normalizedTime <= 0 && Game.timeState == TimeState.Backward)

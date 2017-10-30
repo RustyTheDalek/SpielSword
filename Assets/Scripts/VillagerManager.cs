@@ -30,6 +30,7 @@ public class VillagerManager : MonoBehaviour {
     public static RuntimeAnimatorController[] villagerAnimators = new RuntimeAnimatorController[2];
 
     public static List<MageAura> auras = new List<MageAura>();
+    public static List<SpawnableSpriteTimeObject> attacks = new List<SpawnableSpriteTimeObject>();
 
     public static int totalLives = 0;
 
@@ -78,7 +79,7 @@ public class VillagerManager : MonoBehaviour {
         NextVillager();
         EnterArena();
 
-        Debug.Log(AssetManager.VillagerSprites.Count);
+        //Debug.Log(AssetManager.VillagerSprites.Count);
 	}
 
     private void SetupVillager(GameObject villager, Vector3 spawnOffset)
@@ -171,6 +172,7 @@ public class VillagerManager : MonoBehaviour {
         //                                                .5f);
 
         pastVillagers.Add(activeVillager);
+
     }
 
     public void OnNewRound()
@@ -215,7 +217,6 @@ public class VillagerManager : MonoBehaviour {
             currentVillagerLayer++;
 
             //Add a random Hat to the active Villager
-            activeVillager.hat.gameObject.AddComponent<SpriteRenderer>();
             activeVillager.hat.GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count)];
             activeVillager.hat.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
 
@@ -237,6 +238,35 @@ public class VillagerManager : MonoBehaviour {
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = true;
         activeVillager.transform.position = warpGateExit.transform.position;
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = false;
+    }
+
+    /// <summary>
+    /// Removes all Villagers that are still alive at time of boss skipping
+    /// </summary>
+    public void TrimVillagers()
+    {
+        Debug.Log("Martying Villagers");
+        for (int i = 0; i < pastVillagers.Count; i++)
+        {
+            if (pastVillagers[i].Alive)
+            {
+                pastVillagers[i].animData.martyed = true;
+                pastVillagers[i].GetComponent<VillagerTimeObject>().SetMartyPoint();
+            }
+        }
+    }
+
+    internal void TrimSpawnables()
+    {
+        Debug.Log("Martying Spawnables");
+
+        for (int i = 0; i < attacks.Count; i++)
+        {
+            if (attacks[i].finishFrame > Game.t)
+            {
+                attacks[i].SetMartyPoint();
+            }
+        }
     }
 
 }

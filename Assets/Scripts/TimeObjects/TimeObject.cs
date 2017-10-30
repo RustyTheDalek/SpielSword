@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class TimeObject : BaseTimeObject2
 {
@@ -12,15 +13,7 @@ public class TimeObject : BaseTimeObject2
     // Use this for initialization
     protected virtual void Start()
     {
-
         startFrame = Game.t;
-
-#if UNITY_EDITOR
-
-        debugText = GetComponentInChildren<TextMesh>();
-
-#endif
-
     }
 
     protected virtual void Update()
@@ -41,9 +34,6 @@ public class TimeObject : BaseTimeObject2
                         if (Game.t >= startFrame)
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            //Just in case a frame or to is skipped we will attempt to 
-                            //keep object in sync by subtracting the difference between their start frame and current game time
-                            currentFrame = 0;
                             OnStartPlayback();
                         }
 
@@ -81,9 +71,7 @@ public class TimeObject : BaseTimeObject2
                         if (Game.t <= startFrame)
                         {
                             tObjectState = TimeObjectState.PastStart;
-
                             OnFinishReverse();
-
                             break;
                         }
 
@@ -96,10 +84,6 @@ public class TimeObject : BaseTimeObject2
                         if (Game.t <= finishFrame)
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            //Just in case a frame or to is skipped we will attempt to 
-                            //keep object in sync by subtracting the difference between their finish frame and current game time
-                            //- (finishFrame - Game.t)
-                            currentFrame = (bFrames.Count - 1);
                             OnStartReverse();
                         }
                         break;
@@ -107,26 +91,27 @@ public class TimeObject : BaseTimeObject2
 
                 break;
         }
+    }
 
 #if UNITY_EDITOR
 
-        if (debugText && bFrames != null)
+    private void OnDrawGizmos()
+    {
+        if (Game.debugText)
         {
-            if (Game.debugText)
-            {
-                debugText.text = "Time State: " + tObjectState.ToString() +
-                                    "\nTotal Frames: " + TotalFrames +
-                                    "\nCurrent Frame: " + currentFrame +
-                                    "\nStart Frame: " + startFrame +
-                                    "\nFinish Frame: " + finishFrame;
-            }
-            else
-            {
-                debugText.gameObject.SetActive(false);
-            }
+            Handles.Label(transform.position, "Time State: " + tObjectState.ToString()
+                                + "\nTotal Frames: " + TotalFrames +
+                                "\nCurrent Frame: " + currentFrame +
+                                "\nStart Frame: " + startFrame +
+                                "\nFinish Frame: " + finishFrame, DebugUI);
         }
-#endif
+        //else
+        //{
+        //    debugText.gameObject.SetActive(false);
+        //}
     }
+
+#endif
 
     protected void Playback()
     {
@@ -203,6 +188,34 @@ public class TimeObject : BaseTimeObject2
     protected virtual void OnPast()
     {
         tObjectState = TimeObjectState.PastFinished;
-        finishFrame = Game.t;
+
+        if (finishFrame == 0)
+        {
+            finishFrame = Game.t;
+        }
+    }
+
+    protected override void OnFinishPlayback()
+    {
+
+    }
+
+    protected override void OnFinishReverse()
+    {
+        currentFrame = 0;
+    }
+
+    protected override void OnStartReverse()
+    {
+        //Just in case a frame or to is skipped we will attempt to 
+        //keep object in sync by subtracting the difference between their finish frame and current game time
+        //- (finishFrame - Game.t)
+        currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - Game.t) - 1);
+    }
+
+    protected override void OnStartPlayback()
+    {
+        tObjectState = TimeObjectState.PastPlaying;
+        currentFrame = Game.t - startFrame;
     }
 }
