@@ -39,8 +39,23 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
-    //public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
-    // Makes sure the list isn't run more then once per stage
+    /// <summary>
+    /// Helps track when a stage is entered for accurate stage skipping checks
+    /// </summary>
+    public List<int> timeEnteredStage = new List<int>(5);
+
+    public int TimeEnteredCurrentStage
+    {
+        get
+        {
+            return timeEnteredStage[(int)bossStage];
+        }
+
+        set
+        {
+            timeEnteredStage[(int)bossStage] = value;
+        }
+    }
 
     public List<bool> stageReplaying;
 
@@ -108,8 +123,8 @@ public abstract class BossManager : MonoBehaviour
             numberOAttacks.Add(0);
             stageAttacks.Add(new List<int>());
             stageReplaying.Add(true);
+            timeEnteredStage.Add(0);
         }
-
 
         for (int i = 0; i < stageAttacks.Count; i++)
         {
@@ -203,9 +218,12 @@ public abstract class BossManager : MonoBehaviour
     /// <returns></returns>
     bool EarlyStageCheck()
     {
-        if (NumberOAttacks4Stage != CurrentStageAtttacks.Count)
+        //If there isn't a time for when the stage was entered then there's no need to check
+        if (TimeEnteredCurrentStage != 0 && Game.t < TimeEnteredCurrentStage)
         {
             Game.StageMetEarly = true;
+            //We want to overwrite the Time entered current stage 
+            TimeEnteredCurrentStage = Game.t;
         }
         else
         {
@@ -305,8 +323,9 @@ public abstract class BossManager : MonoBehaviour
 
                         if (health < 80 && !EarlyStageCheck())
                         {
+                            TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Two;
-                            OnStageTwo();        
+                            OnStageTwo();
                         }
                         break;
 
@@ -316,6 +335,7 @@ public abstract class BossManager : MonoBehaviour
 
                         if (health < 60 && !EarlyStageCheck())
                         {
+                            TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Three;
                             OnStageThree();
                         }
@@ -328,6 +348,7 @@ public abstract class BossManager : MonoBehaviour
 
                         if (health < 40 && !EarlyStageCheck())
                         {
+                            TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Four;
                             OnStageFour();
                         }
@@ -340,6 +361,7 @@ public abstract class BossManager : MonoBehaviour
 
                         if (health < 20 && !EarlyStageCheck())
                         {
+                            TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Five;
                             OnStageFive();
                         }

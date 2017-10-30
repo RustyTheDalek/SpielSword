@@ -154,14 +154,25 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
             gameObject.SetActive(sSFrames[currentFrame].active);
             m_Sprite.enabled = sSFrames[currentFrame].active;
 
-            if (sSFrames[currentFrame].marty)
+            switch (Game.timeState)
             {
-                m_anim.SetTrigger("Marty");
-            }
+                case TimeState.Forward:
 
-            if (sSFrames[currentFrame].unMarty)
-            {
-                m_anim.SetTrigger("UnMarty");
+                    if (sSFrames[currentFrame].marty)
+                    {
+                        Debug.Log(this.name + " Martyed");
+                        m_anim.SetTrigger("Marty");
+                    }
+                    break;
+
+                case TimeState.Backward:
+
+                    if (sSFrames[currentFrame].marty)
+                    {
+                        Debug.Log(this.name + " UnMartyed");
+                        m_anim.SetTrigger("UnMarty");
+                    }
+                    break;
             }
         }
     }
@@ -186,7 +197,6 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
 
     protected override void OnStartReverse()
     {
-        Debug.Log("am here");
         base.OnStartReverse();
         //m_Sprite.enabled = true;
     }
@@ -220,9 +230,10 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
         //deathOrMarty = false;
         tempSSFrame = sSFrames[currentFrame];
         tempSSFrame.marty = true;
+        m_anim.SetTrigger("Marty");
         sSFrames[currentFrame] = tempSSFrame;
 
-        finishFrame = currentFrame;
+        finishFrame = bFrames[currentFrame].timeStamp;
 
         for (int i = currentFrame + 1; i < bFrames.Count; i++)
         {

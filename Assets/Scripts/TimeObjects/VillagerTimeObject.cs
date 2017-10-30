@@ -202,7 +202,7 @@ public class VillagerTimeObject : SpriteTimeObject
         tempFrame.marty = true;
         vFrames[currentFrame] = tempFrame;
 
-        finishFrame = currentFrame;
+        finishFrame = bFrames[currentFrame].timeStamp;
 
         for (int i = currentFrame+1; i < bFrames.Count; i++)
         {

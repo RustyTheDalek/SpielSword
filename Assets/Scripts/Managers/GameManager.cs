@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+
         if (trackCam.target == null || trackCam.target != vilManager.activeVillager)
         {
             trackCam.target = vilManager.activeVillager.transform;
@@ -117,7 +118,7 @@ public class GameManager : MonoBehaviour {
 
                             case SkipStageType.VillagerWipe:
 
-
+                                Game.bossState = BossState.Attacking;
                                 break;
                         }
                         break;
