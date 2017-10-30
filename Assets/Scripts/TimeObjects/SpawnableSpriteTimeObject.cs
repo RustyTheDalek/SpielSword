@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class SpawnableSpriteTimeObject : SpriteTimeObject
 {
@@ -93,7 +94,7 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
 
                     case TimeObjectState.PastPlaying:
 
-                        if (Game.t <= startFrame || currentFrame < 0)
+                        if (Game.t <= startFrame)
                         {
                             tObjectState = TimeObjectState.PastStart;
 
@@ -122,26 +123,27 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
 
                 break;
         }
+    }
 
 #if UNITY_EDITOR
 
-        if (debugText && bFrames != null)
+    private void OnDrawGizmos()
+    {
+        if (Game.debugText)
         {
-            if (Game.debugText)
-            {
-                debugText.text = "Time State: " + tObjectState.ToString() +
-                                    "\nTotal Frames: " + TotalFrames +
-                                    "\nCurrent Frame: " + currentFrame +
-                                    "\nStart Frame: " + startFrame +
-                                    "\nFinish Frame: " + finishFrame;
-            }
-            else
-            {
-                debugText.gameObject.SetActive(false);
-            }
+            Handles.Label(transform.position, "Time State: " + tObjectState.ToString() +
+                                "\nTotal Frames: " + TotalFrames +
+                                "\nCurrent Frame: " + currentFrame +
+                                "\nStart Frame: " + startFrame +
+                                "\nFinish Frame: " + finishFrame);
         }
-#endif
+        //else
+        //{
+        //    debugText.gameObject.SetActive(false);
+        //}
     }
+
+#endif
 
     protected override void PlayFrame()
     {
@@ -179,14 +181,14 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
     protected override void OnFinishReverse()
     {
         base.OnFinishReverse();
-        SetActive(false);
+        m_Sprite.enabled = false;
     }
 
     protected override void OnStartReverse()
     {
         Debug.Log("am here");
         base.OnStartReverse();
-        SetActive(true);
+        //m_Sprite.enabled = true;
     }
 
     protected void SetActive(bool active)

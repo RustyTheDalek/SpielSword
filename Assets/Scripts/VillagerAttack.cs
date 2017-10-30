@@ -31,6 +31,8 @@ public class VillagerAttack : MonoBehaviour
                 coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
             }
 
+            //TODO: add logic so projectile does not collide with self 
+            //(Could be done with Tags)
             if (coll.tag != "Ethereal")
             {
                 SetActive(false);

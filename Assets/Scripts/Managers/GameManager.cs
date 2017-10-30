@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour {
                             case SkipStageType.FastForward:
 
                                 currentBoss.SetTriggers(Game.StageMetEarly);
+                                currentBoss.StartFastForward();
                                 Game.bossState = BossState.SkippingStage;
                                 break;
 
@@ -109,6 +110,7 @@ public class GameManager : MonoBehaviour {
                                 }
                                 else
                                 {
+                                    currentBoss.StopFastForward();
                                     Game.PastTimeScale = 1;
                                 }
                                 break;

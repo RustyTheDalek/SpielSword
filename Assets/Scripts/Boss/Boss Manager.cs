@@ -155,6 +155,13 @@ public abstract class BossManager : MonoBehaviour
     #region Stage skipping ideas
 
     //Idea 1 : Boss Fast forwards between stages when skipping attacks aren't
+    public void StartFastForward()
+    {
+        bossHealthBar.SetHealthBar(HealthBarState.Invincible);
+
+        SetVHSEffect(true);
+    }
+
     public void FastforwardSkip()
     {
         //Here we're trying to get a percentage of how far into the Stage the boss is
@@ -164,6 +171,13 @@ public abstract class BossManager : MonoBehaviour
             (float)stageAttacks[(int)bossStage].Count);
         //Debug.Log(value + " : " + Smoothing + " : " + bossSpeedUp.Evaluate(value));
         Game.PastTimeScale = bossSpeedUp.Evaluate(value);
+    }
+
+    public void StopFastForward()
+    {
+        bossHealthBar.SetHealthBar(HealthBarState.Standard);
+
+        SetVHSEffect(false);
     }
 
     //Idea 2 : Skip to next Stage
@@ -351,19 +365,6 @@ public abstract class BossManager : MonoBehaviour
                     else
                     {
                         trackedHealth.Add(health);
-                    }
-
-                    if (!Game.StageMetEarly)
-                    {
-                        bossHealthBar.SetHealthBar(HealthBarState.Standard);
-
-                        SetVHSEffect(false);
-                    }
-                    else
-                    {
-                        bossHealthBar.SetHealthBar(HealthBarState.Invincible);
-
-                        SetVHSEffect(true);
                     }
                 }
                 else//Death of boss

@@ -143,15 +143,6 @@ public class VillagerTimeObject : SpriteTimeObject
         endFinish = false;
     }
 
-    protected override void OnStartPlayback()
-    {
-        //Debug.Break();
-        //Vector3 theScale = transform.localScale;
-        //theScale.x *= -1;
-        //transform.localScale = theScale;
-        //transform.localScale = Vector3.one;
-    }
-
     /// <summary>
     /// What happens when a Villager become a past incarnation
     /// </summary>

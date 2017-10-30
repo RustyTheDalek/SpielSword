@@ -36,6 +36,12 @@ public static class Game
 
     public static bool debugText = true;
 
+#if UNITY_EDITOR
+
+    public static GUIStyle debugStyle = new GUIStyle();
+
+#endif
+
     /// <summary>
     /// Scaling for fastforward of boss and past objects
     /// </summary>

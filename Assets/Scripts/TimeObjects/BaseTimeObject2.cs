@@ -7,13 +7,6 @@ using UnityEngine;
 /// </summary>
 public abstract class BaseTimeObject2 : MonoBehaviour
 {
-
-#if UNITY_EDITOR
-
-    protected TextMesh debugText;
-
-#endif
-
     protected BaseFrameData tempBFrame;
     protected List<BaseFrameData> bFrames = new List<BaseFrameData>();
 
@@ -37,32 +30,33 @@ public abstract class BaseTimeObject2 : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
+
+    public GUIStyle DebugUI;
+
+#endif
+
     protected abstract void PlayFrame();
     protected abstract void TrackFrame();
 
     /// <summary>
     /// Called when an object finishes its rewind
     /// </summary>
-    protected virtual void OnFinishReverse() { }
+    protected abstract void OnFinishReverse();
 
     /// <summary>
     /// Called when an objects starts its rewind
     /// </summary>
-    protected virtual void OnStartReverse() { }
+    protected abstract void OnStartReverse();
 
     /// <summary>
     /// Called when an object starts playback
     /// </summary>
-    protected virtual void OnStartPlayback() { }
+    protected abstract void OnStartPlayback();
 
     /// <summary>
     /// Called when an object finishes playback
     /// </summary>
-    protected virtual void OnFinishPlayback() { }
-
-    /// <summary>
-    /// Called when time goes back to 0 and begins again
-    /// </summary>
-    public virtual void OnStartTime() { }
+    protected abstract void OnFinishPlayback();
 }
                                                           
