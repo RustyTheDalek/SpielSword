@@ -214,7 +214,7 @@ public class VillagerManager : MonoBehaviour {
             //Prevent previous Villager from being controlled
             if (activeVillager)
             {
-                Golem.health = 100;
+                Golem.health = BossManager.MAXHEALTH;
             }
 
             //Get the next Villager

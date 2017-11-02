@@ -29,7 +29,7 @@ public class BossHealthBar : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        healthBar.fillAmount = BossManager.health/100f;
+        healthBar.fillAmount = BossManager.health/BossManager.MAXHEALTH;
 	}
 
     /// <summary>

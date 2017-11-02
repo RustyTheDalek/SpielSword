@@ -8,7 +8,8 @@ public abstract class BossManager : MonoBehaviour
 {
     public Head head;
 
-    public static float health = 100;
+    public const float MAXHEALTH = 400;
+    public static float health = MAXHEALTH;
 
     public List<List<int>> stageAttacks = new List<List<int>>();
 
@@ -144,25 +145,25 @@ public abstract class BossManager : MonoBehaviour
             case BossStage.Two:
 
                 OnStageTwo();
-                health = 79;
+                health = MAXHEALTH * .79f;
                 break;
 
             case BossStage.Three:
 
                 OnStageThree();
-                health = 59;
+                health = MAXHEALTH * .59f;
                 break;
 
             case BossStage.Four:
 
                 OnStageFour();
-                health = 39;
+                health = MAXHEALTH * .39f;
                 break;
 
             case BossStage.Five:
 
                 OnStageFive();
-                health = 19;
+                health = MAXHEALTH * .19f;
                 break;
         }
     }
@@ -287,23 +288,23 @@ public abstract class BossManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            health = 100;
+            health = MAXHEALTH;
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            health = 70;
+            health = MAXHEALTH * .7f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            health = 50;
+            health = MAXHEALTH * .5f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            health = 30;
+            health = MAXHEALTH * .3f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            health = 10;
+            health = MAXHEALTH * .1f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha7))
         {
@@ -321,7 +322,7 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageOneAttacks);
 
-                        if (health < 80 && !EarlyStageCheck())
+                        if (health < MAXHEALTH * .8f && !EarlyStageCheck())
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Two;
@@ -333,7 +334,7 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageTwoAttacks);
 
-                        if (health < 60 && !EarlyStageCheck())
+                        if (health < MAXHEALTH * .6f && !EarlyStageCheck())
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Three;
@@ -346,7 +347,7 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageThreeAttacks);
 
-                        if (health < 40 && !EarlyStageCheck())
+                        if (health < MAXHEALTH * .4f && !EarlyStageCheck())
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Four;
@@ -359,7 +360,7 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageFourAttacks);
 
-                        if (health < 20 && !EarlyStageCheck())
+                        if (health < MAXHEALTH * .2f && !EarlyStageCheck())
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Five;
@@ -426,7 +427,7 @@ public abstract class BossManager : MonoBehaviour
 
         Game.PastTimeScale = 1;
 
-        health = 100;
+        health = MAXHEALTH;
 
         //foreach (ObjectTracking obj in trackedBossObjs)
         //{
