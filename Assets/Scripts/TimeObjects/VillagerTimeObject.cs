@@ -171,7 +171,6 @@ public class VillagerTimeObject : SpriteTimeObject
 
         _SRenderer.material = AssetManager.SpriteMaterials[0];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[0];
-        villager.hat.GetComponent<VHSEffect>().enabled = false;
         vhsEffect.enabled = false;
 
         _SRenderer.color = new Color(   _SRenderer.color.r,
@@ -191,7 +190,6 @@ public class VillagerTimeObject : SpriteTimeObject
 
         _SRenderer.material = AssetManager.SpriteMaterials[1];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
-        villager.hat.GetComponent<VHSEffect>().enabled = true;
         vhsEffect.enabled = true;
     }
 
