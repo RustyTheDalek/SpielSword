@@ -29,8 +29,6 @@ public class VillagerManager : MonoBehaviour {
 
     public List<Sprite> Hats;
 
-    public static RuntimeAnimatorController[] villagerAnimators = new RuntimeAnimatorController[2];
-
     public static List<MageAura> auras = new List<MageAura>();
     public static List<SpawnableSpriteTimeObject> attacks = new List<SpawnableSpriteTimeObject>();
 
@@ -49,12 +47,14 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     int currentVillagerLayer = 6;
 
-    public VillagerClass ClassToSpawn = VillagerClass.Warlock;
+    public VillagerClass classToSpawn = VillagerClass.Warlock;
+
+    int magesSpawned    = 0, 
+        warriorsSpawned = 0, 
+        warlocksSpawned = 0;
 
     void Awake()
     {
-        //Retrieve Animators
-        villagerAnimators = Resources.LoadAll<RuntimeAnimatorController>("VAnimators");
     }
 
     // Use this for initialization
@@ -74,6 +74,8 @@ public class VillagerManager : MonoBehaviour {
 
             spawnOffset += new Vector3(-1, 0, 0);
 
+            classToSpawn = (VillagerClass)Random.Range(0, 3);
+
             SetupVillager(temp, spawnOffset);
         }
 
@@ -88,23 +90,31 @@ public class VillagerManager : MonoBehaviour {
     {
         villager.transform.SetParent(remainingVillagersTrans);
         villager.transform.localPosition = spawnOffset;
-        villager.name = "Spiel " + -spawnOffset.x;
 
-        switch (ClassToSpawn)
+        switch (classToSpawn)
         {
             case VillagerClass.Warrior:
 
                 villager.AddComponent<Warrior>();
+                villager.GetComponent<SpriteRenderer>().color = Color.yellow;
+                villager.name = "Warrior " + warriorsSpawned + 1;
+                warriorsSpawned++;
                 break;
 
             case VillagerClass.Mage:
 
                 villager.AddComponent<Mage>();
+                villager.GetComponent<SpriteRenderer>().color = Color.blue;
+                villager.name = "Mage " + magesSpawned + 1;
+                magesSpawned++;
                 break;
 
             case VillagerClass.Warlock:
 
                 villager.AddComponent<Warlock>();
+                villager.GetComponent<SpriteRenderer>().color = new Color(75f/255f, 0, 130f/255f);
+                villager.name = "Warlock " + warlocksSpawned + 1;
+                warlocksSpawned++;
                 break;
         }
 
@@ -126,17 +136,17 @@ public class VillagerManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            ClassToSpawn = VillagerClass.Warrior;
+            classToSpawn = VillagerClass.Warrior;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            ClassToSpawn = VillagerClass.Mage;
+            classToSpawn = VillagerClass.Mage;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            ClassToSpawn = VillagerClass.Warlock;
+            classToSpawn = VillagerClass.Warlock;
         }
 #endif
         //Set remaining Villagers to Queue appropriately

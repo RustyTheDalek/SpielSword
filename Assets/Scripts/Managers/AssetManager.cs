@@ -202,4 +202,21 @@ public static class AssetManager
             return _WarlockImp;
         }
     }
+
+    static RuntimeAnimatorController[] _VillagerAnimators;
+
+    public static RuntimeAnimatorController[] VillagerAnimators
+    {
+        get
+        {
+            if (_VillagerAnimators == null)
+            {
+                _VillagerAnimators = new RuntimeAnimatorController[2];
+
+                _VillagerAnimators = Resources.LoadAll<RuntimeAnimatorController>("VAnimators");
+            }
+
+            return _VillagerAnimators;
+        }
+    }
 }

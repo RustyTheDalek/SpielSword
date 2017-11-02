@@ -27,7 +27,7 @@ public class Mage : Villager {
     // Use this for initialization
     public override void Start ()
     {
-        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[0];
+        m_Animator.runtimeAnimatorController = AssetManager.VillagerAnimators[0];
         villagerAttackType = AttackType.Ranged;
         base.Start();	
 	}

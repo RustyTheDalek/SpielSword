@@ -36,7 +36,7 @@ public class Warlock : Villager
     // Use this for initialization
     public override void Start ()
     {
-        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
+        m_Animator.runtimeAnimatorController = AssetManager.VillagerAnimators[1];
 
         base.Start();
 
