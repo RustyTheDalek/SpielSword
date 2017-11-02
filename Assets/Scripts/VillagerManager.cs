@@ -10,6 +10,7 @@ using System.Collections.Generic;
 public class VillagerManager : MonoBehaviour {
 
     //Transforms to sort the Villagers
+    [HideInInspector]
     public Transform    activeVillagerTrans,
                         remainingVillagersTrans,
                         pastVillagersTrans,
@@ -17,6 +18,7 @@ public class VillagerManager : MonoBehaviour {
                         warpGateEnt,
                         warpGateExit;
 
+    public int villagersToSpawn;
     
     public Villager activeVillager;
 
@@ -66,7 +68,7 @@ public class VillagerManager : MonoBehaviour {
         //Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
         //remainingVillagers.AddRange(villagers
         Vector3 spawnOffset = Vector3.zero;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < villagersToSpawn; i++)
         {
             GameObject temp = AssetManager.Villager.Spawn();
 
