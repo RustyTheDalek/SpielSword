@@ -6,8 +6,8 @@ using System.Collections;
 /// </summary>
 public class VillagerAttack : MonoBehaviour
 {
-    public int damage = 1;
-    public int damageMult = 1;
+    public float damage = 1;
+    public float damageMult = 1;
 
     public float lifeTime = 1;
 

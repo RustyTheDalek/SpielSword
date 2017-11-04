@@ -54,7 +54,7 @@ public class Head : MonoBehaviour {
         }
     }
 
-    public void OnHit(int damageMultiplier)
+    public void OnHit(float damageMultiplier)
     {
         Debug.Log("Golem took " + 1 * damageMultiplier + " Damage!");
         Golem.health -= 1 * damageMultiplier;

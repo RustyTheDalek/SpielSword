@@ -141,23 +141,43 @@ public static class AssetManager
         }
     }
 
-    static GameObject _Aura;
+    static GameObject _MageAura;
 
-    public static GameObject Aura
+    public static GameObject MageAura
     {
         get
         {
-            if (_Aura == null)
+            if (_MageAura == null)
             {
-                _Aura = new GameObject();
+                _MageAura = new GameObject();
 
                 obj = Resources.Load("MageAura");
 
-                _Aura = (GameObject)obj;
-                _Aura.CreatePool(25);
+                _MageAura = (GameObject)obj;
+                _MageAura.CreatePool(25);
             }
 
-            return _Aura;
+            return _MageAura;
+        }
+    }
+
+    static GameObject _PriestAura;
+
+    public static GameObject PriestAura
+    {
+        get
+        {
+            if (_PriestAura == null)
+            {
+                _PriestAura = new GameObject();
+
+                obj = Resources.Load("PriestAura");
+
+                _PriestAura = (GameObject)obj;
+                _PriestAura.CreatePool(25);
+            }
+
+            return _PriestAura;
         }
     }
 

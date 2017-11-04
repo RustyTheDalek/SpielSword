@@ -3,4 +3,5 @@
     Warrior,
     Mage,
     Warlock,
+    Priest,
 }

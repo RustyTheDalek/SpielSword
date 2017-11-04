@@ -54,6 +54,12 @@ public abstract class Villager : MonoBehaviour
 
     public VillagerTimeObject vTO;
 
+    /// <summary>
+    /// If a Villager is shielded they are unable to take damage from attacks
+    /// </summary>
+    public bool shielded = false;
+
+    public float damageMult = 1;
 
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
@@ -287,7 +293,10 @@ public abstract class Villager : MonoBehaviour
 
     public virtual void OnHit()
     {
-        health--;
+        if (!shielded)
+        {
+            health--;
+        }
     }
 
     public virtual void OnPastHit(Collider2D collider)
@@ -318,6 +327,7 @@ public abstract class Villager : MonoBehaviour
             Debug.Log("Ranged Attack");
 
             rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
+            rangedAtk.GetComponent<VillagerAttack>().damageMult = damageMult;
 
             float direction = rangedTrans.position.x - transform.position.x;
 
@@ -340,8 +350,8 @@ public abstract class Villager : MonoBehaviour
 
     public void SetDamageMult(int val)
     {
+        damageMult = val;
         melee.GetComponent<MeleeAttack>().damageMult = val;
-        AssetManager.Projectile.GetComponent<VillagerAttack>().damageMult = val;
     }
 }
 
