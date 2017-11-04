@@ -49,10 +49,11 @@ public class VillagerManager : MonoBehaviour {
 
     public VillagerClass classToSpawn = VillagerClass.Warlock;
 
-    int magesSpawned    = 0, 
-        warriorsSpawned = 0, 
+    int magesSpawned = 0,
+        warriorsSpawned = 0,
         warlocksSpawned = 0,
-        priestSpawned   = 0;
+        priestSpawned = 0,
+        roguesSpawned = 0;
 
     void Awake()
     {
@@ -75,7 +76,7 @@ public class VillagerManager : MonoBehaviour {
 
             spawnOffset += new Vector3(-1, 0, 0);
 
-            classToSpawn = (VillagerClass)Random.Range(1, 1);
+            classToSpawn = (VillagerClass)Random.Range(0, 5);
 
             SetupVillager(temp, spawnOffset);
         }
@@ -124,6 +125,14 @@ public class VillagerManager : MonoBehaviour {
                 villager.GetComponent<SpriteRenderer>().color = new Color(1, 1, 224f / 255f);
                 villager.name = "Priest " + warlocksSpawned + 1;
                 priestSpawned++;
+                break;
+
+            case VillagerClass.Rogue:
+
+                villager.AddComponent<Rogue>();
+                villager.GetComponent<SpriteRenderer>().color = Color.red;
+                villager.name = "Rogue " + warlocksSpawned + 1;
+                roguesSpawned++;
                 break;
         }
 

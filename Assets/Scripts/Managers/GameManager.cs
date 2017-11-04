@@ -19,9 +19,12 @@ public class GameManager : MonoBehaviour {
 
     public UnityStandardAssets._2D.Camera2DFollow trackCam;
 
+    public static BoxCollider2D gameBounds;
+
     // Use this for initialization
-    void Start () {
-		
+    void Start ()
+    {
+        gameBounds = GameObject.Find("ArenaBounds").GetComponent<BoxCollider2D>();
 	}
 	
 	// Update is called once per frame
@@ -138,4 +141,22 @@ public class GameManager : MonoBehaviour {
             //    break;
         }
 	}
+
+    public static bool moveRequest(CircleCollider2D[] colliders, Vector3 position)
+    {
+        foreach (CircleCollider2D coll in colliders)
+        {
+            if (!gameBounds.bounds.Contains(position))
+            {
+                return false;
+            }
+
+            if (!gameBounds.bounds.Intersects(coll.bounds))
+            {
+                Debug.Log("Postion will not be in map no teleport allowed");
+                return false;
+            }
+        }
+        return true;
+    }
 }

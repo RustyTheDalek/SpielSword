@@ -4,4 +4,5 @@
     Mage,
     Warlock,
     Priest,
+    Rogue,
 }
