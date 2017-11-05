@@ -31,7 +31,7 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
                 {
                     case TimeObjectState.Present:
 
-                        if (GetComponent<SpriteRenderer>().enabled)
+                        if (m_Sprite.enabled)
                         {
                             TrackFrame();
                         }

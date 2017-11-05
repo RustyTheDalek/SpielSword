@@ -165,7 +165,7 @@ public abstract class Villager : MonoBehaviour
                         break;
 
                     case AttackType.Ranged:
-                        animData.rangedAttack = Input.GetKey(KeyCode.DownArrow);
+                        animData.rangedAttack = Input.GetKeyDown(KeyCode.DownArrow);
                         CanAttack(animData.rangedAttack);
                         break;    
                 }
@@ -324,7 +324,6 @@ public abstract class Villager : MonoBehaviour
     {
         if (villagerState == VillagerState.PresentVillager)
         {
-            Debug.Log("Ranged Attack");
 
             rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
             rangedAtk.GetComponent<VillagerAttack>().damageMult = damageMult;

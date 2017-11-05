@@ -5,4 +5,5 @@
     Warlock,
     Priest,
     Rogue,
+    Last, //Special Class to find last Class
 }
