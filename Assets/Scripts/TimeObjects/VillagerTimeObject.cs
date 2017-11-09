@@ -16,8 +16,6 @@ public class VillagerTimeObject : SpriteTimeObject
                 endRecorded,
                 deathOrMarty = true; //Whether te villager is going to die or fade from existence
 
-    SpriteRenderer _SRenderer;
-
     private VillagerFrameData tempFrame;
     private List<VillagerFrameData> vFrames = new List<VillagerFrameData>();
 
@@ -27,7 +25,6 @@ public class VillagerTimeObject : SpriteTimeObject
 
         villager = GetComponent<Villager>();
         m_Character = GetComponent<VillagerCharacter2D>();
-        _SRenderer = GetComponent<SpriteRenderer>();
 
         if (GetComponent<VHSEffect>())
         {
@@ -85,7 +82,7 @@ public class VillagerTimeObject : SpriteTimeObject
 
                 case TimeState.Backward:
 
-                    _SRenderer.sprite = AssetManager.VillagerSprites[vFrames[currentFrame].spriteName];
+                    m_Sprite.sprite = AssetManager.VillagerSprites[vFrames[currentFrame].spriteName];
                     villager.hat.localPosition = vFrames[currentFrame].hatPos;
                     transform.localScale = vFrames[currentFrame].scale;
 
@@ -103,7 +100,7 @@ public class VillagerTimeObject : SpriteTimeObject
             move = villager.xDir,
             health = villager.health,
 
-            spriteName = _SRenderer.sprite.name,
+            spriteName = m_Sprite.sprite.name,
             hatPos = villager.hat.localPosition,
             scale = transform.localScale
         };
@@ -169,13 +166,13 @@ public class VillagerTimeObject : SpriteTimeObject
     {
         base.OnFinishReverse();
 
-        _SRenderer.material = AssetManager.SpriteMaterials[0];
+        m_Sprite.material = AssetManager.SpriteMaterials[0];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[0];
         vhsEffect.enabled = false;
 
-        _SRenderer.color = new Color(   _SRenderer.color.r,
-                                        _SRenderer.color.g,
-                                        _SRenderer.color.b,
+        m_Sprite.color = new Color(m_Sprite.color.r,
+                                        m_Sprite.color.g,
+                                        m_Sprite.color.b,
                                         .5f);
 
         villager.hat.GetComponent<SpriteRenderer>().color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
@@ -188,7 +185,7 @@ public class VillagerTimeObject : SpriteTimeObject
     {
         base.OnStartReverse();
 
-        _SRenderer.material = AssetManager.SpriteMaterials[1];
+        m_Sprite.material = AssetManager.SpriteMaterials[1];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
         vhsEffect.enabled = true;
     }
