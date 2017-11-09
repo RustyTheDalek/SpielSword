@@ -216,7 +216,8 @@ public class VillagerManager : MonoBehaviour {
     {
         foreach (MageAura aura in auras)
         {
-            aura.DecreaseStrength();
+            if(aura)
+                aura.DecreaseStrength();
         }
     }
 
