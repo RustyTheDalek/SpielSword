@@ -120,7 +120,7 @@ public class TimeObjectManager : MonoBehaviour
         else
         {
             float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-            float newTimeScale = 1;
+            float newTimeScale = 5;
             Time.timeScale = newTimeScale;
 
             if (Game.t < 0)
