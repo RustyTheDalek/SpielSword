@@ -11,8 +11,22 @@ public class BossTimeObject : SpriteTimeObject {
 
     protected override void Start()
     {
-        base.Start();
+        startFrame = Game.t;
+
+        m_Sprite = GetComponent<SpriteRenderer>();
+
+        if (GetComponent<VHSEffect>())
+        {
+            vhsEffect = GetComponent<VHSEffect>();
+        }
+        else
+        {
+            vhsEffect = gameObject.AddComponent<VHSEffect>();
+        }
+
         _Animator = GetComponent<Animator>();
+
+        TimeObjectManager.bossObjs.Add(this);
     }
 
     protected override void OnStartPlayback()

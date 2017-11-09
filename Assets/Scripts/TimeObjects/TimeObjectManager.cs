@@ -11,6 +11,7 @@ public class TimeObjectManager : MonoBehaviour
     public static List<TimeObject> tObjects = new List<TimeObject>();
     public static List<VillagerTimeObject> vObjects = new List<VillagerTimeObject>();
     public static List<SpriteTimeObject> spriteObjects = new List<SpriteTimeObject>();
+    public static List<BossTimeObject> bossObjs = new List<BossTimeObject>();
     public static List<SpawnableSpriteTimeObject> vSpawnable = new List<SpawnableSpriteTimeObject>();
 
     public bool newRoundReady;
@@ -68,6 +69,11 @@ public class TimeObjectManager : MonoBehaviour
             {
                 sObj.HardReset();
             }
+
+            foreach (BossTimeObject bObj in bossObjs)
+            {
+                bObj.HardReset();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -105,6 +111,11 @@ public class TimeObjectManager : MonoBehaviour
         {
             sObj.SoftReset();
         }
+
+        foreach (BossTimeObject bObj in bossObjs)
+        {
+            bObj.SoftReset();
+        }
     }
 
     private void LateUpdate()
@@ -126,6 +137,9 @@ public class TimeObjectManager : MonoBehaviour
             if (Game.t < 0)
             {
                 Game.t = 0;
+
+                OnFinishReverseCatch();
+
                 Game.timeState = TimeState.Forward;
                 Time.timeScale = 1;
 
@@ -138,6 +152,29 @@ public class TimeObjectManager : MonoBehaviour
                     Debug.LogWarning("No Villager manager found, are you testing Time stuff without it?");
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Special catch for when time reversal is too fast
+    /// </summary>
+    private void OnFinishReverseCatch()
+    {
+        Debug.Log("Special reverse called by Time Object Manager");
+
+        foreach (VillagerTimeObject vObject in vObjects)
+        {
+            vObject.OnFinishReverseCatch();
+        }
+
+        foreach (SpriteTimeObject spriteObject in spriteObjects)
+        {
+            spriteObject.OnFinishReverseCatch();
+        }
+
+        foreach (BossTimeObject bossObj in bossObjs)
+        {
+            bossObj.OnFinishReverseCatch();
         }
     }
 }

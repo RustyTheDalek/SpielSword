@@ -218,4 +218,9 @@ public class TimeObject : BaseTimeObject2
         tObjectState = TimeObjectState.PastPlaying;
         currentFrame = Game.t - startFrame;
     }
+
+    public void OnFinishReverseCatch()
+    {
+        OnFinishReverse();
+    }
 }
