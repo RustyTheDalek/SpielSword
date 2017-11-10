@@ -10,7 +10,9 @@ public class Rogue : Villager {
 	// Use this for initialization
 	public override void Start ()
     {
-        m_Animator.runtimeAnimatorController = AssetManager.VillagerAnimators[1];
+        RuntimeAnimatorController temp;
+        AssetManager.VillagerAnimators.TryGetValue("Warlock", out temp);
+        m_Animator.runtimeAnimatorController = temp;
 
         //Need to set Rogue animator here
         base.Start();
@@ -18,11 +20,6 @@ public class Rogue : Villager {
         villagerAttackType = AttackType.Melee;
         specialType = SpecialType.Press;
 	}
-
-    public override void OnSpecial(bool _PlayerSpecial)
-    {
-        animData.playerSpecial = _PlayerSpecial;
-    }
 
     public void Blink()
     {

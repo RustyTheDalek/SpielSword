@@ -289,7 +289,10 @@ public abstract class Villager : MonoBehaviour
         PlayerCollisions[1].isTrigger = active;
     }
 
-    public abstract void OnSpecial(bool _PlayerSpecial);
+    public virtual void OnSpecial(bool _PlayerSpecial)
+    {
+        animData.playerSpecial = _PlayerSpecial;
+    }
 
     public virtual void OnHit()
     {

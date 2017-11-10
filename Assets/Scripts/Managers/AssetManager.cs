@@ -223,17 +223,26 @@ public static class AssetManager
         }
     }
 
-    static RuntimeAnimatorController[] _VillagerAnimators;
+    static Dictionary<string, RuntimeAnimatorController> _VillagerAnimators;
 
-    public static RuntimeAnimatorController[] VillagerAnimators
+    public static Dictionary<string, RuntimeAnimatorController> VillagerAnimators
     {
         get
         {
             if (_VillagerAnimators == null)
             {
-                _VillagerAnimators = new RuntimeAnimatorController[2];
+                _VillagerAnimators = new Dictionary<string, RuntimeAnimatorController>();
 
-                _VillagerAnimators = Resources.LoadAll<RuntimeAnimatorController>("VAnimators");
+                objs = Resources.LoadAll<RuntimeAnimatorController>("VAnimators");
+
+                RuntimeAnimatorController temp;
+
+                foreach (object obj in objs)
+                {
+                    temp = (RuntimeAnimatorController)obj;
+                    Debug.Log(temp.name);
+                    _VillagerAnimators.Add(temp.name, (RuntimeAnimatorController)obj);
+                }
             }
 
             return _VillagerAnimators;

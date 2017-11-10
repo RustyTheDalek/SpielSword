@@ -120,7 +120,7 @@ public abstract class BossManager : MonoBehaviour
         //Sets the counter for the list to zero
         for(int i = 0; i < 5; i++)
         {
-            Debug.Log(i);
+            //Debug.Log(i);
             numberOAttacks.Add(0);
             stageAttacks.Add(new List<int>());
             stageReplaying.Add(true);

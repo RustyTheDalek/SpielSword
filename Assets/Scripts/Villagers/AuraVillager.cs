@@ -13,7 +13,9 @@ public abstract class AuraVillager : Villager
 
     public override void Start()
     {
-        m_Animator.runtimeAnimatorController = AssetManager.VillagerAnimators[0];
+        RuntimeAnimatorController temp;
+        AssetManager.VillagerAnimators.TryGetValue("Aura", out temp);
+        m_Animator.runtimeAnimatorController = temp;
 
         base.Start();
     }

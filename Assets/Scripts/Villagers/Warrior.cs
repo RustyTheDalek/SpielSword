@@ -32,7 +32,9 @@ public class Warrior : Villager
     // Use this for initialization
     public override void Start()
     {
-        m_Animator.runtimeAnimatorController = AssetManager.VillagerAnimators[3];
+        RuntimeAnimatorController temp;
+        AssetManager.VillagerAnimators.TryGetValue("Warlock", out temp);
+        m_Animator.runtimeAnimatorController = temp;
 
         villagerAttackType = AttackType.Melee;
         base.Start();
@@ -75,11 +77,6 @@ public class Warrior : Villager
                 
                 break;
         }
-    }
-
-    public override void OnSpecial(bool playerSpecial)
-    {
-        animData.playerSpecial = playerSpecial;
     }
 
     public override void OnHit()
