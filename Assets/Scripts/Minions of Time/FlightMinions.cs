@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlightMinions : MinionsManager {
+public class FlightMinions : Character {
 
 	// Use this for initialization
 	void Start () {

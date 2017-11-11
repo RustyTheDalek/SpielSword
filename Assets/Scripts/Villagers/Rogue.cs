@@ -17,7 +17,7 @@ public class Rogue : Villager {
         //Need to set Rogue animator here
         base.Start();
 
-        villagerAttackType = AttackType.Melee;
+        attackType = AttackType.Melee;
         specialType = SpecialType.Press;
 	}
 

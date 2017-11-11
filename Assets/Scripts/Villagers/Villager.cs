@@ -6,32 +6,19 @@ using System.Collections.Generic;
 /// Class for controller Villager
 /// </summary>
 [RequireComponent(typeof(VillagerCharacter2D))]
-public abstract class Villager : MonoBehaviour
+public abstract class Villager : Character
 {
     #region Public Variables
 
     public VillagerState villagerState = VillagerState.Waiting;
-    public AttackType villagerAttackType = AttackType.Melee;
-
-    public float xDir;
-
-    public float health = 1;
 
     //Target X position for Villager to aim for when they're waiting in queue
     public float targetX;
 
-    public VillagerAnimData animData;
+    public new VillagerAnimData vAnimData;
 
     //Whether the Villager is advancing in the queue
     public bool advancing;
-
-    public bool Alive
-    {
-        get
-        {
-            return health > 0;
-        }
-    }
 
     //Whether it's currently in control by the player
     public bool ActivePlayer
@@ -75,11 +62,11 @@ public abstract class Villager : MonoBehaviour
 
     #region Protected Variables
 
-    protected VillagerCharacter2D m_Character;
+    protected new VillagerCharacter2D m_Villager;
     protected Animator m_Animator;
 
     protected SpecialType specialType;
-
+     
     /// <summary>
     /// Temporary GameObject for tracking Ranged attack
     /// </summary>
@@ -95,15 +82,12 @@ public abstract class Villager : MonoBehaviour
     #endregion
 
     #region Private Variables
-
-    bool m_Jump;
-
     #endregion
 
-    public virtual void Awake()
+    public override void Awake()
     {
         m_Animator = GetComponent<Animator>();
-        m_Character = GetComponent<VillagerCharacter2D>();
+        m_Villager = GetComponent<VillagerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         vTO = GetComponent<VillagerTimeObject>();
 
@@ -116,10 +100,20 @@ public abstract class Villager : MonoBehaviour
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
-        animData = new VillagerAnimData();
-        animData.canSpecial = true;
-        animData.playerSpecialIsTrigger = false;
-        //villagerState = VillagerState.Waiting;
+        vAnimData = new VillagerAnimData()
+        {
+            move = 0,
+
+            jump = false,
+            meleeAttack = false,
+            rangedAttack = false,
+            dead = false,
+            playerSpecial = false,
+            canSpecial = false,
+            playerSpecialIsTrigger = false,
+
+            martyed = false
+        };
 
         hat = transform.Find("Hat");
 
@@ -133,9 +127,8 @@ public abstract class Villager : MonoBehaviour
         }
     }
 
-    public virtual void Update()
+    public override void Update()
     {
-        animData.dead = !Alive;
 
         switch(villagerState)
         {
@@ -146,16 +139,16 @@ public abstract class Villager : MonoBehaviour
                 xDir = ((Input.GetKey(KeyCode.D)) ?  1 : xDir);
                 xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
 
-                switch (villagerAttackType)
+                switch (attackType)
                 {
                     case AttackType.Melee:
-                        animData.meleeAttack = Input.GetKey(KeyCode.DownArrow);
-                        m_Character.CanAttack(animData.meleeAttack);
+                        vAnimData.meleeAttack = Input.GetKey(KeyCode.DownArrow);
+                        m_Villager.CanAttack(vAnimData.meleeAttack);
                         break;
 
                     case AttackType.Ranged:
-                        animData.rangedAttack = Input.GetKeyDown(KeyCode.DownArrow);
-                        m_Character.CanAttack(animData.rangedAttack);
+                        vAnimData.rangedAttack = Input.GetKeyDown(KeyCode.DownArrow);
+                        m_Villager.CanAttack(vAnimData.rangedAttack);
                         break;    
                 }
 
@@ -206,28 +199,28 @@ public abstract class Villager : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    public override void FixedUpdate()
     {
         switch (villagerState)
         {
             case VillagerState.PresentVillager:
 
-                animData.move = xDir;
-                animData.jump = m_Jump;
+                vAnimData.move = xDir;
+                vAnimData.jump = m_Jump;
 
                 //animData.dead = !alive;
 
-                m_Character.Move(animData);
+                m_Villager.Move(vAnimData);
                 m_Jump = false;
                 break;
 
             case VillagerState.Waiting:
 
-                animData.move = xDir;
-                animData.dead = false;
-                animData.jump = false;
-                animData.meleeAttack = false;
-                m_Character.Move(animData);
+                vAnimData.move = xDir;
+                vAnimData.dead = false;
+                vAnimData.jump = false;
+                vAnimData.meleeAttack = false;
+                m_Villager.Move(vAnimData);
                 break;
 
             case VillagerState.PastVillager:
@@ -262,7 +255,7 @@ public abstract class Villager : MonoBehaviour
 
     public virtual void OnSpecial(bool _PlayerSpecial)
     {
-        animData.playerSpecial = _PlayerSpecial;
+        vAnimData.playerSpecial = _PlayerSpecial;
     }
 
     public virtual void OnHit()
@@ -275,12 +268,12 @@ public abstract class Villager : MonoBehaviour
 
     public virtual void OnPastHit(Collider2D collider)
     {
-        if (collider.GetComponent<BossAttack>() && !animData.dead &&
+        if (collider.GetComponent<BossAttack>() && !vAnimData.dead &&
             Game.timeState == TimeState.Forward)
         {
             Debug.Log("Past Villager Hit By Boss Attack");
-            animData.dead = true;
-            m_Character.Move(animData);
+            vAnimData.dead = true;
+            m_Villager.Move(vAnimData);
 
             GetComponentInChildren<ParticleSystem>().Play();
         }

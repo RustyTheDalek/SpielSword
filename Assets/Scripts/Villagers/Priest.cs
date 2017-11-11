@@ -7,7 +7,7 @@ public class Priest : AuraVillager
     public override void Start()
     {
         base.Start();
-        villagerAttackType = AttackType.Melee;
+        attackType = AttackType.Melee;
     }
 
     protected override GameObject Aura()

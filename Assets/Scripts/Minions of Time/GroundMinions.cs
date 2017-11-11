@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlatformerCharacter2D))]
-public class GroundMinions : MinionsManager {
+public class GroundMinions : Character {
 
     private float distanceToFloor;
     private float distanceFromWall;
@@ -13,22 +13,17 @@ public class GroundMinions : MinionsManager {
     private Ray2D ray;
     private bool inAir;
 
-    protected PlatformerCharacter2D m_Character;
-
     public LayerMask layerGround;
     public LayerMask layerGroundOnly;
     public LayerMask layerVillagerOnly;
-    public PlatformerAnimData animData;
     public GameObject actPlayer;
     public bool playerHere;
 
     // Use this for initialization
-    new void Start () {
-        base.Start();
-        base.health = 1;
+    public void Start ()
+    {
 
-        //m_Animator = GetComponent<Animator>();
-        m_Character = GetComponent<PlatformerCharacter2D>();
+        m_Platformer = GetComponent<PlatformerCharacter2D>();
 
         distanceFromWall = 0.4f;
         distanceToFloor = 0.8f;
@@ -36,7 +31,6 @@ public class GroundMinions : MinionsManager {
         //actPlayer = GameObject.FindGameObjectWithTag("Player");
         playerHere = false;
 
-        animData = new PlatformerAnimData();
         //Set a random start direction
         xDir = Random.Range(0, 2);
         if (xDir == 0)
@@ -48,9 +42,12 @@ public class GroundMinions : MinionsManager {
     }
 	
 	// Update is called once per frame
-	new void Update () {
+	public override void Update ()
+    {
         base.Update();
+
         Movement();
+
         if (playerHere)
         {
             FindFoe();
@@ -100,9 +97,8 @@ public class GroundMinions : MinionsManager {
 
         //regardless continue moving
         animData.move = xDir;
-        m_Character.Move(animData);
-
     }
+
     void FindFoe()
     {
         findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x,actPlayer.transform.position.y - transform.position.y).normalized;

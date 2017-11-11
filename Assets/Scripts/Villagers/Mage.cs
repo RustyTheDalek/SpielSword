@@ -9,7 +9,7 @@ public class Mage : AuraVillager {
     public override void Start ()
     {
         base.Start();
-        villagerAttackType = AttackType.Ranged;
+        attackType = AttackType.Ranged;
 	}
 
     protected override GameObject Aura()

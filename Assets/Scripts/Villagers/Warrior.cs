@@ -15,7 +15,7 @@ public class Warrior : Villager
     {
         get
         {
-            if (shieldStrength > 0 && animData.playerSpecial)
+            if (shieldStrength > 0 && vAnimData.playerSpecial)
                 return true;
             else
                 return false;
@@ -36,7 +36,7 @@ public class Warrior : Villager
         AssetManager.VillagerAnimators.TryGetValue("Warlock", out temp);
         m_Animator.runtimeAnimatorController = temp;
 
-        villagerAttackType = AttackType.Melee;
+        attackType = AttackType.Melee;
         base.Start();
     }
 
@@ -52,21 +52,21 @@ public class Warrior : Villager
                 //ability to special and renable when the shield is not in use
                 if (shieldStrength <= 0)
                 {
-                    animData.canSpecial = false;
+                    vAnimData.canSpecial = false;
                 }
                 else if (shieldStrength > 0)
                 {
-                    animData.canSpecial = true;
+                    vAnimData.canSpecial = true;
                 }
 
                 //When the player is trying to use the shield and the shield has 
                 //strength detract power  
-                if (animData.playerSpecial && shieldStrength > 0)
+                if (vAnimData.playerSpecial && shieldStrength > 0)
                 {
                     shieldStrength -= Time.deltaTime;
                 }
                 //otherwise if the shield is not in use and needs charging charge it up
-                else if (!animData.playerSpecial && shieldStrength < 1)
+                else if (!vAnimData.playerSpecial && shieldStrength < 1)
                 {
                     shieldStrength += Time.deltaTime;
                 }

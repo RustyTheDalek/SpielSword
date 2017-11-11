@@ -27,7 +27,7 @@ public class Character : MonoBehaviour {
         }
     }
 
-    public PlatformerAnimData pAnimData;
+    public PlatformerAnimData animData;
 
     #endregion
 
@@ -35,13 +35,13 @@ public class Character : MonoBehaviour {
 
     protected PlatformerCharacter2D m_Platformer;
 
+    protected float health = 1;
+
+    protected bool m_Jump;
+
     #endregion
 
     #region Private Variables
-
-    float health = 1;
-
-    bool m_Jump;
 
     #endregion
 
@@ -49,7 +49,7 @@ public class Character : MonoBehaviour {
     {
         m_Platformer = GetComponent<PlatformerCharacter2D>();
 
-        pAnimData = new PlatformerAnimData()
+        animData = new PlatformerAnimData()
         {
             move = 0,
 
@@ -63,11 +63,11 @@ public class Character : MonoBehaviour {
 
     public virtual void Update()
     {
-        pAnimData.dead = !Alive;
+        animData.dead = !Alive;
     }
 
     public virtual void FixedUpdate()
     {
-        m_Platformer.Move(pAnimData);
+        m_Platformer.Move(animData);
     }
 }

@@ -46,7 +46,7 @@ public class VillagerTimeObject : SpriteTimeObject
         {
             vAnimData = new VillagerAnimData();
 
-            villager.health = vFrames[currentFrame].health;
+            //villager.health = vFrames[currentFrame].health;
             vAnimData.move = vFrames[currentFrame].move;
 
             switch (Game.timeState)
@@ -55,7 +55,7 @@ public class VillagerTimeObject : SpriteTimeObject
 
                     //villager.animData.jump = actions[Game.t].jump;
 
-                    switch (villager.villagerAttackType)
+                    switch (villager.attackType)
                     {
                         case AttackType.Melee:
                             //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
@@ -98,14 +98,14 @@ public class VillagerTimeObject : SpriteTimeObject
         tempFrame = new VillagerFrameData()
         {
             move = villager.xDir,
-            health = villager.health,
+            //health = villager.health,
 
             spriteName = m_Sprite.sprite.name,
             hatPos = villager.hat.localPosition,
             scale = transform.localScale
         };
 
-        switch (villager.villagerAttackType)
+        switch (villager.attackType)
         {
             case AttackType.Melee:
                 //tempFrame.meleeAttack = villager.animData.meleeAttack;
@@ -117,8 +117,8 @@ public class VillagerTimeObject : SpriteTimeObject
                 tempFrame.rangedAttack = attackStart;
                 break;
         }
-        tempFrame.special = villager.animData.playerSpecial;
-        tempFrame.canSpecial = villager.animData.canSpecial;
+        tempFrame.special = villager.vAnimData.playerSpecial;
+        tempFrame.canSpecial = villager.vAnimData.canSpecial;
         tempFrame.dead = !villager.Alive;
 
         if (!endRecorded && endFinish)
