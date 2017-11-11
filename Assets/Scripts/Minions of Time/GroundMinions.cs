@@ -9,14 +9,18 @@ public class GroundMinions : MinionsManager {
     private float distanceFromWall;
     private Vector2 findFloor;
     private Vector2 findWall;
+    private Vector2 findPlayer;
     private Ray2D ray;
     private bool inAir;
-    //private Animator m_Animator;
 
     protected PlatformerCharacter2D m_Character;
 
     public LayerMask layerGround;
+    public LayerMask layerGroundOnly;
+    public LayerMask layerVillagerOnly;
     public PlatformerAnimData animData;
+    public GameObject actPlayer;
+    public bool playerHere;
 
     // Use this for initialization
     new void Start () {
@@ -28,7 +32,10 @@ public class GroundMinions : MinionsManager {
 
         distanceFromWall = 0.4f;
         distanceToFloor = 0.8f;
-        
+
+        //actPlayer = GameObject.FindGameObjectWithTag("Player");
+        playerHere = false;
+
         animData = new PlatformerAnimData();
         //Set a random start direction
         xDir = Random.Range(0, 2);
@@ -44,6 +51,10 @@ public class GroundMinions : MinionsManager {
 	new void Update () {
         base.Update();
         Movement();
+        if (playerHere)
+        {
+            FindFoe();
+        }
     }
 
     void Movement()
@@ -56,7 +67,7 @@ public class GroundMinions : MinionsManager {
             if (!Physics2D.Raycast(findFloor, Vector2.down, distanceToFloor, layerGround))
             {
 
-                Debug.Log("There is no ground");
+                //Debug.Log("There is no ground");
                 //if not reverse the direction
                 xDir *= -1;
             }
@@ -81,22 +92,30 @@ public class GroundMinions : MinionsManager {
         if (Physics2D.Raycast(findWall, facedDirection, distanceFromWall, layerGround))
         {
 
-            Debug.Log("There is a Wall");
+            //Debug.Log("There is a Wall");
             //if not reverse the direction
             xDir *= -1;
         }
         #endregion
 
-        /*ray = new Ray2D(findWall, facedDirection);
-       
-        Debug.DrawRay(ray.origin, ray.direction);*/
-        //Debug.Log("There is ground");
-
-
         //regardless continue moving
         animData.move = xDir;
         m_Character.Move(animData);
 
+    }
+    void FindFoe()
+    {
+        findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x,actPlayer.transform.position.y - transform.position.y).normalized;
+        Debug.Log("I'll find him");
+        Debug.DrawRay(transform.position, findPlayer, Color.green);
+        if (Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerVillagerOnly))
+        {
+            Debug.Log("i Dont see him");
+            if (!Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly))
+            {
+                Debug.Log("Get help he is here");
+            }
+        }
     }
 
 }
