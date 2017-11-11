@@ -120,6 +120,13 @@ public class PlatformerCharacter2D : MonoBehaviour
         }
     }
 
+    public void CanAttack(bool attack)
+    {
+        if (!attack)
+        {
+            m_Anim.SetBool("CanAttack", true);
+        }
+    }
 
     private void Flip()
     {

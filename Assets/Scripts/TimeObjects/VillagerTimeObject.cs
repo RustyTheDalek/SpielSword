@@ -59,13 +59,13 @@ public class VillagerTimeObject : SpriteTimeObject
                     {
                         case AttackType.Melee:
                             //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
-                            villager.CanAttack(vAnimData.meleeAttack);
+                            m_Character.CanAttack(vAnimData.meleeAttack);
                             vAnimData.meleeAttack = vFrames[currentFrame].meleeAttack;
                             break;
 
                         case AttackType.Ranged:
                             //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
-                            villager.CanAttack(vAnimData.rangedAttack);
+                            m_Character.CanAttack(vAnimData.rangedAttack);
                             vAnimData.rangedAttack = vFrames[currentFrame].rangedAttack;
                             break;
                     }

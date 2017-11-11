@@ -6,14 +6,9 @@ using System.Collections;
 /// </summary>
 public class VillagerAnimData : PlatformerAnimData
 {
-    //public float move;
-
-    //public bool jump;
-    //public bool meleeAttack;
-    //public bool rangedAttack;
     public bool playerSpecial;
     public bool canSpecial;
-    //public bool dead;
+
     public bool playerSpecialIsTrigger;
 
     public bool martyed;

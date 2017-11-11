@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Class for controller Villager
 /// </summary>
-[RequireComponent(typeof(PlatformerCharacter2D))]
+[RequireComponent(typeof(VillagerCharacter2D))]
 public abstract class Villager : MonoBehaviour
 {
     #region Public Variables
@@ -16,8 +16,6 @@ public abstract class Villager : MonoBehaviour
     public float xDir;
 
     public float health = 1;
-
-    public Vector3 startingPos;
 
     //Target X position for Villager to aim for when they're waiting in queue
     public float targetX;
@@ -46,6 +44,7 @@ public abstract class Villager : MonoBehaviour
 
     public ParticleSystem deathEffect;
 
+    //TODO: bring this up a level when attacks for minions are sorted
     public CircleCollider2D melee;
 
     public CircleCollider2D[] PlayerCollisions;
@@ -71,15 +70,6 @@ public abstract class Villager : MonoBehaviour
             return villagerState == VillagerState.PresentVillager;
         }
     }
-
-    #region pastVillager variables
-
-    /// <summary>
-    /// Special time in which Villagers "Finish" Dying.
-    /// </summary>
-    public int reverseDeathTimeStamp = 0;
-
-    #endregion
 
     #endregion
 
@@ -116,13 +106,12 @@ public abstract class Villager : MonoBehaviour
         m_Character = GetComponent<VillagerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         vTO = GetComponent<VillagerTimeObject>();
-        startingPos = transform.position;
 
         rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;
 
         //villagerState = VillagerState.Waiting;
 
-        //TO-DO: FIX THIS TRASH
+        //TODO: FIX THIS TRASH
         melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
@@ -161,12 +150,12 @@ public abstract class Villager : MonoBehaviour
                 {
                     case AttackType.Melee:
                         animData.meleeAttack = Input.GetKey(KeyCode.DownArrow);
-                        CanAttack(animData.meleeAttack);
+                        m_Character.CanAttack(animData.meleeAttack);
                         break;
 
                     case AttackType.Ranged:
                         animData.rangedAttack = Input.GetKeyDown(KeyCode.DownArrow);
-                        CanAttack(animData.rangedAttack);
+                        m_Character.CanAttack(animData.rangedAttack);
                         break;    
                 }
 
@@ -213,25 +202,7 @@ public abstract class Villager : MonoBehaviour
 
             case VillagerState.PastVillager:
 
-                if (Game.timeState == TimeState.Backward)
-                {
-                    if (reverseDeathTimeStamp != 0 &&
-                        reverseDeathTimeStamp == Game.t)
-                    {
-                        //Debug.Break();
-                        Debug.Log("Villager Un-Dying");
-                        //m_Animator.SetTrigger("ExitDeath");
-                    }
-                }
                 break;
-        }
-    }
-
-    public void CanAttack(bool attack)
-    {
-        if (!attack)
-        {
-            m_Animator.SetBool("CanAttack", true);
         }
     }
 
