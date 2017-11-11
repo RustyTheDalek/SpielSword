@@ -5,26 +5,37 @@ using UnityEngine;
 
 public class VillagerTimeObject : SpriteTimeObject
 {
-    Villager villager;
-
-    protected VillagerCharacter2D m_Character;
-
-    VillagerAnimData vAnimData;
+    #region Public Variables
 
     public bool attackStart,
                 endFinish,
                 endRecorded,
                 deathOrMarty = true; //Whether te villager is going to die or fade from existence
 
+    #endregion
+
+    #region Protected Variables
+
+    protected VillagerCharacter2D m_Villager;
+
+    #endregion
+
+    #region Private Variables
+
+    Villager villager;
+    VillagerAnimData vAnimData;
+
     private VillagerFrameData tempFrame;
     private List<VillagerFrameData> vFrames = new List<VillagerFrameData>();
+
+    #endregion
 
     protected override void Start()
     {
         base.Start();
 
         villager = GetComponent<Villager>();
-        m_Character = GetComponent<VillagerCharacter2D>();
+        m_Villager = GetComponent<VillagerCharacter2D>();
 
         if (GetComponent<VHSEffect>())
         {
@@ -59,13 +70,13 @@ public class VillagerTimeObject : SpriteTimeObject
                     {
                         case AttackType.Melee:
                             //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
-                            m_Character.CanAttack(vAnimData.meleeAttack);
+                            m_Villager.CanAttack(vAnimData.meleeAttack);
                             vAnimData.meleeAttack = vFrames[currentFrame].meleeAttack;
                             break;
 
                         case AttackType.Ranged:
                             //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
-                            m_Character.CanAttack(vAnimData.rangedAttack);
+                            m_Villager.CanAttack(vAnimData.rangedAttack);
                             vAnimData.rangedAttack = vFrames[currentFrame].rangedAttack;
                             break;
                     }
@@ -76,7 +87,7 @@ public class VillagerTimeObject : SpriteTimeObject
                     vAnimData.martyed = vFrames[currentFrame].marty;
                     transform.localScale = vFrames[currentFrame].scale;
 
-                    m_Character.Move(vAnimData);
+                    m_Villager.Move(vAnimData);
 
                     break;
 
@@ -159,16 +170,14 @@ public class VillagerTimeObject : SpriteTimeObject
             move = 0,
         };
 
-        m_Character.Move(vAnimData);
+        m_Villager.Move(vAnimData);
     }
 
     protected override void OnFinishReverse()
     {
         base.OnFinishReverse();
 
-        m_Sprite.material = AssetManager.SpriteMaterials[0];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[0];
-        vhsEffect.enabled = false;
 
         m_Sprite.color = new Color(m_Sprite.color.r,
                                         m_Sprite.color.g,
@@ -184,10 +193,7 @@ public class VillagerTimeObject : SpriteTimeObject
     protected override void OnStartReverse()
     {
         base.OnStartReverse();
-
-        m_Sprite.material = AssetManager.SpriteMaterials[1];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
-        vhsEffect.enabled = true;
     }
 
     public void SetMartyPoint()
@@ -202,8 +208,8 @@ public class VillagerTimeObject : SpriteTimeObject
         for (int i = currentFrame+1; i < bFrames.Count; i++)
         {
             bFrames.RemoveAt(i);
-            vFrames.RemoveAt(i);
             sFrames.RemoveAt(i);
+            vFrames.RemoveAt(i);
         }
     }
 }

@@ -33,6 +33,8 @@ public class BossTimeObject : SpriteTimeObject {
     {
         //Not called for some reason
         frames.Clear();
+        bFrames.Clear();
+        sFrames.Clear();
         tObjectState = TimeObjectState.Present;
         finishFrame = 0;
     }

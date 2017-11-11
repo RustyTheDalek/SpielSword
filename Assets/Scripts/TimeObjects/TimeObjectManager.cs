@@ -8,11 +8,12 @@ using UnityEngine;
 public class TimeObjectManager : MonoBehaviour
 {
 
-    public static List<TimeObject> tObjects = new List<TimeObject>();
+    //public static List<TimeObject> tObjects = new List<TimeObject>();
     public static List<VillagerTimeObject> vObjects = new List<VillagerTimeObject>();
     public static List<SpriteTimeObject> spriteObjects = new List<SpriteTimeObject>();
     public static List<BossTimeObject> bossObjs = new List<BossTimeObject>();
     public static List<SpawnableSpriteTimeObject> vSpawnable = new List<SpawnableSpriteTimeObject>();
+    public static List<PlatformerTimeObject> platformers = new List<PlatformerTimeObject>();
 
     public bool newRoundReady;
 
@@ -24,10 +25,10 @@ public class TimeObjectManager : MonoBehaviour
         //Retreive all relevant Time Objects
         TimeObject[] tObjs = GetComponentsInChildren<TimeObject>();
 
-        foreach (TimeObject tObj in tObjs)
-        {
-            tObjects.Add(tObj);
-        }
+        //foreach (TimeObject tObj in tObjs)
+        //{
+        //    tObjects.Add(tObj);
+        //}
 
         //VillagerTimeObject[] vObjs = GetComponentsInChildren<VillagerTimeObject>();
 
@@ -50,10 +51,10 @@ public class TimeObjectManager : MonoBehaviour
             //For the purposes of testing this will also set any Present time objects to past
             Game.t = 0;
 
-            foreach (TimeObject tObj in tObjects)
-            {
-                tObj.HardReset();
-            }
+            //foreach (TimeObject tObj in tObjects)
+            //{
+            //    tObj.HardReset();
+            //}
 
             foreach (VillagerTimeObject vObj in vObjects)
             {
@@ -74,6 +75,12 @@ public class TimeObjectManager : MonoBehaviour
             {
                 bObj.HardReset();
             }
+
+            foreach (PlatformerTimeObject pObj in platformers)
+            {
+                pObj.HardReset();
+            }
+
         }
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -92,10 +99,10 @@ public class TimeObjectManager : MonoBehaviour
 
         //Time.timeScale = .25f;
 
-        foreach (TimeObject tObj in tObjects)
-        {
-            tObj.SoftReset();
-        }
+        //foreach (TimeObject tObj in tObjects)
+        //{
+        //    tObj.SoftReset();
+        //}
 
         foreach (VillagerTimeObject vObj in vObjects)
         {
@@ -116,6 +123,11 @@ public class TimeObjectManager : MonoBehaviour
         {
             bObj.SoftReset();
         }
+
+        foreach (PlatformerTimeObject pObj in platformers)
+        {
+            pObj.SoftReset();
+        }
     }
 
     private void LateUpdate()
@@ -131,7 +143,7 @@ public class TimeObjectManager : MonoBehaviour
         else
         {
             float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-            float newTimeScale = 5;
+            float newTimeScale = 1;
             Time.timeScale = newTimeScale;
 
             if (Game.t < 0)
@@ -169,12 +181,18 @@ public class TimeObjectManager : MonoBehaviour
 
         foreach (SpriteTimeObject spriteObject in spriteObjects)
         {
+            Debug.Log(spriteObject.name);               
             spriteObject.OnFinishReverseCatch();
         }
 
         foreach (BossTimeObject bossObj in bossObjs)
         {
             bossObj.OnFinishReverseCatch();
+        }
+
+        foreach (PlatformerTimeObject pObj in platformers)
+        {
+            pObj.OnFinishReverseCatch();
         }
     }
 }

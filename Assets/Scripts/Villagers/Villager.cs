@@ -15,7 +15,7 @@ public abstract class Villager : Character
     //Target X position for Villager to aim for when they're waiting in queue
     public float targetX;
 
-    public new VillagerAnimData vAnimData;
+    public VillagerAnimData vAnimData;
 
     //Whether the Villager is advancing in the queue
     public bool advancing;

@@ -19,14 +19,19 @@ public class GroundMinions : Character {
     public GameObject actPlayer;
     public bool playerHere;
 
-    // Use this for initialization
-    public void Start ()
+    public override void Awake()
     {
+        base.Awake();
 
         m_Platformer = GetComponent<PlatformerCharacter2D>();
 
         distanceFromWall = 0.4f;
         distanceToFloor = 0.8f;
+    }
+
+    // Use this for initialization
+    public void Start ()
+    {
 
         //actPlayer = GameObject.FindGameObjectWithTag("Player");
         playerHere = false;

@@ -167,6 +167,7 @@ public class TimeObject : BaseTimeObject2
 
     public virtual void SoftReset()
     {
+
         switch (tObjectState)
         {
             case TimeObjectState.Present:
