@@ -109,7 +109,7 @@ public abstract class Villager : Character
             rangedAttack = false,
             dead = false,
             playerSpecial = false,
-            canSpecial = false,
+            canSpecial = true,
             playerSpecialIsTrigger = false,
 
             martyed = false
