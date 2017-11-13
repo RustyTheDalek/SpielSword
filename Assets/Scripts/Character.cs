@@ -27,7 +27,7 @@ public class Character : MonoBehaviour {
         }
     }
 
-    public PlatformerAnimData animData;
+    public Hashtable animData;
 
     #endregion
 
@@ -49,21 +49,19 @@ public class Character : MonoBehaviour {
     {
         m_Platformer = GetComponent<PlatformerCharacter2D>();
 
-        animData = new PlatformerAnimData()
-        {
-            move = 0,
+        animData = new Hashtable();
 
-            jump = false,
-            meleeAttack = false,
-            rangedAttack = false,
-            dead = false,
-        };
+        animData.Add("Move", 0f);
+        animData.Add("Dead", false);
+        animData.Add("MeleeAttack", false);
+        animData.Add("RangedAttack", false);
+        animData.Add("Jump", false);
 
     }
 
     public virtual void Update()
     {
-        animData.dead = !Alive;
+        animData["Dead"] = !Alive;
     }
 
     public virtual void FixedUpdate()

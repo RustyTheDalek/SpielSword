@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Controls the Animation and movement of the 2D Characters
@@ -22,6 +23,16 @@ public class PlatformerCharacter2D : MonoBehaviour
     private Rigidbody2D m_Rigidbody2D;
     private bool m_FacingRight = true;  // For determining which way the character is currently facing.
 
+    public float move = 26;
+
+    Collider2D[] colliders;
+
+    bool dead;
+    bool meleeAttack;
+    bool rangedAttack;
+    bool jump;
+    float xDir;
+
     private void Awake()
     {
         // Setting up references.
@@ -40,14 +51,14 @@ public class PlatformerCharacter2D : MonoBehaviour
 
             // The character is grounded if a circlecast to the groundcheck position hits anything designated as ground
             // This can be done using layers instead but Sample Assets will not overwrite your project settings.
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                if (colliders[i].gameObject != gameObject)
-                {
-                    m_Grounded = true;
-                }
-            }
+            //colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+            //for (int i = 0; i < colliders.Length; i++)
+            //{
+            //    if (colliders[i].gameObject != gameObject)
+            //    {
+            m_Grounded = true;
+            //    }
+            //}
 
             m_Anim.SetBool("Ground", m_Grounded);
 
@@ -58,11 +69,16 @@ public class PlatformerCharacter2D : MonoBehaviour
         }
     }
 
-
-    public virtual void Move(PlatformerAnimData animData)
+    public virtual void Move(Hashtable animData)
     {
+        dead = (bool)animData["Dead"];
+        meleeAttack = (bool)animData["MeleeAttack"];
+        rangedAttack = (bool)animData["RangedAttack"];
+        jump = (bool)animData["Jump"];
+        xDir = (float)animData["Move"];
+
         //If dead and not in dead state we want to trigger the death animation
-        if (animData.dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death") && 
+        if (dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death") && 
             Game.timeState == TimeState.Forward)
         {
             m_Anim.SetTrigger("Dead");
@@ -78,40 +94,37 @@ public class PlatformerCharacter2D : MonoBehaviour
         //We want to make sure attacks are triggered only when time is moving forwards
         if (Game.timeState == TimeState.Forward)
         {
-            m_Anim.SetBool("MeleeAttack", animData.meleeAttack);
-            m_Anim.SetBool("RangedAttack", animData.rangedAttack);
+            m_Anim.SetBool("MeleeAttack", meleeAttack);
+            m_Anim.SetBool("RangedAttack", rangedAttack);
         }
         
         //only control the player if grounded or airControl is turned on
-        if (m_Grounded || m_AirControl && !animData.dead)
+        if (m_Grounded || m_AirControl && !dead)
         {
             // Reduce the speed if crouching by the crouchSpeed multiplier
-            animData.move = (!m_Grounded ? animData.move * .8f : animData.move);
+            //animData.floatas["Move"] = (!m_Grounded ? (float)animData.floatas["Move"] * .8f : animData.floatas["Move"]);
 
             // The Speed animator parameter is set to the absolute value of the horizontal input.
-            m_Anim.SetFloat("Speed", Mathf.Abs(animData.move));
 
-            // Move the character
-            //if (PresentVillager)
-            //{
-                m_Rigidbody2D.velocity = new Vector2(animData.move * m_MaxSpeed, m_Rigidbody2D.velocity.y);
-            //}
+            m_Anim.SetFloat("Speed", Mathf.Abs(xDir));
+
+            m_Rigidbody2D.velocity = new Vector2(xDir * m_MaxSpeed, m_Rigidbody2D.velocity.y);
 
             // If the input is moving the player right and the player is facing left...
-            if (animData.move > 0 && !m_FacingRight)
+            if (xDir > 0 && !m_FacingRight)
             {
                 // ... flip the player.
                 Flip();
             }
                 // Otherwise if the input is moving the player left and the player is facing right...
-            else if (animData.move < 0 && m_FacingRight)
+            else if (xDir < 0 && m_FacingRight)
             {
                 // ... flip the player.
                 Flip();
             }
         }
         // If the player should jump...
-        if (m_Grounded && animData.jump && m_Anim.GetBool("Ground"))
+        if (m_Grounded && jump && m_Anim.GetBool("Ground"))
         {
             // Add a vertical force to the player.
             m_Grounded = false;

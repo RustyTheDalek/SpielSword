@@ -8,7 +8,7 @@ using UnityEngine;
 public class TimeObjectManager : MonoBehaviour
 {
 
-    //public static List<TimeObject> tObjects = new List<TimeObject>();
+    public static List<TimeObject> tObjects = new List<TimeObject>();
     public static List<VillagerTimeObject> vObjects = new List<VillagerTimeObject>();
     public static List<SpriteTimeObject> spriteObjects = new List<SpriteTimeObject>();
     public static List<BossTimeObject> bossObjs = new List<BossTimeObject>();
@@ -25,10 +25,10 @@ public class TimeObjectManager : MonoBehaviour
         //Retreive all relevant Time Objects
         TimeObject[] tObjs = GetComponentsInChildren<TimeObject>();
 
-        //foreach (TimeObject tObj in tObjs)
-        //{
-        //    tObjects.Add(tObj);
-        //}
+        foreach (TimeObject tObj in tObjs)
+        {
+            tObjects.Add(tObj);
+        }
 
         //VillagerTimeObject[] vObjs = GetComponentsInChildren<VillagerTimeObject>();
 
@@ -86,7 +86,6 @@ public class TimeObjectManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             Game.timeState = TimeState.Backward;
-
             SoftReset();
         }
          
@@ -99,10 +98,10 @@ public class TimeObjectManager : MonoBehaviour
 
         //Time.timeScale = .25f;
 
-        //foreach (TimeObject tObj in tObjects)
-        //{
-        //    tObj.SoftReset();
-        //}
+        foreach (TimeObject tObj in tObjects)
+        {
+            tObj.SoftReset();
+        }
 
         foreach (VillagerTimeObject vObj in vObjects)
         {
@@ -143,7 +142,7 @@ public class TimeObjectManager : MonoBehaviour
         else
         {
             float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-            float newTimeScale = 1;
+            float newTimeScale = 5;
             Time.timeScale = newTimeScale;
 
             if (Game.t < 0)
@@ -173,6 +172,11 @@ public class TimeObjectManager : MonoBehaviour
     private void OnFinishReverseCatch()
     {
         Debug.Log("Special reverse called by Time Object Manager");
+
+        foreach (TimeObject tObj in tObjects)
+        {
+            tObj.OnFinishReverseCatch();
+        }
 
         foreach (VillagerTimeObject vObject in vObjects)
         {

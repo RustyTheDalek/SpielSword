@@ -46,9 +46,9 @@ public class PlatformerTimeObject : SpriteTimeObject
         {
             move = m_Character.xDir,
             //TODO:Stop using animdata if nessecary
-            jump = m_Character.animData.jump,
-            meleeAttack = m_Character.animData.jump,
-            rangedAttack = m_Character.animData.rangedAttack,
+            jump = (bool)m_Character.animData["Jump"],
+            meleeAttack = (bool)m_Character.animData["MeleeAttack"],
+            rangedAttack = (bool)m_Character.animData["RangedAttack"],
             dead = m_Character.Alive,
 
         };
@@ -64,10 +64,10 @@ public class PlatformerTimeObject : SpriteTimeObject
         if (Tools.WithinRange(currentFrame, pFrames))
         {
             m_Character.xDir = pFrames[currentFrame].move;
-            m_Character.animData.jump = pFrames[currentFrame].jump;
-            m_Character.animData.meleeAttack = pFrames[currentFrame].meleeAttack;
-            m_Character.animData.rangedAttack = pFrames[currentFrame].rangedAttack;
-            m_Character.animData.dead = pFrames[currentFrame].dead; 
+            m_Character.animData["Jump"]= pFrames[currentFrame].jump;
+            m_Character.animData["MeleeAttack"]= pFrames[currentFrame].meleeAttack;
+            m_Character.animData["RangedAttack"]= pFrames[currentFrame].rangedAttack;
+            m_Character.animData["Dead"] = pFrames[currentFrame].dead; 
         }
 
     }
@@ -82,6 +82,6 @@ public class PlatformerTimeObject : SpriteTimeObject
         tObjectState = TimeObjectState.Present;
 
         m_Sprite.material = AssetManager.SpriteMaterials[0];
-        vhsEffect.enabled = false;
+        //vhsEffect.enabled = false;
     }
 }

@@ -19,6 +19,8 @@ public class GroundMinions : Character {
     public GameObject actPlayer;
     public bool playerHere;
 
+    public float timer = 0;
+
     public override void Awake()
     {
         base.Awake();
@@ -44,6 +46,7 @@ public class GroundMinions : Character {
         }
         findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
         findWall = new Vector2(transform.position.x + (xDir*0.6f), transform.position.y);
+
     }
 	
 	// Update is called once per frame
@@ -51,7 +54,13 @@ public class GroundMinions : Character {
     {
         base.Update();
 
-        Movement();
+        timer += Time.deltaTime;
+
+        if (timer > .046875f)
+        {
+            Movement();
+            timer = 0f;
+        }
 
         if (playerHere)
         {
@@ -63,10 +72,12 @@ public class GroundMinions : Character {
     {
         #region Find the floor
         findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
+        bool raycastResult = Physics2D.Raycast(findFloor, Vector2.down, distanceToFloor, layerGround);
+
         //ray cast below the player to ensure ground is still there
-        if (inAir != !Physics2D.Raycast(findFloor, Vector2.down, distanceToFloor, layerGround))
+        if (inAir != !raycastResult)
         {
-            if (!Physics2D.Raycast(findFloor, Vector2.down, distanceToFloor, layerGround))
+            if (!raycastResult)
             {
 
                 //Debug.Log("There is no ground");
@@ -74,7 +85,7 @@ public class GroundMinions : Character {
                 xDir *= -1;
             }
         }
-        inAir = !Physics2D.Raycast(findFloor, Vector2.down, distanceToFloor, layerGround);
+        inAir = !raycastResult;
         #endregion
 
         #region Find the wall
@@ -101,7 +112,7 @@ public class GroundMinions : Character {
         #endregion
 
         //regardless continue moving
-        animData.move = xDir;
+        animData["Move"] = xDir;
     }
 
     void FindFoe()
@@ -109,10 +120,11 @@ public class GroundMinions : Character {
         findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x,actPlayer.transform.position.y - transform.position.y).normalized;
         Debug.Log("I'll find him");
         Debug.DrawRay(transform.position, findPlayer, Color.green);
-        if (Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerVillagerOnly))
+        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerVillagerOnly);
+        if (rayResult)
         {
             Debug.Log("i Dont see him");
-            if (!Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly))
+            if (!rayResult)
             {
                 Debug.Log("Get help he is here");
             }
