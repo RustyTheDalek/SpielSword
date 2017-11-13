@@ -25,14 +25,14 @@ public abstract class AuraVillager : Villager
         base.Awake();
 
         specialType = SpecialType.Press;
-        vAnimData.playerSpecialIsTrigger = true;
+        animData["PlayerSpecialIsTrigger"] = true;
     }
 
     public override void OnSpecial(bool _PlayerSpecial)
     {
         if (!AuraActive)
         {
-            vAnimData.playerSpecial = _PlayerSpecial;
+            animData["PlayerSpecial"] = _PlayerSpecial;
         }
     }
 
@@ -43,7 +43,7 @@ public abstract class AuraVillager : Villager
             VillagerManager.auras.Add(Aura().GetComponent<MageAura>());
 
             AuraActive = true;
-            vAnimData.canSpecial = false;
+            animData["CanSpecial"] = false;
         }
     }
 

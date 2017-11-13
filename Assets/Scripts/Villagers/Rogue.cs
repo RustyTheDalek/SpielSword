@@ -27,7 +27,7 @@ public class Rogue : Villager {
 
         Vector3 newPos = transform.position + Vector3.right * Mathf.Sign(direction) * distance;
 
-        while (!GameManager.moveRequest(PlayerCollisions, newPos))
+        while (!GameManager.MoveRequest(PlayerCollisions, newPos))
         {
             newPos = transform.position + Vector3.right * Mathf.Sin(direction) * distance --;
         }

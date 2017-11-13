@@ -281,7 +281,7 @@ public class VillagerManager : MonoBehaviour {
         {
             if (pastVillagers[i].Alive)
             {
-                pastVillagers[i].vAnimData.martyed = true;
+                pastVillagers[i].animData["Martyed"] = true;
                 pastVillagers[i].GetComponent<VillagerTimeObject>().SetMartyPoint();
             }
         }

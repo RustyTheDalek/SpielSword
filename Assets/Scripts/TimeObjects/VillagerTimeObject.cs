@@ -128,8 +128,8 @@ public class VillagerTimeObject : SpriteTimeObject
                 tempFrame.rangedAttack = attackStart;
                 break;
         }
-        tempFrame.special = villager.vAnimData.playerSpecial;
-        tempFrame.canSpecial = villager.vAnimData.canSpecial;
+        tempFrame.special = (bool)villager.animData["PlayerSpecial"];
+        tempFrame.canSpecial = (bool)villager.animData["CanSpecial"];
         tempFrame.dead = !villager.Alive;
 
         if (!endRecorded && endFinish)

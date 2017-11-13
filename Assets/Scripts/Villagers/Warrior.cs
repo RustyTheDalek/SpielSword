@@ -15,7 +15,7 @@ public class Warrior : Villager
     {
         get
         {
-            if (shieldStrength > 0 && vAnimData.playerSpecial)
+            if (shieldStrength > 0 && (bool)animData["PlayerSpecial"])
                 return true;
             else
                 return false;
@@ -52,21 +52,21 @@ public class Warrior : Villager
                 //ability to special and renable when the shield is not in use
                 if (shieldStrength <= 0)
                 {
-                    vAnimData.canSpecial = false;
+                    animData["CanSpecial"]= false;
                 }
                 else if (shieldStrength > 0)
                 {
-                    vAnimData.canSpecial = true;
+                    animData["CanSpecial"] = true;
                 }
 
                 //When the player is trying to use the shield and the shield has 
                 //strength detract power  
-                if (vAnimData.playerSpecial && shieldStrength > 0)
+                if ((bool)animData["PlayerSpecial"] && shieldStrength > 0)
                 {
                     shieldStrength -= Time.deltaTime;
                 }
                 //otherwise if the shield is not in use and needs charging charge it up
-                else if (!vAnimData.playerSpecial && shieldStrength < 1)
+                else if (!(bool)animData["PlayerSpecial"] && shieldStrength < 1)
                 {
                     shieldStrength += Time.deltaTime;
                 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class TimeObject : BaseTimeObject2
+public class TimeObject : BaseTimeObject
 {
 
     // Use this for initialization

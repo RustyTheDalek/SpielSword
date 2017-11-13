@@ -14,14 +14,14 @@ public class SpriteTimeObject : TimeObject
     {
         m_Sprite = GetComponent<SpriteRenderer>();
 
-        //if (GetComponent<VHSEffect>())
-        //{
-        //    vhsEffect = GetComponent<VHSEffect>();
-        //}
-        //else
-        //{
-        //    vhsEffect = gameObject.AddComponent<VHSEffect>();
-        //}
+        if (GetComponent<VHSEffect>())
+        {
+            vhsEffect = GetComponent<VHSEffect>();
+        }
+        else
+        {
+            vhsEffect = gameObject.AddComponent<VHSEffect>();
+        }
     }
 
     protected override void Start()
@@ -70,22 +70,22 @@ public class SpriteTimeObject : TimeObject
         base.OnFinishReverse();
 
         currentFrame = 0;
-        //m_Sprite.material = AssetManager.SpriteMaterials[0];
-        //vhsEffect.enabled = false;
+        m_Sprite.material = AssetManager.SpriteMaterials[0];
+        vhsEffect.enabled = false;
     }
 
     protected override void OnStartReverse()
     {
         base.OnStartReverse();
 
-        //m_Sprite.material = AssetManager.SpriteMaterials[1];
-        //vhsEffect.enabled = true;
+        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        vhsEffect.enabled = true;
     }
 
     protected override void OnPast()
     {
-        //m_Sprite.material = AssetManager.SpriteMaterials[1];
-        //vhsEffect.enabled = true;
+        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        vhsEffect.enabled = true;
         base.OnPast();
     }
 }

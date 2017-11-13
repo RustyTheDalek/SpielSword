@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviour {
                     vilManager.OnVillagerDeath();
                     currentBoss.GetComponent<BossManager>().SetAnimators(false);
                     TimeObjectManager.SoftReset();
+
+
                 }
 
                 switch (Game.bossState)
@@ -142,7 +144,7 @@ public class GameManager : MonoBehaviour {
         }
 	}
 
-    public static bool moveRequest(CircleCollider2D[] colliders, Vector3 position)
+    public static bool MoveRequest(CircleCollider2D[] colliders, Vector3 position)
     {
         foreach (CircleCollider2D coll in colliders)
         {

@@ -27,7 +27,7 @@ public class Warlock : Villager
         base.Awake();
 
         specialType = SpecialType.Press;
-        vAnimData.playerSpecialIsTrigger = true;
+        animData["PlayerSpecialIsTrigger"] = true;
 
         teleportObj = Instantiate(Resources.Load("Particles/TeleportFX") as GameObject, transform, false);
         teleport = teleportObj.GetComponent<ParticleSystem>();
@@ -55,7 +55,7 @@ public class Warlock : Villager
     {
         if (!wardActive)
         {
-            vAnimData.playerSpecial = _PlayerSpecial;
+            animData["PlayerSpecial"] = _PlayerSpecial;
         }
         else
         {
@@ -81,7 +81,7 @@ public class Warlock : Villager
             currentWard = AssetManager.Ward.Spawn(transform.position);
 
             wardActive = true;
-            vAnimData.canSpecial = false;
+            animData["CanSpecial"] = false;
         }
     }
 

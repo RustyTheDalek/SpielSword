@@ -49,14 +49,19 @@ public class Character : MonoBehaviour {
     {
         m_Platformer = GetComponent<PlatformerCharacter2D>();
 
-        animData = new Hashtable();
+        CreateHashtable();
+    }
 
-        animData.Add("Move", 0f);
-        animData.Add("Dead", false);
-        animData.Add("MeleeAttack", false);
-        animData.Add("RangedAttack", false);
-        animData.Add("Jump", false);
-
+    protected virtual void CreateHashtable()
+    {
+        animData = new Hashtable
+        {
+            { "Move", 0f },
+            { "Dead", false },
+            { "MeleeAttack", false },
+            { "RangedAttack", false },
+            { "Jump", false }
+        };
     }
 
     public virtual void Update()

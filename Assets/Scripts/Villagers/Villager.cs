@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -15,7 +16,7 @@ public abstract class Villager : Character
     //Target X position for Villager to aim for when they're waiting in queue
     public float targetX;
 
-    public VillagerAnimData vAnimData;
+    //public VillagerAnimData vAnimData;
 
     //Whether the Villager is advancing in the queue
     public bool advancing;
@@ -100,20 +101,27 @@ public abstract class Villager : Character
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
-        vAnimData = new VillagerAnimData()
-        {
-            move = 0,
+        CreateHashtable();
 
-            jump = false,
-            meleeAttack = false,
-            rangedAttack = false,
-            dead = false,
-            playerSpecial = false,
-            canSpecial = true,
-            playerSpecialIsTrigger = false,
+        animData.Add("PlayerSpecial", false);
+        animData.Add("CanSpecial", true);
+        animData.Add("PlayerSpecialIsTrigger", false);
+        animData.Add("Martyed", false);
 
-            martyed = false
-        };
+        //vAnimData = new VillagerAnimData()
+        //{
+        //    move = 0,
+
+        //    jump = false,
+        //    meleeAttack = false,
+        //    rangedAttack = false,
+        //    dead = false,
+        //    playerSpecial = false,
+        //    canSpecial = true,
+        //    playerSpecialIsTrigger = false,
+
+        //    martyed = false
+        //};
 
         hat = transform.Find("Hat");
 
@@ -142,13 +150,13 @@ public abstract class Villager : Character
                 switch (attackType)
                 {
                     case AttackType.Melee:
-                        vAnimData.meleeAttack = Input.GetKey(KeyCode.DownArrow);
-                        m_Villager.CanAttack(vAnimData.meleeAttack);
+                        animData["MeleeAttack"] = Input.GetKey(KeyCode.DownArrow);
+                        m_Villager.CanAttack((bool)animData["MeleeAttack"]);
                         break;
 
                     case AttackType.Ranged:
-                        vAnimData.rangedAttack = Input.GetKeyDown(KeyCode.DownArrow);
-                        m_Villager.CanAttack(vAnimData.rangedAttack);
+                        animData["RangedAttack"] = Input.GetKeyDown(KeyCode.DownArrow);
+                        m_Villager.CanAttack((bool)animData["RangedAttack"]);
                         break;    
                 }
 
@@ -205,22 +213,22 @@ public abstract class Villager : Character
         {
             case VillagerState.PresentVillager:
 
-                vAnimData.move = xDir;
-                vAnimData.jump = m_Jump;
+                animData["Move"] = xDir;
+                animData["Jump"] = m_Jump;
 
                 //animData.dead = !alive;
 
-                m_Villager.Move(vAnimData);
+                m_Villager.Move(animData);
                 m_Jump = false;
                 break;
 
             case VillagerState.Waiting:
 
-                vAnimData.move = xDir;
-                vAnimData.dead = false;
-                vAnimData.jump = false;
-                vAnimData.meleeAttack = false;
-                m_Villager.Move(vAnimData);
+                animData["Move"] = xDir;
+                animData["Dead"] = false;
+                animData["Jump"] = false;
+                animData["MeleeAttack"] = false;
+                m_Villager.Move(animData);
                 break;
 
             case VillagerState.PastVillager:
@@ -255,7 +263,7 @@ public abstract class Villager : Character
 
     public virtual void OnSpecial(bool _PlayerSpecial)
     {
-        vAnimData.playerSpecial = _PlayerSpecial;
+        animData["PlayerSpecial"] = _PlayerSpecial;
     }
 
     public virtual void OnHit()
@@ -268,12 +276,12 @@ public abstract class Villager : Character
 
     public virtual void OnPastHit(Collider2D collider)
     {
-        if (collider.GetComponent<BossAttack>() && !vAnimData.dead &&
+        if (collider.GetComponent<BossAttack>() && !(bool)animData["Dead"] &&
             Game.timeState == TimeState.Forward)
         {
             Debug.Log("Past Villager Hit By Boss Attack");
-            vAnimData.dead = true;
-            m_Villager.Move(vAnimData);
+            animData["Dead"] = true;
+            m_Villager.Move(animData);
 
             GetComponentInChildren<ParticleSystem>().Play();
         }
