@@ -49,11 +49,6 @@ public class VillagerManager : MonoBehaviour {
 
     public VillagerClass classToSpawn = VillagerClass.Warlock;
 
-    int magesSpawned = 0,
-        warriorsSpawned = 0,
-        warlocksSpawned = 0,
-        priestSpawned = 0,
-        roguesSpawned = 0;
 
     void Awake()
     {
@@ -72,12 +67,14 @@ public class VillagerManager : MonoBehaviour {
         Vector3 spawnOffset = Vector3.zero;
         for (int i = 0; i < villagersToSpawn; i++)
         {
-            GameObject temp = AssetManager.Villager.Spawn();
 
             spawnOffset += new Vector3(-1, 0, 0);
 
-            classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
+            //classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
+            classToSpawn = VillagerClass.Spielsword;
 
+            GameObject temp = AssetManager.Villagers[classToSpawn.ToString()].Spawn();
+            temp.name = classToSpawn.ToString() + i;
             SetupVillager(temp, spawnOffset);
         }
 
@@ -92,49 +89,6 @@ public class VillagerManager : MonoBehaviour {
     {
         villager.transform.SetParent(remainingVillagersTrans);
         villager.transform.localPosition = spawnOffset;
-
-        switch (classToSpawn)
-        {
-            case VillagerClass.Warrior:
-
-                villager.AddComponent<Warrior>();
-                villager.GetComponent<SpriteRenderer>().color = Color.yellow;
-                villager.name = "Warrior " + warriorsSpawned + 1;
-                warriorsSpawned++;
-                break;
-
-            case VillagerClass.Mage:
-
-                villager.AddComponent<Mage>();
-                villager.GetComponent<SpriteRenderer>().color = Color.blue;
-                villager.name = "Mage " + magesSpawned + 1;
-                magesSpawned++;
-                break;
-
-            case VillagerClass.Warlock:
-
-                villager.AddComponent<Warlock>();
-                villager.GetComponent<SpriteRenderer>().color = new Color(75f/255f, 0, 130f/255f);
-                villager.name = "Warlock " + warlocksSpawned + 1;
-                warlocksSpawned++;
-                break;
-
-            case VillagerClass.Priest:
-
-                villager.AddComponent<Priest>();
-                villager.GetComponent<SpriteRenderer>().color = new Color(1, 1, 224f / 255f);
-                villager.name = "Priest " + warlocksSpawned + 1;
-                priestSpawned++;
-                break;
-
-            case VillagerClass.Rogue:
-
-                villager.AddComponent<Rogue>();
-                villager.GetComponent<SpriteRenderer>().color = Color.red;
-                villager.name = "Rogue " + warlocksSpawned + 1;
-                roguesSpawned++;
-                break;
-        }
 
         remainingVillagers.Add(villager.GetComponent<Villager>());
     }

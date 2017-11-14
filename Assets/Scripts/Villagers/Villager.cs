@@ -63,7 +63,7 @@ public abstract class Villager : Character
 
     #region Protected Variables
 
-    protected new VillagerCharacter2D m_Villager;
+    protected VillagerCharacter2D m_Villager;
     protected Animator m_Animator;
 
     protected SpecialType specialType;
@@ -92,12 +92,24 @@ public abstract class Villager : Character
         deathEffect = GetComponentInChildren<ParticleSystem>();
         vTO = GetComponent<VillagerTimeObject>();
 
-        rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;
+        switch(attackType)
+        {
+            case AttackType.Ranged:
+
+                rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;
+
+                break;
+
+            case AttackType.Melee:
+
+                melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
+
+                break;
+        }
 
         //villagerState = VillagerState.Waiting;
 
         //TODO: FIX THIS TRASH
-        melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
@@ -192,7 +204,7 @@ public abstract class Villager : Character
                 //Wander/AI Code
                 if (Mathf.Abs(transform.localPosition.x - targetX) > .5f)
                 {
-                    xDir = Mathf.Clamp01(targetX - transform.localPosition.x);
+                    xDir = (int)Mathf.Clamp01(targetX - transform.localPosition.x);
                 }
                 else
                 {

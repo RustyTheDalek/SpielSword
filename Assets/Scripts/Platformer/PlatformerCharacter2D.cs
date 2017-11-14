@@ -21,9 +21,7 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     protected Animator m_Anim;            // Reference to the character's animator component.
     private Rigidbody2D m_Rigidbody2D;
-    private bool m_FacingRight = true;  // For determining which way the character is currently facing.
-
-    public float move = 26;
+    public bool m_FacingRight = true;  // For determining which way the character is currently facing.
 
     Collider2D[] colliders;
 
@@ -31,7 +29,7 @@ public class PlatformerCharacter2D : MonoBehaviour
     bool meleeAttack;
     bool rangedAttack;
     bool jump;
-    float xDir;
+    public int xDir =  0;
 
     private void Awake()
     {
@@ -49,16 +47,16 @@ public class PlatformerCharacter2D : MonoBehaviour
         {
             m_Grounded = false;
 
-            // The character is grounded if a circlecast to the groundcheck position hits anything designated as ground
-            // This can be done using layers instead but Sample Assets will not overwrite your project settings.
-            //colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-            //for (int i = 0; i < colliders.Length; i++)
-            //{
-            //    if (colliders[i].gameObject != gameObject)
-            //    {
-            m_Grounded = true;
-            //    }
-            //}
+            //The character is grounded if a circlecast to the groundcheck position hits anything designated as ground
+            //This can be done using layers instead but Sample Assets will not overwrite your project settings.
+            colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].gameObject != gameObject)
+                {
+                    m_Grounded = true;
+                }
+            }
 
             m_Anim.SetBool("Ground", m_Grounded);
 
@@ -71,11 +69,12 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     public virtual void Move(Hashtable animData)
     {
+
         dead = (bool)animData["Dead"];
         meleeAttack = (bool)animData["MeleeAttack"];
         rangedAttack = (bool)animData["RangedAttack"];
         jump = (bool)animData["Jump"];
-        xDir = (float)animData["Move"];
+        xDir = (int)animData["Move"];
 
         //If dead and not in dead state we want to trigger the death animation
         if (dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death") && 
@@ -101,6 +100,7 @@ public class PlatformerCharacter2D : MonoBehaviour
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl && !dead)
         {
+            //Debug.Log(name + "here");
             // Reduce the speed if crouching by the crouchSpeed multiplier
             //animData.floatas["Move"] = (!m_Grounded ? (float)animData.floatas["Move"] * .8f : animData.floatas["Move"]);
 
@@ -113,13 +113,15 @@ public class PlatformerCharacter2D : MonoBehaviour
             // If the input is moving the player right and the player is facing left...
             if (xDir > 0 && !m_FacingRight)
             {
+                Debug.Log(name + "Facing Right");
                 // ... flip the player.
                 Flip();
             }
-                // Otherwise if the input is moving the player left and the player is facing right...
+            // Otherwise if the input is moving the player left and the player is facing right...
             else if (xDir < 0 && m_FacingRight)
             {
                 // ... flip the player.
+                Debug.Log(name + "Face Left");
                 Flip();
             }
         }

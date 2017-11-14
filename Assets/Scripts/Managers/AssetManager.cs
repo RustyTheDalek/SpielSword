@@ -71,23 +71,33 @@ public static class AssetManager
         }
     }
 
-    static GameObject _Villager;
+    static Dictionary<string, GameObject> _Villagers;
 
-    public static GameObject Villager
+    public static Dictionary<string, GameObject> Villagers
     {
         get
         {
-            if (_Villager == null)
+            if (_Villagers == null)
             {
-                _Villager = new GameObject();
+                _Villagers = new Dictionary<string, GameObject>();
 
-                obj = Resources.Load("Spiel");
+                objs = Resources.LoadAll("Villagers");
 
-                _Villager = (GameObject)obj;
-                _Villager.CreatePool(30);
+                GameObject gObj;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as GameObject != null)
+                    {
+                        gObj = (GameObject)obj;
+
+                        _Villagers.Add(gObj.name, gObj);
+                        _Villagers[gObj.name].CreatePool(50);
+                    }
+                }
             }
 
-            return _Villager;
+            return _Villagers;
         }
     }
 
@@ -220,32 +230,6 @@ public static class AssetManager
             }
 
             return _WarlockImp;
-        }
-    }
-
-    static Dictionary<string, RuntimeAnimatorController> _VillagerAnimators;
-
-    public static Dictionary<string, RuntimeAnimatorController> VillagerAnimators
-    {
-        get
-        {
-            if (_VillagerAnimators == null)
-            {
-                _VillagerAnimators = new Dictionary<string, RuntimeAnimatorController>();
-
-                objs = Resources.LoadAll<RuntimeAnimatorController>("VAnimators");
-
-                RuntimeAnimatorController temp;
-
-                foreach (object obj in objs)
-                {
-                    temp = (RuntimeAnimatorController)obj;
-                    Debug.Log(temp.name);
-                    _VillagerAnimators.Add(temp.name, (RuntimeAnimatorController)obj);
-                }
-            }
-
-            return _VillagerAnimators;
         }
     }
 }

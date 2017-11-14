@@ -35,7 +35,7 @@ public class Head : MonoBehaviour {
     {
         //Debug.Log("Collision");
 
-        if (coll.transform.name == "Melee" && !Game.StageMetEarly)
+        if (coll.gameObject.layer == LayerMask.NameToLayer("Weapon") && !Game.StageMetEarly)
         {
             //Debug.Log("Attack Succesful");
             OnHit(coll.GetComponent<MeleeAttack>().Damage);

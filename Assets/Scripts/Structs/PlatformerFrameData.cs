@@ -4,7 +4,7 @@ using UnityEngine;
 
 public struct PlatformerFrameData
 {
-    public float move;
+    public int move;
 
     public bool jump,
                 meleeAttack,

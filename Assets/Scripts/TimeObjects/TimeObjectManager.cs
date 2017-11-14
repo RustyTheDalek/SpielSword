@@ -23,12 +23,12 @@ public class TimeObjectManager : MonoBehaviour
     void Start ()
     {
         //Retreive all relevant Time Objects
-        TimeObject[] tObjs = GetComponentsInChildren<TimeObject>();
+        //TimeObject[] tObjs = GetComponentsInChildren<TimeObject>();
 
-        foreach (TimeObject tObj in tObjs)
-        {
-            tObjects.Add(tObj);
-        }
+        //foreach (TimeObject tObj in tObjs)
+        //{
+        //    tObjects.Add(tObj);
+        //}
 
         //VillagerTimeObject[] vObjs = GetComponentsInChildren<VillagerTimeObject>();
 
@@ -85,6 +85,7 @@ public class TimeObjectManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
+            Debug.Log("Time Reversed");
             Game.timeState = TimeState.Backward;
             SoftReset();
         }
@@ -184,8 +185,7 @@ public class TimeObjectManager : MonoBehaviour
         }
 
         foreach (SpriteTimeObject spriteObject in spriteObjects)
-        {
-            Debug.Log(spriteObject.name);               
+        {           
             spriteObject.OnFinishReverseCatch();
         }
 

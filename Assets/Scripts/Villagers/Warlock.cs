@@ -33,18 +33,6 @@ public class Warlock : Villager
         teleport = teleportObj.GetComponent<ParticleSystem>();
     }
 
-    // Use this for initialization
-    public override void Start ()
-    {
-        RuntimeAnimatorController temp;
-        AssetManager.VillagerAnimators.TryGetValue("Warlock", out temp);
-        m_Animator.runtimeAnimatorController = temp;
-
-        base.Start();
-
-        attackType = AttackType.Ranged;
-    }
-
     // Update is called once per frame
     public override void Update()
     {

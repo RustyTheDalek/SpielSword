@@ -23,7 +23,7 @@ public class VillagerTimeObject : SpriteTimeObject
     #region Private Variables
 
     Villager villager;
-    VillagerAnimData vAnimData;
+    Hashtable animData;
 
     private VillagerFrameData tempFrame;
     private List<VillagerFrameData> vFrames = new List<VillagerFrameData>();
@@ -46,6 +46,19 @@ public class VillagerTimeObject : SpriteTimeObject
             vhsEffect = gameObject.AddComponent<VHSEffect>();
         }
 
+        animData = new Hashtable
+        {
+            { "Move", 0 },
+            { "Dead", false },
+            { "MeleeAttack", false },
+            { "RangedAttack", false },
+            { "Jump", false },
+            { "PlayerSpecial", false },
+            { "CanSpecial", true},
+            { "PlayerSpecialIsTrigger", false},
+            { "Martyed", false},
+        };
+
         //tObjectState = TimeObjectState.Void;
     }
 
@@ -55,10 +68,9 @@ public class VillagerTimeObject : SpriteTimeObject
 
         if (Tools.WithinRange(currentFrame, vFrames))
         {
-            vAnimData = new VillagerAnimData();
 
             //villager.health = vFrames[currentFrame].health;
-            vAnimData.move = vFrames[currentFrame].move;
+            animData["Move"] = vFrames[currentFrame].move;
 
             switch (Game.timeState)
             {
@@ -70,24 +82,24 @@ public class VillagerTimeObject : SpriteTimeObject
                     {
                         case AttackType.Melee:
                             //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
-                            m_Villager.CanAttack(vAnimData.meleeAttack);
-                            vAnimData.meleeAttack = vFrames[currentFrame].meleeAttack;
+                            m_Villager.CanAttack((bool)animData["MeleeAttack"]);
+                            animData["MeleeAttack"] = vFrames[currentFrame].meleeAttack;
                             break;
 
                         case AttackType.Ranged:
                             //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
-                            m_Villager.CanAttack(vAnimData.rangedAttack);
-                            vAnimData.rangedAttack = vFrames[currentFrame].rangedAttack;
+                            m_Villager.CanAttack((bool)animData["RangedAttack"]);
+                            animData["RangedAttack"] = vFrames[currentFrame].rangedAttack;
                             break;
                     }
 
-                    vAnimData.playerSpecial = vFrames[currentFrame].special;
-                    vAnimData.canSpecial = vFrames[currentFrame].canSpecial;
-                    vAnimData.dead = vFrames[currentFrame].dead;
-                    vAnimData.martyed = vFrames[currentFrame].marty;
-                    transform.localScale = vFrames[currentFrame].scale;
+                    animData["PlayerSpecial"] = vFrames[currentFrame].special;
+                    animData["CanSpecial"] = vFrames[currentFrame].canSpecial;
+                    animData["Dead"] = vFrames[currentFrame].dead;
+                    animData["Martyed"] = vFrames[currentFrame].marty;
+                    //animData["LocalScale"] = vFrames[currentFrame].scale;
 
-                    m_Villager.Move(vAnimData);
+                    m_Villager.Move(animData);
 
                     break;
 
@@ -163,14 +175,13 @@ public class VillagerTimeObject : SpriteTimeObject
 
     protected override void OnFinishPlayback()
     {
-        vAnimData = new VillagerAnimData()
-        {
-            dead = deathOrMarty,
-            martyed = !deathOrMarty,
-            move = 0,
-        };
+        Debug.Log("Villager Finished");
 
-        m_Villager.Move(vAnimData);
+        animData["Dead"] = deathOrMarty;
+        animData["Martyed"] = !deathOrMarty;
+        animData["Move"] = 0;
+
+        m_Villager.Move(animData);
     }
 
     protected override void OnFinishReverse()

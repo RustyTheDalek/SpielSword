@@ -17,7 +17,7 @@ public class Character : MonoBehaviour {
     /// None =  0
     /// Right=  1
     /// </summary>
-    public float xDir;
+    public int xDir;
 
     public bool Alive
     {
@@ -56,7 +56,7 @@ public class Character : MonoBehaviour {
     {
         animData = new Hashtable
         {
-            { "Move", 0f },
+            { "Move", 0 },
             { "Dead", false },
             { "MeleeAttack", false },
             { "RangedAttack", false },

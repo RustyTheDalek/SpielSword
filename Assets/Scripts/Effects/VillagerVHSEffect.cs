@@ -11,8 +11,6 @@ public class VillagerVHSEffect : VHSEffect {
     public override void Start()
     {
         base.Start();
-
-        //hatVHS = GetComponentInChildren<SpriteRenderer>();
     }
 
     public override void UpdateVHS(bool vhs)

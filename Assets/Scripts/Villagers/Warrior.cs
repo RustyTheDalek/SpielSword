@@ -29,17 +29,6 @@ public class Warrior : Villager
         specialType = SpecialType.Hold;
     }
 
-    // Use this for initialization
-    public override void Start()
-    {
-        RuntimeAnimatorController temp;
-        AssetManager.VillagerAnimators.TryGetValue("Warlock", out temp);
-        m_Animator.runtimeAnimatorController = temp;
-
-        attackType = AttackType.Melee;
-        base.Start();
-    }
-
     public override void Update()
     {
         base.Update();

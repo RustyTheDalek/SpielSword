@@ -10,9 +10,6 @@ public class Rogue : Villager {
 	// Use this for initialization
 	public override void Start ()
     {
-        RuntimeAnimatorController temp;
-        AssetManager.VillagerAnimators.TryGetValue("Warlock", out temp);
-        m_Animator.runtimeAnimatorController = temp;
 
         //Need to set Rogue animator here
         base.Start();
