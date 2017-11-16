@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Class for controller Villager
+/// Class for controlling Villager
 /// </summary>
 [RequireComponent(typeof(VillagerCharacter2D))]
 public abstract class Villager : Character
