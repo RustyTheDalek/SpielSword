@@ -13,4 +13,12 @@ public class MeleeAttack : MonoBehaviour
             return _Damage * damageMult;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name == "Head")
+        {
+            collision.GetComponent<Head>().OnHit(Damage);
+        }
+    }
 }

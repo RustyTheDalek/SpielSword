@@ -35,15 +35,15 @@ public class Head : MonoBehaviour {
     {
         //Debug.Log("Collision");
 
-        if (coll.gameObject.layer == LayerMask.NameToLayer("Weapon") && !Game.StageMetEarly)
-        {
-            //Debug.Log("Attack Succesful");
-            OnHit(coll.GetComponent<MeleeAttack>().Damage);
-        }
-        else
-        {
-            //Debug.Log("Collision with" + coll.name);
-        }
+        //if (coll.gameObject.layer == LayerMask.NameToLayer("Weapon") && !Game.StageMetEarly)
+        //{
+        //    //Debug.Log("Attack Succesful");
+        //    OnHit(coll.GetComponent<MeleeAttack>().Damage);
+        //}
+        //else
+        //{
+        //    //Debug.Log("Collision with" + coll.name);
+        //}
     }
 
     void OnCollisionEnter2D(Collision2D coll)

@@ -70,8 +70,8 @@ public class VillagerManager : MonoBehaviour {
 
             spawnOffset += new Vector3(-1, 0, 0);
 
-            //classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            classToSpawn = VillagerClass.Spielsword;
+            classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
+            //classToSpawn = VillagerClass.Berserker;
 
             GameObject temp = AssetManager.Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
