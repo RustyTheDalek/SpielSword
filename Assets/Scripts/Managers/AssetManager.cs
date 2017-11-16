@@ -131,23 +131,33 @@ public static class AssetManager
         }
     }
 
-    static GameObject _Ward;
+    static Dictionary<string, GameObject> _Wards;
 
-    public static GameObject Ward
+    public static Dictionary<string, GameObject> Wards
     {
         get
         {
-            if (_Ward == null)
+            if (_Wards == null)
             {
-                _Ward = new GameObject();
+                _Wards = new Dictionary<string, GameObject>();
 
-                obj = Resources.Load("Ward");
+                objs = Resources.LoadAll("Wards");
 
-                _Ward = (GameObject)obj;
-                _Ward.CreatePool(25);
+                GameObject gObj;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as GameObject != null)
+                    {
+                        gObj = (GameObject)obj;
+
+                        _Wards.Add(gObj.name, gObj);
+                        _Wards[gObj.name].CreatePool(50);
+                    }
+                }
             }
 
-            return _Ward;
+            return _Wards;
         }
     }
 

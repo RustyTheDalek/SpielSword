@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Warlock : Villager
+public class Warlock : WardVillager
 {
     #region Public Variables
 
-    public GameObject currentWard;
+    //public GameObject currentWard;
 
-    public bool wardActive;
+    //public bool wardActive;
 
     #endregion
 
@@ -27,49 +27,24 @@ public class Warlock : Villager
         base.Awake();
 
         specialType = SpecialType.Press;
-        animData["PlayerSpecialIsTrigger"] = true;
 
         teleportObj = Instantiate(Resources.Load("Particles/TeleportFX") as GameObject, transform, false);
         teleport = teleportObj.GetComponent<ParticleSystem>();
+
+        wardName = "WarlockWard";
     }
 
-    // Update is called once per frame
-    public override void Update()
-    {
-        base.Update();
-    }
 
-    public override void OnSpecial(bool _PlayerSpecial)
+    protected override void OnWardActive(bool _PlayerSpecial)
     {
-        if (!wardActive)
+        //TODO: Finalise functionality
+        //If the Player presses the button once the Ward is active do the teleport
+        //In future maybe destroyd current copy?
+        if (_PlayerSpecial)
         {
-            animData["PlayerSpecial"] = _PlayerSpecial;
-        }
-        else
-        {
-            //TODO: Finalise functionality
-            //If the Player presses the button once the Ward is active do the teleport
-            //In future maybe destroyd current copy?
-            if (_PlayerSpecial)
-            {
-                Debug.Log("Teleporting");
-                transform.position = currentWard.transform.position;
-                teleport.Play();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Called by the Animator to spawn the ward at the correct time
-    /// </summary>
-    public void SpawnWard()
-    {
-        if (villagerState == VillagerState.PresentVillager)
-        {
-            currentWard = AssetManager.Ward.Spawn(transform.position);
-
-            wardActive = true;
-            animData["CanSpecial"] = false;
+            Debug.Log("Teleporting");
+            transform.position = currentWard.transform.position;
+            teleport.Play();
         }
     }
 
