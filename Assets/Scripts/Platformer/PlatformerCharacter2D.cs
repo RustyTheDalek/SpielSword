@@ -113,7 +113,7 @@ public class PlatformerCharacter2D : MonoBehaviour
             // If the input is moving the player right and the player is facing left...
             if (xDir > 0 && !m_FacingRight)
             {
-                Debug.Log(name + "Facing Right");
+                //Debug.Log(name + "Facing Right");
                 // ... flip the player.
                 Flip();
             }
@@ -121,7 +121,7 @@ public class PlatformerCharacter2D : MonoBehaviour
             else if (xDir < 0 && m_FacingRight)
             {
                 // ... flip the player.
-                Debug.Log(name + "Face Left");
+                //Debug.Log(name + "Face Left");
                 Flip();
             }
         }
