@@ -242,4 +242,44 @@ public static class AssetManager
             return _WarlockImp;
         }
     }
+
+    static GameObject _Hook;
+
+    public static GameObject Hook
+    {
+        get
+        {
+            if (_Hook == null)
+            {
+                _Hook = new GameObject();
+
+                obj = Resources.Load("Hook");
+
+                _Hook = (GameObject)obj;
+                _Hook.CreatePool(10);
+            }
+
+            return _Hook;
+        }
+    }
+
+    static GameObject _RopeNode;
+
+    public static GameObject RopeNode
+    {
+        get
+        {
+            if (_RopeNode == null)
+            {
+                _RopeNode = new GameObject();
+
+                obj = Resources.Load("RopeNode");
+
+                _RopeNode = (GameObject)obj;
+                _RopeNode.CreatePool(10);
+            }
+
+            return _RopeNode;
+        }
+    }
 }
