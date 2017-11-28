@@ -2,8 +2,8 @@
 
 public struct VillagerFrameData
 {
-    public float move,
-                 health;
+    public int move;
+    public float health;
 
     public bool meleeAttack,
                 rangedAttack,
@@ -13,7 +13,9 @@ public struct VillagerFrameData
                 canSpecial,
                 specialEnd,
                 dead,
-                deathEnd;
+                deathEnd,
+                marty,
+                unmarty;
 
     public string spriteName;
 

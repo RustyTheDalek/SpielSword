@@ -5,28 +5,37 @@ using UnityEngine;
 
 public class VillagerTimeObject : SpriteTimeObject
 {
-    Villager villager;
-
-    protected PlatformerCharacter2D m_Character;
-
-    VillagerAnimData vAnimData;
+    #region Public Variables
 
     public bool attackStart,
-                deathFinish,
-                deathRecorded;
+                endFinish,
+                endRecorded,
+                deathOrMarty = true; //Whether te villager is going to die or fade from existence
 
-    SpriteRenderer _SRenderer;
+    #endregion
+
+    #region Protected Variables
+
+    protected VillagerCharacter2D m_Villager;
+
+    #endregion
+
+    #region Private Variables
+
+    Villager villager;
+    Hashtable animData;
 
     private VillagerFrameData tempFrame;
     private List<VillagerFrameData> vFrames = new List<VillagerFrameData>();
+
+    #endregion
 
     protected override void Start()
     {
         base.Start();
 
         villager = GetComponent<Villager>();
-        m_Character = GetComponent<PlatformerCharacter2D>();
-        _SRenderer = GetComponent<SpriteRenderer>();
+        m_Villager = GetComponent<VillagerCharacter2D>();
 
         if (GetComponent<VHSEffect>())
         {
@@ -37,6 +46,19 @@ public class VillagerTimeObject : SpriteTimeObject
             vhsEffect = gameObject.AddComponent<VHSEffect>();
         }
 
+        animData = new Hashtable
+        {
+            { "Move", 0 },
+            { "Dead", false },
+            { "MeleeAttack", false },
+            { "RangedAttack", false },
+            { "Jump", false },
+            { "PlayerSpecial", false },
+            { "CanSpecial", true},
+            { "PlayerSpecialIsTrigger", false},
+            { "Martyed", false},
+        };
+
         //tObjectState = TimeObjectState.Void;
     }
 
@@ -46,10 +68,9 @@ public class VillagerTimeObject : SpriteTimeObject
 
         if (Tools.WithinRange(currentFrame, vFrames))
         {
-            vAnimData = new VillagerAnimData();
 
-            villager.health = vFrames[currentFrame].health;
-            vAnimData.move = vFrames[currentFrame].move;
+            //villager.health = vFrames[currentFrame].health;
+            animData["Move"] = vFrames[currentFrame].move;
 
             switch (Game.timeState)
             {
@@ -57,33 +78,34 @@ public class VillagerTimeObject : SpriteTimeObject
 
                     //villager.animData.jump = actions[Game.t].jump;
 
-                    switch (villager.villagerAttackType)
+                    switch (villager.attackType)
                     {
                         case AttackType.Melee:
                             //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
-                            villager.CanAttack(vAnimData.meleeAttack);
-                            vAnimData.meleeAttack = vFrames[currentFrame].meleeAttack;
+                            m_Villager.CanAttack((bool)animData["MeleeAttack"]);
+                            animData["MeleeAttack"] = vFrames[currentFrame].meleeAttack;
                             break;
 
                         case AttackType.Ranged:
                             //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
-                            villager.CanAttack(vAnimData.rangedAttack);
-                            vAnimData.rangedAttack = vFrames[currentFrame].rangedAttack;
+                            m_Villager.CanAttack((bool)animData["RangedAttack"]);
+                            animData["RangedAttack"] = vFrames[currentFrame].rangedAttack;
                             break;
                     }
 
-                    vAnimData.playerSpecial = vFrames[currentFrame].special;
-                    vAnimData.canSpecial = vFrames[currentFrame].canSpecial;
-                    vAnimData.dead = vFrames[currentFrame].dead;
-                    transform.localScale = vFrames[currentFrame].scale;
+                    animData["PlayerSpecial"] = vFrames[currentFrame].special;
+                    animData["CanSpecial"] = vFrames[currentFrame].canSpecial;
+                    animData["Dead"] = vFrames[currentFrame].dead;
+                    animData["Martyed"] = vFrames[currentFrame].marty;
+                    //animData["LocalScale"] = vFrames[currentFrame].scale;
 
-                    m_Character.Move(vAnimData);
+                    m_Villager.Move(animData);
 
                     break;
 
                 case TimeState.Backward:
 
-                    _SRenderer.sprite = AssetManager.VillagerSprites[vFrames[currentFrame].spriteName];
+                    m_Sprite.sprite = AssetManager.VillagerSprites[vFrames[currentFrame].spriteName];
                     villager.hat.localPosition = vFrames[currentFrame].hatPos;
                     transform.localScale = vFrames[currentFrame].scale;
 
@@ -99,14 +121,14 @@ public class VillagerTimeObject : SpriteTimeObject
         tempFrame = new VillagerFrameData()
         {
             move = villager.xDir,
-            health = villager.health,
+            //health = villager.health,
 
-            spriteName = _SRenderer.sprite.name,
+            spriteName = m_Sprite.sprite.name,
             hatPos = villager.hat.localPosition,
             scale = transform.localScale
         };
 
-        switch (villager.villagerAttackType)
+        switch (villager.attackType)
         {
             case AttackType.Melee:
                 //tempFrame.meleeAttack = villager.animData.meleeAttack;
@@ -118,29 +140,27 @@ public class VillagerTimeObject : SpriteTimeObject
                 tempFrame.rangedAttack = attackStart;
                 break;
         }
-        tempFrame.special = villager.animData.playerSpecial;
-        tempFrame.canSpecial = villager.animData.canSpecial;
+        tempFrame.special = (bool)villager.animData["PlayerSpecial"];
+        tempFrame.canSpecial = (bool)villager.animData["CanSpecial"];
         tempFrame.dead = !villager.Alive;
 
-        if (!deathRecorded && deathFinish)
+        if (!endRecorded && endFinish)
         {
-            tempFrame.deathEnd = deathFinish;
-            deathRecorded = true;
+            if (deathOrMarty)
+            {
+                tempFrame.deathEnd = endFinish;
+            }
+            else
+            {
+                tempFrame.marty = endFinish;
+            }
+            endRecorded = true;
         }
 
         vFrames.Add(tempFrame);
 
         attackStart = false;
-        deathFinish = false;
-    }
-
-    protected override void OnStartPlayback()
-    {
-        //Debug.Break();
-        //Vector3 theScale = transform.localScale;
-        //theScale.x *= -1;
-        //transform.localScale = theScale;
-        //transform.localScale = Vector3.one;
+        endFinish = false;
     }
 
     /// <summary>
@@ -155,27 +175,24 @@ public class VillagerTimeObject : SpriteTimeObject
 
     protected override void OnFinishPlayback()
     {
-        vAnimData = new VillagerAnimData()
-        {
-            dead = true,
-            move = 0,
-        };
+        Debug.Log("Villager Finished");
 
-        m_Character.Move(vAnimData);
+        animData["Dead"] = deathOrMarty;
+        animData["Martyed"] = !deathOrMarty;
+        animData["Move"] = 0;
+
+        m_Villager.Move(animData);
     }
 
     protected override void OnFinishReverse()
     {
         base.OnFinishReverse();
 
-        _SRenderer.material = AssetManager.SpriteMaterials[0];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[0];
-        villager.hat.GetComponent<VHSEffect>().enabled = false;
-        vhsEffect.enabled = false;
 
-        _SRenderer.color = new Color(   _SRenderer.color.r,
-                                        _SRenderer.color.g,
-                                        _SRenderer.color.b,
+        m_Sprite.color = new Color(m_Sprite.color.r,
+                                        m_Sprite.color.g,
+                                        m_Sprite.color.b,
                                         .5f);
 
         villager.hat.GetComponent<SpriteRenderer>().color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
@@ -187,10 +204,23 @@ public class VillagerTimeObject : SpriteTimeObject
     protected override void OnStartReverse()
     {
         base.OnStartReverse();
-
-        _SRenderer.material = AssetManager.SpriteMaterials[1];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
-        villager.hat.GetComponent<VHSEffect>().enabled = true;
-        vhsEffect.enabled = true;
+    }
+
+    public void SetMartyPoint()
+    {
+        deathOrMarty = false;
+        tempFrame = vFrames[currentFrame];
+        tempFrame.marty = true;
+        vFrames[currentFrame] = tempFrame;
+
+        finishFrame = bFrames[currentFrame].timeStamp;
+
+        for (int i = currentFrame+1; i < bFrames.Count; i++)
+        {
+            bFrames.RemoveAt(i);
+            sFrames.RemoveAt(i);
+            vFrames.RemoveAt(i);
+        }
     }
 }

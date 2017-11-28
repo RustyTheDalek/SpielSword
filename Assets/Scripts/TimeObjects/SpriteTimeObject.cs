@@ -10,10 +10,8 @@ public class SpriteTimeObject : TimeObject
     protected SpriteFrameData tempSFrame;
     protected List<SpriteFrameData> sFrames = new List<SpriteFrameData>();
 
-    protected override void Start()
+    protected void Awake()
     {
-        base.Start();
-
         m_Sprite = GetComponent<SpriteRenderer>();
 
         if (GetComponent<VHSEffect>())
@@ -24,8 +22,25 @@ public class SpriteTimeObject : TimeObject
         {
             vhsEffect = gameObject.AddComponent<VHSEffect>();
         }
+    }
+
+    protected override void Start()
+    {
+        base.Start();
 
         TimeObjectManager.spriteObjects.Add(this);
+    }
+
+    //This constructor is used when we still want the base Start function but the child 
+    //of this object has a different list that's managed by TimeObjectManager
+    protected void Start(bool newList)
+    {
+        base.Start();
+
+        if (!newList)
+        {
+            TimeObjectManager.spriteObjects.Add(this);
+        }
     }
 
     protected override void PlayFrame()
@@ -54,6 +69,7 @@ public class SpriteTimeObject : TimeObject
     {
         base.OnFinishReverse();
 
+        currentFrame = 0;
         m_Sprite.material = AssetManager.SpriteMaterials[0];
         vhsEffect.enabled = false;
     }

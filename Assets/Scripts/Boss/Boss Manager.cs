@@ -1,34 +1,77 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System;
 
-public abstract class BossManager : MonoBehaviour {
+public abstract class BossManager : MonoBehaviour
+{
+    public Head head;
 
+    public const float MAXHEALTH = 400;
+    public static float health = MAXHEALTH;
 
-    public int stage = 0;
+    public List<List<int>> stageAttacks = new List<List<int>>();
 
-	public Head head;
+    public List<int> CurrentStageAtttacks
+    {
+        get
+        {
+            return stageAttacks[(int)bossStage];
+        }
+    }
 
-    /// <summary>
-    /// Whether the Boss is currently attackble by the Player 
-    /// </summary>
-    public bool skippingStage;
-
-    public static float health = 100;
-
-    public List<int> attackList, 
-                        attackList2, 
-                        attackList3, 
-	                    attackList4, 
-                        attackList5 = new List<int>();
-
-	public int attackCountStage;
+    public int attackCountStage;
     // Values stored in these ints are used to track the progress in the attack list
     // number system determins the stage they are in charge of
-    public int currentCount, currentCount2, currentCount3, currentCount4, currentCount5;
-	// Makes sure the list isn't run more then once per stage
-	public bool playList, playList2, playList3, playList4, playList5;
+    //Stores how many attacks are in each stage
+    List<int> numberOAttacks = new List<int>(5);
+
+    public int NumberOAttacks4Stage
+    {
+        get
+        {
+            return numberOAttacks[(int)bossStage];
+        }
+
+        set
+        {
+            numberOAttacks[(int)bossStage] = value;
+        }
+    }
+
+    /// <summary>
+    /// Helps track when a stage is entered for accurate stage skipping checks
+    /// </summary>
+    public List<int> timeEnteredStage = new List<int>(5);
+
+    public int TimeEnteredCurrentStage
+    {
+        get
+        {
+            return timeEnteredStage[(int)bossStage];
+        }
+
+        set
+        {
+            timeEnteredStage[(int)bossStage] = value;
+        }
+    }
+
+    public List<bool> stageReplaying;
+
+    public bool CurrentStageReplay
+    {
+        get
+        {
+            return stageReplaying[(int)bossStage];
+        }
+
+        set
+        {
+            stageReplaying[(int)bossStage] = value;
+        }
+}
 
     public AnimationCurve bossSpeedUp;
 
@@ -44,11 +87,11 @@ public abstract class BossManager : MonoBehaviour {
 
     public BossHealthBar bossHealthBar;
 
-    protected List<int>     stageOneAttacks = new List<int>(),
-                            stageTwoAttacks = new List<int>(),
-                            stageThreeAttacks = new List<int>(),
-                            stageFourAttacks = new List<int>(),
-                            stageFiveAttacks = new List<int>();
+    protected List<int>     stageOneAttackSequence = new List<int>(),
+                            stageTwoAttackSequence = new List<int>(),
+                            stageThreeAttackSequence = new List<int>(),
+                            stageFourAttackSequence = new List<int>(),
+                            stageFiveAttackSequence = new List<int>();
 
     #region Variables for retracing the Boss' Actions
     //List of Boss parts that are tracked for rewind
@@ -56,6 +99,8 @@ public abstract class BossManager : MonoBehaviour {
 
     public List<float> trackedHealth = new List<float>();
     #endregion
+
+    public BossStage bossStage = BossStage.None;
 
     /// <summary>
     /// Uses Normalised time from Boss animations to smooth the speed up for stage skipping
@@ -68,46 +113,173 @@ public abstract class BossManager : MonoBehaviour {
         }
     }
 
+    public abstract bool Attacking { get; } 
+
     public virtual void Start ()
 	{
-		//Sets the counter for the list to zero
-		currentCount = 0;
-		currentCount2 = 0;
-		currentCount3 = 0;
-		currentCount4 = 0;
-		currentCount5 = 0;
-		// sets the bool to true so they run first time
-		playList = true;
-		playList2 = true;
-		playList3 = true;
-		playList4 = true;
-		playList5 = true;
+        //Sets the counter for the list to zero
+        for(int i = 0; i < 5; i++)
+        {
+            //Debug.Log(i);
+            numberOAttacks.Add(0);
+            stageAttacks.Add(new List<int>());
+            stageReplaying.Add(true);
+            timeEnteredStage.Add(0);
+        }
+
+        for (int i = 0; i < stageAttacks.Count; i++)
+        {
+            stageAttacks[i] = new List<int>();
+        }
 
         //Get All objects that can be tracked
         //Currently assumes anything with an Animator needs to be tracked
         Animator[] objs = GetComponentsInChildren<Animator>();
 
         bossAnims.AddRange(objs);
+
+        OnStageOne();
+
+        switch (bossStage)
+        {
+            case BossStage.Two:
+
+                OnStageTwo();
+                health = MAXHEALTH * .79f;
+                break;
+
+            case BossStage.Three:
+
+                OnStageThree();
+                health = MAXHEALTH * .59f;
+                break;
+
+            case BossStage.Four:
+
+                OnStageFour();
+                health = MAXHEALTH * .39f;
+                break;
+
+            case BossStage.Five:
+
+                OnStageFive();
+                health = MAXHEALTH * .19f;
+                break;
+        }
     }
 
     #region Stage skipping ideas
 
     //Idea 1 : Boss Fast forwards between stages when skipping attacks aren't
+    public void StartFastForward()
+    {
+        bossHealthBar.SetHealthBar(HealthBarState.Invincible);
+
+        SetVHSEffect(true);
+    }
+
     public void FastforwardSkip()
     {
         //Here we're trying to get a percentage of how far into the Stage the boss is
         //We use the attack list as a rudimentry method then use the smoothing value 
         //to have it interoplate between the values
-        float value = (float)((float)(currentCount + Smoothing) / (float)attackList.Count);
-        Debug.Log(value + " : " + Smoothing + " : " + bossSpeedUp.Evaluate(value));
+        float value = (float)((float)(numberOAttacks[(int)bossStage] + Smoothing) / 
+            (float)stageAttacks[(int)bossStage].Count);
+        //Debug.Log(value + " : " + Smoothing + " : " + bossSpeedUp.Evaluate(value));
         Game.PastTimeScale = bossSpeedUp.Evaluate(value);
+    }
+
+    public void StopFastForward()
+    {
+        bossHealthBar.SetHealthBar(HealthBarState.Standard);
+
+        SetVHSEffect(false);
+    }
+
+    //Idea 2 : Skip to next Stage
+    public void NextStage()
+    {
+        bossStage += 1;
+    }
+
+    public void TrimStage()
+    {
+        for (int i = NumberOAttacks4Stage; i < CurrentStageAtttacks.Count; i++)
+        {
+            CurrentStageAtttacks.RemoveAt(i);
+        }
     }
 
     #endregion
 
+    /// <summary>
+    /// This helps to see if stage was entered early by seeing if the boss still has 
+    /// attacks to perform in this stage
+    /// </summary>
+    /// <returns></returns>
+    bool EarlyStageCheck()
+    {
+        //If there isn't a time for when the stage was entered then there's no need to check
+        if (TimeEnteredCurrentStage != 0 && Game.t < TimeEnteredCurrentStage)
+        {
+            Game.StageMetEarly = true;
+            //We want to overwrite the Time entered current stage 
+            TimeEnteredCurrentStage = Game.t;
+        }
+        else
+        {
+            Game.StageMetEarly = false;
+        }
+
+        return Game.StageMetEarly;
+    }
+
+    void StageListings(Action<int> stageAttacks)
+    {
+        //pulls up the next attack in sequence
+        for (int i = NumberOAttacks4Stage; i <= CurrentStageAtttacks.Count; i++)
+        {
+            if (Attacking)
+            {
+                // makes sure a attack isn't already playing befor continuing
+                return;
+            }
+            int attack = CurrentStageAtttacks[i];
+            stageAttacks(attack);
+            // remembers the place in the list if exited out by above
+            NumberOAttacks4Stage++;
+        }
+    }
+
+    void StageAttackLogic(Action<int> stageAttacks)
+    {
+        // checks to make sure an attack is possible
+        if (!Attacking)
+        {
+            // Checks to make sure the list hasn't been run and that there is a list
+            if (CurrentStageAtttacks.Count > NumberOAttacks4Stage && CurrentStageReplay)
+            {
+                StageListings(stageAttacks);
+            }
+            else
+            {
+                //Prevents access to the list once at this part
+                CurrentStageReplay = false;
+                // Rolls a random number based on no of attacks
+                int newAttack = UnityEngine.Random.Range(0, attackCountStage);
+                // Adds attack to list
+                CurrentStageAtttacks.Add(newAttack);
+                NumberOAttacks4Stage = CurrentStageAtttacks.Count;
+                // Runs the attack assosiated with that number
+                stageAttacks(newAttack);
+            }
+        }
+    }
+
     // Update is called once per frame
     public virtual void Update()
     {
+        //attackList = stageAttacks[0];
         #region Debug options for testing
         if (Input.GetKeyDown(KeyCode.K))
         {
@@ -116,23 +288,23 @@ public abstract class BossManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            health = 100;
+            health = MAXHEALTH;
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            health = 70;
+            health = MAXHEALTH * .7f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            health = 50;
+            health = MAXHEALTH * .5f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            health = 30;
+            health = MAXHEALTH * .3f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            health = 10;
+            health = MAXHEALTH * .1f;
         }
         if (Input.GetKeyDown(KeyCode.Alpha7))
         {
@@ -144,69 +316,65 @@ public abstract class BossManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
-                #region Stage select
-                if (health > 80)
+                switch (bossStage)
                 {
-                    StageOne();
+                    case BossStage.One:
+
+                        StageAttackLogic(StageOneAttacks);
+
+                        if (health < MAXHEALTH * .8f && !EarlyStageCheck())
+                        {
+                            TimeEnteredCurrentStage = Game.t;
+                            bossStage = BossStage.Two;
+                            OnStageTwo();
+                        }
+                        break;
+
+                    case BossStage.Two:
+
+                        StageAttackLogic(StageTwoAttacks);
+
+                        if (health < MAXHEALTH * .6f && !EarlyStageCheck())
+                        {
+                            TimeEnteredCurrentStage = Game.t;
+                            bossStage = BossStage.Three;
+                            OnStageThree();
+                        }
+
+                        break;
+
+                    case BossStage.Three:
+
+                        StageAttackLogic(StageThreeAttacks);
+
+                        if (health < MAXHEALTH * .4f && !EarlyStageCheck())
+                        {
+                            TimeEnteredCurrentStage = Game.t;
+                            bossStage = BossStage.Four;
+                            OnStageFour();
+                        }
+
+                        break;
+
+                    case BossStage.Four:
+
+                        StageAttackLogic(StageFourAttacks);
+
+                        if (health < MAXHEALTH * .2f && !EarlyStageCheck())
+                        {
+                            TimeEnteredCurrentStage = Game.t;
+                            bossStage = BossStage.Five;
+                            OnStageFive();
+                        }
+
+                        break;
+
+                    case BossStage.Five:
+
+                        StageAttackLogic(StageFiveAttacks);
+
+                        break;
                 }
-                else if (health < 80 && health > 60)
-                {
-                    if (attackList.Count != currentCount)
-                    {
-                        StageOne();
-                        skippingStage = true;
-                    }
-                    else
-                    {
-                        //Game.PastTimeScale = 1;
-                        skippingStage = false;
-                        Game.PastTimeScale = 1;
-                        StageTwo();
-                    }
-                }
-                else if (health < 60 && health > 40)
-                {
-                    if (attackList2.Count != currentCount2)
-                    {
-                        StageTwo();
-                        skippingStage = true;
-                    }
-                    else
-                    {
-                        skippingStage = false;
-                        Game.PastTimeScale = 1;
-                        StageThree();
-                    }
-                }
-                else if (health < 40 && health > 20)
-                {
-                    if (attackList3.Count != currentCount3)
-                    {
-                        StageThree();
-                        skippingStage = true;
-                    }
-                    else
-                    {
-                        skippingStage = false;
-                        Game.PastTimeScale = 1;
-                        StageFour();
-                    }
-                }
-                else if (health > 0 && health < 20)
-                {
-                    if (attackList4.Count != currentCount4)
-                    {
-                        StageFour();
-                        skippingStage = true;
-                    }
-                    else
-                    {
-                        skippingStage = false;
-                        Game.PastTimeScale = 1;
-                        StageFive();
-                    }
-                }
-                #endregion
 
                 if (Alive)
                 {
@@ -220,19 +388,6 @@ public abstract class BossManager : MonoBehaviour {
                     else
                     {
                         trackedHealth.Add(health);
-                    }
-
-                    if (!skippingStage)
-                    {
-                        bossHealthBar.SetHealthBar(HealthBarState.Standard);
-
-                        SetVHSEffect(false);
-                    }
-                    else
-                    {
-                        bossHealthBar.SetHealthBar(HealthBarState.Invincible);
-
-                        SetVHSEffect(true);
                     }
                 }
                 else//Death of boss
@@ -256,22 +411,23 @@ public abstract class BossManager : MonoBehaviour {
     {
         SetAnimators(true);
 
-        currentCount = 0;
-        currentCount2 = 0;
-        currentCount3 = 0;
-        currentCount4 = 0;
-        currentCount5 = 0;
+        bossStage = BossStage.One;
+        OnStageOne();
+
+        for (int i = 0; i < numberOAttacks.Count; i++)
+        {
+            numberOAttacks[i] = 0;
+        }
 
         // sets the bool to true so they run first time
-        playList = true;
-        playList2 = true;
-        playList3 = true;
-        playList4 = true;
-        playList5 = true;
+        for (int i = 0; i < stageReplaying.Count; i++)
+        {
+            stageReplaying[i] = true;
+        }
 
         Game.PastTimeScale = 1;
 
-        health = 100;
+        health = MAXHEALTH;
 
         //foreach (ObjectTracking obj in trackedBossObjs)
         //{
@@ -280,13 +436,20 @@ public abstract class BossManager : MonoBehaviour {
 
     }
 
-	public abstract void StageOne ();
-	public abstract void StageTwo ();
-	public abstract void StageThree ();
-	public abstract void StageFour ();
-	public abstract void StageFive ();
+    //What happens the first time a stage is entered
+    public abstract void OnStageOne();
+    public abstract void OnStageTwo();
+    public abstract void OnStageThree();
+    public abstract void OnStageFour();
+    public abstract void OnStageFive();
 
-	public abstract void SetBossParts ();
+    protected abstract void StageOneAttacks(int attack);
+    protected abstract void StageTwoAttacks(int attack);
+    protected abstract void StageThreeAttacks(int attack);
+    protected abstract void StageFourAttacks(int attack);
+    protected abstract void StageFiveAttacks(int attack);
+
+    public virtual void SetBossParts() { }
 
 	void Detach(GameObject target)
 	{
@@ -330,6 +493,21 @@ public abstract class BossManager : MonoBehaviour {
             int val = (enable == true) ? 1 : 0;
             part.material = AssetManager.SpriteMaterials[val];
             part.GetComponent<VHSEffect>().enabled = enable;
+        }
+    }
+
+    /// <summary>
+    /// Turns Boss animations parts into Triggers based on Boolean
+    /// </summary>
+    /// <param name="trigger"> Whether we want Colldiers to become triggers</param>
+    public void SetTriggers(bool trigger)
+    {
+        foreach (Animator bossAttack in bossAnims)
+        {
+            if (bossAttack.GetComponent<BossAttack>())
+            {
+                bossAttack.GetComponent<Collider2D>().isTrigger = trigger;
+            }
         }
     }
 }

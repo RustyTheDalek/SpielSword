@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Warlock : Villager
+public class Warlock : WardVillager
 {
     #region Public Variables
 
-    public GameObject currentWard;
+    //public GameObject currentWard;
 
-    public bool wardActive;
+    //public bool wardActive;
 
     #endregion
 
@@ -27,59 +27,24 @@ public class Warlock : Villager
         base.Awake();
 
         specialType = SpecialType.Press;
-        animData.playerSpecialIsTrigger = true;
 
         teleportObj = Instantiate(Resources.Load("Particles/TeleportFX") as GameObject, transform, false);
         teleport = teleportObj.GetComponent<ParticleSystem>();
+
+        wardName = "WarlockWard";
     }
 
-    // Use this for initialization
-    public override void Start ()
+
+    protected override void OnWardActive(bool _PlayerSpecial)
     {
-        m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[1];
-
-        base.Start();
-
-        villagerAttackType = AttackType.Ranged;
-    }
-
-    // Update is called once per frame
-    public override void Update()
-    {
-        base.Update();
-    }
-
-    public override void OnSpecial(bool _PlayerSpecial)
-    {
-        if (!wardActive)
+        //TODO: Finalise functionality
+        //If the Player presses the button once the Ward is active do the teleport
+        //In future maybe destroyd current copy?
+        if (_PlayerSpecial)
         {
-            animData.playerSpecial = _PlayerSpecial;
-        }
-        else
-        {
-            //TODO: Finalise functionality
-            //If the Player presses the button once the Ward is active do the teleport
-            //In future maybe destroyd current copy?
-            if (_PlayerSpecial)
-            {
-                Debug.Log("Teleporting");
-                transform.position = currentWard.transform.position;
-                teleport.Play();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Called by the Animator to spawn the ward at the correct time
-    /// </summary>
-    public void SpawnWard()
-    {
-        if (villagerState == VillagerState.PresentVillager)
-        {
-            currentWard = AssetManager.Ward.Spawn(transform.position);
-
-            wardActive = true;
-            animData.canSpecial = false;
+            Debug.Log("Teleporting");
+            transform.position = currentWard.transform.position;
+            teleport.Play();
         }
     }
 
@@ -89,12 +54,16 @@ public class Warlock : Villager
         {
             Debug.Log("Warlock Ranged Attack");
 
-            rangedAtk = AssetManager.WarlockImp.Spawn(rangedTrans.position);
+            rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
 
-            //float direction = rangedTrans.position.x - transform.position.x;
+            float direction = rangedTrans.position.x - transform.position.x;
 
-            /*rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
-                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);*/
+            rangedAtk.GetComponent<VillagerAttack>().lifeTime = .25f;
+            rangedAtk.GetComponent<VillagerAttack>().damage = 2;
+            rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
+                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
+
+            VillagerManager.attacks.Add(rangedAtk.GetComponent<SpawnableSpriteTimeObject>());
         }
     }
 }

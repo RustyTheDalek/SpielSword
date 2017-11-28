@@ -15,7 +15,7 @@ public class Warrior : Villager
     {
         get
         {
-            if (shieldStrength > 0 && animData.playerSpecial)
+            if (shieldStrength > 0 && (bool)animData["PlayerSpecial"])
                 return true;
             else
                 return false;
@@ -27,14 +27,6 @@ public class Warrior : Villager
         base.Awake();
 
         specialType = SpecialType.Hold;
-    }
-
-    // Use this for initialization
-    public override void Start()
-    {
-        //m_Animator.runtimeAnimatorController = VillagerManager.villagerAnimators[2];
-        villagerAttackType = AttackType.Melee;
-        base.Start();
     }
 
     public override void Update()
@@ -49,21 +41,21 @@ public class Warrior : Villager
                 //ability to special and renable when the shield is not in use
                 if (shieldStrength <= 0)
                 {
-                    animData.canSpecial = false;
+                    animData["CanSpecial"]= false;
                 }
                 else if (shieldStrength > 0)
                 {
-                    animData.canSpecial = true;
+                    animData["CanSpecial"] = true;
                 }
 
                 //When the player is trying to use the shield and the shield has 
                 //strength detract power  
-                if (animData.playerSpecial && shieldStrength > 0)
+                if ((bool)animData["PlayerSpecial"] && shieldStrength > 0)
                 {
                     shieldStrength -= Time.deltaTime;
                 }
                 //otherwise if the shield is not in use and needs charging charge it up
-                else if (!animData.playerSpecial && shieldStrength < 1)
+                else if (!(bool)animData["PlayerSpecial"] && shieldStrength < 1)
                 {
                     shieldStrength += Time.deltaTime;
                 }
@@ -74,11 +66,6 @@ public class Warrior : Villager
                 
                 break;
         }
-    }
-
-    public override void OnSpecial(bool playerSpecial)
-    {
-        animData.playerSpecial = playerSpecial;
     }
 
     public override void OnHit()

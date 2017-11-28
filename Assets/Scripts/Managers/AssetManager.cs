@@ -71,23 +71,33 @@ public static class AssetManager
         }
     }
 
-    static GameObject _Villager;
+    static Dictionary<string, GameObject> _Villagers;
 
-    public static GameObject Villager
+    public static Dictionary<string, GameObject> Villagers
     {
         get
         {
-            if (_Villager == null)
+            if (_Villagers == null)
             {
-                _Villager = new GameObject();
+                _Villagers = new Dictionary<string, GameObject>();
 
-                obj = Resources.Load("Spiel");
+                objs = Resources.LoadAll("Villagers");
 
-                _Villager = (GameObject)obj;
-                _Villager.CreatePool(30);
+                GameObject gObj;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as GameObject != null)
+                    {
+                        gObj = (GameObject)obj;
+
+                        _Villagers.Add(gObj.name, gObj);
+                        _Villagers[gObj.name].CreatePool(50);
+                    }
+                }
             }
 
-            return _Villager;
+            return _Villagers;
         }
     }
 
@@ -121,43 +131,73 @@ public static class AssetManager
         }
     }
 
-    static GameObject _Ward;
+    static Dictionary<string, GameObject> _Wards;
 
-    public static GameObject Ward
+    public static Dictionary<string, GameObject> Wards
     {
         get
         {
-            if (_Ward == null)
+            if (_Wards == null)
             {
-                _Ward = new GameObject();
+                _Wards = new Dictionary<string, GameObject>();
 
-                obj = Resources.Load("Ward");
+                objs = Resources.LoadAll("Wards");
 
-                _Ward = (GameObject)obj;
-                _Ward.CreatePool(25);
+                GameObject gObj;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as GameObject != null)
+                    {
+                        gObj = (GameObject)obj;
+
+                        _Wards.Add(gObj.name, gObj);
+                        _Wards[gObj.name].CreatePool(50);
+                    }
+                }
             }
 
-            return _Ward;
+            return _Wards;
         }
     }
 
-    static GameObject _Aura;
+    static GameObject _MageAura;
 
-    public static GameObject Aura
+    public static GameObject MageAura
     {
         get
         {
-            if (_Aura == null)
+            if (_MageAura == null)
             {
-                _Aura = new GameObject();
+                _MageAura = new GameObject();
 
                 obj = Resources.Load("MageAura");
 
-                _Aura = (GameObject)obj;
-                _Aura.CreatePool(25);
+                _MageAura = (GameObject)obj;
+                _MageAura.CreatePool(25);
             }
 
-            return _Aura;
+            return _MageAura;
+        }
+    }
+
+    static GameObject _PriestAura;
+
+    public static GameObject PriestAura
+    {
+        get
+        {
+            if (_PriestAura == null)
+            {
+                _PriestAura = new GameObject();
+
+                obj = Resources.Load("PriestAura");
+
+                _PriestAura = (GameObject)obj;
+                _PriestAura.CreatePool(25);
+            }
+
+            return _PriestAura;
         }
     }
 

@@ -1,39 +1,25 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Class for controller Villager
+/// Class for controlling Villager
 /// </summary>
-[RequireComponent(typeof(PlatformerCharacter2D))]
-public abstract class Villager : MonoBehaviour
+[RequireComponent(typeof(VillagerCharacter2D))]
+public abstract class Villager : Character
 {
     #region Public Variables
 
     public VillagerState villagerState = VillagerState.Waiting;
-    public AttackType villagerAttackType = AttackType.Melee;
-
-    public float xDir;
-
-    public float health = 1;
-
-    public Vector3 startingPos;
 
     //Target X position for Villager to aim for when they're waiting in queue
     public float targetX;
 
-    public VillagerAnimData animData;
+    //public VillagerAnimData vAnimData;
 
     //Whether the Villager is advancing in the queue
     public bool advancing;
-
-    public bool Alive
-    {
-        get
-        {
-            return health > 0;
-        }
-    }
 
     //Whether it's currently in control by the player
     public bool ActivePlayer
@@ -46,6 +32,7 @@ public abstract class Villager : MonoBehaviour
 
     public ParticleSystem deathEffect;
 
+    //TODO: bring this up a level when attacks for minions are sorted
     public CircleCollider2D melee;
 
     public CircleCollider2D[] PlayerCollisions;
@@ -54,6 +41,12 @@ public abstract class Villager : MonoBehaviour
 
     public VillagerTimeObject vTO;
 
+    /// <summary>
+    /// If a Villager is shielded they are unable to take damage from attacks
+    /// </summary>
+    public bool shielded = false;
+
+    public float damageMult = 1;
 
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
@@ -66,24 +59,15 @@ public abstract class Villager : MonoBehaviour
         }
     }
 
-    #region pastVillager variables
-
-    /// <summary>
-    /// Special time in which Villagers "Finish" Dying.
-    /// </summary>
-    public int reverseDeathTimeStamp = 0;
-
-    #endregion
-
     #endregion
 
     #region Protected Variables
 
-    protected PlatformerCharacter2D m_Character;
+    protected VillagerCharacter2D m_Villager;
     protected Animator m_Animator;
 
     protected SpecialType specialType;
-
+     
     /// <summary>
     /// Temporary GameObject for tracking Ranged attack
     /// </summary>
@@ -94,36 +78,62 @@ public abstract class Villager : MonoBehaviour
     /// </summary>
     protected Transform rangedTrans;
 
+    protected float rangedProjectileStrength = 25;
+
     #endregion
 
     #region Private Variables
-
-    float rangedProjectileStrength = 25;
-
-    bool m_Jump;
-
     #endregion
 
-    public virtual void Awake()
+    public override void Awake()
     {
         m_Animator = GetComponent<Animator>();
-        m_Character = GetComponent<PlatformerCharacter2D>();
+        m_Villager = GetComponent<VillagerCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         vTO = GetComponent<VillagerTimeObject>();
-        startingPos = transform.position;
 
-        rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;
+        switch(attackType)
+        {
+            case AttackType.Ranged:
+
+                rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;
+
+                break;
+
+            case AttackType.Melee:
+
+                melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
+
+                break;
+        }
 
         //villagerState = VillagerState.Waiting;
 
-        //TO-DO: FIX THIS TRASH
-        melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
+        //TODO: FIX THIS TRASH
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
-        animData.canSpecial = true;
-        animData.playerSpecialIsTrigger = false;
-        //villagerState = VillagerState.Waiting;
+        CreateHashtable();
+
+        animData.Add("PlayerSpecial", false);
+        animData.Add("CanSpecial", true);
+        animData.Add("PlayerSpecialIsTrigger", false);
+        animData.Add("Martyed", false);
+
+        //vAnimData = new VillagerAnimData()
+        //{
+        //    move = 0,
+
+        //    jump = false,
+        //    meleeAttack = false,
+        //    rangedAttack = false,
+        //    dead = false,
+        //    playerSpecial = false,
+        //    canSpecial = true,
+        //    playerSpecialIsTrigger = false,
+
+        //    martyed = false
+        //};
 
         hat = transform.Find("Hat");
 
@@ -137,9 +147,8 @@ public abstract class Villager : MonoBehaviour
         }
     }
 
-    public virtual void Update()
+    public override void Update()
     {
-        animData.dead = !Alive;
 
         switch(villagerState)
         {
@@ -150,16 +159,16 @@ public abstract class Villager : MonoBehaviour
                 xDir = ((Input.GetKey(KeyCode.D)) ?  1 : xDir);
                 xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
 
-                switch (villagerAttackType)
+                switch (attackType)
                 {
                     case AttackType.Melee:
-                        animData.meleeAttack = Input.GetKey(KeyCode.DownArrow);
-                        CanAttack(animData.meleeAttack);
+                        animData["MeleeAttack"] = Input.GetKey(KeyCode.DownArrow);
+                        m_Villager.CanAttack((bool)animData["MeleeAttack"]);
                         break;
 
                     case AttackType.Ranged:
-                        animData.rangedAttack = Input.GetKey(KeyCode.DownArrow);
-                        CanAttack(animData.rangedAttack);
+                        animData["RangedAttack"] = Input.GetKeyDown(KeyCode.DownArrow);
+                        m_Villager.CanAttack((bool)animData["RangedAttack"]);
                         break;    
                 }
 
@@ -195,7 +204,7 @@ public abstract class Villager : MonoBehaviour
                 //Wander/AI Code
                 if (Mathf.Abs(transform.localPosition.x - targetX) > .5f)
                 {
-                    xDir = Mathf.Clamp01(targetX - transform.localPosition.x);
+                    xDir = (int)Mathf.Clamp01(targetX - transform.localPosition.x);
                 }
                 else
                 {
@@ -206,50 +215,32 @@ public abstract class Villager : MonoBehaviour
 
             case VillagerState.PastVillager:
 
-                if (Game.timeState == TimeState.Backward)
-                {
-                    if (reverseDeathTimeStamp != 0 &&
-                        reverseDeathTimeStamp == Game.t)
-                    {
-                        //Debug.Break();
-                        Debug.Log("Villager Un-Dying");
-                        //m_Animator.SetTrigger("ExitDeath");
-                    }
-                }
                 break;
         }
     }
 
-    public void CanAttack(bool attack)
-    {
-        if (!attack)
-        {
-            m_Animator.SetBool("CanAttack", true);
-        }
-    }
-
-    private void FixedUpdate()
+    public override void FixedUpdate()
     {
         switch (villagerState)
         {
             case VillagerState.PresentVillager:
 
-                animData.move = xDir;
-                animData.jump = m_Jump;
+                animData["Move"] = xDir;
+                animData["Jump"] = m_Jump;
 
                 //animData.dead = !alive;
 
-                m_Character.Move(animData);
+                m_Villager.Move(animData);
                 m_Jump = false;
                 break;
 
             case VillagerState.Waiting:
 
-                animData.move = xDir;
-                animData.dead = false;
-                animData.jump = false;
-                animData.meleeAttack = false;
-                m_Character.Move(animData);
+                animData["Move"] = xDir;
+                animData["Dead"] = false;
+                animData["Jump"] = false;
+                animData["MeleeAttack"] = false;
+                m_Villager.Move(animData);
                 break;
 
             case VillagerState.PastVillager:
@@ -282,21 +273,27 @@ public abstract class Villager : MonoBehaviour
         PlayerCollisions[1].isTrigger = active;
     }
 
-    public abstract void OnSpecial(bool _PlayerSpecial);
+    public virtual void OnSpecial(bool _PlayerSpecial)
+    {
+        animData["PlayerSpecial"] = _PlayerSpecial;
+    }
 
     public virtual void OnHit()
     {
-        health--;
+        if (!shielded)
+        {
+            health--;
+        }
     }
 
     public virtual void OnPastHit(Collider2D collider)
     {
-        if (collider.GetComponent<BossAttack>() && !animData.dead &&
+        if (collider.GetComponent<BossAttack>() && !(bool)animData["Dead"] &&
             Game.timeState == TimeState.Forward)
         {
             Debug.Log("Past Villager Hit By Boss Attack");
-            animData.dead = true;
-            m_Character.Move(animData);
+            animData["Dead"] = true;
+            m_Villager.Move(animData);
 
             GetComponentInChildren<ParticleSystem>().Play();
         }
@@ -314,14 +311,16 @@ public abstract class Villager : MonoBehaviour
     {
         if (villagerState == VillagerState.PresentVillager)
         {
-            Debug.Log("Ranged Attack");
 
             rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
+            rangedAtk.GetComponent<VillagerAttack>().damageMult = damageMult;
 
             float direction = rangedTrans.position.x - transform.position.x;
 
             rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
                 , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
+
+            VillagerManager.attacks.Add(rangedAtk.GetComponent<SpawnableSpriteTimeObject>());
         }
     }
 
@@ -337,8 +336,8 @@ public abstract class Villager : MonoBehaviour
 
     public void SetDamageMult(int val)
     {
+        damageMult = val;
         melee.GetComponent<MeleeAttack>().damageMult = val;
-        AssetManager.Projectile.GetComponent<VillagerAttack>().damageMult = val;
     }
 }
 
