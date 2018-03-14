@@ -24,7 +24,14 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        gameBounds = GameObject.Find("ArenaBounds").GetComponent<BoxCollider2D>();
+        try
+        {
+            gameBounds = GameObject.Find("ArenaBounds").GetComponent<BoxCollider2D>();
+        }
+        catch
+        {
+            Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
+        }
 	}
 	
 	// Update is called once per frame

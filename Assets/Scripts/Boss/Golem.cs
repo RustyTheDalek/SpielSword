@@ -30,7 +30,7 @@ public class Golem : BossManager {
                 lArmRock1.GetComponent<BossAttack>().attacking ||
                 lArmRock2.GetComponent<BossAttack>().attacking ||
                 lArmRock3.GetComponent<BossAttack>().attacking ||
-                lArmRock4.GetComponent<BossAttack>().attacking ||
+                //lArmRock4.GetComponent<BossAttack>().attacking ||
                 rArmRock2.GetComponent<BossAttack>().attacking ||
                 rArmRock3.GetComponent<BossAttack>().attacking ||
                 rightArm.GetComponent<BossAttack>().attacking ||
