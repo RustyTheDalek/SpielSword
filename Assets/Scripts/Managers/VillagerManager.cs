@@ -99,13 +99,6 @@ public class VillagerManager : MonoBehaviour {
 
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
 
-        //myTimeScale = Time.timeScale;
-
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            activeVillager.Kill();
-        }
-
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             classToSpawn = VillagerClass.Warrior;
@@ -142,7 +135,11 @@ public class VillagerManager : MonoBehaviour {
         activeVillager.villagerState = VillagerState.PastVillager;
         activeVillager.transform.parent = pastVillagersTrans;
         activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-        activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+        if (activeVillager.melee)
+        {
+            activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+        }
+
         //activeVillager.SetTrigger(true);
 
         //activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
@@ -253,5 +250,17 @@ public class VillagerManager : MonoBehaviour {
             }
         }
     }
+
+    #region DebugFunctions
+
+    public void KillVillager()
+    {
+        if (activeVillager)
+        {
+            activeVillager.Kill();
+        }
+    }
+
+    #endregion
 
 }

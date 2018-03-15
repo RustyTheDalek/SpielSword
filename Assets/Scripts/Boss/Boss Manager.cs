@@ -285,27 +285,6 @@ public abstract class BossManager : MonoBehaviour
         {
             Reset();
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            health = MAXHEALTH;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            health = MAXHEALTH * .7f;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            health = MAXHEALTH * .5f;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            health = MAXHEALTH * .3f;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            health = MAXHEALTH * .1f;
-        }
         if (Input.GetKeyDown(KeyCode.Alpha7))
         {
             health = 0;
@@ -510,4 +489,28 @@ public abstract class BossManager : MonoBehaviour
             }
         }
     }
+
+    #region Debug Functions
+
+    public void Stage2()
+    {
+        health = MAXHEALTH* .7f;
+    }
+
+    public void Stage3()
+    {
+        health = MAXHEALTH * .5f;
+    }
+
+    public void Stage4()
+    {
+        health = MAXHEALTH * .3f;
+    }
+
+    public void Stage5()
+    {
+        health = MAXHEALTH * .1f;
+    }
+
+    #endregion
 }
