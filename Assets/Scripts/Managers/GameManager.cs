@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour {
 
     public Animator PausePnl;
 
+    float dTimeScale;
+
     // Use this for initialization
     void Start ()
     {
@@ -53,6 +55,8 @@ public class GameManager : MonoBehaviour {
                     PausePnl.SetTrigger("Open");
                 else
                     Debug.LogError("PausePnl not set :(");
+
+                Pause();
             }
             else
             {
@@ -60,6 +64,8 @@ public class GameManager : MonoBehaviour {
                     PausePnl.SetTrigger("Close");
                 else
                     Debug.LogError("PausePnl not set :");
+
+                Resume();
             }
 
         }
@@ -177,8 +183,16 @@ public class GameManager : MonoBehaviour {
         }
 	}
 
+    public void Pause()
+    {
+        dTimeScale = Time.timeScale;
+        Time.timeScale = 0;
+    }
+
     public void Resume()
     {
+        Time.timeScale = dTimeScale;
+        dTimeScale = 0;
     }
 
     public void Quit()
