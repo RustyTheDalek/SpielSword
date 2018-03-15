@@ -28,6 +28,8 @@ public static class Game
     public static bool StageMetEarly;
 
     public static bool bossReady = false;
+
+    public static bool paused;
     
     /// <summary>
     /// If the Boss is attackable

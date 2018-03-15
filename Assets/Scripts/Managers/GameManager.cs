@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Manages (No shit) the Game itself, handles logic relating to overall game e.g. 
 /// handling the skipping of Boss stages when player causes a paradox
 /// Created by      : Ian - 24/07/17
-/// Last updated    : Ian - 24/07/17
+/// Last updated    : Ian - 15/03/18
 /// </summary>
 public class GameManager : MonoBehaviour {
 
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour {
 
     public static BoxCollider2D gameBounds;
 
+    public Animator PausePnl;
+
     // Use this for initialization
     void Start ()
     {
@@ -32,11 +35,34 @@ public class GameManager : MonoBehaviour {
         {
             Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
         }
+
+        PausePnl = GetComponentInChildren<Animator>();
+
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
+        if(Input.GetButtonDown("Pause"))
+        {
+            Game.paused = !Game.paused;
+
+            if (Game.paused)
+            {
+                if (PausePnl)
+                    PausePnl.SetTrigger("Open");
+                else
+                    Debug.LogError("PausePnl not set :(");
+            }
+            else
+            {
+                if (PausePnl)
+                    PausePnl.SetTrigger("Close");
+                else
+                    Debug.LogError("PausePnl not set :");
+            }
+
+        }
 
         if (trackCam.target == null || trackCam.target != vilManager.activeVillager)
         {
@@ -150,6 +176,14 @@ public class GameManager : MonoBehaviour {
             //    break;
         }
 	}
+
+    public void Resume()
+    {
+    }
+
+    public void Quit()
+    {
+    }
 
     public static bool MoveRequest(CircleCollider2D[] colliders, Vector3 position)
     {
