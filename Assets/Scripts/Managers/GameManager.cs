@@ -22,10 +22,6 @@ public class GameManager : MonoBehaviour {
 
     public static BoxCollider2D gameBounds;
 
-    public Animator PausePnl;
-
-    float dTimeScale;
-
     // Use this for initialization
     void Start ()
     {
@@ -37,39 +33,11 @@ public class GameManager : MonoBehaviour {
         {
             Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
         }
-
-        PausePnl = GetComponentInChildren<Animator>();
-
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if(Input.GetButtonDown("Pause"))
-        {
-            Game.paused = !Game.paused;
-
-            if (Game.paused)
-            {
-                if (PausePnl)
-                    PausePnl.SetTrigger("Open");
-                else
-                    Debug.LogError("PausePnl not set :(");
-
-                Pause();
-            }
-            else
-            {
-                if (PausePnl)
-                    PausePnl.SetTrigger("Close");
-                else
-                    Debug.LogError("PausePnl not set :");
-
-                Resume();
-            }
-
-        }
-
         if (trackCam.target == null || trackCam.target != vilManager.activeVillager)
         {
             trackCam.target = vilManager.activeVillager.transform;
@@ -182,22 +150,6 @@ public class GameManager : MonoBehaviour {
             //    break;
         }
 	}
-
-    public void Pause()
-    {
-        dTimeScale = Time.timeScale;
-        Time.timeScale = 0;
-    }
-
-    public void Resume()
-    {
-        Time.timeScale = dTimeScale;
-        dTimeScale = 0;
-    }
-
-    public void Quit()
-    {
-    }
 
     public static bool MoveRequest(CircleCollider2D[] colliders, Vector3 position)
     {

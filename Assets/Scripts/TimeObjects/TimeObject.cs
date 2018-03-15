@@ -127,6 +127,7 @@ public class TimeObject : BaseTimeObject
         {
             transform.position = bFrames[currentFrame].m_Position;
             transform.rotation = bFrames[currentFrame].m_Rotation;
+            transform.localScale = bFrames[currentFrame].m_Scale;
 
             gameObject.SetActive(bFrames[currentFrame].enabled);
 
@@ -140,7 +141,7 @@ public class TimeObject : BaseTimeObject
         {
             m_Position = transform.position,
             m_Rotation = transform.rotation,
-
+            m_Scale = transform.localScale,
             timeStamp = Game.t,
 
             enabled = gameObject.activeSelf

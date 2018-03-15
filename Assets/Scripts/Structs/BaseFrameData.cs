@@ -9,6 +9,7 @@ public struct BaseFrameData
 
     public Vector3 m_Position;
     public Quaternion m_Rotation;
+    public Vector3 m_Scale;
 
     public bool enabled;
 }
