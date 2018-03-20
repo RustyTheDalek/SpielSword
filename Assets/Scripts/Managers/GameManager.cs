@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour {
 
     public static BoxCollider2D gameBounds;
 
+    public delegate void PlayerDeathEvent();
+    public static event PlayerDeathEvent OnPlayerDeath;
+
     // Use this for initialization
     void Start ()
     {
@@ -58,10 +61,12 @@ public class GameManager : MonoBehaviour {
                 if (!vilManager.activeVillager.Alive)
                 {
                     Game.timeState = TimeState.Backward;
-                    vilManager.OnVillagerDeath();
                     currentBoss.GetComponent<BossManager>().SetAnimators(false);
-                    TimeObjectManager.SoftReset();
 
+                    OnPlayerDeath();
+
+                    //TimeObjectManager.SoftReset();
+                    //vilManager.OnVillagerDeath();
 
                 }
 

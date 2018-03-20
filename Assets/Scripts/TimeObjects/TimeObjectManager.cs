@@ -142,6 +142,7 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
+            //Currently not using X while we're testing
             float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
             float newTimeScale = 5;
             Time.timeScale = newTimeScale;

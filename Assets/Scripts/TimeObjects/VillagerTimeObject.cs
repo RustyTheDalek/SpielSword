@@ -30,10 +30,8 @@ public class VillagerTimeObject : SpriteTimeObject
 
     #endregion
 
-    protected override void Start()
+    private void Awake()
     {
-        base.Start();
-
         villager = GetComponent<Villager>();
         m_Villager = GetComponent<VillagerCharacter2D>();
 
@@ -58,14 +56,16 @@ public class VillagerTimeObject : SpriteTimeObject
             { "PlayerSpecialIsTrigger", false},
             { "Martyed", false},
         };
-
-        //tObjectState = TimeObjectState.Void;
     }
 
-    protected override void PlayFrame()
+    private void Start()
     {
-        base.PlayFrame();
+        OnPlayFrame += OnVillagerPlayFrame;
+        OnTrackFrame += OnVillagerTrackFrame;
+    }
 
+    protected void OnVillagerPlayFrame()
+    {
         if (Tools.WithinRange(currentFrame, vFrames))
         {
 
@@ -114,10 +114,8 @@ public class VillagerTimeObject : SpriteTimeObject
         }
     }
 
-    protected override void TrackFrame()
+    protected void TrackFrame()
     {
-        base.TrackFrame();
-
         tempFrame = new VillagerFrameData()
         {
             move = villager.xDir,
