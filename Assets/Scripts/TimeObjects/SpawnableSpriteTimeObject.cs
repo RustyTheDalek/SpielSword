@@ -22,7 +22,7 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
         OnFinishPlayback += OnFinishSpawnableSpritePlayback;
     }
 
-    protected void Start()
+    protected virtual void Start()
     {
         //TODO: Remove this if not needed
         tObjectState = TimeObjectState.Present;

@@ -175,29 +175,29 @@ public class TimeObjectManager : MonoBehaviour
     {
         Debug.Log("Special reverse called by Time Object Manager");
 
-        foreach (TimeObject tObj in tObjects)
-        {
-            tObj.OnFinishReverseCatch();
-        }
+        //foreach (TimeObject tObj in tObjects)
+        //{
+        //    tObj.OnFinishReverseCatch();
+        //}
 
-        foreach (VillagerTimeObject vObject in vObjects)
-        {
-            vObject.OnFinishReverseCatch();
-        }
+        //foreach (VillagerTimeObject vObject in vObjects)
+        //{
+        //    vObject.OnFinishReverseCatch();
+        //}
 
-        foreach (SpriteTimeObject spriteObject in spriteObjects)
-        {           
-            spriteObject.OnFinishReverseCatch();
-        }
+        //foreach (SpriteTimeObject spriteObject in spriteObjects)
+        //{           
+        //    spriteObject.OnFinishReverseCatch();
+        //}
 
-        foreach (BossTimeObject bossObj in bossObjs)
-        {
-            bossObj.OnFinishReverseCatch();
-        }
+        //foreach (BossTimeObject bossObj in bossObjs)
+        //{
+        //    bossObj.OnFinishReverseCatch();
+        //}
 
-        foreach (PlatformerTimeObject pObj in platformers)
-        {
-            pObj.OnFinishReverseCatch();
-        }
+        //foreach (PlatformerTimeObject pObj in platformers)
+        //{
+        //    pObj.OnFinishReverseCatch();
+        //}
     }
 }

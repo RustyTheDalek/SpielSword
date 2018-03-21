@@ -18,6 +18,8 @@ public class Aura : SpawnableSpriteTimeObject
 
         auraActive = true;
         auraTimer = auraLife;
+
+        OnPlayFrame += PlayAuraFrame;
     }
 
     // Update is called once per frame
@@ -39,10 +41,8 @@ public class Aura : SpawnableSpriteTimeObject
         base.Update();
     }
 
-    protected override void PlayFrame()
+    protected void PlayAuraFrame()
     {
-        base.PlayFrame();
-
         if (Tools.WithinRange(currentFrame, sSFrames))
         {
             GetComponent<SpriteRenderer>().enabled = sSFrames[currentFrame].active;

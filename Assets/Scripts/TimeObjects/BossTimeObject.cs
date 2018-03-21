@@ -9,27 +9,23 @@ public class BossTimeObject : SpriteTimeObject {
 
     Animator _Animator;
 
-    protected override void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         startFrame = Game.t;
-
-        m_Sprite = GetComponent<SpriteRenderer>();
-
-        if (GetComponent<VHSEffect>())
-        {
-            vhsEffect = GetComponent<VHSEffect>();
-        }
-        else
-        {
-            vhsEffect = gameObject.AddComponent<VHSEffect>();
-        }
 
         _Animator = GetComponent<Animator>();
 
-        TimeObjectManager.bossObjs.Add(this);
+        OnStartPlayback += OnStartBossTimeObjectPlayback;
     }
 
-    protected override void OnStartPlayback()
+    //protected override void Start()
+    //{
+    //    TimeObjectManager.bossObjs.Add(this);
+    //}
+
+    protected void OnStartBossTimeObjectPlayback()
     {
         //Not called for some reason
         frames.Clear();
@@ -42,6 +38,5 @@ public class BossTimeObject : SpriteTimeObject {
     void OnAnimatorMove()
     {
         _Animator.speed = Game.PastTimeScale;
-
     }
 }
