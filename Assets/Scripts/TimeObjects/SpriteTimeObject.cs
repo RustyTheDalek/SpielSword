@@ -10,8 +10,9 @@ public class SpriteTimeObject : TimeObject
     protected SpriteFrameData tempSFrame;
     protected List<SpriteFrameData> sFrames = new List<SpriteFrameData>();
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         m_Sprite = GetComponent<SpriteRenderer>();
 
         if (GetComponent<VHSEffect>())
@@ -69,19 +70,19 @@ public class SpriteTimeObject : TimeObject
 
     protected void OnSpriteFinishReverse()
     {
-        m_Sprite.material = AssetManager.SpriteMaterials[0];
+        m_Sprite.material = AssetManager.SpriteMaterials["Sprite"];
         vhsEffect.enabled = false;
     }
 
     protected void OnSpriteStartReverse()
     {
-        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        m_Sprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
     }
 
     protected override void OnPast()
     {
-        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        m_Sprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
         base.OnPast();
     }

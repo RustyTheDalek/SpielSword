@@ -28,7 +28,9 @@ public class PlatformerTimeObject : SpriteTimeObject
 
 
     protected override void Awake()
-    { 
+    {
+        base.Awake();
+
         m_Character = GetComponent<Character>();
         m_Platformer = GetComponent<PlatformerCharacter2D>();
 
@@ -88,7 +90,7 @@ public class PlatformerTimeObject : SpriteTimeObject
             finishFrame = 0;
             tObjectState = TimeObjectState.Present;
 
-            m_Sprite.material = AssetManager.SpriteMaterials[0];
+            m_Sprite.material = AssetManager.SpriteMaterials["Sprite"];
             //vhsEffect.enabled = false;
         }
     }

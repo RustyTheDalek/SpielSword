@@ -359,10 +359,10 @@ public abstract class BossManager : MonoBehaviour
                 {
                     if (Game.t < trackedHealth.Count)
                     {
-                        if (trackedHealth[(int)Game.t] < health)
-                        {
-                            health = trackedHealth[(int)Game.t];
-                        }
+                        //if (trackedHealth[(int)Game.t] < health)
+                        //{
+                        //    health = trackedHealth[(int)Game.t];
+                        //}
                     }
                     else
                     {
@@ -469,7 +469,7 @@ public abstract class BossManager : MonoBehaviour
     {
         foreach (SpriteRenderer part in bossParts)
         {
-            int val = (enable == true) ? 1 : 0;
+            string val = (enable == true) ? "VHSSprite" : "Sprite";
             part.material = AssetManager.SpriteMaterials[val];
             part.GetComponent<VHSEffect>().enabled = enable;
         }
