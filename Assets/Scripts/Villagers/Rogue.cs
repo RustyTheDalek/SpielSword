@@ -20,7 +20,7 @@ public class Rogue : Villager {
 
     public void Blink()
     {
-        float direction = rangedTrans.position.x - transform.position.x;
+        float direction = melee.transform.position.x - transform.position.x;
 
         Vector3 newPos = transform.position + Vector3.right * Mathf.Sign(direction) * distance;
 

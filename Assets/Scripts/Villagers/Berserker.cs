@@ -16,10 +16,14 @@ public class Berserker : Villager
 
     public void OnBerserkerRage()
     {
-        animData["CanSpecial"] = false;
+        if (villagerState == VillagerState.PresentVillager)
+        {
+            Debug.Log("I'm RAGING");
+            animData["CanSpecial"] = false;
 
-        SetDamageMult((int)damageMult * 2);
+            SetDamageMult((int)damageMult * 2);
 
-        transform.localScale *= 2;
+            transform.localScale *= 2;
+        }
     }
 }
