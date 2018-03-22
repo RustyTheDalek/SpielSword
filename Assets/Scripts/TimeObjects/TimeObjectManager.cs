@@ -44,6 +44,9 @@ public class TimeObjectManager : MonoBehaviour
     void Update()
     {
 
+        //Increment Game time
+        Game.t += (int)Time.timeScale * (int)Game.timeState * (int)Game.PastTimeScale;
+
 #if UNITY_EDITOR
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -89,7 +92,7 @@ public class TimeObjectManager : MonoBehaviour
             Game.timeState = TimeState.Backward;
             SoftReset();
         }
-         
+
 #endif
     }
 
@@ -132,8 +135,24 @@ public class TimeObjectManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        //Increment Game time
-        Game.t += (int)Time.timeScale * (int)Game.timeState * (int)Game.PastTimeScale;
+        if (Game.t < 0)
+        {
+            Game.t = 0;
+
+            OnFinishReverseCatch();
+
+            Game.timeState = TimeState.Forward;
+            Time.timeScale = 1;
+
+            try
+            {
+                newRoundReady = true;
+            }
+            catch
+            {
+                Debug.LogWarning("No Villager manager found, are you testing Time stuff without it?");
+            }
+        }
 
         if (Game.timeState == TimeState.Forward)
         {
@@ -143,28 +162,11 @@ public class TimeObjectManager : MonoBehaviour
         else
         {
             //Currently not using X while we're testing
-            float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-            float newTimeScale = 5;
+            float x = rewindCurve.Evaluate((float)Game.t / (float)Game.longestTime);
+            float newTimeScale = x;
             Time.timeScale = newTimeScale;
 
-            if (Game.t < 0)
-            {
-                Game.t = 0;
-
-                OnFinishReverseCatch();
-
-                Game.timeState = TimeState.Forward;
-                Time.timeScale = 1;
-
-                try
-                {
-                    newRoundReady = true;
-                }
-                catch
-                {
-                    Debug.LogWarning("No Villager manager found, are you testing Time stuff without it?");
-                }
-            }
+            
         }
     }
 
