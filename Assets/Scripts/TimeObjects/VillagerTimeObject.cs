@@ -18,6 +18,8 @@ public class VillagerTimeObject : SpriteTimeObject
 
     protected VillagerCharacter2D m_Villager;
 
+    protected SpriteRenderer m_HatSprite;
+
     #endregion
 
     #region Private Variables
@@ -36,6 +38,7 @@ public class VillagerTimeObject : SpriteTimeObject
 
         villager = GetComponent<Villager>();
         m_Villager = GetComponent<VillagerCharacter2D>();
+        m_HatSprite = GetComponentsInChildren<VHSEffect>()[1].GetComponent<SpriteRenderer>();
 
         if (GetComponent<VHSEffect>())
         {
@@ -65,6 +68,7 @@ public class VillagerTimeObject : SpriteTimeObject
         OnPlayFrame += OnVillagerPlayFrame;
         OnTrackFrame += OnVillagerTrackFrame;
         OnFinishPlayback += OnVillagerFinishPlayback;
+        OnStartReverse += OnVillagerStartReverse;
         OnFinishReverse += OnVillagerFinishReverse;
     }
 
@@ -187,8 +191,11 @@ public class VillagerTimeObject : SpriteTimeObject
     }
 
     protected void OnVillagerFinishReverse()
-    { 
-    
+    {
+
+        m_HatSprite.material = AssetManager.SpriteMaterials["Sprite"];
+
+
         m_Sprite.color = new Color(m_Sprite.color.r,
                                         m_Sprite.color.g,
                                         m_Sprite.color.b,
@@ -216,4 +223,10 @@ public class VillagerTimeObject : SpriteTimeObject
             vFrames.RemoveAt(i);
         }
     }
+
+    protected void OnVillagerStartReverse()
+    {
+        m_HatSprite.material = AssetManager.SpriteMaterials["VHSSprite"];
+    }
+
 }
