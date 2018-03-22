@@ -7,5 +7,6 @@
     Rogue,
     Spielsword,
     Berserker,
+    Shaman,
     Last, //Special Class to find last Class
 }
