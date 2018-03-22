@@ -20,22 +20,22 @@ public class TimeObject : MonoBehaviour
     public int currentFrame;
 
     public delegate void PlayingFrame();
-    public static event PlayingFrame OnPlayFrame;
+    public event PlayingFrame OnPlayFrame;
 
     public delegate void StartingPlayback();
-    public static event StartingPlayback OnStartPlayback;
+    public event StartingPlayback OnStartPlayback;
 
     public delegate void FinishingPlayback();
-    public static event StartingPlayback OnFinishPlayback;
+    public event StartingPlayback OnFinishPlayback;
 
     public delegate void StartReverse();
-    public static event StartReverse OnStartReverse;
+    public event StartReverse OnStartReverse;
 
     public delegate void FinishReverse();
-    public static event FinishReverse OnFinishReverse;
+    public event FinishReverse OnFinishReverse;
 
     public delegate void TrackingFrame();
-    public static event TrackingFrame OnTrackFrame;
+    public event TrackingFrame OnTrackFrame;
 
     protected int TotalFrames
     {
@@ -73,11 +73,13 @@ public class TimeObject : MonoBehaviour
 
 #endif
 
-    private void Awake()
+    protected virtual void Awake()
     {
         startFrame = Game.t;
 
         OnTrackFrame += TrackTransform;
+        OnPlayFrame += PlayTransormFrame;
+
         GameManager.OnPlayerDeath += SoftReset;
     }
 
@@ -103,12 +105,14 @@ public class TimeObject : MonoBehaviour
                             //skips past it's start frame somehow
                             if (Game.t > startFrame)
                             {
-                                Debug.Log("Game time greater than start frame skipping ahead");
+                                //Debug.Log("Game time (" + Game.t + ") + greater than " +
+                                //    "start frame (" + startFrame + ") + skipping ahead");
                                 currentFrame = Game.t - startFrame;
                             }
                             tObjectState = TimeObjectState.PastPlaying;
 
-                            OnStartPlayback();
+                            if(OnStartPlayback != null)
+                                OnStartPlayback();
                         }
 
                         break;
@@ -127,7 +131,9 @@ public class TimeObject : MonoBehaviour
                             else
                             {
                                 tObjectState = TimeObjectState.PastFinished;
-                                OnFinishPlayback();
+
+                                if(OnFinishPlayback != null)
+                                    OnFinishPlayback();
                                 currentFrame = finishFrame;
                             }
                             break;
@@ -156,7 +162,10 @@ public class TimeObject : MonoBehaviour
                         if (Game.t <= startFrame)
                         {
                             tObjectState = TimeObjectState.PastStart;
-                            OnFinishReverse();
+
+                            if(OnFinishReverse != null)
+                                OnFinishReverse();
+
                             currentFrame = 0;
                             break;
                         }
@@ -171,7 +180,8 @@ public class TimeObject : MonoBehaviour
                         if (Game.t <= finishFrame || (finishFrame == 0 && Game.t <= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            OnStartReverse();
+                            if(OnStartReverse != null)
+                                OnStartReverse();
 
                             //Just in case a frame or to is skipped we will attempt to 
                             //keep object in sync by subtracting the difference between their finish frame and current game time
