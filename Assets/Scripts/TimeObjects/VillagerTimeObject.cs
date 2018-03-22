@@ -65,7 +65,6 @@ public class VillagerTimeObject : SpriteTimeObject
         OnPlayFrame += OnVillagerPlayFrame;
         OnTrackFrame += OnVillagerTrackFrame;
         OnFinishPlayback += OnVillagerFinishPlayback;
-        OnStartReverse += OnVillagerStartReverse;
         OnFinishReverse += OnVillagerFinishReverse;
     }
 
@@ -173,28 +172,22 @@ public class VillagerTimeObject : SpriteTimeObject
     {
         base.OnPast();
         villager.villagerState = VillagerState.PastVillager;
-        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
+        //villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
 
     protected void OnVillagerFinishPlayback()
     {
-        Debug.Log("Villager Finished");
-
+        Debug.Log("Villager Finished playback, dying");
         animData["Dead"] = deathOrMarty;
         animData["Martyed"] = !deathOrMarty;
         animData["Move"] = 0;
+        animData["CanSpecial"] = false;
 
         m_Villager.Move(animData);
     }
 
-    protected void OnVillagerStartReverse()
-    {
-        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
-    }
-
     protected void OnVillagerFinishReverse()
-    {
-        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[0];
+    { 
     
         m_Sprite.color = new Color(m_Sprite.color.r,
                                         m_Sprite.color.g,
