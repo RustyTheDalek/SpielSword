@@ -16,7 +16,7 @@ public class MeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.name == "Head")
+        if (collision.name == "Head" && Game.timeState == TimeState.Forward)
         {
             collision.GetComponent<Head>().OnHit(Damage);
         }
