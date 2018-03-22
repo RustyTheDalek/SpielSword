@@ -201,21 +201,21 @@ public static class AssetManager
         }
     }
 
-    static List<Material> _SpriteMaterials;
+    static Dictionary<string, Material> _SpriteMaterials;
 
-    public static List<Material> SpriteMaterials
+    public static Dictionary<string, Material> SpriteMaterials
     {
         get
         {
             if (_SpriteMaterials == null)
             {
-                _SpriteMaterials = new List<Material>();
+                _SpriteMaterials = new Dictionary<string, Material>();
 
                 objs = Resources.LoadAll("Materials");
 
                 foreach (object obj in objs)
                 {
-                    _SpriteMaterials.Add((Material)obj);
+                    _SpriteMaterials.Add( ( (Material)obj).name, (Material)obj);
                 }
             }
 

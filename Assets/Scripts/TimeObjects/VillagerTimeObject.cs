@@ -30,9 +30,9 @@ public class VillagerTimeObject : SpriteTimeObject
 
     #endregion
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         villager = GetComponent<Villager>();
         m_Villager = GetComponent<VillagerCharacter2D>();
@@ -58,14 +58,18 @@ public class VillagerTimeObject : SpriteTimeObject
             { "PlayerSpecialIsTrigger", false},
             { "Martyed", false},
         };
-
-        //tObjectState = TimeObjectState.Void;
     }
 
-    protected override void PlayFrame()
+    private void Start()
     {
-        base.PlayFrame();
+        OnPlayFrame += OnVillagerPlayFrame;
+        OnTrackFrame += OnVillagerTrackFrame;
+        OnFinishPlayback += OnVillagerFinishPlayback;
+        OnFinishReverse += OnVillagerFinishReverse;
+    }
 
+    protected void OnVillagerPlayFrame()
+    {
         if (Tools.WithinRange(currentFrame, vFrames))
         {
 
@@ -114,10 +118,8 @@ public class VillagerTimeObject : SpriteTimeObject
         }
     }
 
-    protected override void TrackFrame()
+    protected void OnVillagerTrackFrame()
     {
-        base.TrackFrame();
-
         tempFrame = new VillagerFrameData()
         {
             move = villager.xDir,
@@ -170,26 +172,23 @@ public class VillagerTimeObject : SpriteTimeObject
     {
         base.OnPast();
         villager.villagerState = VillagerState.PastVillager;
-        OnStartReverse();
+        //villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
 
-    protected override void OnFinishPlayback()
+    protected void OnVillagerFinishPlayback()
     {
-        Debug.Log("Villager Finished");
-
+        Debug.Log("Villager Finished playback, dying");
         animData["Dead"] = deathOrMarty;
         animData["Martyed"] = !deathOrMarty;
         animData["Move"] = 0;
+        animData["CanSpecial"] = false;
 
         m_Villager.Move(animData);
     }
 
-    protected override void OnFinishReverse()
-    {
-        base.OnFinishReverse();
-
-        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[0];
-
+    protected void OnVillagerFinishReverse()
+    { 
+    
         m_Sprite.color = new Color(m_Sprite.color.r,
                                         m_Sprite.color.g,
                                         m_Sprite.color.b,
@@ -199,12 +198,6 @@ public class VillagerTimeObject : SpriteTimeObject
                                                                         villager.hat.GetComponent<SpriteRenderer>().color.g,
                                                                         villager.hat.GetComponent<SpriteRenderer>().color.b,
                                                                         .5f);
-    }
-
-    protected override void OnStartReverse()
-    {
-        base.OnStartReverse();
-        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials[1];
     }
 
     public void SetMartyPoint()

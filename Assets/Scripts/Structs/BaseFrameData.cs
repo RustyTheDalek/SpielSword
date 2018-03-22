@@ -2,8 +2,10 @@
 
 /// <summary>
 /// Base data for a object to be controlled by time
+/// Tracks everything you'd find in a basic GameObject i.e. transform variables
+/// and whether the gameObject is enabled.
 /// </summary>
-public struct BaseFrameData
+public struct TransformFrameData
 {
     public int timeStamp;
 

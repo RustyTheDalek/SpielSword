@@ -10,8 +10,9 @@ public class SpriteTimeObject : TimeObject
     protected SpriteFrameData tempSFrame;
     protected List<SpriteFrameData> sFrames = new List<SpriteFrameData>();
 
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         m_Sprite = GetComponent<SpriteRenderer>();
 
         if (GetComponent<VHSEffect>())
@@ -22,41 +23,43 @@ public class SpriteTimeObject : TimeObject
         {
             vhsEffect = gameObject.AddComponent<VHSEffect>();
         }
+
+        OnPlayFrame += PlaySpriteFrame;
+        OnTrackFrame += TrackSpriteFrame;
+
+        OnStartReverse += OnSpriteStartReverse;
+        OnFinishReverse += OnSpriteFinishReverse;
     }
 
-    protected override void Start()
-    {
-        base.Start();
+    //protected override void Start()
+    //{
+    //    base.Start();
 
-        TimeObjectManager.spriteObjects.Add(this);
-    }
+    //    TimeObjectManager.spriteObjects.Add(this);
+    //}
 
     //This constructor is used when we still want the base Start function but the child 
     //of this object has a different list that's managed by TimeObjectManager
-    protected void Start(bool newList)
+    //protected void Start(bool newList)
+    //{
+    //    base.Start();
+
+    //    if (!newList)
+    //    {
+    //        TimeObjectManager.spriteObjects.Add(this);
+    //    }
+    //}
+
+    protected void PlaySpriteFrame()
     {
-        base.Start();
-
-        if (!newList)
-        {
-            TimeObjectManager.spriteObjects.Add(this);
-        }
-    }
-
-    protected override void PlayFrame()
-    {
-        base.PlayFrame();
-
         if (Tools.WithinRange(currentFrame, sFrames))
         {
             m_Sprite.color = sFrames[currentFrame].color;
         }
     }
 
-    protected override void TrackFrame()
+    protected void TrackSpriteFrame()
     {
-        base.TrackFrame();
-
         tempSFrame = new SpriteFrameData()
         {
             color = m_Sprite.color,
@@ -65,26 +68,21 @@ public class SpriteTimeObject : TimeObject
         sFrames.Add(tempSFrame);
     }
 
-    protected override void OnFinishReverse()
+    protected void OnSpriteFinishReverse()
     {
-        base.OnFinishReverse();
-
-        currentFrame = 0;
-        m_Sprite.material = AssetManager.SpriteMaterials[0];
+        m_Sprite.material = AssetManager.SpriteMaterials["Sprite"];
         vhsEffect.enabled = false;
     }
 
-    protected override void OnStartReverse()
+    protected void OnSpriteStartReverse()
     {
-        base.OnStartReverse();
-
-        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        m_Sprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
     }
 
     protected override void OnPast()
     {
-        m_Sprite.material = AssetManager.SpriteMaterials[1];
+        m_Sprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
         base.OnPast();
     }

@@ -1,19 +1,86 @@
-﻿/// <summary>
-/// Object that can be affected by time in both directions
-/// </summary>
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
-public class TimeObject : BaseTimeObject
+/// <summary>
+/// Base Class for objects to be controlled by time
+/// </summary>
+public class TimeObject : MonoBehaviour
 {
+    protected TransformFrameData tempBFrame;
+    protected List<TransformFrameData> bFrames = new List<TransformFrameData>();
 
-    // Use this for initialization
-    protected virtual void Start()
+    public int startFrame, finishFrame;
+
+    public TimeObjectState tObjectState = TimeObjectState.Void;
+
+    public int currentFrame;
+
+    public delegate void PlayingFrame();
+    public event PlayingFrame OnPlayFrame;
+
+    public delegate void StartingPlayback();
+    public event StartingPlayback OnStartPlayback;
+
+    public delegate void FinishingPlayback();
+    public event StartingPlayback OnFinishPlayback;
+
+    public delegate void StartReverse();
+    public event StartReverse OnStartReverse;
+
+    public delegate void FinishReverse();
+    public event FinishReverse OnFinishReverse;
+
+    public delegate void TrackingFrame();
+    public event TrackingFrame OnTrackFrame;
+
+    protected int TotalFrames
+    {
+        get
+        {
+            if (bFrames != null)
+                return bFrames.Count;
+            else
+            {
+                Debug.LogWarning("Frame list null, returning 0");
+                return 0;
+            }
+        }
+    }
+
+#if UNITY_EDITOR
+
+    public GUIStyle DebugUI;
+
+    private void OnDrawGizmos()
+    {
+        if (Game.debugText)
+        {
+            Handles.Label(transform.position, "Time State: " + tObjectState.ToString()
+                                + "\nTotal Frames: " + TotalFrames +
+                                "\nCurrent Frame: " + currentFrame +
+                                "\nStart Frame: " + startFrame +
+                                "\nFinish Frame: " + finishFrame, DebugUI);
+        }
+        //else
+        //{
+        //    debugText.gameObject.SetActive(false);
+        //}
+    }
+
+#endif
+
+    protected virtual void Awake()
     {
         startFrame = Game.t;
+
+        OnTrackFrame += TrackTransform;
+        OnPlayFrame += PlayTransormFrame;
+
+        GameManager.OnPlayerDeath += SoftReset;
     }
 
     protected virtual void Update()
@@ -26,29 +93,53 @@ public class TimeObject : BaseTimeObject
                 {
                     case TimeObjectState.Present:
 
-                        TrackFrame();
+                        //TrackFrame();
+                        OnTrackFrame();
                         break;
 
                     case TimeObjectState.PastStart:
 
                         if (Game.t >= startFrame)
                         {
+                            //This (hopefully keeps the object in sync if game time 
+                            //skips past it's start frame somehow
+                            if (Game.t > startFrame)
+                            {
+                                //Debug.Log("Game time (" + Game.t + ") + greater than " +
+                                //    "start frame (" + startFrame + ") + skipping ahead");
+                                currentFrame = Game.t - startFrame;
+                            }
                             tObjectState = TimeObjectState.PastPlaying;
-                            OnStartPlayback();
+
+                            if(OnStartPlayback != null)
+                                OnStartPlayback();
                         }
 
                         break;
 
                     case TimeObjectState.PastPlaying:
 
-                        if (Game.t >= finishFrame)
+                        //If finish frame is 0 then timeobject hasn't finished yet and will need extra tracking
+                        if (Game.t >= finishFrame && finishFrame != 0 ||
+                            (finishFrame == 0 && Game.t >= bFrames[bFrames.Count - 1].timeStamp))
                         {
-                            tObjectState = TimeObjectState.PastFinished;
-                            OnFinishPlayback();
+                            if (finishFrame == 0)
+                            {
+                                tObjectState = TimeObjectState.Present;
+                                OnTrackFrame();
+                            }
+                            else
+                            {
+                                tObjectState = TimeObjectState.PastFinished;
+
+                                if(OnFinishPlayback != null)
+                                    OnFinishPlayback();
+                                currentFrame = finishFrame;
+                            }
                             break;
                         }
 
-                        Playback();
+                        OnPlayFrame();
 
                         break;
 
@@ -71,20 +162,31 @@ public class TimeObject : BaseTimeObject
                         if (Game.t <= startFrame)
                         {
                             tObjectState = TimeObjectState.PastStart;
-                            OnFinishReverse();
+
+                            if(OnFinishReverse != null)
+                                OnFinishReverse();
+
+                            currentFrame = 0;
                             break;
                         }
 
-                        Playback();
+                        OnPlayFrame();
 
                         break;
 
                     case TimeObjectState.PastFinished:
 
-                        if (Game.t <= finishFrame)
+                        //We want to make sure it starts at the right time or starts reversing if it's in the present
+                        if (Game.t <= finishFrame || (finishFrame == 0 && Game.t <= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            OnStartReverse();
+                            if(OnStartReverse != null)
+                                OnStartReverse();
+
+                            //Just in case a frame or to is skipped we will attempt to 
+                            //keep object in sync by subtracting the difference between their finish frame and current game time
+                            //- (finishFrame - Game.t)
+                            currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - Game.t) - 1);
                         }
                         break;
                 }
@@ -93,35 +195,24 @@ public class TimeObject : BaseTimeObject
         }
     }
 
-#if UNITY_EDITOR
+    //protected abstract void PlayFrame();
+    //protected abstract void TrackFrame();
 
-    private void OnDrawGizmos()
+    protected void TrackTransform()
     {
-        if (Game.debugText)
+        tempBFrame = new TransformFrameData()
         {
-            Handles.Label(transform.position, "Time State: " + tObjectState.ToString()
-                                + "\nTotal Frames: " + TotalFrames +
-                                "\nCurrent Frame: " + currentFrame +
-                                "\nStart Frame: " + startFrame +
-                                "\nFinish Frame: " + finishFrame, DebugUI);
-        }
-        //else
-        //{
-        //    debugText.gameObject.SetActive(false);
-        //}
+            m_Position = transform.position,
+            m_Rotation = transform.rotation,
+            m_Scale = transform.localScale,
+            timeStamp = Game.t,
+
+            enabled = gameObject.activeSelf
+        };
+        bFrames.Add(tempBFrame);
     }
 
-#endif
-
-    protected void Playback()
-    {
-        if (TotalFrames > 0)
-        {
-            PlayFrame();
-        }
-    }
-
-    protected override void PlayFrame()
+    protected void PlayTransormFrame()
     {
         if (Tools.WithinRange(currentFrame, bFrames))
         {
@@ -135,18 +226,17 @@ public class TimeObject : BaseTimeObject
         }
     }
 
-    protected override void TrackFrame()
+    /// <summary>
+    /// Called when an object becomes a past object
+    /// </summary>
+    protected virtual void OnPast()
     {
-        tempBFrame = new BaseFrameData()
-        {
-            m_Position = transform.position,
-            m_Rotation = transform.rotation,
-            m_Scale = transform.localScale,
-            timeStamp = Game.t,
+        tObjectState = TimeObjectState.PastFinished;
 
-            enabled = gameObject.activeSelf
-        };
-        bFrames.Add(tempBFrame);
+        if (finishFrame == 0)
+        {
+            finishFrame = Game.t;
+        }
     }
 
     public virtual void HardReset()
@@ -183,46 +273,5 @@ public class TimeObject : BaseTimeObject
                 break;
         }
     }
-
-    /// <summary>
-    /// Called when an object becomes a past object
-    /// </summary>
-    protected virtual void OnPast()
-    {
-        tObjectState = TimeObjectState.PastFinished;
-
-        if (finishFrame == 0)
-        {
-            finishFrame = Game.t;
-        }
-    }
-
-    protected override void OnFinishPlayback()
-    {
-
-    }
-
-    protected override void OnFinishReverse()
-    {
-        currentFrame = 0;
-    }
-
-    protected override void OnStartReverse()
-    {
-        //Just in case a frame or to is skipped we will attempt to 
-        //keep object in sync by subtracting the difference between their finish frame and current game time
-        //- (finishFrame - Game.t)
-        currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - Game.t) - 1);
-    }
-
-    protected override void OnStartPlayback()
-    {
-        tObjectState = TimeObjectState.PastPlaying;
-        currentFrame = Game.t - startFrame;
-    }
-
-    public void OnFinishReverseCatch()
-    {
-        OnFinishReverse();
-    }
 }
+                                                          

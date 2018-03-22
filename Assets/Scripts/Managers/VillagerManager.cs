@@ -82,8 +82,9 @@ public class VillagerManager : MonoBehaviour {
         NextVillager();
         EnterArena();
 
+        GameManager.OnPlayerDeath += OnVillagerDeath;
         //Debug.Log(AssetManager.VillagerSprites.Count);
-	}
+    }
 
     private void SetupVillager(GameObject villager, Vector3 spawnOffset)
     {

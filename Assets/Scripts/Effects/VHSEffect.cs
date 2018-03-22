@@ -54,7 +54,7 @@ public class VHSEffect : MonoBehaviour {
             {
                 xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i+1);
                 xScanLines[i] = XScanLineLogic(xScanLines[i]);
-                mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * Time.timeScale * Game.PastTimeScale);
+                mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * (int)Time.timeScale * Game.PastTimeScale);
             }
 
             if (yScanLine >= .75f || yScanLine <= 0)
@@ -64,7 +64,7 @@ public class VHSEffect : MonoBehaviour {
 
             //yScanLine = yScanLine % 1;
 
-            mpb.SetFloat("_yScanLine", yScanLine * Time.timeScale * Game.PastTimeScale);
+            mpb.SetFloat("_yScanLine", yScanLine * (int)Time.timeScale * Game.PastTimeScale);
             mpb.SetFloat("_noiseStrength", noiseStrength);
             mpb.SetFloat("_ScanJitter", scanJitter);
             sRenderer.SetPropertyBlock(mpb);

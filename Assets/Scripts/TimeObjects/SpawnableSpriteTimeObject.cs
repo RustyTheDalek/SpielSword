@@ -10,145 +10,45 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
 
     protected Animator m_anim;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
-
-        tObjectState = TimeObjectState.Present;
-
-        TimeObjectManager.vSpawnable.Add(this);
+        base.Awake();
 
         m_anim = GetComponent<Animator>();
+
+        OnTrackFrame += TrackSpawnableSpriteFrame;
+        OnPlayFrame += PlaySpawnableSpriteFrame;
+        OnFinishReverse += OnFinishSpawnableSpriteReverse;
+        OnFinishPlayback += OnFinishSpawnableSpritePlayback;
     }
 
-    protected override void Update()
+    protected virtual void Start()
     {
-        switch (Game.timeState)
+        //TODO: Remove this if not needed
+        tObjectState = TimeObjectState.Present;
+
+        //TimeObjectManager.vSpawnable.Add(this);
+    }
+
+    protected void TrackSpawnableSpriteFrame()
+    {
+        tempSSFrame = new SpawnableSpriteFrameData()
         {
-            case TimeState.Forward:
+            active = gameObject.activeSelf,
+        };
 
-                switch (tObjectState)
-                {
-                    case TimeObjectState.Present:
-
-                        if (m_Sprite.enabled)
-                        {
-                            TrackFrame();
-                        }
-                        else
-                        {
-                            tObjectState = TimeObjectState.PresentDead;
-                            finishFrame = Game.t;
-                        }
-
-                        break;
-
-                    case TimeObjectState.PastStart:
-
-                        if (Game.t >= startFrame)
-                        {
-                            tObjectState = TimeObjectState.PastPlaying;
-                            //Just in case a frame or to is skipped we will attempt to 
-                            //keep object in sync by subtracting the difference between their start frame and current game time
-                            currentFrame = 0;
-                            OnStartPlayback();
-                        }
-
-                        break;
-
-                    case TimeObjectState.PastPlaying:
-
-                        if ((Game.t >= finishFrame && finishFrame != 0) ||
-                            (finishFrame == 0 && Game.t >= bFrames[bFrames.Count - 1].timeStamp))
-                        {
-                            if (finishFrame == 0)
-                            {
-                                tObjectState = TimeObjectState.Present;
-                                TrackFrame();
-                            }
-                            else
-                            {
-                                tObjectState = TimeObjectState.PastFinished;
-                                OnFinishPlayback();
-                            }
-                            break;
-                        }
-
-                        Playback();
-
-                        break;
-
-                    case TimeObjectState.PastFinished:
-
-                        break;
-                }
-
-                break;
-
-            case TimeState.Backward:
-
-                switch (tObjectState)
-                {
-                    case TimeObjectState.PastStart:
-                        break;
-
-                    case TimeObjectState.PastPlaying:
-
-                        if (Game.t <= startFrame)
-                        {
-                            tObjectState = TimeObjectState.PastStart;
-
-                            OnFinishReverse();
-
-                            break;
-                        }
-
-                        Playback();
-
-                        break;
-
-                    case TimeObjectState.PastFinished:
-
-                        if (Game.t <= finishFrame || (finishFrame == 0 && Game.t <= bFrames[bFrames.Count - 1].timeStamp))
-                        {
-                            tObjectState = TimeObjectState.PastPlaying;
-                            //Just in case a frame or to is skipped we will attempt to 
-                            //keep object in sync by subtracting the difference between their finish frame and current game time
-                            //- (finishFrame - Game.t)
-                            currentFrame = (bFrames.Count - 1);
-                            OnStartReverse();
-                        }
-                        break;
-                }
-
-                break;
+        sSFrames.Add(tempSSFrame);
+        
+        //When the sprite is disabled that means the spawnable sprite has finished and needs to stop
+        if(!m_Sprite.enabled)
+        {
+            tObjectState = TimeObjectState.PresentDead;
+            finishFrame = Game.t;
         }
     }
 
-#if UNITY_EDITOR
-
-    private void OnDrawGizmos()
+    protected void PlaySpawnableSpriteFrame()
     {
-        if (Game.debugText)
-        {
-            Handles.Label(transform.position, "Time State: " + tObjectState.ToString() +
-                                "\nTotal Frames: " + TotalFrames +
-                                "\nCurrent Frame: " + currentFrame +
-                                "\nStart Frame: " + startFrame +
-                                "\nFinish Frame: " + finishFrame);
-        }
-        //else
-        //{
-        //    debugText.gameObject.SetActive(false);
-        //}
-    }
-
-#endif
-
-    protected override void PlayFrame()
-    {
-        base.PlayFrame();
-
         if (Tools.WithinRange(currentFrame, sSFrames))
         {
             gameObject.SetActive(sSFrames[currentFrame].active);
@@ -177,28 +77,19 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
         }
     }
 
-    protected override void TrackFrame()
+    //protected override void OnStartSpawnableSpriteReverse()
+    //{
+    //    //m_Sprite.enabled = true;
+    //}
+
+    protected void OnFinishSpawnableSpriteReverse()
     {
-        base.TrackFrame();
-
-        tempSSFrame = new SpawnableSpriteFrameData()
-        {
-            active = gameObject.activeSelf,
-        };
-
-        sSFrames.Add(tempSSFrame);
-    }
-
-    protected override void OnFinishReverse()
-    {
-        base.OnFinishReverse();
         m_Sprite.enabled = false;
     }
 
-    protected override void OnStartReverse()
+    protected void OnFinishSpawnableSpritePlayback()
     {
-        base.OnStartReverse();
-        //m_Sprite.enabled = true;
+        m_Sprite.enabled = false;
     }
 
     protected void SetActive(bool active)
@@ -210,13 +101,6 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
 
         if (GetComponent<Rigidbody2D>())
             GetComponent<Rigidbody2D>().simulated = active;
-    }
-
-    protected override void OnFinishPlayback()
-    {
-        base.OnFinishPlayback();
-
-        m_Sprite.enabled = false;
     }
 
     protected override void OnPast()

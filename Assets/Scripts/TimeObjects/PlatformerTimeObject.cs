@@ -26,22 +26,31 @@ public class PlatformerTimeObject : SpriteTimeObject
 
     #endregion
 
-    protected override void Start()
+
+    protected override void Awake()
     {
-        base.Start(true);
+        base.Awake();
 
         m_Character = GetComponent<Character>();
         m_Platformer = GetComponent<PlatformerCharacter2D>();
 
-        TimeObjectManager.platformers.Add(this);
+        OnTrackFrame += TrackPlatformerFrame;
+        OnPlayFrame += PlayPlatformerFrame;
+        OnStartPlayback += OnStartPlatformerPlayback;
+    }
 
+    protected void Start()
+    {
+        //base.Start(true);
+
+        //TimeObjectManager.platformers.Add(this);
+
+        //TODO:Remove this as it might not be totally nesecary 
         tObjectState = TimeObjectState.Present;
     }
 
-    protected override void TrackFrame()
+    protected void TrackPlatformerFrame()
     {
-        base.TrackFrame();
-
         tempFrame = new PlatformerFrameData()
         {
             move = m_Character.xDir,
@@ -57,10 +66,8 @@ public class PlatformerTimeObject : SpriteTimeObject
         
     }
 
-    protected override void PlayFrame()
+    protected void PlayPlatformerFrame()
     {
-        base.PlayFrame();
-
         if (Tools.WithinRange(currentFrame, pFrames))
         {
             m_Character.xDir = pFrames[currentFrame].move;
@@ -72,16 +79,19 @@ public class PlatformerTimeObject : SpriteTimeObject
 
     }
 
-    protected override void OnStartPlayback()
+    protected void OnStartPlatformerPlayback()
     {
-        Debug.Log("Finish Frame is 0, Platformer not died becoming present again");
-        pFrames.Clear();
-        sFrames.Clear();
-        bFrames.Clear();
-        finishFrame = 0;
-        tObjectState = TimeObjectState.Present;
+        if (finishFrame == 0)
+        {
+            Debug.Log("Finish Frame is 0, Platformer not died becoming present again");
+            pFrames.Clear();
+            sFrames.Clear();
+            bFrames.Clear();
+            finishFrame = 0;
+            tObjectState = TimeObjectState.Present;
 
-        m_Sprite.material = AssetManager.SpriteMaterials[0];
-        //vhsEffect.enabled = false;
+            m_Sprite.material = AssetManager.SpriteMaterials["Sprite"];
+            //vhsEffect.enabled = false;
+        }
     }
 }

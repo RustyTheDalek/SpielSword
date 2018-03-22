@@ -10,8 +10,6 @@ using UnityEngine.UI;
 /// </summary>
 public class DebugPnl : MonoBehaviour {
 
-    Toggle godMode;
-
     VillagerManager vilManager;
     BossManager bManager;
 
@@ -19,7 +17,6 @@ public class DebugPnl : MonoBehaviour {
 
     private void Start()
     {
-        godMode = GetComponentInChildren<Toggle>();
 
         vilManager = GameObject.Find("VillagerManager").GetComponent<VillagerManager>();
         bManager = GameObject.Find("Boss").GetComponent<BossManager>();

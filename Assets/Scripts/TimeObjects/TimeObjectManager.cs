@@ -44,6 +44,9 @@ public class TimeObjectManager : MonoBehaviour
     void Update()
     {
 
+        //Increment Game time
+        Game.t += (int)Time.timeScale * (int)Game.timeState * (int)Game.PastTimeScale;
+
 #if UNITY_EDITOR
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -89,7 +92,7 @@ public class TimeObjectManager : MonoBehaviour
             Game.timeState = TimeState.Backward;
             SoftReset();
         }
-         
+
 #endif
     }
 
@@ -132,8 +135,22 @@ public class TimeObjectManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        //Increment Game time
-        Game.t += (int)Time.timeScale * (int)Game.timeState * (int)Game.PastTimeScale;
+        if (Game.t < 0)
+        {
+            Game.t = 0;
+
+            Game.timeState = TimeState.Forward;
+            Time.timeScale = 1;
+
+            try
+            {
+                newRoundReady = true;
+            }
+            catch
+            {
+                Debug.LogWarning("No Villager manager found, are you testing Time stuff without it?");
+            }
+        }
 
         if (Game.timeState == TimeState.Forward)
         {
@@ -142,61 +159,12 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            float x = Mathf.InverseLerp(0, Game.longestTime, Game.t);
-            float newTimeScale = 5;
+            //Currently not using X while we're testing
+            float x = rewindCurve.Evaluate((float)Game.t / (float)Game.longestTime);
+            float newTimeScale = x;
             Time.timeScale = newTimeScale;
 
-            if (Game.t < 0)
-            {
-                Game.t = 0;
-
-                OnFinishReverseCatch();
-
-                Game.timeState = TimeState.Forward;
-                Time.timeScale = 1;
-
-                try
-                {
-                    newRoundReady = true;
-                }
-                catch
-                {
-                    Debug.LogWarning("No Villager manager found, are you testing Time stuff without it?");
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Special catch for when time reversal is too fast
-    /// </summary>
-    private void OnFinishReverseCatch()
-    {
-        Debug.Log("Special reverse called by Time Object Manager");
-
-        foreach (TimeObject tObj in tObjects)
-        {
-            tObj.OnFinishReverseCatch();
-        }
-
-        foreach (VillagerTimeObject vObject in vObjects)
-        {
-            vObject.OnFinishReverseCatch();
-        }
-
-        foreach (SpriteTimeObject spriteObject in spriteObjects)
-        {           
-            spriteObject.OnFinishReverseCatch();
-        }
-
-        foreach (BossTimeObject bossObj in bossObjs)
-        {
-            bossObj.OnFinishReverseCatch();
-        }
-
-        foreach (PlatformerTimeObject pObj in platformers)
-        {
-            pObj.OnFinishReverseCatch();
+            
         }
     }
 }
