@@ -112,18 +112,25 @@ public class SpawnableSpriteTimeObject : SpriteTimeObject
     public void SetMartyPoint()
     {
         //deathOrMarty = false;
-        tempSSFrame = sSFrames[currentFrame];
-        tempSSFrame.marty = true;
-        m_anim.SetTrigger("Marty");
-        sSFrames[currentFrame] = tempSSFrame;
-
-        finishFrame = bFrames[currentFrame].timeStamp;
-
-        for (int i = currentFrame + 1; i < bFrames.Count; i++)
+        try
         {
-            bFrames.RemoveAt(i);
-            sSFrames.RemoveAt(i);
-            sFrames.RemoveAt(i);
+            tempSSFrame = sSFrames[currentFrame];
+            tempSSFrame.marty = true;
+            m_anim.SetTrigger("Marty");
+            sSFrames[currentFrame] = tempSSFrame;
+
+            finishFrame = bFrames[currentFrame].timeStamp;
+
+            for (int i = currentFrame + 1; i < bFrames.Count; i++)
+            {
+                bFrames.RemoveAt(i);
+                sSFrames.RemoveAt(i);
+                sFrames.RemoveAt(i);
+            }
+        }
+        catch
+        {
+            Debug.LogError("Frames " + TotalFrames + " : " + sSFrames.Count);
         }
     }
 }

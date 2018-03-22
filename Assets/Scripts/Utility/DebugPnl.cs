@@ -10,6 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class DebugPnl : MonoBehaviour {
 
+#if UNITY_EDITOR
     VillagerManager vilManager;
     BossManager bManager;
 
@@ -68,5 +69,5 @@ public class DebugPnl : MonoBehaviour {
     {
         bManager.Stage5();
     }
-
+#endif
 }
