@@ -345,7 +345,10 @@ public abstract class Villager : Character
     public void SetDamageMult(int val)
     {
         damageMult = val;
-        melee.GetComponent<MeleeAttack>().damageMult = val;
+        if (melee)
+        {
+            melee.GetComponent<MeleeAttack>().damageMult = val;
+        }
     }
 }
 
