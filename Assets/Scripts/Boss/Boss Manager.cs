@@ -113,6 +113,13 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
+    Timer stageFinishTimer;
+
+    int stageOneTimer   = 60,
+        stageTwoTimer   = 60,
+        stageThreeTimer = 60,
+        stageFourTimer  = 60;
+
     public abstract bool Attacking { get; } 
 
     public virtual void Start ()
@@ -166,6 +173,10 @@ public abstract class BossManager : MonoBehaviour
                 health = MAXHEALTH * .19f;
                 break;
         }
+        stageFinishTimer = gameObject.AddComponent<Timer>();
+        stageFinishTimer.Setup("StageCountdown", stageOneTimer, true);
+        Debug.Log("StageTimer : " + stageOneTimer);
+        stageFinishTimer.StartTimer();
     }
 
     #region Stage skipping ideas
@@ -301,10 +312,14 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageOneAttacks);
 
-                        if (health < MAXHEALTH * .8f && !EarlyStageCheck())
+                        //if (health < MAXHEALTH * .8f && !EarlyStageCheck())
+                        if(stageFinishTimer.complete)
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Two;
+                            stageFinishTimer.Setup("StageCountdown", stageOneTimer, true);
+                            stageFinishTimer.Reset();
+                            stageFinishTimer.StartTimer();
                             OnStageTwo();
                         }
                         break;
@@ -313,10 +328,14 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageTwoAttacks);
 
-                        if (health < MAXHEALTH * .6f && !EarlyStageCheck())
+                        //if (health < MAXHEALTH * .6f && !EarlyStageCheck())
+                        if (stageFinishTimer.complete)
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Three;
+                            stageFinishTimer.Setup("StageCountdown", stageTwoTimer, true);
+                            stageFinishTimer.Reset();
+                            stageFinishTimer.StartTimer();
                             OnStageThree();
                         }
 
@@ -326,10 +345,14 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageThreeAttacks);
 
-                        if (health < MAXHEALTH * .4f && !EarlyStageCheck())
+                        //if (health < MAXHEALTH * .4f && !EarlyStageCheck())
+                        if (stageFinishTimer.complete)
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Four;
+                            stageFinishTimer.Setup("StageCountdown", stageThreeTimer, true);
+                            stageFinishTimer.Reset();
+                            stageFinishTimer.StartTimer();
                             OnStageFour();
                         }
 
@@ -339,10 +362,14 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageFourAttacks);
 
-                        if (health < MAXHEALTH * .2f && !EarlyStageCheck())
+                        //if (health < MAXHEALTH * .2f && !EarlyStageCheck())
+                        if (stageFinishTimer.complete)
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Five;
+                            stageFinishTimer.Setup("StageCountdown", stageFourTimer, true);
+                            stageFinishTimer.Reset();
+                            stageFinishTimer.StartTimer();
                             OnStageFive();
                         }
 
