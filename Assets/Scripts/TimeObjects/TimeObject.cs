@@ -134,6 +134,7 @@ public class TimeObject : MonoBehaviour
 
                                 if(OnFinishPlayback != null)
                                     OnFinishPlayback();
+
                                 currentFrame = finishFrame;
                             }
                             break;

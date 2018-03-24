@@ -34,10 +34,10 @@ public class VillagerVHSEffect : VHSEffect {
                 mpb.SetFloat("_ScanJitter", scanJitter);
                 hatRenderer.SetPropertyBlock(mpb);
             }
-            else
-            {
-                Debug.Log("No attached renderer to hat");
-            }
+            //else
+            //{
+            //    Debug.Log("No attached renderer to hat");
+            //}
         }
         else
         {

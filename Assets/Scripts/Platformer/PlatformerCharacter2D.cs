@@ -69,7 +69,6 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     public virtual void Move(Hashtable animData)
     {
-
         dead = (bool)animData["Dead"];
         meleeAttack = (bool)animData["MeleeAttack"];
         rangedAttack = (bool)animData["RangedAttack"];
@@ -77,10 +76,9 @@ public class PlatformerCharacter2D : MonoBehaviour
         xDir = (int)animData["Move"];
 
         //If dead and not in dead state we want to trigger the death animation
-        if (dead && !m_Anim.GetCurrentAnimatorStateInfo(0).IsName("Death") && 
-            Game.timeState == TimeState.Forward)
+        if (Game.timeState == TimeState.Forward)
         {
-            m_Anim.SetTrigger("Dead");
+            m_Anim.SetBool("Dead", dead);
         }
 
         //Want to make sure the Character reverses from death if time is moving backwards
