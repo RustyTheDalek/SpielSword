@@ -13,7 +13,7 @@ public class Timer : MonoBehaviour
     //Whether the timer starts immediately
     public bool startOnAwake;
 
-
+    //TODO: Fix complete so it cann't be set to true
     public bool countsDown, //If true counts down else count up
                 active = false, //Whether the timer is running
                 complete = false; //Is the timer finished

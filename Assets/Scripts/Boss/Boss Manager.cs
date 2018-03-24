@@ -102,6 +102,9 @@ public abstract class BossManager : MonoBehaviour
 
     public BossStage bossStage = BossStage.None;
 
+    [SerializeField]
+    StageFinishType stageFinishType = StageFinishType.Time;
+
     /// <summary>
     /// Uses Normalised time from Boss animations to smooth the speed up for stage skipping
     /// </summary>
@@ -115,10 +118,8 @@ public abstract class BossManager : MonoBehaviour
 
     Timer stageFinishTimer;
 
-    int stageOneTimer   = 60,
-        stageTwoTimer   = 60,
-        stageThreeTimer = 60,
-        stageFourTimer  = 60;
+    List<int> stageTimers;
+    List<float> stageHealthLimits;
 
     public abstract bool Attacking { get; } 
 
@@ -147,36 +148,32 @@ public abstract class BossManager : MonoBehaviour
 
         OnStageOne();
 
-        switch (bossStage)
+        switch(stageFinishType)
         {
-            case BossStage.Two:
+            case StageFinishType.Healthloss:
 
-                OnStageTwo();
-                health = MAXHEALTH * .79f;
+                stageHealthLimits = new List<float>(4)
+                {
+                    MAXHEALTH * .8f,
+                    MAXHEALTH * .6f,
+                    MAXHEALTH * .4f,
+                    MAXHEALTH * .2f
+                };
+
                 break;
 
-            case BossStage.Three:
+            case StageFinishType.Time:
 
-                OnStageThree();
-                health = MAXHEALTH * .59f;
-                break;
+                stageTimers = new List<int>(4)
+                {
+                    60,
+                    60,
+                    60,
+                    60
+                };
 
-            case BossStage.Four:
-
-                OnStageFour();
-                health = MAXHEALTH * .39f;
-                break;
-
-            case BossStage.Five:
-
-                OnStageFive();
-                health = MAXHEALTH * .19f;
                 break;
         }
-        stageFinishTimer = gameObject.AddComponent<Timer>();
-        stageFinishTimer.Setup("StageCountdown", stageOneTimer, true);
-        Debug.Log("StageTimer : " + stageOneTimer);
-        stageFinishTimer.StartTimer();
     }
 
     #region Stage skipping ideas
@@ -211,6 +208,14 @@ public abstract class BossManager : MonoBehaviour
     public void NextStage()
     {
         bossStage += 1;
+
+        if(stageFinishType == StageFinishType.Time)
+        {
+            Debug.Log(bossStage + " : " + (int)bossStage);
+            stageFinishTimer = gameObject.AddComponent<Timer>();
+            stageFinishTimer.Setup("StageCountdown", stageTimers[(int)bossStage], true);
+            stageFinishTimer.StartTimer();
+        }
     }
 
     public void TrimStage()
@@ -287,6 +292,37 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
+    bool ReqsForNextStage(bool checkforNextStage = true)
+    {
+        switch(stageFinishType)
+        {
+            case StageFinishType.Healthloss:
+
+                if (health < stageHealthLimits[(int)bossStage] && !EarlyStageCheck())
+                    return true;
+
+                break;
+
+            case StageFinishType.Time:
+
+                if (stageFinishTimer.complete)
+                {
+                    if (checkforNextStage)
+                    {
+                        stageFinishTimer.Setup("StageCountdown", stageTimers[(int)bossStage], true);
+                        stageFinishTimer.Reset();
+                        stageFinishTimer.StartTimer();
+                    }
+
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
+    }
+
     // Update is called once per frame
     public virtual void Update()
     {
@@ -306,20 +342,26 @@ public abstract class BossManager : MonoBehaviour
         {
             case TimeState.Forward:
 
+                if (health <= MAXHEALTH * .8f)
+                {
+                    DamageBoss(0);
+                }
+
+                if (health <= MAXHEALTH * .4f)
+                {
+                    DamageBoss(1);
+                }
+
                 switch (bossStage)
                 {
                     case BossStage.One:
 
                         StageAttackLogic(StageOneAttacks);
 
-                        //if (health < MAXHEALTH * .8f && !EarlyStageCheck())
-                        if(stageFinishTimer.complete)
+                        if(ReqsForNextStage())
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Two;
-                            stageFinishTimer.Setup("StageCountdown", stageOneTimer, true);
-                            stageFinishTimer.Reset();
-                            stageFinishTimer.StartTimer();
                             OnStageTwo();
                         }
                         break;
@@ -328,14 +370,10 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageTwoAttacks);
 
-                        //if (health < MAXHEALTH * .6f && !EarlyStageCheck())
-                        if (stageFinishTimer.complete)
+                        if(ReqsForNextStage())
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Three;
-                            stageFinishTimer.Setup("StageCountdown", stageTwoTimer, true);
-                            stageFinishTimer.Reset();
-                            stageFinishTimer.StartTimer();
                             OnStageThree();
                         }
 
@@ -345,14 +383,10 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageThreeAttacks);
 
-                        //if (health < MAXHEALTH * .4f && !EarlyStageCheck())
-                        if (stageFinishTimer.complete)
+                        if (ReqsForNextStage())
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Four;
-                            stageFinishTimer.Setup("StageCountdown", stageThreeTimer, true);
-                            stageFinishTimer.Reset();
-                            stageFinishTimer.StartTimer();
                             OnStageFour();
                         }
 
@@ -362,14 +396,10 @@ public abstract class BossManager : MonoBehaviour
 
                         StageAttackLogic(StageFourAttacks);
 
-                        //if (health < MAXHEALTH * .2f && !EarlyStageCheck())
-                        if (stageFinishTimer.complete)
+                        if (ReqsForNextStage(false))
                         {
                             TimeEnteredCurrentStage = Game.t;
                             bossStage = BossStage.Five;
-                            stageFinishTimer.Setup("StageCountdown", stageFourTimer, true);
-                            stageFinishTimer.Reset();
-                            stageFinishTimer.StartTimer();
                             OnStageFive();
                         }
 
@@ -417,8 +447,7 @@ public abstract class BossManager : MonoBehaviour
     {
         SetAnimators(true);
 
-        bossStage = BossStage.One;
-        OnStageOne();
+        bossStage = BossStage.None;
 
         for (int i = 0; i < numberOAttacks.Count; i++)
         {
@@ -454,6 +483,8 @@ public abstract class BossManager : MonoBehaviour
     protected abstract void StageThreeAttacks(int attack);
     protected abstract void StageFourAttacks(int attack);
     protected abstract void StageFiveAttacks(int attack);
+
+    protected abstract void DamageBoss(int num);
 
     public virtual void SetBossParts() { }
 
@@ -519,24 +550,22 @@ public abstract class BossManager : MonoBehaviour
 
     #region Debug Functions
 
-    public void Stage2()
-    {
-        health = MAXHEALTH* .7f;
-    }
+    public void ToStage(int stage)
+    { 
+        switch (stageFinishType)
+        {
+            case StageFinishType.Healthloss:
 
-    public void Stage3()
-    {
-        health = MAXHEALTH * .5f;
-    }
+                health = stageHealthLimits[stage-1];
+                break;
 
-    public void Stage4()
-    {
-        health = MAXHEALTH * .3f;
-    }
+            case StageFinishType.Time:
 
-    public void Stage5()
-    {
-        health = MAXHEALTH * .1f;
+                bossStage = (BossStage)stage-1;
+                stageFinishTimer.complete = true;
+
+                break;
+        }
     }
 
     #endregion

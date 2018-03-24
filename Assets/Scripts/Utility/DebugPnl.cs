@@ -50,24 +50,10 @@ public class DebugPnl : MonoBehaviour {
         vilManager.KillVillager();
     }
 
-    public void BossStage2()
+    public void ToStage(int stage)
     {
-        bManager.Stage2();
-    }
-
-    public void BossStage3()
-    {
-        bManager.Stage3();
-    }
-
-    public void BossStage4()
-    {
-        bManager.Stage4();
-    }
-
-    public void BossStage5()
-    {
-        bManager.Stage5();
+        stage--;
+        bManager.ToStage(stage);
     }
 #endif
 }

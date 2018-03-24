@@ -15,7 +15,8 @@ public class TimeObjectManager : MonoBehaviour
     public static List<SpawnableSpriteTimeObject> vSpawnable = new List<SpawnableSpriteTimeObject>();
     public static List<PlatformerTimeObject> platformers = new List<PlatformerTimeObject>();
 
-    public bool newRoundReady;
+    public delegate void OnNewRoundReady();
+    public static event OnNewRoundReady NewRoundReady;
 
     public AnimationCurve rewindCurve;
 
@@ -142,14 +143,8 @@ public class TimeObjectManager : MonoBehaviour
             Game.timeState = TimeState.Forward;
             Time.timeScale = 1;
 
-            try
-            {
-                newRoundReady = true;
-            }
-            catch
-            {
-                Debug.LogWarning("No Villager manager found, are you testing Time stuff without it?");
-            }
+            if (NewRoundReady != null)
+                NewRoundReady();
         }
 
         if (Game.timeState == TimeState.Forward)

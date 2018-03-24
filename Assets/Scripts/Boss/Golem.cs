@@ -45,6 +45,20 @@ public class Golem : BossManager {
             }
         }
     }
+    
+    /// <summary>
+    /// Causes next stage of Boss Damage
+    /// </summary>
+    protected override void DamageBoss(int num)
+    {
+        bossParts[0].sprite = headStages[num];
+        bossParts[1].sprite = bodyStages[num];
+        bossParts[2].sprite = utilityA[num];
+        bossParts[3].sprite = utilityB[num];
+        bossParts[4].sprite = utilityC[num];
+        bossParts[5].sprite = rArmStages[num];
+        bossParts[6].sprite = lArmStages[num];
+    }
 
     #region Stage One
     public override void OnStageOne()
@@ -90,14 +104,6 @@ public class Golem : BossManager {
     #region Stage Two
     public override void OnStageTwo()
     {
-        bossParts[0].sprite = headStages[0];
-        bossParts[1].sprite = bodyStages[0];
-        bossParts[2].sprite = utilityA[0];
-        bossParts[3].sprite = utilityB[0];
-        bossParts[4].sprite = utilityC[0];
-        bossParts[5].sprite = rArmStages[0];
-        bossParts[6].sprite = lArmStages[0];
-
         //Sets the amount of attacks possible this stage
         attackCountStage = 5;
     }
@@ -171,14 +177,6 @@ public class Golem : BossManager {
     #region Stage Four
     public override void OnStageFour()
     {
-        bossParts[0].sprite = headStages[1];
-        bossParts[1].sprite = bodyStages[1];
-        bossParts[2].sprite = utilityA[1];
-        bossParts[3].sprite = utilityB[1];
-        bossParts[4].sprite = utilityC[1];
-        bossParts[5].sprite = rArmStages[1];
-        bossParts[6].sprite = lArmStages[1];
-
         //Sets the amount of attacks possible this stage
         attackCountStage = 6;
     }

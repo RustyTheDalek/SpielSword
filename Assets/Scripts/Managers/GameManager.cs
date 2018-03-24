@@ -37,6 +37,16 @@ public class GameManager : MonoBehaviour {
             Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
         }
 	}
+
+    void OnNewRound()
+    {
+        currentBoss.Reset();
+        vilManager.OnNewRound();
+        Game.bossReady = false;
+        Game.bossState = BossState.Waking;
+
+        TimeObjectManager.NewRoundReady -= OnNewRound;
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -50,20 +60,13 @@ public class GameManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
-                if (timeManager.newRoundReady)
-                {
-                    currentBoss.Reset();
-                    vilManager.OnNewRound();
-
-                    timeManager.newRoundReady = false;
-                }
-
                 if (!vilManager.activeVillager.Alive)
                 {
                     Game.timeState = TimeState.Backward;
                     currentBoss.GetComponent<BossManager>().SetAnimators(false);
 
                     OnPlayerDeath();
+                    TimeObjectManager.NewRoundReady += OnNewRound;
 
                     //TimeObjectManager.SoftReset();
                     //vilManager.OnVillagerDeath();
