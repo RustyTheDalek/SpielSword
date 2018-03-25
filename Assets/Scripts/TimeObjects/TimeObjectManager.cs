@@ -39,6 +39,8 @@ public class TimeObjectManager : MonoBehaviour
         //}
 
         AssetManager.Projectile.name = "Range";
+
+        GameManager.OnPlayerDeath += SetMaxReverseSpeed;
     }
 
     // Update is called once per frame
@@ -134,6 +136,13 @@ public class TimeObjectManager : MonoBehaviour
         }
     }
 
+    void SetMaxReverseSpeed()
+    {
+        Keyframe keyframe = new Keyframe(.5f, (Game.longestTime / 60));
+
+        rewindCurve.MoveKey(1, keyframe);
+    }
+
     private void LateUpdate()
     {
         if (Game.t < 0)
@@ -157,9 +166,7 @@ public class TimeObjectManager : MonoBehaviour
             //Currently not using X while we're testing
             float x = rewindCurve.Evaluate((float)Game.t / (float)Game.longestTime);
             float newTimeScale = x;
-            Time.timeScale = newTimeScale;
-
-            
+            Time.timeScale = newTimeScale;   
         }
     }
 }
