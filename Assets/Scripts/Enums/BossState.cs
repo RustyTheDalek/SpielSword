@@ -7,4 +7,5 @@ public enum BossState
     Attacking,
     StartSkippingStage,
     SkippingStage,
+    Dead,
 }

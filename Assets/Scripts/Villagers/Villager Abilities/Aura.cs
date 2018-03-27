@@ -11,6 +11,21 @@ public class Aura : SpawnableSpriteTimeObject
     public float auraLife  = 5,
                     auraTimer = 0;
 
+    /// <summary>
+    /// Reference to creators collider for ensuring it doesn't rect to self when required
+    /// </summary>
+    public GameObject creator;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        OnPlayFrame -= PlaySpriteFrame;
+        OnTrackFrame -= TrackSpriteFrame;
+    }
+
+
+
     // Use this for initialization
     protected override void Start()
     {
@@ -20,12 +35,15 @@ public class Aura : SpawnableSpriteTimeObject
         auraTimer = auraLife;
 
         OnPlayFrame += PlayAuraFrame;
+
+        TimeObjectManager.NewRoundReady += DecreaseStrength;
     }
 
     // Update is called once per frame
     protected override void Update()
     {
-        if (auraTimer > 0 && (tObjectState == TimeObjectState.Present || tObjectState == TimeObjectState.PastPlaying))
+        if (auraTimer > 0 && (tObjectState == TimeObjectState.Present || 
+            tObjectState == TimeObjectState.PastPlaying))
         {
             auraTimer -= Time.deltaTime;
         }
@@ -33,7 +51,10 @@ public class Aura : SpawnableSpriteTimeObject
         {
             SetActive(false);
 
-            finishFrame = Game.t;
+            if (finishFrame == 0)
+            {
+                finishFrame = Game.t;
+            }
 
             auraActive = false;
         }
@@ -45,8 +66,6 @@ public class Aura : SpawnableSpriteTimeObject
     {
         if (Tools.WithinRange(currentFrame, sSFrames))
         {
-            GetComponent<SpriteRenderer>().enabled = sSFrames[currentFrame].active;
-
             if (GetComponent<Collider2D>())
                 GetComponent<Collider2D>().enabled = sSFrames[currentFrame].active;
 
@@ -63,8 +82,71 @@ public class Aura : SpawnableSpriteTimeObject
         {
             health--;
 
-            Color col = GetComponent<SpriteRenderer>().color;
-            GetComponent<SpriteRenderer>().color = new Color(col.r, col.g, col.b, health / 4);
+            Color col = m_Sprite.color;
+            m_Sprite.color = new Color(col.r, col.g, col.b, health / 4);
+        }
+        else
+        {
+            TimeObjectManager.NewRoundReady -= DecreaseStrength;
         }
     }
+
+    protected virtual void OnEnterAura(Collider2D coll)
+    {
+        if (coll.gameObject != creator)
+        {
+            if (!Game.ComboAchieved)
+            {
+                Game.ComboAchieved = true;
+                Game.IncScore();
+            }
+        }
+    }
+
+    protected virtual void OnExitAura(Collider2D coll) { }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (auraActive && coll.GetComponent<Villager>())
+        {
+            Villager temp = coll.GetComponent<Villager>();
+
+            if (temp.CurrentVillager)
+            {
+                OnEnterAura(coll);
+            }
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D coll)
+    {
+        if (coll.GetComponent<Villager>())
+        {
+            Villager temp = coll.GetComponent<Villager>();
+
+            if (temp.CurrentVillager && auraActive)
+            {
+                OnEnterAura(coll);
+            }
+            else
+            {
+                OnExitAura(coll);
+            }
+        }
+    }
+
+
+    void OnTriggerExit2D(Collider2D coll)
+    {
+        if (coll.GetComponent<Villager>())
+        {
+            Villager temp = coll.GetComponent<Villager>();
+
+            if (temp.CurrentVillager)
+            {
+                OnExitAura(coll);
+            }
+        }
+    }
+
 }

@@ -6,10 +6,10 @@ using System;
 
 public abstract class BossManager : MonoBehaviour
 {
-    public Head head;
-
     public const float MAXHEALTH = 400;
     public static float health = MAXHEALTH;
+
+    #region Attack variables
 
     public List<List<int>> stageAttacks = new List<List<int>>();
 
@@ -40,6 +40,15 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
+    protected List<int> stageOneAttackSequence = new List<int>(),
+                            stageTwoAttackSequence = new List<int>(),
+                            stageThreeAttackSequence = new List<int>(),
+                            stageFourAttackSequence = new List<int>(),
+                            stageFiveAttackSequence = new List<int>();
+
+    #endregion
+
+    #region Stage variables
     /// <summary>
     /// Helps track when a stage is entered for accurate stage skipping checks
     /// </summary>
@@ -73,6 +82,18 @@ public abstract class BossManager : MonoBehaviour
         }
 }
 
+    public BossStage bossStage = BossStage.None;
+
+    [SerializeField]
+    StageFinishType stageFinishType = StageFinishType.Time;
+
+    Timer stageFinishTimer;
+
+    List<int> stageTimers;
+    List<float> stageHealthLimits;
+
+    #endregion
+
     public AnimationCurve bossSpeedUp;
 
     public bool Alive
@@ -87,23 +108,12 @@ public abstract class BossManager : MonoBehaviour
 
     public BossHealthBar bossHealthBar;
 
-    protected List<int>     stageOneAttackSequence = new List<int>(),
-                            stageTwoAttackSequence = new List<int>(),
-                            stageThreeAttackSequence = new List<int>(),
-                            stageFourAttackSequence = new List<int>(),
-                            stageFiveAttackSequence = new List<int>();
-
     #region Variables for retracing the Boss' Actions
     //List of Boss parts that are tracked for rewind
     List<Animator> bossAnims = new List<Animator>();
 
     public List<float> trackedHealth = new List<float>();
     #endregion
-
-    public BossStage bossStage = BossStage.None;
-
-    [SerializeField]
-    StageFinishType stageFinishType = StageFinishType.Time;
 
     /// <summary>
     /// Uses Normalised time from Boss animations to smooth the speed up for stage skipping
@@ -116,12 +126,10 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
-    Timer stageFinishTimer;
+    public abstract bool Attacking { get; }
 
-    List<int> stageTimers;
-    List<float> stageHealthLimits;
-
-    public abstract bool Attacking { get; } 
+    public  delegate void BossDeath();
+    public static event BossDeath OnBossDeath;
 
     public virtual void Start ()
 	{
@@ -174,6 +182,8 @@ public abstract class BossManager : MonoBehaviour
 
                 break;
         }
+
+        OnBossDeath += OnDeath;
     }
 
     #region Stage skipping ideas
@@ -352,84 +362,91 @@ public abstract class BossManager : MonoBehaviour
                     DamageBoss(1);
                 }
 
-                switch (bossStage)
+                switch (Game.bossState)
                 {
-                    case BossStage.One:
+                    case BossState.Attacking:
 
-                        StageAttackLogic(StageOneAttacks);
-
-                        if(ReqsForNextStage())
-                        {
-                            TimeEnteredCurrentStage = Game.t;
-                            bossStage = BossStage.Two;
-                            OnStageTwo();
-                        }
-                        break;
-
-                    case BossStage.Two:
-
-                        StageAttackLogic(StageTwoAttacks);
-
-                        if(ReqsForNextStage())
-                        {
-                            TimeEnteredCurrentStage = Game.t;
-                            bossStage = BossStage.Three;
-                            OnStageThree();
-                        }
-
-                        break;
-
-                    case BossStage.Three:
-
-                        StageAttackLogic(StageThreeAttacks);
-
-                        if (ReqsForNextStage())
-                        {
-                            TimeEnteredCurrentStage = Game.t;
-                            bossStage = BossStage.Four;
-                            OnStageFour();
-                        }
-
-                        break;
-
-                    case BossStage.Four:
-
-                        StageAttackLogic(StageFourAttacks);
-
-                        if (ReqsForNextStage(false))
-                        {
-                            TimeEnteredCurrentStage = Game.t;
-                            bossStage = BossStage.Five;
-                            OnStageFive();
-                        }
-
-                        break;
-
-                    case BossStage.Five:
-
-                        StageAttackLogic(StageFiveAttacks);
-
-                        break;
-                }
-
-                if (Alive)
-                {
-                    if (Game.t < trackedHealth.Count)
+                        switch (bossStage)
                     {
-                        //if (trackedHealth[(int)Game.t] < health)
-                        //{
-                        //    health = trackedHealth[(int)Game.t];
-                        //}
+                        case BossStage.One:
+
+                            StageAttackLogic(StageOneAttacks);
+
+                            if (ReqsForNextStage())
+                            {
+                                TimeEnteredCurrentStage = Game.t;
+                                bossStage = BossStage.Two;
+                                OnStageTwo();
+                            }
+                            break;
+
+                        case BossStage.Two:
+
+                            StageAttackLogic(StageTwoAttacks);
+
+                            if (ReqsForNextStage())
+                            {
+                                TimeEnteredCurrentStage = Game.t;
+                                bossStage = BossStage.Three;
+                                OnStageThree();
+                            }
+
+                            break;
+
+                        case BossStage.Three:
+
+                            StageAttackLogic(StageThreeAttacks);
+
+                            if (ReqsForNextStage())
+                            {
+                                TimeEnteredCurrentStage = Game.t;
+                                bossStage = BossStage.Four;
+                                OnStageFour();
+                            }
+
+                            break;
+
+                        case BossStage.Four:
+
+                            StageAttackLogic(StageFourAttacks);
+
+                            if (ReqsForNextStage(false))
+                            {
+                                TimeEnteredCurrentStage = Game.t;
+                                bossStage = BossStage.Five;
+                                OnStageFive();
+                            }
+
+                            break;
+
+                        case BossStage.Five:
+
+                            StageAttackLogic(StageFiveAttacks);
+
+                            break;
                     }
-                    else
-                    {
-                        trackedHealth.Add(health);
-                    }
-                }
-                else//Death of boss
-                {
-                    Detach(gameObject);
-                }
+
+                        if (Alive)
+                        {
+                            if (Game.t < trackedHealth.Count)
+                            {
+                                //if (trackedHealth[(int)Game.t] < health)
+                                //{
+                                //    health = trackedHealth[(int)Game.t];
+                                //}
+                            }
+                            else
+                            {
+                                trackedHealth.Add(health);
+                            }
+                        }
+                        else//Death of boss
+                        {
+                            OnBossDeath();
+                        }
+
+                        break;
+                }   
 
                 break;
 
@@ -474,9 +491,27 @@ public abstract class BossManager : MonoBehaviour
     //What happens the first time a stage is entered
     public abstract void OnStageOne();
     public abstract void OnStageTwo();
-    public abstract void OnStageThree();
+
+    public virtual void OnStageThree()
+    {
+        Game.IncScore();
+        Game.ReachedStage3 = true;
+    }
     public abstract void OnStageFour();
-    public abstract void OnStageFive();
+
+    public virtual void OnStageFive()
+    {
+        Game.IncScore();
+        Game.ReachedStage5 = true;
+
+    }
+
+    public void OnDeath()
+    {
+        Game.bossState = BossState.Dead;
+
+        Detach(gameObject);
+    }
 
     protected abstract void StageOneAttacks(int attack);
     protected abstract void StageTwoAttacks(int attack);

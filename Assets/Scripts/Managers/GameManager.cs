@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour {
     public delegate void PlayerDeathEvent();
     public static event PlayerDeathEvent OnPlayerDeath;
 
+    public delegate void GameOverEvent();
+    public static event GameOverEvent OnGameOver;
+
     // Use this for initialization
     void Start ()
     {
@@ -36,7 +39,10 @@ public class GameManager : MonoBehaviour {
         {
             Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
         }
-	}
+
+        BossManager.OnBossDeath += IncreaseScore;
+        BossManager.OnBossDeath += OpenEndSlate;
+    }
 
     void OnNewRound()
     {
@@ -46,6 +52,7 @@ public class GameManager : MonoBehaviour {
         Game.bossState = BossState.Waking;
 
         TimeObjectManager.NewRoundReady -= OnNewRound;
+
     }
 	
 	// Update is called once per frame
@@ -62,14 +69,25 @@ public class GameManager : MonoBehaviour {
 
                 if (!vilManager.activeVillager.Alive)
                 {
-                    Game.timeState = TimeState.Backward;
-                    currentBoss.GetComponent<BossManager>().SetAnimators(false);
+                    if (vilManager.RemainingVillagers <= 0)
+                    {
+                        Time.timeScale = 0;
+                        Debug.Log("Game Over");
+                        //TODO:On game over probably have Golem keep going and character just dies
+                        if (OnGameOver != null)
+                            OnGameOver();
+                    }
+                    else
+                    {
+                        Game.timeState = TimeState.Backward;
+                        currentBoss.GetComponent<BossManager>().SetAnimators(false);
 
-                    OnPlayerDeath();
-                    TimeObjectManager.NewRoundReady += OnNewRound;
+                        OnPlayerDeath();
+                        TimeObjectManager.NewRoundReady += OnNewRound;
 
-                    //TimeObjectManager.SoftReset();
-                    //vilManager.OnVillagerDeath();
+                        //TimeObjectManager.SoftReset();
+                        //vilManager.OnVillagerDeath();
+                    }
 
                 }
 
@@ -158,6 +176,41 @@ public class GameManager : MonoBehaviour {
             //    break;
         }
 	}
+
+    void IncreaseScore()
+    {
+        Game.IncScore();
+    }
+
+    /// <summary>
+    /// Opens End-game slate showing score
+    /// </summary>
+    void OpenEndSlate()
+    {
+        string finish = "You won, score " + Game.TotalScore + " Out of " + Game.MAXSCORE;
+
+        if(Game.ReachedStage3)
+        {
+            finish += " You reached Stage 3";
+        }
+
+        if(Game.ReachedStage5)
+        {
+            finish += " You reached Stage 5";
+        }
+
+        if(Game.ComboAchieved)
+        {
+            finish += " You did a combo";
+        }
+
+        if(Game.LessThanTenLives)
+        {
+            finish += " In less than 10 lives too";
+        }
+
+        Debug.Log(finish);
+    }
 
     public static bool MoveRequest(CircleCollider2D[] colliders, Vector3 position)
     {

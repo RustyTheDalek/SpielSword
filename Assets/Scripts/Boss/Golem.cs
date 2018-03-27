@@ -145,6 +145,7 @@ public class Golem : BossManager {
     #region Stage Three
     public override void OnStageThree()
     {
+        base.OnStageThree();
         //Sets the amount of attacks possible this stage
         attackCountStage = 4;
     }
@@ -226,6 +227,7 @@ public class Golem : BossManager {
     #region Stage Five
     public override void OnStageFive()
     {
+        base.OnStageFive();
         //Sets the amount of attacks possible this stage
         attackCountStage = 4;
     }

@@ -38,6 +38,30 @@ public static class Game
 
     public static bool debugText = true;
 
+    public const int MAXSCORE = 5;
+
+    private static int _Score = 0;
+
+    public static void IncScore()
+    {
+        _Score++;
+
+        Debug.Log("Score increased");
+    }
+
+    public static bool  ReachedStage3,
+                        ReachedStage5,
+                        ComboAchieved,
+                        LessThanTenLives;
+
+    public static int TotalScore
+    {
+        get
+        {
+            return _Score;
+        }
+    }
+
 #if UNITY_EDITOR
 
     public static GUIStyle debugStyle = new GUIStyle();

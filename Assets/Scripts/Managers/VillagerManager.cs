@@ -11,7 +11,7 @@ public class VillagerManager : MonoBehaviour {
 
     //Transforms to sort the Villagers
     [HideInInspector]
-    public Transform    activeVillagerTrans,
+    public Transform activeVillagerTrans,
                         remainingVillagersTrans,
                         pastVillagersTrans,
                         deadVillagersTrans,
@@ -19,11 +19,28 @@ public class VillagerManager : MonoBehaviour {
                         warpGateExit;
 
     public int villagersToSpawn;
-    
+
     public Villager activeVillager;
 
     [SerializeField] List<Villager> remainingVillagers;
     List<Villager> pastVillagers;
+
+    public int RemainingVillagers
+    {
+        get
+        {
+            if (remainingVillagers != null)
+            {
+                return remainingVillagers.Count;
+            }
+            else
+            {
+                Debug.LogError("Remaining villagers null");
+
+                return -1;
+            }
+        }
+    }
 
     Action currentAction;
 
@@ -52,6 +69,7 @@ public class VillagerManager : MonoBehaviour {
 
     void Awake()
     {
+        BossManager.OnBossDeath += CheckLivesUsed;
     }
 
     // Use this for initialization
@@ -71,7 +89,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            //classToSpawn = VillagerClass.Berserker;
+            classToSpawn = VillagerClass.Mage;
 
             GameObject temp = AssetManager.Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
@@ -221,6 +239,15 @@ public class VillagerManager : MonoBehaviour {
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = true;
         activeVillager.transform.position = warpGateExit.transform.position;
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = false;
+    }
+
+    void CheckLivesUsed()
+    {
+        if(totalLives <= 10)
+        {
+            Game.LessThanTenLives = true;
+            Game.IncScore();
+        }
     }
 
     /// <summary>

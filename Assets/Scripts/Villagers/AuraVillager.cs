@@ -31,7 +31,8 @@ public abstract class AuraVillager : Villager
     {
         if (villagerState == VillagerState.PresentVillager)
         {
-            VillagerManager.auras.Add(Aura().GetComponent<MageAura>());
+            GameObject temp = Aura();
+            temp.GetComponent<Aura>().creator = gameObject;
 
             AuraActive = true;
             animData["CanSpecial"] = false;

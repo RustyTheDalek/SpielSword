@@ -119,12 +119,15 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastPlaying:
 
-                        //If finish frame is 0 then timeobject hasn't finished yet and will need extra tracking
+                        //If finish frame is 0 then timeobject hasn't finished yet and 
+                        //will need extra tracking
                         if (Game.t >= finishFrame && finishFrame != 0 ||
-                            (finishFrame == 0 && Game.t >= bFrames[bFrames.Count - 1].timeStamp))
+                            (finishFrame == 0 && 
+                            Game.t >= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             if (finishFrame == 0)
                             {
+                                Debug.Log("Gotta finish");
                                 tObjectState = TimeObjectState.Present;
                                 OnTrackFrame();
                             }
@@ -177,8 +180,10 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastFinished:
 
-                        //We want to make sure it starts at the right time or starts reversing if it's in the present
-                        if (Game.t <= finishFrame || (finishFrame == 0 && Game.t <= bFrames[bFrames.Count - 1].timeStamp))
+                        //We want to make sure it starts at the right time or starts 
+                        //reversing if it's in the present
+                        if (Game.t <= finishFrame || (finishFrame == 0 && 
+                            Game.t <= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             tObjectState = TimeObjectState.PastPlaying;
                             if(OnStartReverse != null)
