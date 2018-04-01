@@ -68,21 +68,22 @@ public class FlightMinions : Character {
             FindFoe();
         }
 
-        Vector3 relativePos = (orbitPoint.transform.position) - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(relativePos);
+        //Vector3 relativePos = orbitPoint.transform.position - transform.position;
+        //Quaternion rotation = Quaternion.LookRotation(relativePos);
 
-        Quaternion current = transform.localRotation;
+        //Quaternion current = transform.localRotation;
 
-        transform.localRotation = Quaternion.Slerp(current, rotation, Time.deltaTime);
-        transform.Translate(0, 0, 3 * Time.deltaTime);
+        //transform.localRotation = Quaternion.Lerp(current, rotation, Time.deltaTime);
+        //transform.Translate(0, 0, 3 * Time.deltaTime);
         //transform.rotation = Quaternion.identity;
-
+        transform.RotateAround(orbitPoint.transform.position, Vector3.forward, 90 * Time.deltaTime);
+        transform.rotation = Quaternion.identity;
     }
 
     void Movement()
     {
         //regardless continue moving
-        animData["Move"] = xDir;
+        //animData["Move"] = xDir;
     }
 
     void FindFoe()
@@ -97,8 +98,20 @@ public class FlightMinions : Character {
             if (!rayResult)
             {
                 Debug.Log("Get help he is here");
+                Attack();
             }
         }
+    }
+
+    void Attack()
+    {
+        Vector3 relativePos = actPlayer.transform.position - transform.position;
+        Quaternion rotation = Quaternion.LookRotation(relativePos);
+
+        Quaternion current = transform.localRotation;
+
+        transform.localRotation = Quaternion.Lerp(current, rotation, Time.deltaTime);
+        transform.Translate(Vector3.forward * Time.deltaTime);
     }
 
 }

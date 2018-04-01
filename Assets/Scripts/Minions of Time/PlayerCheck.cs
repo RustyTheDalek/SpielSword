@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerCheck : MonoBehaviour {
 
     public GameObject parentMinion;
+
+    //public Component parentComponent;
+    bool groundEnemy;
     bool onEnter;
     bool onExit;
 
@@ -12,6 +15,16 @@ public class PlayerCheck : MonoBehaviour {
 	void Start () {
         onEnter = false;
         onExit = true;
+        if (parentMinion = GameObject.Find("Flying Enemy"))
+        {
+            groundEnemy = false;
+            //parentComponent = parentMinion.GetComponent<FlightMinions>();
+        }
+        else
+        {
+            groundEnemy = true;
+            //parentComponent = parentMinion.GetComponent<GroundMinions>();
+        }
     }
 	
 	// Update is called once per frame
@@ -25,8 +38,16 @@ public class PlayerCheck : MonoBehaviour {
         if (!onEnter)
         {
             Debug.Log("I sense a player");
-            parentMinion.GetComponent<GroundMinions>().actPlayer = player.gameObject;
-            parentMinion.GetComponent<GroundMinions>().playerHere = true;
+            if (groundEnemy)
+            {
+                parentMinion.GetComponent<GroundMinions>().actPlayer = player.gameObject;
+                parentMinion.GetComponent<GroundMinions>().playerHere = true;
+            }
+            else
+            {
+                parentMinion.GetComponent<FlightMinions>().actPlayer = player.gameObject;
+                parentMinion.GetComponent<FlightMinions>().playerHere = true;
+            }
         }
         onEnter = true;
     }
@@ -37,7 +58,14 @@ public class PlayerCheck : MonoBehaviour {
         if (!onExit)
         {
             Debug.Log("Dont you want to play?");
-            parentMinion.GetComponent<GroundMinions>().playerHere = false;
+            if (groundEnemy)
+            {
+                parentMinion.GetComponent<GroundMinions>().playerHere = false;
+            }
+            else
+            {
+                parentMinion.GetComponent<FlightMinions>().playerHere = false;
+            }
         }
         onExit = true;
     }
