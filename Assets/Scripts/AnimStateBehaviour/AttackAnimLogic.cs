@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CannotAttack : StateMachineBehaviour {
+/// <summary>
+/// Prevents Player from just holding down attack and also provides accurate tracking of attacks
+/// Created on : Ian Jones      - 27/08/17
+/// Updated by : Ian Jones      - 01/04/18
+/// </summary>
+public class AttackAnimLogic : StateMachineBehaviour {
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,30 +24,12 @@ public class CannotAttack : StateMachineBehaviour {
         //animator.GetComponentInChildren<MeleeAttack>().GetComponent<CircleCollider2D>().enabled = true;
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-        //Debug.Log(stateInfo.normalizedTime);
-    //}
-
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
         if (Game.timeState == TimeState.Backward)
         {
             animator.SetBool("CanAttack", false);
         }
-        //animator.GetComponentInChildren<MeleeAttack>().GetComponent<CircleCollider2D>().enabled = false;
     }
-
-    // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-    //
-    //}
-
-    // OnStateIK is called right after Animator.OnAnimatorIK(). Code that sets up animation IK (inverse kinematics) should be implemented here.
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-    //
-    //}
 }
