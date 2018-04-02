@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System;
 
+/// <summary>
+/// Base class for Bosses
+/// Created on : Sean Taylor    - 15/06/16
+/// Updated by : Ian Jones      - 01/04/18
+/// </summary>
 public abstract class BossManager : MonoBehaviour
 {
     public const float MAXHEALTH = 400;
@@ -22,6 +27,7 @@ public abstract class BossManager : MonoBehaviour
     }
 
     public int attackCountStage;
+
     // Values stored in these ints are used to track the progress in the attack list
     // number system determins the stage they are in charge of
     //Stores how many attacks are in each stage
@@ -49,6 +55,7 @@ public abstract class BossManager : MonoBehaviour
     #endregion
 
     #region Stage variables
+
     /// <summary>
     /// Helps track when a stage is entered for accurate stage skipping checks
     /// </summary>
@@ -94,6 +101,9 @@ public abstract class BossManager : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// Defines how the Boss Speeds up during a stage skip
+    /// </summary>
     public AnimationCurve bossSpeedUp;
 
     public bool Alive
@@ -128,7 +138,7 @@ public abstract class BossManager : MonoBehaviour
 
     public abstract bool Attacking { get; }
 
-    public  delegate void BossDeath();
+    public delegate void BossDeath();
     public static event BossDeath OnBossDeath;
 
     public virtual void Start ()
@@ -486,6 +496,13 @@ public abstract class BossManager : MonoBehaviour
         //    obj.Reset();
         //} 
 
+    }
+
+    public void StartFight()
+    {
+        Debug.Log("Starting fight!");
+        //NextStage();
+        //Game.bossState = BossState.Attacking;
     }
 
     //What happens the first time a stage is entered
