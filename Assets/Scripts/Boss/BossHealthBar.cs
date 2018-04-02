@@ -20,12 +20,6 @@ public class BossHealthBar : MonoBehaviour
         healthBar = GetComponentInChildren<Image>();
         standardSprite = healthBar.sprite;
     }
-
-	// Use this for initialization
-	void Start ()
-    {
-	
-	}
 	
 	// Update is called once per frame
 	void Update ()
