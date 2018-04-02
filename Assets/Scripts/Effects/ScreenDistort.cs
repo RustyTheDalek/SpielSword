@@ -1,14 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Manages screen distortion efect
+/// Created by : Ian Jones      - 01/08/17
+/// Updated by : Ian Jones      - 02/04/18
+/// </summary>
 public class ScreenDistort : MonoBehaviour {
 
     [Range(-1f, 1f)] public float displaceStrength =.01f;
     [Range(0, 1)] public float noiseStrength = .5f;
 
     public Material distort;
-
 
     float textureOffset;
 
@@ -39,7 +41,6 @@ public class ScreenDistort : MonoBehaviour {
         if (flux && Random.Range(0f, 1f) < .1f)
         {
             displaceStrength = Random.Range(-.01f, .01f);
-            //speedFlux = Random.Range(0.75f, 1f);
         }
     }
 
@@ -48,7 +49,6 @@ public class ScreenDistort : MonoBehaviour {
         distort.SetFloat("_DisplaceStrength", displaceStrength);
         distort.SetFloat("_Offset", textureOffset);
         distort.SetFloat("_NoiseStrength", noiseStrength);
-        //distort.mainTextureOffset += Vector2.up * textureOffset;
         Graphics.Blit(source, destination, distort);
     }
 }

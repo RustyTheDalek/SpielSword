@@ -1,7 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Manages noise effect on Sprite
+/// Created by : Ian Jones      - 30/05/17
+/// Updated by : Ian Jones      - 02/04/18
+/// </summary>
 [ExecuteInEditMode]
 public class VHSEffect : MonoBehaviour {
 
@@ -41,15 +44,17 @@ public class VHSEffect : MonoBehaviour {
         UpdateVHS(true);
     }
 
-    public virtual void UpdateVHS(bool vhs)
+    public virtual void UpdateVHS(bool active)
     {
-        if (vhs)
+        if (active)
         {
             mpb = new MaterialPropertyBlock();
             sRenderer.GetPropertyBlock(mpb);
 
+            //Moves the "Smudge effect"
             yScanLine += Time.deltaTime * yScanSpeed * (int)Game.timeState;
 
+            //Moves all the scan lines around
             for (int i = 0; i < xScanLines.Length; i++)
             {
                 xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i+1);
@@ -57,12 +62,11 @@ public class VHSEffect : MonoBehaviour {
                 mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * (int)Time.timeScale * Game.PastTimeScale);
             }
 
+            //Clamps the smudge effect
             if (yScanLine >= .75f || yScanLine <= 0)
             {
                 yScanSpeed *= -1 * Random.Range(0.1f, 1);
             }
-
-            //yScanLine = yScanLine % 1;
 
             mpb.SetFloat("_yScanLine", yScanLine * (int)Time.timeScale * Game.PastTimeScale);
             mpb.SetFloat("_noiseStrength", noiseStrength);
@@ -84,9 +88,10 @@ public class VHSEffect : MonoBehaviour {
         }
     }
 
+    //This causes Lines to move randomly up when they reach the bottom
     float XScanLineLogic(float val)
     {
-        if (val <= 0 /*|| Random.value < 0.01*/)
+        if (val <= 0 )
         {
             return Random.value;
         }

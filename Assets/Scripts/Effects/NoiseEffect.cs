@@ -1,7 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Manages Noise effect shader
+/// Created by : Ian Jones      - 01/08/17
+/// Updated by : Ian Jones      - 02/04/18
+/// </summary>
 [ExecuteInEditMode]
 public class NoiseEffect : MonoBehaviour
 {

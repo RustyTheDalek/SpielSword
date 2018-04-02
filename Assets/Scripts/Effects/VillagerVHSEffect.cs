@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script that manages it's own VHS effect as well as another, used on villagers 
+/// to sync hat up.
+/// Created by : Ian Jones      - 30/10/17
+/// Updated by : Ian Jones      - 02/04/18
+/// </summary>
 [ExecuteInEditMode]
 public class VillagerVHSEffect : VHSEffect {
 
@@ -34,10 +40,6 @@ public class VillagerVHSEffect : VHSEffect {
                 mpb.SetFloat("_ScanJitter", scanJitter);
                 hatRenderer.SetPropertyBlock(mpb);
             }
-            //else
-            //{
-            //    Debug.Log("No attached renderer to hat");
-            //}
         }
         else
         {

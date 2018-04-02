@@ -1,7 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Manages Scan Line effect on screen
+/// Created by : Ian Jones      - 01/08/17
+/// Updated by : Ian Jones      - 02/04/18
+/// </summary>
 [ExecuteInEditMode]
 public class ScanLineEffect : MonoBehaviour
 {
@@ -37,9 +40,9 @@ public class ScanLineEffect : MonoBehaviour
         UpdateScanLines(true);
     }
 
-    void UpdateScanLines(bool vhs)
+    void UpdateScanLines(bool active)
     {
-        if (vhs)
+        if (active)
         {
 
             for (int i = 0; i < xScanLines.Length; i++)
@@ -47,17 +50,6 @@ public class ScanLineEffect : MonoBehaviour
                 xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i + 1);
                 xScanLines[i] = XScanLineLogic(xScanLines[i]);
             }
-        }
-        else
-        {
-            //for (int i = 0; i < xScanLines.Length; i++)
-            //{
-            //    mpb.SetFloat("_xScanLine" + i, 0);
-            //}
-            //mpb.SetFloat("_yScanLine", 0);
-            //mpb.SetFloat("_noiseStrength", 0);
-            //mpb.SetFloat("_ScanJitter", 0);
-            //sRenderer.SetPropertyBlock(mpb);
         }
     }
 
