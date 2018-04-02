@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 /// <summary>
 /// Manages health Bar fill and state
+/// Created by : Ian Jones      - 18/08/16
+/// Updated by : Ian Jones      - 02/04/18
 /// </summary>
 public class BossHealthBar : MonoBehaviour
 {

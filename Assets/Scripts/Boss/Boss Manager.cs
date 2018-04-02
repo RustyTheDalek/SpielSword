@@ -6,7 +6,7 @@ using System;
 
 /// <summary>
 /// Base class for Bosses
-/// Created on : Sean Taylor    - 15/06/16
+/// Created by : Sean Taylor    - 15/06/16
 /// Updated by : Ian Jones      - 01/04/18
 /// </summary>
 public abstract class BossManager : MonoBehaviour

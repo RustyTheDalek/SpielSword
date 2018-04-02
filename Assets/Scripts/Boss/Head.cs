@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 /// <summary>
-/// Script for registering hit to the boss' head
+/// Script for registering hits to the boss' head
+/// TODO: Change this to be more generic when new bosses are introduced
+/// Created on : Ian Jones      - 18/08/16
+/// Updated by : Ian Jones      - 01/04/18
 /// </summary>
 public class Head : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class Head : MonoBehaviour {
     public Sprite damageHead;
 
     Timer damageTimer;
+
 	// Use this for initialization
 	void Start ()
     {

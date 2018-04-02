@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System;
+
 /// <summary>
 /// Script to control the Golem Boss
+/// Created by : Ian Jones      - 26/02/16
+/// Updated by : Ian Jones      - 01/04/18
 /// </summary>
 public class Golem : BossManager {
 

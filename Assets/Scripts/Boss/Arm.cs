@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Sync support attacks for the arms
 /// (Created from the RightArm & LeftArm scripts as they did the same thing)
-/// Created on : Ian Jones      - 02/04/18
+/// Created by : Ian Jones      - 02/04/18
 /// Updated by : Ian Jones      - 02/04/18
 /// </summary>
 public class Arm : MonoBehaviour {
