@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
 
     public TimeObjectManager timeManager;
 
-    public UnityStandardAssets._2D.Camera2DFollow trackCam;
+    public Camera2DFollow trackCam;
 
     public static BoxCollider2D gameBounds;
 
