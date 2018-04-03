@@ -194,6 +194,7 @@ public abstract class BossManager : MonoBehaviour
         }
 
         OnBossDeath += OnDeath;
+        TimeObjectManager.NewRoundReady += Reset;
     }
 
     #region Stage skipping ideas

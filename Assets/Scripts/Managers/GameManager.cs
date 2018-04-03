@@ -40,29 +40,23 @@ public class GameManager : MonoBehaviour {
             Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
         }
 
+        trackCam = GetComponentInChildren<Camera2DFollow>();
+
         BossManager.OnBossDeath += IncreaseScore;
         BossManager.OnBossDeath += OpenEndSlate;
+
+        VillagerManager.OnNextVillager += TrackNewVillager;
     }
 
     void OnNewRound()
     {
-        currentBoss.Reset();
-        vilManager.OnNewRound();
         Game.bossReady = false;
         Game.bossState = BossState.Waking;
-
-        TimeObjectManager.NewRoundReady -= OnNewRound;
-
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (trackCam.target == null || trackCam.target != vilManager.activeVillager)
-        {
-            trackCam.target = vilManager.activeVillager.transform;
-        }
-
         switch (Game.timeState)
         {
             case TimeState.Forward:
@@ -83,7 +77,6 @@ public class GameManager : MonoBehaviour {
                         currentBoss.GetComponent<BossManager>().SetAnimators(false);
 
                         OnPlayerDeath();
-                        TimeObjectManager.NewRoundReady += OnNewRound;
 
                         //TimeObjectManager.SoftReset();
                         //vilManager.OnVillagerDeath();
@@ -180,6 +173,11 @@ public class GameManager : MonoBehaviour {
     void IncreaseScore()
     {
         Game.IncScore();
+    }
+
+    void TrackNewVillager(Villager newVillager)
+    {
+        trackCam.target = newVillager.transform;
     }
 
     /// <summary>

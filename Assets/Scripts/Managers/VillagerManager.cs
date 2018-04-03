@@ -49,6 +49,9 @@ public class VillagerManager : MonoBehaviour {
     public static List<MageAura> auras = new List<MageAura>();
     public static List<SpawnableSpriteTimeObject> attacks = new List<SpawnableSpriteTimeObject>();
 
+    public delegate void NewVillagerEvent(Villager newVillager);
+    public static NewVillagerEvent OnNextVillager;
+
     public static int totalLives = 0;
 
 #if UNITY_EDITOR
@@ -70,6 +73,7 @@ public class VillagerManager : MonoBehaviour {
     void Awake()
     {
         BossManager.OnBossDeath += CheckLivesUsed;
+        TimeObjectManager.NewRoundReady += OnNewRound;
     }
 
     // Use this for initialization
@@ -222,6 +226,9 @@ public class VillagerManager : MonoBehaviour {
             activeVillager.hat.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
 
             currentVillagerLayer++;
+
+            if(OnNextVillager != null)
+                OnNextVillager(activeVillager);
 
             //Reset all the past Villagers
             //foreach (PastVillager pVillager in pastVillagers)
