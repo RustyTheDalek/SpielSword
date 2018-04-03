@@ -40,7 +40,8 @@ public class GameManager : MonoBehaviour {
             Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
         }
 
-        trackCam = GetComponentInChildren<Camera2DFollow>();
+        if(trackCam == null)
+            trackCam = GetComponentInChildren<Camera2DFollow>();
 
         BossManager.OnBossDeath += IncreaseScore;
         BossManager.OnBossDeath += OpenEndSlate;
