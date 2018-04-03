@@ -36,7 +36,7 @@ public class Aura : SpawnableSpriteTimeObject
 
         OnPlayFrame += PlayAuraFrame;
 
-        TimeObjectManager.NewRoundReady += DecreaseStrength;
+        TimeObjectManager.OnNewRoundReady += DecreaseStrength;
     }
 
     // Update is called once per frame
@@ -87,7 +87,7 @@ public class Aura : SpawnableSpriteTimeObject
         }
         else
         {
-            TimeObjectManager.NewRoundReady -= DecreaseStrength;
+            TimeObjectManager.OnNewRoundReady -= DecreaseStrength;
         }
     }
 

@@ -12,17 +12,22 @@ public class PlayerCheck : MonoBehaviour {
     bool onExit;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         onEnter = false;
         onExit = true;
-        if (parentMinion = GameObject.Find("Flying Enemy"))
+
+        parentMinion = GetComponentInParent<Character>().gameObject;
+
+        if (parentMinion.GetComponent<GroundMinions>() != null)
         {
-            groundEnemy = false;
+            Debug.Log("Ground Enemy");
+            groundEnemy = true;
             //parentComponent = parentMinion.GetComponent<FlightMinions>();
         }
         else
         {
-            groundEnemy = true;
+            groundEnemy = false;
             //parentComponent = parentMinion.GetComponent<GroundMinions>();
         }
     }

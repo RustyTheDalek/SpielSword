@@ -12,6 +12,8 @@ public static class Game
     /// </summary>
     public static int t = 0;
 
+    public static int FightStart = 0;
+
     /// <summary>
     /// Scaling for Time Helps speed up reversal
     /// </summary>

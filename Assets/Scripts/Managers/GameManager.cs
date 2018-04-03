@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// Manages (No shit) the Game itself, handles logic relating to overall game e.g. 
 /// handling the skipping of Boss stages when player causes a paradox
 /// Created by      : Ian - 24/07/17
-/// Last updated    : Ian - 15/03/18
+/// Last updated    : Ian - 03/04/18
 /// </summary>
 public class GameManager : MonoBehaviour {
 
@@ -22,11 +22,15 @@ public class GameManager : MonoBehaviour {
 
     public static BoxCollider2D gameBounds;
 
+    RectTransform bossHealth;
+
+    #region Events
     public delegate void PlayerDeathEvent();
     public static event PlayerDeathEvent OnPlayerDeath;
 
     public delegate void GameOverEvent();
     public static event GameOverEvent OnGameOver;
+    #endregion
 
     // Use this for initialization
     void Start ()
@@ -40,11 +44,17 @@ public class GameManager : MonoBehaviour {
             Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
         }
 
+        bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
+
         if(trackCam == null)
             trackCam = GetComponentInChildren<Camera2DFollow>();
 
         BossManager.OnBossDeath += IncreaseScore;
         BossManager.OnBossDeath += OpenEndSlate;
+
+        TimeObjectManager.OnNewRoundReady += OnNewRound;
+
+        ArenaEntry.OnPlayerEnterArena += EnableBossUI;
 
         VillagerManager.OnNextVillager += TrackNewVillager;
     }
@@ -53,6 +63,11 @@ public class GameManager : MonoBehaviour {
     {
         Game.bossReady = false;
         Game.bossState = BossState.Waking;
+    }
+
+    void EnableBossUI()
+    {
+        bossHealth.gameObject.SetActive(true);
     }
 	
 	// Update is called once per frame
@@ -87,6 +102,7 @@ public class GameManager : MonoBehaviour {
 
                 switch (Game.bossState)
                 {
+
                     case BossState.Waking:
 
                         if (Game.bossReady)

@@ -141,6 +141,8 @@ public abstract class BossManager : MonoBehaviour
     public delegate void BossDeath();
     public static event BossDeath OnBossDeath;
 
+    public bool ImmediateStart = true;
+
     public virtual void Start ()
 	{
         //Sets the counter for the list to zero
@@ -163,6 +165,14 @@ public abstract class BossManager : MonoBehaviour
         Animator[] objs = GetComponentsInChildren<Animator>();
 
         bossAnims.AddRange(objs);
+
+        if (!ImmediateStart)
+        {
+            foreach (Animator bossPart in bossAnims)
+            {
+                bossPart.enabled = false;
+            }
+        }
 
         OnStageOne();
 
@@ -194,7 +204,9 @@ public abstract class BossManager : MonoBehaviour
         }
 
         OnBossDeath += OnDeath;
-        TimeObjectManager.NewRoundReady += Reset;
+        TimeObjectManager.OnNewRoundReady += Reset;
+
+        ArenaEntry.OnPlayerEnterArena += StartFight;
     }
 
     #region Stage skipping ideas
@@ -378,64 +390,64 @@ public abstract class BossManager : MonoBehaviour
                     case BossState.Attacking:
 
                         switch (bossStage)
-                    {
-                        case BossStage.One:
+                        {
+                            case BossStage.One:
 
-                            StageAttackLogic(StageOneAttacks);
+                                StageAttackLogic(StageOneAttacks);
 
-                            if (ReqsForNextStage())
-                            {
-                                TimeEnteredCurrentStage = Game.t;
-                                bossStage = BossStage.Two;
-                                OnStageTwo();
-                            }
-                            break;
+                                if (ReqsForNextStage())
+                                {
+                                    TimeEnteredCurrentStage = Game.t;
+                                    bossStage = BossStage.Two;
+                                    OnStageTwo();
+                                }
+                                break;
 
-                        case BossStage.Two:
+                            case BossStage.Two:
 
-                            StageAttackLogic(StageTwoAttacks);
+                                StageAttackLogic(StageTwoAttacks);
 
-                            if (ReqsForNextStage())
-                            {
-                                TimeEnteredCurrentStage = Game.t;
-                                bossStage = BossStage.Three;
-                                OnStageThree();
-                            }
+                                if (ReqsForNextStage())
+                                {
+                                    TimeEnteredCurrentStage = Game.t;
+                                    bossStage = BossStage.Three;
+                                    OnStageThree();
+                                }
 
-                            break;
+                                break;
 
-                        case BossStage.Three:
+                            case BossStage.Three:
 
-                            StageAttackLogic(StageThreeAttacks);
+                                StageAttackLogic(StageThreeAttacks);
 
-                            if (ReqsForNextStage())
-                            {
-                                TimeEnteredCurrentStage = Game.t;
-                                bossStage = BossStage.Four;
-                                OnStageFour();
-                            }
+                                if (ReqsForNextStage())
+                                {
+                                    TimeEnteredCurrentStage = Game.t;
+                                    bossStage = BossStage.Four;
+                                    OnStageFour();
+                                }
 
-                            break;
+                                break;
 
-                        case BossStage.Four:
+                            case BossStage.Four:
 
-                            StageAttackLogic(StageFourAttacks);
+                                StageAttackLogic(StageFourAttacks);
 
-                            if (ReqsForNextStage(false))
-                            {
-                                TimeEnteredCurrentStage = Game.t;
-                                bossStage = BossStage.Five;
-                                OnStageFive();
-                            }
+                                if (ReqsForNextStage(false))
+                                {
+                                    TimeEnteredCurrentStage = Game.t;
+                                    bossStage = BossStage.Five;
+                                    OnStageFive();
+                                }
 
-                            break;
+                                break;
 
-                        case BossStage.Five:
+                            case BossStage.Five:
 
-                            StageAttackLogic(StageFiveAttacks);
+                                StageAttackLogic(StageFiveAttacks);
 
-                            break;
-                    }
+                                break;
+                        }
 
                         if (Alive)
                         {
@@ -496,14 +508,21 @@ public abstract class BossManager : MonoBehaviour
         //{
         //    obj.Reset();
         //} 
-
     }
 
     public void StartFight()
     {
         Debug.Log("Starting fight!");
+        Game.FightStart = Game.t;
+
+        foreach(Animator bossPart in bossAnims)
+        {
+            bossPart.enabled = true;
+        }
         //NextStage();
         //Game.bossState = BossState.Attacking;
+
+        ArenaEntry.OnPlayerEnterArena -= StartFight;
     }
 
     //What happens the first time a stage is entered

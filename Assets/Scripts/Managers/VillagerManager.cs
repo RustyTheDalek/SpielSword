@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Manages all the Villages Alived, Past or Dead.
 /// Created By      : Ian - GGJ16         
-/// Last updated By : Ian - 12/08/16
+/// Last updated By : Ian - 03/04/18
 /// </summary>
 public class VillagerManager : MonoBehaviour {
 
@@ -15,8 +15,10 @@ public class VillagerManager : MonoBehaviour {
                         remainingVillagersTrans,
                         pastVillagersTrans,
                         deadVillagersTrans,
-                        warpGateEnt,
-                        warpGateExit;
+                        levelStart,
+                        arenaStart;
+
+    Vector3 spawnPos;
 
     public int villagersToSpawn;
 
@@ -73,7 +75,7 @@ public class VillagerManager : MonoBehaviour {
     void Awake()
     {
         BossManager.OnBossDeath += CheckLivesUsed;
-        TimeObjectManager.NewRoundReady += OnNewRound;
+        TimeObjectManager.OnNewRoundReady += OnNewRound;
     }
 
     // Use this for initialization
@@ -93,7 +95,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            //classToSpawn = VillagerClass.Mage;
+            //classToSpawn = VillagerClass.Berserker;
 
             GameObject temp = AssetManager.Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
@@ -101,11 +103,12 @@ public class VillagerManager : MonoBehaviour {
         }
 
         //Spawn a new villager and teleport them to the Arena
+        spawnPos = levelStart.transform.position;
         NextVillager();
-        EnterArena();
+        EnterLevel();
 
         GameManager.OnPlayerDeath += OnVillagerDeath;
-        //Debug.Log(AssetManager.VillagerSprites.Count);
+        ArenaEntry.OnPlayerEnterArena += ArenaCheckpoint;
     }
 
     private void SetupVillager(GameObject villager, Vector3 spawnOffset)
@@ -181,7 +184,7 @@ public class VillagerManager : MonoBehaviour {
     public void OnNewRound()
     {
         NextVillager();
-        EnterArena();
+        EnterLevel();
         WeakenAuras();
     }
 
@@ -237,13 +240,15 @@ public class VillagerManager : MonoBehaviour {
         }
     }
 
-    //Move active Villager to the Arena
-    void EnterArena()
+    /// <summary>
+    /// Enters the next Villager into theLevel
+    /// </summary>
+    void EnterLevel()
     {
         activeVillager.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         activeVillager.GetComponent<Rigidbody2D>().angularVelocity = 0;
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = true;
-        activeVillager.transform.position = warpGateExit.transform.position;
+        activeVillager.transform.position = spawnPos;
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = false;
     }
 
@@ -283,6 +288,16 @@ public class VillagerManager : MonoBehaviour {
                 attacks[i].SetMartyPoint();
             }
         }
+    }
+
+    /// <summary>
+    /// Changes the start point to the Arena once it's been reached
+    /// </summary>
+    void ArenaCheckpoint()
+    {
+        Debug.Log("Reached Checkpoint, now spawning in Arena");
+        spawnPos = arenaStart.transform.position;
+        ArenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
     }
 
     #region DebugFunctions

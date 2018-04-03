@@ -15,8 +15,8 @@ public class TimeObjectManager : MonoBehaviour
     public static List<SpawnableSpriteTimeObject> vSpawnable = new List<SpawnableSpriteTimeObject>();
     public static List<PlatformerTimeObject> platformers = new List<PlatformerTimeObject>();
 
-    public delegate void OnNewRoundReady();
-    public static event OnNewRoundReady NewRoundReady;
+    public delegate void NewRoundReadyEvent();
+    public static event NewRoundReadyEvent OnNewRoundReady;
 
     public AnimationCurve rewindCurve;
 
@@ -138,22 +138,23 @@ public class TimeObjectManager : MonoBehaviour
 
     void SetMaxReverseSpeed()
     {
-        Keyframe keyframe = new Keyframe(.5f, (Game.longestTime / 60));
+        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(Game.longestTime / 60, .1f, 20));
 
         rewindCurve.MoveKey(1, keyframe);
     }
 
     private void LateUpdate()
     {
-        if (Game.t < 0)
+        if (Game.t < Game.FightStart)
         {
-            Game.t = 0;
+            //Skips time ahead to when fight starts
+            Game.t = Game.FightStart;
 
             Game.timeState = TimeState.Forward;
             Time.timeScale = 1;
 
-            if (NewRoundReady != null)
-                NewRoundReady();
+            if (OnNewRoundReady != null)
+                OnNewRoundReady();
         }
 
         if (Game.timeState == TimeState.Forward)

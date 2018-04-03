@@ -192,6 +192,8 @@ public class VillagerTimeObject : SpriteTimeObject
 
     protected void OnVillagerFinishReverse()
     {
+        GetComponent<Rigidbody2D>().simulated = true;
+
 
         m_HatSprite.material = AssetManager.SpriteMaterials["Sprite"];
 
@@ -226,6 +228,7 @@ public class VillagerTimeObject : SpriteTimeObject
 
     protected void OnVillagerStartReverse()
     {
+        GetComponent<Rigidbody2D>().simulated = false;
         m_HatSprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
