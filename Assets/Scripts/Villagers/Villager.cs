@@ -210,13 +210,17 @@ public abstract class Villager : Character
             case VillagerState.Waiting:
 
                 //Wander/AI Code
-                if (Mathf.Abs(transform.localPosition.x - targetX) > .5f)
+                if (advancing)
                 {
-                    xDir = (int)Mathf.Clamp01(targetX - transform.localPosition.x);
-                }
-                else
-                {
-                    advancing = false;
+                    if (Mathf.Abs(transform.localPosition.x - targetX) > .5f)
+                    {
+                        xDir = (int)Mathf.Clamp01(targetX - transform.localPosition.x);
+                    }
+                    else
+                    {
+                        advancing = false;
+                        xDir = 0;
+                    }
                 }
 
                 break;

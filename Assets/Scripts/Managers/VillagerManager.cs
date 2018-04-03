@@ -90,7 +90,7 @@ public class VillagerManager : MonoBehaviour {
         for (int i = 0; i < villagersToSpawn; i++)
         {
 
-            spawnOffset += new Vector3(-1, 0, 0);
+            spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
             //classToSpawn = VillagerClass.Mage;
@@ -142,9 +142,8 @@ public class VillagerManager : MonoBehaviour {
         {
             //If Villager is not moving forward and not in his correct place
             if(!remainingVillagers[i].advancing &&
-                remainingVillagers[i].transform.localPosition.x < i * -2)
+                remainingVillagers[i].transform.localPosition.x <= i * -2)
             {
-                //Debug.Log("Villager " + i + " is not in his correct place");
                 remainingVillagers[i].SetTarget(i * - 2);
             }
         }
