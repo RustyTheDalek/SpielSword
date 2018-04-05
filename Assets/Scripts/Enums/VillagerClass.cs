@@ -1,4 +1,7 @@
-﻿public enum VillagerClass
+﻿/// <summary>
+/// All Villagers Classes
+/// </summary>
+public enum VillagerClass
 {
     Warrior,
     Mage,
