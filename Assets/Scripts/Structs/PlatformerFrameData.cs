@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿/// <summary>
+/// Tracks data relating to Platformer objects
+/// Created by : Ian Jones - 11/11/17
+/// Updated by : Ian Jones - 06/04/18
+/// </summary>
 public struct PlatformerFrameData
 {
     public int move;

@@ -155,19 +155,6 @@ public class VillagerTimeObject : SpriteTimeObject
         tempFrame.canSpecial = (bool)villager.animData["CanSpecial"];
         tempFrame.dead = !villager.Alive;
 
-        if (!endRecorded && endFinish)
-        {
-            if (deathOrMarty)
-            {
-                tempFrame.deathEnd = endFinish;
-            }
-            else
-            {
-                tempFrame.marty = endFinish;
-            }
-            endRecorded = true;
-        }
-
         vFrames.Add(tempFrame);
 
         attackStart = false;
