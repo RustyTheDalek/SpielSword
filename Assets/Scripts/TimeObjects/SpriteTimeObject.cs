@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SpriteTimeObject : TimeObject
@@ -54,7 +53,10 @@ public class SpriteTimeObject : TimeObject
     {
         if (Tools.WithinRange(currentFrame, sFrames))
         {
-            m_Sprite.color = sFrames[currentFrame].color;
+            m_Sprite.color = new Color( sFrames[currentFrame].color.r,
+                                        sFrames[currentFrame].color.g,
+                                        sFrames[currentFrame].color.b,
+                                        .75f);
         }
     }
 
@@ -84,6 +86,7 @@ public class SpriteTimeObject : TimeObject
     {
         m_Sprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
+
         base.OnPast();
     }
 }

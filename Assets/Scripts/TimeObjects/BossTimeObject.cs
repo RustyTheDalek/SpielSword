@@ -33,6 +33,7 @@ public class BossTimeObject : SpriteTimeObject {
         sFrames.Clear();
         tObjectState = TimeObjectState.Present;
         finishFrame = 0;
+        m_Sprite.color = new Color(m_Sprite.color.r, m_Sprite.color.g, m_Sprite.color.b, 1f);
     }
 
     void OnAnimatorMove()

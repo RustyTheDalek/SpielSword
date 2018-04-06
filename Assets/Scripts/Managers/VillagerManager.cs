@@ -1,23 +1,24 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
 /// Manages all the Villages Alived, Past or Dead.
 /// Created By      : Ian - GGJ16         
-/// Last updated By : Ian - 03/04/18
+/// Last updated By : Ian - 06/04/18
 /// </summary>
 public class VillagerManager : MonoBehaviour {
 
     //Transforms to sort the Villagers
-    [HideInInspector]
-    public Transform activeVillagerTrans,
-                        remainingVillagersTrans,
-                        pastVillagersTrans,
-                        deadVillagersTrans,
-                        levelStart,
-                        arenaStart;
+    Transform   activeVillagerTrans,
+                remainingVillagersTrans,
+                pastVillagersTrans,
+                deadVillagersTrans,
+                levelStart,
+                arenaStart;
 
+    /// <summary>
+    /// Where new Villagers Spawn
+    /// </summary>
     Vector3 spawnPos;
 
     public int villagersToSpawn;
@@ -44,25 +45,12 @@ public class VillagerManager : MonoBehaviour {
         }
     }
 
-    Action currentAction;
-
     public List<Sprite> Hats;
-
-    public static List<MageAura> auras = new List<MageAura>();
-    public static List<SpawnableSpriteTimeObject> attacks = new List<SpawnableSpriteTimeObject>();
 
     public delegate void NewVillagerEvent(Villager newVillager);
     public static NewVillagerEvent OnNextVillager;
 
     public static int totalLives = 0;
-
-#if UNITY_EDITOR
-    /// <summary>
-    /// Editor variables to view statics
-    /// </summary>
-    public float myT;
-    public float myTimeScale;
-#endif
 
     /// <summary>
     /// Render Layer for CurrentVillager
@@ -71,11 +59,19 @@ public class VillagerManager : MonoBehaviour {
 
     public VillagerClass classToSpawn = VillagerClass.Warlock;
 
-
     void Awake()
     {
         BossManager.OnBossDeath += CheckLivesUsed;
         TimeObjectManager.OnNewRoundReady += OnNewRound;
+
+        Transform[] objs = GetComponentsInChildren<Transform>();
+
+        activeVillagerTrans = objs[1];
+        remainingVillagersTrans = objs[2];
+        pastVillagersTrans = objs[3];
+        deadVillagersTrans = objs[4];
+        levelStart = objs[5];
+        arenaStart = objs[6];
     }
 
     // Use this for initialization
@@ -86,12 +82,9 @@ public class VillagerManager : MonoBehaviour {
         pastVillagers = new List<Villager>();
 
         //Get all Villagers and add them to the Villager list
-        //Villager[] villagers = remainingVillagersTrans.GetComponentsInChildren<Villager>();
-        //remainingVillagers.AddRange(villagers
         Vector3 spawnOffset = Vector3.zero;
         for (int i = 0; i < villagersToSpawn; i++)
         {
-
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
@@ -154,7 +147,6 @@ public class VillagerManager : MonoBehaviour {
 
     public void OnVillagerDeath()
     {
-
         //Turn active Villager into Past Villager
         activeVillager.deathEffect.Play();
         activeVillager.villagerState = VillagerState.PastVillager;
@@ -165,18 +157,6 @@ public class VillagerManager : MonoBehaviour {
             activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
         }
 
-        //activeVillager.SetTrigger(true);
-
-        //activeVillager.GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-        //                                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
-        //                                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
-        //                                                                .5f);
-
-        //activeVillager.transform.Find("Hat").GetComponent<SpriteRenderer>().color = new Color(activeVillager.GetComponent<SpriteRenderer>().color.r,
-        //                                                activeVillager.GetComponent<SpriteRenderer>().color.g,
-        //                                                activeVillager.GetComponent<SpriteRenderer>().color.b,
-        //                                                .5f);
-
         pastVillagers.Add(activeVillager);
 
     }
@@ -185,16 +165,6 @@ public class VillagerManager : MonoBehaviour {
     {
         NextVillager();
         EnterLevel();
-        WeakenAuras();
-    }
-
-    private void WeakenAuras()
-    {
-        foreach (MageAura aura in auras)
-        {
-            if(aura)
-                aura.DecreaseStrength();
-        }
     }
 
     /// <summary>
@@ -218,7 +188,6 @@ public class VillagerManager : MonoBehaviour {
             activeVillager.vTO.tObjectState = TimeObjectState.Present;
             activeVillager.transform.parent = activeVillagerTrans;
             activeVillager.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
-            TimeObjectManager.vObjects.Add(activeVillager.GetComponent<VillagerTimeObject>());
             remainingVillagers.RemoveAt(0);
 
             currentVillagerLayer++;
@@ -232,11 +201,6 @@ public class VillagerManager : MonoBehaviour {
             if(OnNextVillager != null)
                 OnNextVillager(activeVillager);
 
-            //Reset all the past Villagers
-            //foreach (PastVillager pVillager in pastVillagers)
-            //{
-                //pVillager.GetComponent<Animator>().SetTrigger("ExitDeath");
-            //}
         }
     }
 
@@ -258,35 +222,6 @@ public class VillagerManager : MonoBehaviour {
         {
             Game.LessThanTenLives = true;
             Game.IncScore();
-        }
-    }
-
-    /// <summary>
-    /// Removes all Villagers that are still alive at time of boss skipping
-    /// </summary>
-    public void TrimVillagers()
-    {
-        Debug.Log("Martying Villagers");
-        for (int i = 0; i < pastVillagers.Count; i++)
-        {
-            if (pastVillagers[i].Alive)
-            {
-                pastVillagers[i].animData["Martyed"] = true;
-                pastVillagers[i].GetComponent<VillagerTimeObject>().SetMartyPoint();
-            }
-        }
-    }
-
-    internal void TrimSpawnables()
-    {
-        Debug.Log("Martying Spawnables");
-
-        for (int i = 0; i < attacks.Count; i++)
-        {
-            if (attacks[i].finishFrame > Game.t)
-            {
-                attacks[i].SetMartyPoint();
-            }
         }
     }
 

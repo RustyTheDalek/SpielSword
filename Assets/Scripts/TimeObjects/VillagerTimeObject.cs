@@ -77,6 +77,11 @@ public class VillagerTimeObject : SpriteTimeObject
         if (Tools.WithinRange(currentFrame, vFrames))
         {
 
+            m_HatSprite.color = new Color(m_HatSprite.color.r,
+                                            m_HatSprite.color.g,
+                                            m_HatSprite.color.b,
+                                            .75f);
+
             //villager.health = vFrames[currentFrame].health;
             animData["Move"] = vFrames[currentFrame].move;
 

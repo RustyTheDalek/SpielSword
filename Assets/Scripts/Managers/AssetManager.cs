@@ -1,7 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Looks after all assets that need to be loaded
+/// </summary>
 public static class AssetManager
 {
     static Object obj;

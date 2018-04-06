@@ -1,18 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 /// <summary>
 /// Manages (No shit) the Game itself, handles logic relating to overall game e.g. 
 /// handling the skipping of Boss stages when player causes a paradox
 /// Created by      : Ian - 24/07/17
-/// Last updated    : Ian - 03/04/18
+/// Last updated    : Ian - 06/04/18
 /// </summary>
 public class GameManager : MonoBehaviour {
 
-    public BossManager  bossTemplate,
-                        currentBoss;
+    public BossManager currentBoss;
 
     public VillagerManager vilManager;
 
@@ -20,8 +16,14 @@ public class GameManager : MonoBehaviour {
 
     public Camera2DFollow trackCam;
 
+    /// <summary>
+    /// Bounds for the Arena at present
+    /// </summary>
     public static BoxCollider2D gameBounds;
 
+    /// <summary>
+    /// Boss Health UI
+    /// </summary>
     RectTransform bossHealth;
 
     #region Events
@@ -35,15 +37,7 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        try
-        {
-            gameBounds = GameObject.Find("ArenaBounds").GetComponent<BoxCollider2D>();
-        }
-        catch
-        {
-            Debug.LogWarning("No Game Bounds found, functions that rely on this will not work");
-        }
-
+        gameBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
         bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
 
         if(trackCam == null)
@@ -79,6 +73,7 @@ public class GameManager : MonoBehaviour {
 
                 if (!vilManager.activeVillager.Alive)
                 {
+                    //Game over if no lives
                     if (vilManager.RemainingVillagers <= 0)
                     {
                         Time.timeScale = 0;
@@ -87,15 +82,12 @@ public class GameManager : MonoBehaviour {
                         if (OnGameOver != null)
                             OnGameOver();
                     }
-                    else
+                    else //Otherwise start reversing time
                     {
                         Game.timeState = TimeState.Backward;
                         currentBoss.GetComponent<BossManager>().SetAnimators(false);
 
                         OnPlayerDeath();
-
-                        //TimeObjectManager.SoftReset();
-                        //vilManager.OnVillagerDeath();
                     }
 
                 }
@@ -138,7 +130,6 @@ public class GameManager : MonoBehaviour {
                                 currentBoss.NextStage();
 
                                 vilManager.TrimVillagers();
-                                vilManager.TrimSpawnables();
 
                                 Game.bossState = BossState.SkippingStage;
 
@@ -173,17 +164,6 @@ public class GameManager : MonoBehaviour {
 
                 }
                 break;
-
-            //case TimeState.Backward:
-
-            //    if (timeManager.newRoundReady)
-            //    {
-            //        currentBoss.Reset();
-            //        vilManager.OnNewRound();
-
-            //        timeManager.newRoundReady = false;
-            //    }
-            //    break;
         }
 	}
 

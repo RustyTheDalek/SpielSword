@@ -62,8 +62,6 @@ public class Warlock : WardVillager
             rangedAtk.GetComponent<VillagerAttack>().damage = 2;
             rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
                 , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
-
-            VillagerManager.attacks.Add(rangedAtk.GetComponent<SpawnableSpriteTimeObject>());
         }
     }
 }
