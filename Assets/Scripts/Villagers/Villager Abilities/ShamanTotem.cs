@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ShamanTotem : SpawnableSpriteTimeObject
 {
-    public GameObject creator;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

@@ -57,7 +57,7 @@ public abstract class WardVillager : Villager
         if (villagerState == VillagerState.PresentVillager)
         {
             currentWard = AssetManager.Wards[wardName].Spawn(transform.position + wardOffset);
-            currentWard.GetComponent<ShamanTotem>().creator = gameObject;
+            currentWard.GetComponent<SpawnableSpriteTimeObject>().creator = gameObject;
             wardActive = true;
             animData["CanSpecial"] = false;
         }

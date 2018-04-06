@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Tracks and plays back Sprite based information
+/// Created by : Ian Jones - 22/04/17
+/// Updated by : Ian Jones - 06/04/18
+/// </summary>
 public class SpriteTimeObject : TimeObject
 {
     protected SpriteRenderer m_Sprite;
@@ -29,25 +34,6 @@ public class SpriteTimeObject : TimeObject
         OnStartReverse += OnSpriteStartReverse;
         OnFinishReverse += OnSpriteFinishReverse;
     }
-
-    //protected override void Start()
-    //{
-    //    base.Start();
-
-    //    TimeObjectManager.spriteObjects.Add(this);
-    //}
-
-    //This constructor is used when we still want the base Start function but the child 
-    //of this object has a different list that's managed by TimeObjectManager
-    //protected void Start(bool newList)
-    //{
-    //    base.Start();
-
-    //    if (!newList)
-    //    {
-    //        TimeObjectManager.spriteObjects.Add(this);
-    //    }
-    //}
 
     protected void PlaySpriteFrame()
     {

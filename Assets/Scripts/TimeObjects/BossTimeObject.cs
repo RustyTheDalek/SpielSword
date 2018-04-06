@@ -1,7 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Maintains logic for Boss objects
+/// Created by : Ian Jones - 26/04/17
+/// Updated by : Ian Jones - 06/04/18
+/// </summary>
 public class BossTimeObject : SpriteTimeObject {
 
     private SpriteFrameData tempFrame;
@@ -19,11 +23,6 @@ public class BossTimeObject : SpriteTimeObject {
 
         OnStartPlayback += OnStartBossTimeObjectPlayback;
     }
-
-    //protected override void Start()
-    //{
-    //    TimeObjectManager.bossObjs.Add(this);
-    //}
 
     protected void OnStartBossTimeObjectPlayback()
     {

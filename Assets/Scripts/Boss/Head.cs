@@ -31,7 +31,7 @@ public class Head : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.transform.name.Contains("Range") && !Game.StageMetEarly)
+        if ((LayerMask.LayerToName(coll.gameObject.layer) == "Weapon"  && !Game.StageMetEarly))
         {
             OnHit(1);
         }

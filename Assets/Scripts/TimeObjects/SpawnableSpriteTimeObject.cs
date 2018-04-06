@@ -1,14 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
+/// <summary>
+/// Maintains logic for Spawnable Sprite objects
+/// Created by : Ian Jones - 22/04/17
+/// Updated by : Ian Jones - 06/04/18
+/// </summary>
 public class SpawnableSpriteTimeObject : SpriteTimeObject
 {
     protected SpawnableSpriteFrameData tempSSFrame;
     protected List<SpawnableSpriteFrameData> sSFrames = new List<SpawnableSpriteFrameData>();
 
     protected Animator m_anim;
+
+    /// <summary>
+    /// Who created the Sprite object, if any
+    /// </summary>
+    public GameObject creator;
 
     protected override void Awake()
     {

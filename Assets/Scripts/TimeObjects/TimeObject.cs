@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -7,6 +6,8 @@ using UnityEditor;
 
 /// <summary>
 /// Base Class for objects to be controlled by time
+/// Created by : Ian Jones - 19/03/17
+/// Updated by : Ian Jones - 06/04/18
 /// </summary>
 public class TimeObject : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class TimeObject : MonoBehaviour
 
     public int currentFrame;
 
+    #region Events
     public delegate void PlayingFrame();
     public event PlayingFrame OnPlayFrame;
 
@@ -36,6 +38,7 @@ public class TimeObject : MonoBehaviour
 
     public delegate void TrackingFrame();
     public event TrackingFrame OnTrackFrame;
+    #endregion
 
     protected int TotalFrames
     {
@@ -55,7 +58,7 @@ public class TimeObject : MonoBehaviour
 
     public GUIStyle DebugUI;
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (Game.debugText)
         {
@@ -93,7 +96,6 @@ public class TimeObject : MonoBehaviour
                 {
                     case TimeObjectState.Present:
 
-                        //TrackFrame();
                         OnTrackFrame();
                         break;
 
@@ -201,9 +203,6 @@ public class TimeObject : MonoBehaviour
         }
     }
 
-    //protected abstract void PlayFrame();
-    //protected abstract void TrackFrame();
-
     protected void TrackTransform()
     {
         tempBFrame = new TransformFrameData()
@@ -242,23 +241,6 @@ public class TimeObject : MonoBehaviour
         if (finishFrame == 0)
         {
             finishFrame = Game.t;
-        }
-    }
-
-    public virtual void HardReset()
-    {
-        switch (tObjectState)
-        {
-            case TimeObjectState.Present:
-            case TimeObjectState.PresentDead:
-                OnPast();
-                break;
-
-            case TimeObjectState.PastPlaying:
-            case TimeObjectState.PastFinished:
-            case TimeObjectState.PastStart:
-                currentFrame = 0;
-                break;
         }
     }
 

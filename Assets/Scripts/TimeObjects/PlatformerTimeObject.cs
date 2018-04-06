@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Tracking for Platformer characters such as Villagers and Minions
+/// Created by : Ian Jones - 11/11/17
+/// Updated by : Ian Jones - 06/04/18
 /// </summary>
 public class PlatformerTimeObject : SpriteTimeObject
 {
@@ -41,10 +42,6 @@ public class PlatformerTimeObject : SpriteTimeObject
 
     protected void Start()
     {
-        //base.Start(true);
-
-        //TimeObjectManager.platformers.Add(this);
-
         //TODO:Remove this as it might not be totally nesecary 
         tObjectState = TimeObjectState.Present;
     }

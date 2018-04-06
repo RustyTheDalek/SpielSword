@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls logic for Villager playback, specifically using the animator and sprites
+/// Created by : Ian Jones - 19/03/17
+/// Updated by : Ian Jones - 06/04/18
+/// </summary>
 public class VillagerTimeObject : SpriteTimeObject
 {
     #region Public Variables
@@ -224,5 +228,4 @@ public class VillagerTimeObject : SpriteTimeObject
         m_HatSprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
-
 }
