@@ -32,17 +32,11 @@ public class GameManager : MonoBehaviour {
 
     public delegate void GameOverEvent();
     public static event GameOverEvent OnGameOver;
+
     #endregion
 
-    // Use this for initialization
-    void Start ()
+    private void Awake()
     {
-        gameBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
-        bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
-
-        if(trackCam == null)
-            trackCam = GetComponentInChildren<Camera2DFollow>();
-
         BossManager.OnBossDeath += IncreaseScore;
         BossManager.OnBossDeath += OpenEndSlate;
 
@@ -51,6 +45,16 @@ public class GameManager : MonoBehaviour {
         ArenaEntry.OnPlayerEnterArena += EnableBossUI;
 
         VillagerManager.OnNextVillager += TrackNewVillager;
+    }
+
+    // Use this for initialization
+    void Start ()
+    {
+        gameBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
+        bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
+
+        if (trackCam == null)
+            trackCam = GetComponentInChildren<Camera2DFollow>();
     }
 
     void OnNewRound()
@@ -128,8 +132,6 @@ public class GameManager : MonoBehaviour {
 
                                 currentBoss.TrimStage();
                                 currentBoss.NextStage();
-
-                                vilManager.TrimVillagers();
 
                                 Game.bossState = BossState.SkippingStage;
 
