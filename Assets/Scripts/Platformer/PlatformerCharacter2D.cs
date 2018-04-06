@@ -1,9 +1,10 @@
-using System;
 using UnityEngine;
 using System.Collections;
 
 /// <summary>
 /// Controls the Animation and movement of the 2D Characters
+/// Created : GGJ16
+/// Updated by : Ian Jones  - 06/04/18
 /// </summary>
 public class PlatformerCharacter2D : MonoBehaviour
 {
@@ -98,12 +99,10 @@ public class PlatformerCharacter2D : MonoBehaviour
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl && !dead)
         {
-            //Debug.Log(name + "here");
             // Reduce the speed if crouching by the crouchSpeed multiplier
             //animData.floatas["Move"] = (!m_Grounded ? (float)animData.floatas["Move"] * .8f : animData.floatas["Move"]);
 
             // The Speed animator parameter is set to the absolute value of the horizontal input.
-
             m_Anim.SetFloat("Speed", Mathf.Abs(xDir));
 
             m_Rigidbody2D.velocity = new Vector2(xDir * m_MaxSpeed, m_Rigidbody2D.velocity.y);
@@ -111,7 +110,6 @@ public class PlatformerCharacter2D : MonoBehaviour
             // If the input is moving the player right and the player is facing left...
             if (xDir > 0 && !m_FacingRight)
             {
-                //Debug.Log(name + "Facing Right");
                 // ... flip the player.
                 Flip();
             }
@@ -119,7 +117,6 @@ public class PlatformerCharacter2D : MonoBehaviour
             else if (xDir < 0 && m_FacingRight)
             {
                 // ... flip the player.
-                //Debug.Log(name + "Face Left");
                 Flip();
             }
         }
