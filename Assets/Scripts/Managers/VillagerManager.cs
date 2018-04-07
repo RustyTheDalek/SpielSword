@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Manages all the Villages Alived, Past or Dead.
 /// Created By      : Ian - GGJ16         
-/// Last updated By : Ian - 06/04/18
+/// Last updated By : Ian - 07/04/18
 /// </summary>
 public class VillagerManager : MonoBehaviour {
 
@@ -44,8 +44,6 @@ public class VillagerManager : MonoBehaviour {
             }
         }
     }
-
-    public List<Sprite> Hats;
 
     public delegate void NewVillagerEvent(Villager newVillager);
     public static NewVillagerEvent OnNextVillager;
@@ -193,7 +191,7 @@ public class VillagerManager : MonoBehaviour {
             currentVillagerLayer++;
 
             //Add a random Hat to the active Villager
-            activeVillager.hat.GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count)];
+            activeVillager.hat.GetComponent<SpriteRenderer>().sprite = AssetManager.Hats[Random.Range(0, AssetManager.Hats.Count)];
             activeVillager.hat.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
 
             currentVillagerLayer++;

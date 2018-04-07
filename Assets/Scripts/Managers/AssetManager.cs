@@ -3,6 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// Looks after all assets that need to be loaded
+/// Created by : Ian Jones - 22/04/17
+/// Updated by : Ian Jones - 06/04/18
 /// </summary>
 public static class AssetManager
 {
@@ -282,6 +284,35 @@ public static class AssetManager
             }
 
             return _RopeNode;
+        }
+    }
+
+    static List<Sprite> _Hats;
+
+    public static List<Sprite> Hats
+    {
+        get
+        {
+            if (_Hats == null)
+            {
+                _Hats = new List<Sprite>();
+
+                objs = Resources.LoadAll("Sprites/Hats");
+
+                Sprite sprite;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as Sprite != null)
+                    {
+                        sprite = (Sprite)obj;
+
+                        _Hats.Add(sprite);
+                    }
+                }
+            }
+
+            return _Hats;
         }
     }
 }
