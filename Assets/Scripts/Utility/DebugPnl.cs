@@ -1,12 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Script for aiding with Debugging, contains references to parts it needs to won't 
 /// be present in final build
-/// Created by      : Ian - 15/03/18
+/// Created by : Ian Jones - 15/03/18
+/// Updated by : Ian Jones - 09/04/18
 /// </summary>
 public class DebugPnl : MonoBehaviour {
 
@@ -18,9 +17,16 @@ public class DebugPnl : MonoBehaviour {
 
     private void Start()
     {
-
         vilManager = GameObject.Find("VillagerManager").GetComponent<VillagerManager>();
-        bManager = GameObject.Find("Boss").GetComponent<BossManager>();
+
+        try
+        {
+            bManager = GameObject.Find("Boss").GetComponent<BossManager>();
+        }
+        catch
+        {
+            Debug.Log("No Boss, not able to debug it");
+        }
     }
 
     private void Update()

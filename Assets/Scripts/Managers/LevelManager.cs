@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Manages (No shit) the Game itself, handles logic relating to overall game e.g. 
+/// Manages (No shit) the Level itself, handles logic relating to playing the level 
 /// handling the skipping of Boss stages when player causes a paradox
 /// Created by      : Ian - 24/07/17
-/// Last updated    : Ian - 06/04/18
+/// Last updated    : Ian - 09/04/18
 /// </summary>
-public class GameManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour {
 
     public BossManager currentBoss;
 
@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour {
     void Start ()
     {
         gameBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
+
         bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
 
         if (trackCam == null)
