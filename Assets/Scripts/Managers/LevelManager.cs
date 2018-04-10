@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages (No shit) the Level itself, handles logic relating to playing the level 
 /// handling the skipping of Boss stages when player causes a paradox
 /// Created by      : Ian - 24/07/17
-/// Last updated    : Ian - 09/04/18
+/// Last updated    : Ian - 10/04/18
 /// </summary>
 public class LevelManager : MonoBehaviour {
 
@@ -50,7 +51,14 @@ public class LevelManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        gameBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
+        try
+        {
+            gameBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
+        }
+        catch
+        {
+            Debug.LogWarning("No GameBounds cannot detect entry");
+        }
 
         bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
 
@@ -81,11 +89,12 @@ public class LevelManager : MonoBehaviour {
                     //Game over if no lives
                     if (vilManager.RemainingVillagers <= 0)
                     {
-                        Time.timeScale = 0;
                         Debug.Log("Game Over");
                         //TODO:On game over probably have Golem keep going and character just dies
                         if (OnGameOver != null)
                             OnGameOver();
+
+                        SceneManager.LoadScene("Village");
                     }
                     else //Otherwise start reversing time
                     {

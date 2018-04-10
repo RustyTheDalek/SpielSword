@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class CameraTransitions : MonoBehaviour {
 
-    Dictionary<string,Transform> positions = new Dictionary<string, Transform>();
+    public Dictionary<string,Transform> positions = new Dictionary<string, Transform>();
 
 	// Use this for initialization
 	void Start ()
@@ -21,11 +21,21 @@ public class CameraTransitions : MonoBehaviour {
         }
 
         VillageExit.OnPlayerLeftVillage += EnterWorldMap;
+        WorldMapManager.OnPlayerEnterVillage += EnterVillage;
 	}
+
+    protected void EnterVillage()
+    {
+        transform.position = new Vector3(   positions["Village"].position.x, 
+                                            positions["Village"].position.y, 
+                                            transform.position.z);
+    }
 	
 	protected void EnterWorldMap()
     {
         Debug.Log("Moved to WorldMap");
-        transform.position = positions["WorldMap"].position;
+        transform.position = new Vector3(   positions["WorldMap"].position.x, 
+                                            positions["WorldMap"].position.y, 
+                                            transform.position.z);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 /// Script for aiding with Debugging, contains references to parts it needs to won't 
 /// be present in final build
 /// Created by : Ian Jones - 15/03/18
-/// Updated by : Ian Jones - 09/04/18
+/// Updated by : Ian Jones - 10/04/18
 /// </summary>
 public class DebugPnl : MonoBehaviour {
 
@@ -17,7 +17,14 @@ public class DebugPnl : MonoBehaviour {
 
     private void Start()
     {
-        vilManager = GameObject.Find("VillagerManager").GetComponent<VillagerManager>();
+        try
+        {
+            vilManager = GameObject.Find("VillagerManager").GetComponent<VillagerManager>();
+        }
+        catch
+        {
+            Debug.Log("No Villager manager, cannot debug");
+        }
 
         try
         {

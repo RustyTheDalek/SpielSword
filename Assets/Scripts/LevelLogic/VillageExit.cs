@@ -3,6 +3,7 @@
 /// <summary>
 /// Tracks when Player Leaves Village
 /// Created by Ian Jones : 09/04/18
+/// Updated by Ian Joens : 10/04/18
 /// </summary>
 public class VillageExit : MonoBehaviour {
 
@@ -10,6 +11,11 @@ public class VillageExit : MonoBehaviour {
     public static event PlayerLeftVillageEvent OnPlayerLeftVillage;
 
     bool playerEntered = false;
+
+    private void Awake()
+    {
+        WorldMapManager.OnPlayerEnterVillage += Enable;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,5 +34,10 @@ public class VillageExit : MonoBehaviour {
         {
             Debug.Log("Something entered me but wasn't a villager");
         }
+    }
+
+    void Enable()
+    {
+        playerEntered = false;
     }
 }

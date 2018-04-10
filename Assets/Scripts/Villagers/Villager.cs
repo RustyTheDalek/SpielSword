@@ -1,10 +1,9 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 
 /// <summary>
 /// Class for controlling Villager
+/// Created GGJ16
+/// Updated by : Ian Jones - 10/04/18
 /// </summary>
 [RequireComponent(typeof(VillagerCharacter2D))]
 public abstract class Villager : Character
@@ -105,7 +104,14 @@ public abstract class Villager : Character
 
             case AttackType.Melee:
 
-                melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
+                try
+                {
+                    melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
+                }
+                catch
+                {
+                    Debug.LogWarning("No Melee component on " + name);
+                }
 
                 break;
         }
