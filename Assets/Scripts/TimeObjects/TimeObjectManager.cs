@@ -16,7 +16,7 @@ public class TimeObjectManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        GameManager.OnPlayerDeath += SetMaxReverseSpeed;
+        LevelManager.OnPlayerDeath += SetMaxReverseSpeed;
     }
 
     // Update is called once per frame

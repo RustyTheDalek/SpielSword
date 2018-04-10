@@ -98,7 +98,7 @@ public class VillagerManager : MonoBehaviour {
         NextVillager();
         EnterLevel();
 
-        GameManager.OnPlayerDeath += OnVillagerDeath;
+        LevelManager.OnPlayerDeath += OnVillagerDeath;
         ArenaEntry.OnPlayerEnterArena += ArenaCheckpoint;
     }
 

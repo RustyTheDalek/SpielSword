@@ -83,7 +83,7 @@ public class TimeObject : MonoBehaviour
         OnTrackFrame += TrackTransform;
         OnPlayFrame += PlayTransormFrame;
 
-        GameManager.OnPlayerDeath += SoftReset;
+        LevelManager.OnPlayerDeath += SoftReset;
     }
 
     protected virtual void Update()
