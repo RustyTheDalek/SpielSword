@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class ShamanTotem : SpawnableSpriteTimeObject
 {
+    bool comboUsed = false;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(creator != collision.gameObject)
         {
-            if (!Game.ComboAchieved)
+            if (!comboUsed)
             {
                 Debug.Log("Used Totem");
-                Game.ComboAchieved = true;
+                Game.combosUsed++;
+                comboUsed = true;
                 Game.IncScore();
             }
         }

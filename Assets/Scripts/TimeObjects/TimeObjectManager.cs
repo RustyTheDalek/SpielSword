@@ -3,7 +3,7 @@
 /// <summary>
 /// Manages Objects that are affected by Time
 /// Created by : Ian Jones - 19/03/17
-/// Updated by : Ian Joens - 06/04/18
+/// Updated by : Ian Joens - 13/04/18
 /// </summary>
 public class TimeObjectManager : MonoBehaviour
 {
@@ -56,9 +56,8 @@ public class TimeObjectManager : MonoBehaviour
         else
         {
             //Currently not using X while we're testing
-            float x = rewindCurve.Evaluate((float)Game.t / (float)Game.longestTime);
-            float newTimeScale = x;
-            //Time.timeScale = newTimeScale;   
+            float newTimeScale = rewindCurve.Evaluate((float)Game.t / (float)Game.longestTime);
+            Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }
     }
 }

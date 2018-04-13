@@ -11,10 +11,7 @@ public class Aura : SpawnableSpriteTimeObject
     public float auraLife  = 5,
                     auraTimer = 0;
 
-    /// <summary>
-    /// Reference to creators collider for ensuring it doesn't rect to self when required
-    /// </summary>
-    public GameObject creator;
+    bool comboUsed = false;
 
     protected override void Awake()
     {
@@ -95,9 +92,10 @@ public class Aura : SpawnableSpriteTimeObject
     {
         if (coll.gameObject != creator)
         {
-            if (!Game.ComboAchieved)
+            if (!comboUsed)
             {
-                Game.ComboAchieved = true;
+                Game.combosUsed ++;
+                comboUsed = true;
                 Game.IncScore();
             }
         }

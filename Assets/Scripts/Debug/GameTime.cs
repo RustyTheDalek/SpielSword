@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Logs Game time info to attached Text object
 /// Created on : Ian Jones      - 19/03/17
-/// Updated by : Ian Jones      - 01/04/18
+/// Updated by : Ian Jones      - 13/04/18
 /// </summary>
 public class GameTime : MonoBehaviour {
 
@@ -16,8 +16,6 @@ public class GameTime : MonoBehaviour {
 	void Start ()
     {
         text = GetComponent<Text>();
-
-        text.enabled = Game.debugText;
 	}
 	
 	// Update is called once per frame
@@ -27,5 +25,7 @@ public class GameTime : MonoBehaviour {
             "\nTimeState: " + Game.timeState +
             "\nTimeScale: " + Time.timeScale + 
             "\nPastTimeScale: " + Game.PastTimeScale;
-	}
+
+        text.enabled = Game.debugText;
+    }
 }

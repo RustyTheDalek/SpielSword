@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// Holds varios common variables relating to the game
+/// Created GGJ16
+/// Updated by : Ian Jones 13/04/18
+/// </summary>
 public static class Game
 {
     public static TimeState timeState = TimeState.Forward;
@@ -38,7 +42,7 @@ public static class Game
     /// </summary>
     public static bool attackable = true;
 
-    public static bool debugText = true;
+    public static bool debugText = false;
 
     public const int MAXSCORE = 5;
 
@@ -51,9 +55,10 @@ public static class Game
         Debug.Log("Score increased");
     }
 
+    public static int stageReached = 1, combosUsed, livesUsed;
+
     public static bool  ReachedStage3,
                         ReachedStage5,
-                        ComboAchieved,
                         LessThanTenLives;
 
     public static int TotalScore

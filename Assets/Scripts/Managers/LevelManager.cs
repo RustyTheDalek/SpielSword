@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 /// Manages (No shit) the Level itself, handles logic relating to playing the level 
 /// handling the skipping of Boss stages when player causes a paradox
 /// Created by      : Ian - 24/07/17
-/// Last updated    : Ian - 10/04/18
+/// Last updated    : Ian - 13/04/18
 /// </summary>
 public class LevelManager : MonoBehaviour {
 
@@ -39,7 +39,6 @@ public class LevelManager : MonoBehaviour {
     private void Awake()
     {
         BossManager.OnBossDeath += IncreaseScore;
-        BossManager.OnBossDeath += OpenEndSlate;
 
         TimeObjectManager.OnNewRoundReady += OnNewRound;
 
@@ -187,36 +186,6 @@ public class LevelManager : MonoBehaviour {
     void TrackNewVillager(Villager newVillager)
     {
         trackCam.target = newVillager.transform;
-    }
-
-    /// <summary>
-    /// Opens End-game slate showing score
-    /// </summary>
-    void OpenEndSlate()
-    {
-        string finish = "You won, score " + Game.TotalScore + " Out of " + Game.MAXSCORE;
-
-        if(Game.ReachedStage3)
-        {
-            finish += " You reached Stage 3";
-        }
-
-        if(Game.ReachedStage5)
-        {
-            finish += " You reached Stage 5";
-        }
-
-        if(Game.ComboAchieved)
-        {
-            finish += " You did a combo";
-        }
-
-        if(Game.LessThanTenLives)
-        {
-            finish += " In less than 10 lives too";
-        }
-
-        Debug.Log(finish);
     }
 
     public static bool MoveRequest(CircleCollider2D[] colliders, Vector3 position)

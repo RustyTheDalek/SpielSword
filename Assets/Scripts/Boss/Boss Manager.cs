@@ -7,7 +7,7 @@ using System;
 /// <summary>
 /// Base class for Bosses
 /// Created by : Sean Taylor    - 15/06/16
-/// Updated by : Ian Jones      - 01/04/18
+/// Updated by : Ian Jones      - 13/04/18
 /// </summary>
 public abstract class BossManager : MonoBehaviour
 {
@@ -527,20 +527,26 @@ public abstract class BossManager : MonoBehaviour
 
     //What happens the first time a stage is entered
     public abstract void OnStageOne();
-    public abstract void OnStageTwo();
+
+    public virtual void OnStageTwo()
+    {
+        Game.stageReached = 2;
+    }
 
     public virtual void OnStageThree()
     {
         Game.IncScore();
-        Game.ReachedStage3 = true;
+        Game.stageReached = 3;
     }
-    public abstract void OnStageFour();
+    public virtual void OnStageFour()
+    {
+        Game.stageReached = 4;
+    }
 
     public virtual void OnStageFive()
     {
         Game.IncScore();
-        Game.ReachedStage5 = true;
-
+        Game.stageReached = 5;
     }
 
     public void OnDeath()

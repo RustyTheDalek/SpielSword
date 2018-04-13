@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Script for aiding with Debugging, contains references to parts it needs to won't 
 /// be present in final build
 /// Created by : Ian Jones - 15/03/18
-/// Updated by : Ian Jones - 10/04/18
+/// Updated by : Ian Jones - 13/04/18
 /// </summary>
 public class DebugPnl : MonoBehaviour {
 
@@ -45,10 +44,12 @@ public class DebugPnl : MonoBehaviour {
             if (active)
             {
                 transform.localScale = Vector3.one;
+                Game.debugText = true;
             }
             else
             { 
                 transform.localScale = Vector3.zero;
+                Game.debugText = false;
             }
         }
     }

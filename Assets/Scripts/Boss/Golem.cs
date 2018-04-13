@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Script to control the Golem Boss
 /// Created by : Ian Jones      - 26/02/16
-/// Updated by : Ian Jones      - 01/04/18
+/// Updated by : Ian Jones      - 13/04/18
 /// </summary>
 public class Golem : BossManager {
 
@@ -106,6 +106,7 @@ public class Golem : BossManager {
     #region Stage Two
     public override void OnStageTwo()
     {
+        base.OnStageTwo();
         //Sets the amount of attacks possible this stage
         attackCountStage = 5;
     }
@@ -180,6 +181,7 @@ public class Golem : BossManager {
     #region Stage Four
     public override void OnStageFour()
     {
+        base.OnStageFour();
         //Sets the amount of attacks possible this stage
         attackCountStage = 6;
     }
