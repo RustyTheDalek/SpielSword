@@ -91,15 +91,15 @@ public class FlightMinions : Character {
         findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x, actPlayer.transform.position.y - transform.position.y).normalized;
         Debug.Log("I'll find him");
         Debug.DrawRay(transform.position, findPlayer, Color.green);
-        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerVillagerOnly);
+        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
         if (rayResult)
         {
             Debug.Log("i Dont see him");
-            if (!rayResult)
-            {
-                Debug.Log("Get help he is here");
-                Attack();
-            }
+        }
+        else
+        {
+            Debug.Log("Get help he is here");
+            Attack();
         }
     }
 

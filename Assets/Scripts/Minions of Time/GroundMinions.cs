@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script to control the Ground based minions Boss
+/// Created by : Sean Taylor      - ~06/17
+/// Updated by : Sean Taylor      - 10/04/18
+/// </summary>
+
 [RequireComponent(typeof(PlatformerCharacter2D))]
 public class GroundMinions : Character {
 
@@ -18,6 +24,8 @@ public class GroundMinions : Character {
     public LayerMask layerVillagerOnly;
     public GameObject actPlayer;
     public bool playerHere;
+    public bool attacking;
+    public int attackCount;
 
     public float timer = 0;
 
@@ -62,6 +70,7 @@ public class GroundMinions : Character {
             timer = 0f;
         }
 
+        // Get a player check from PlayerCheck to see if player is present
         if (playerHere)
         {
             FindFoe();
@@ -118,17 +127,46 @@ public class GroundMinions : Character {
     void FindFoe()
     {
         findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x,actPlayer.transform.position.y - transform.position.y).normalized;
-        Debug.Log("I'll find him");
+        //Debug.Log("I'll find him");
         Debug.DrawRay(transform.position, findPlayer, Color.green);
-        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerVillagerOnly);
+        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
         if (rayResult)
         {
             Debug.Log("i Dont see him");
-            if (!rayResult)
-            {
-                Debug.Log("Get help he is here");
-            }
         }
+        else
+        {
+            Debug.Log("Get help he is here");
+            int attack = Random.Range(0, attackCount - 1);
+            Attack(attack);
+        }
+        
+    }
+
+    void Attack(int attack)
+    {
+        animData["Move"] = 0;
+        if (attack == 0)
+        {
+            //SetBool("Attack1", true);
+            attacking = true;
+        }
+        if (attack == 1)
+        {
+            //SetBool("Attack2", true);
+            attacking = true;
+        }
+        if (attack == 2)
+        {
+            //SetBool("Attack3", true);
+            attacking = true;
+        }
+        if (attack == 3)
+        {
+            //SetBool("Attack4", true);
+            attacking = true;
+        }
+        animData["Move"] = xDir;
     }
 
 }
