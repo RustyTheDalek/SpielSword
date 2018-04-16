@@ -19,15 +19,36 @@ public class GroundMinions : Character {
     private Ray2D ray;
     private bool inAir;
 
+    public Animator animi;
     public LayerMask layerGround;
     public LayerMask layerGroundOnly;
     public LayerMask layerVillagerOnly;
     public GameObject actPlayer;
     public bool playerHere;
-    public bool attacking;
     public int attackCount;
 
     public float timer = 0;
+
+    /// <summary>
+    /// Checks whether the the Minion is attacking
+    /// </summary>
+    public bool attacking
+    {
+        get
+        {
+            if (animi.GetBool("Attack1") ||
+                animi.GetBool("Attack2") ||
+                animi.GetBool("Attack3") ||
+                animi.GetBool("Attack4"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 
     public override void Awake()
     {
@@ -55,6 +76,9 @@ public class GroundMinions : Character {
         findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
         findWall = new Vector2(transform.position.x + (xDir*0.6f), transform.position.y);
 
+        //total number of attacks
+        attackCount = 4;
+
     }
 	
 	// Update is called once per frame
@@ -77,7 +101,7 @@ public class GroundMinions : Character {
         }
     }
 
-    void Movement()
+        void Movement()
     {
         #region Find the floor
         findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
@@ -88,8 +112,6 @@ public class GroundMinions : Character {
         {
             if (!raycastResult)
             {
-
-                //Debug.Log("There is no ground");
                 //if not reverse the direction
                 xDir *= -1;
             }
@@ -113,8 +135,6 @@ public class GroundMinions : Character {
         //ray cast infront the player to ensure there is no wall
         if (Physics2D.Raycast(findWall, facedDirection, distanceFromWall, layerGround))
         {
-
-            //Debug.Log("There is a Wall");
             //if not reverse the direction
             xDir *= -1;
         }
@@ -127,16 +147,10 @@ public class GroundMinions : Character {
     void FindFoe()
     {
         findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x,actPlayer.transform.position.y - transform.position.y).normalized;
-        //Debug.Log("I'll find him");
-        Debug.DrawRay(transform.position, findPlayer, Color.green);
         bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
-        if (rayResult)
-        {
-            Debug.Log("i Dont see him");
-        }
+        if (rayResult){}
         else
         {
-            Debug.Log("Get help he is here");
             int attack = Random.Range(0, attackCount - 1);
             Attack(attack);
         }
@@ -146,25 +160,26 @@ public class GroundMinions : Character {
     void Attack(int attack)
     {
         animData["Move"] = 0;
+        if (attacking)
+        {
+            // makes sure a attack isn't already playing befor continuing
+            return;
+        }
         if (attack == 0)
         {
-            //SetBool("Attack1", true);
-            attacking = true;
+            animi.SetBool("Attack1", true);
         }
         if (attack == 1)
         {
-            //SetBool("Attack2", true);
-            attacking = true;
+            animi.SetBool("Attack2", true);
         }
         if (attack == 2)
         {
-            //SetBool("Attack3", true);
-            attacking = true;
+            animi.SetBool("Attack3", true);
         }
         if (attack == 3)
         {
-            //SetBool("Attack4", true);
-            attacking = true;
+            animi.SetBool("Attack4", true);
         }
         animData["Move"] = xDir;
     }
