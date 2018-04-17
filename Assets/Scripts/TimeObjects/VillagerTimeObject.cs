@@ -196,7 +196,7 @@ public class VillagerTimeObject : RigidbodyTimeObject
                                         m_Sprite.color.b,
                                         .5f);
 
-        villager.hat.GetComponent<SpriteRenderer>().color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
+        m_HatSprite.color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
                                                                         villager.hat.GetComponent<SpriteRenderer>().color.g,
                                                                         villager.hat.GetComponent<SpriteRenderer>().color.b,
                                                                         .5f);
@@ -220,8 +220,8 @@ public class VillagerTimeObject : RigidbodyTimeObject
     }
 
     protected void OnVillagerStartReverse()
-    {
+    { 
         m_HatSprite.material = AssetManager.SpriteMaterials["VHSSprite"];
-        villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
+        m_HatSprite.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
 }

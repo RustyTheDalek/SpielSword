@@ -19,7 +19,7 @@ public class RigidbodyTimeObject : SpriteTimeObject
         if (m_Rigidbody2D)
         {
             OnStartReverse += OnRigidbody2DStartReverse;
-            OnFinishReverse += OnRigidbody2DStartReverse;
+            OnFinishReverse += OnRigidbody2DFinishReverse;
         }
     }
 
