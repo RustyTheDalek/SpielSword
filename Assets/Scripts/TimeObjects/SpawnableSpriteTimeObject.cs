@@ -6,7 +6,7 @@ using UnityEngine;
 /// Created by : Ian Jones - 22/04/17
 /// Updated by : Ian Jones - 06/04/18
 /// </summary>
-public class SpawnableSpriteTimeObject : SpriteTimeObject
+public class SpawnableSpriteTimeObject : RigidbodyTimeObject
 {
     protected SpawnableSpriteFrameData tempSSFrame;
     protected List<SpawnableSpriteFrameData> sSFrames = new List<SpawnableSpriteFrameData>();

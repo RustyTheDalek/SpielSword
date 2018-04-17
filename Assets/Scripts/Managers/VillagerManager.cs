@@ -108,6 +108,8 @@ public class VillagerManager : MonoBehaviour {
         villager.transform.localPosition = spawnOffset;
 
         remainingVillagers.Add(villager.GetComponent<Villager>());
+
+        villager.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -182,6 +184,7 @@ public class VillagerManager : MonoBehaviour {
 
             //Get the next Villager
             activeVillager = remainingVillagers[0];
+            activeVillager.gameObject.SetActive(true);
             activeVillager.villagerState = VillagerState.PresentVillager;
             activeVillager.vTO.tObjectState = TimeObjectState.Present;
             activeVillager.transform.parent = activeVillagerTrans;

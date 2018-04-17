@@ -29,7 +29,7 @@ public class TimeObjectManager : MonoBehaviour
 
     void SetMaxReverseSpeed()
     {
-        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(Game.longestTime / 60, .1f, 20));
+        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(Game.longestTime / 60, .1f, 100));
 
         rewindCurve.MoveKey(1, keyframe);
     }
@@ -55,7 +55,6 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            //Currently not using X while we're testing
             float newTimeScale = rewindCurve.Evaluate((float)Game.t / (float)Game.longestTime);
             Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }

@@ -6,7 +6,8 @@ using UnityEngine;
 /// Created by : Ian Jones - 26/04/17
 /// Updated by : Ian Jones - 06/04/18
 /// </summary>
-public class BossTimeObject : SpriteTimeObject {
+public class BossTimeObject : RigidbodyTimeObject
+{
 
     private SpriteFrameData tempFrame;
     private List<SpriteFrameData> frames = new List<SpriteFrameData>();
@@ -33,6 +34,9 @@ public class BossTimeObject : SpriteTimeObject {
         tObjectState = TimeObjectState.Present;
         finishFrame = 0;
         m_Sprite.color = new Color(m_Sprite.color.r, m_Sprite.color.g, m_Sprite.color.b, 1f);
+
+        if(m_Rigidbody2D)
+            m_Rigidbody2D.simulated = true;
     }
 
     void OnAnimatorMove()

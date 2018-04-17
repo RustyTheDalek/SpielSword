@@ -7,7 +7,7 @@ using UnityEngine;
 /// Created by : Ian Jones - 19/03/17
 /// Updated by : Ian Jones - 06/04/18
 /// </summary>
-public class VillagerTimeObject : SpriteTimeObject
+public class VillagerTimeObject : RigidbodyTimeObject
 {
     #region Public Variables
 
@@ -188,9 +188,6 @@ public class VillagerTimeObject : SpriteTimeObject
 
     protected void OnVillagerFinishReverse()
     {
-        GetComponent<Rigidbody2D>().simulated = true;
-
-
         m_HatSprite.material = AssetManager.SpriteMaterials["Sprite"];
 
 
@@ -224,7 +221,6 @@ public class VillagerTimeObject : SpriteTimeObject
 
     protected void OnVillagerStartReverse()
     {
-        GetComponent<Rigidbody2D>().simulated = false;
         m_HatSprite.material = AssetManager.SpriteMaterials["VHSSprite"];
         villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
