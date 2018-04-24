@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Script to control the Ground based minions Boss
 /// Created by : Sean Taylor      - ~06/17
-/// Updated by : Sean Taylor      - 10/04/18
+/// Updated by : Sean Taylor      - 24/04/18
 /// </summary>
 
 [RequireComponent(typeof(PlatformerCharacter2D))]
@@ -24,6 +24,7 @@ public class GroundMinions : Character {
     public LayerMask layerGroundOnly;
     public LayerMask layerVillagerOnly;
     public GameObject actPlayer;
+    public bool lastAttacking;
     public bool playerHere;
     public int attackCount;
 
@@ -139,9 +140,12 @@ public class GroundMinions : Character {
             xDir *= -1;
         }
         #endregion
-
-        //regardless continue moving
-        animData["Move"] = xDir;
+        if (!attacking && !lastAttacking)
+        {
+            //regardless continue moving
+            animData["Move"] = xDir;
+        }
+        lastAttacking = attacking;
     }
 
     void FindFoe()
@@ -181,7 +185,30 @@ public class GroundMinions : Character {
         {
             animi.SetBool("Attack4", true);
         }
-        animData["Move"] = xDir;
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.layer == (LayerMask.NameToLayer("Weapon")))
+        {
+            OnHit();
+        }
+    }
+
+    public void OnHit()
+    {
+        Debug.Log("Minion took Damage!");
+        health -= 1;
+
+        if (health <= 0)
+        {
+            OnDeath();
+        }
+    }
+
+    public void OnDeath()
+    {
+        this.enabled = false;
     }
 
 }

@@ -42,7 +42,7 @@ public class PlayerCheck : MonoBehaviour {
         onExit = false;
         if (!onEnter)
         {
-            Debug.Log("I sense a player");
+            //Debug.Log("I sense a player");
             if (groundEnemy)
             {
                 parentMinion.GetComponent<GroundMinions>().actPlayer = player.gameObject;
@@ -62,7 +62,7 @@ public class PlayerCheck : MonoBehaviour {
         onEnter = false;
         if (!onExit)
         {
-            Debug.Log("Dont you want to play?");
+            //Debug.Log("Dont you want to play?");
             if (groundEnemy)
             {
                 parentMinion.GetComponent<GroundMinions>().playerHere = false;
