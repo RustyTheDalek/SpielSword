@@ -18,6 +18,7 @@ public class GroundMinions : Character {
     private Vector2 findPlayer;
     private Ray2D ray;
     private bool inAir;
+    private bool attacking;
 
     public Animator animi;
     public LayerMask layerGround;
@@ -28,12 +29,7 @@ public class GroundMinions : Character {
     public bool playerHere;
     public int attackCount;
 
-    public float timer = 0;
-
-    /// <summary>
-    /// Checks whether the the Minion is attacking
-    /// </summary>
-    public bool attacking
+    public bool queuedAttack
     {
         get
         {
@@ -51,6 +47,8 @@ public class GroundMinions : Character {
         }
     }
 
+public float timer = 0;
+    
     public override void Awake()
     {
         base.Awake();
@@ -59,13 +57,14 @@ public class GroundMinions : Character {
 
         distanceFromWall = 0.4f;
         distanceToFloor = 0.8f;
+
     }
 
     // Use this for initialization
     public void Start ()
     {
 
-        //actPlayer = GameObject.FindGameObjectWithTag("Player");
+        attacking = false;
         playerHere = false;
 
         //Set a random start direction
@@ -164,24 +163,24 @@ public class GroundMinions : Character {
     void Attack(int attack)
     {
         animData["Move"] = 0;
-        if (attacking)
+        if (attacking || queuedAttack)
         {
             // makes sure a attack isn't already playing befor continuing
             return;
         }
-        if (attack == 0)
+        else if (attack == 0)
         {
             animi.SetBool("Attack1", true);
         }
-        if (attack == 1)
+        else if (attack == 1)
         {
             animi.SetBool("Attack2", true);
         }
-        if (attack == 2)
+        else if (attack == 2)
         {
             animi.SetBool("Attack3", true);
         }
-        if (attack == 3)
+        else if (attack == 3)
         {
             animi.SetBool("Attack4", true);
         }
@@ -208,7 +207,16 @@ public class GroundMinions : Character {
 
     public void OnDeath()
     {
-        this.enabled = false;
+        gameObject.SetActive(false);
     }
 
+    public void OnAttacking()
+    {
+        attacking = true;
+    }
+
+    public void ExitAttacking()
+    {
+        attacking = false;
+    }
 }
