@@ -43,6 +43,8 @@ public class Character : MonoBehaviour {
 
     #region Private Variables
 
+    private bool died = false;
+
     #endregion
 
     public virtual void Awake()
@@ -67,6 +69,20 @@ public class Character : MonoBehaviour {
     public virtual void Update()
     {
         animData["Dead"] = !Alive;
+
+        if(!Alive && !died)
+        {
+            died = true;
+            OnDeath();
+        }
+    }
+
+    public virtual void OnDeath()
+    {
+        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
+
+        animData["Move"] = 0;
+
     }
 
     public virtual void FixedUpdate()
