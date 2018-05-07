@@ -37,7 +37,12 @@ public class PlatformerTimeObject : SpriteTimeObject
 
         OnTrackFrame += TrackPlatformerFrame;
         OnPlayFrame += PlayPlatformerFrame;
-        OnStartPlayback += OnStartPlatformerPlayback;
+        OnFinishPlayback += OnFinishPlatformerPlayback;
+    }
+
+    protected override void OnPast()
+    {
+        tObjectState = TimeObjectState.PastFinished;
     }
 
     protected void Start()
@@ -60,7 +65,7 @@ public class PlatformerTimeObject : SpriteTimeObject
         };
 
         pFrames.Add(tempFrame);
-        
+
     }
 
     protected void PlayPlatformerFrame()
@@ -68,27 +73,23 @@ public class PlatformerTimeObject : SpriteTimeObject
         if (Tools.WithinRange(currentFrame, pFrames))
         {
             m_Character.xDir = pFrames[currentFrame].move;
-            m_Character.animData["Jump"]= pFrames[currentFrame].jump;
-            m_Character.animData["MeleeAttack"]= pFrames[currentFrame].meleeAttack;
-            m_Character.animData["RangedAttack"]= pFrames[currentFrame].rangedAttack;
-            m_Character.animData["Dead"] = pFrames[currentFrame].dead; 
+            m_Character.animData["Jump"] = pFrames[currentFrame].jump;
+            m_Character.animData["MeleeAttack"] = pFrames[currentFrame].meleeAttack;
+            m_Character.animData["RangedAttack"] = pFrames[currentFrame].rangedAttack;
+            m_Character.animData["Dead"] = pFrames[currentFrame].dead;
         }
 
     }
 
-    protected void OnStartPlatformerPlayback()
+    protected void OnFinishPlatformerPlayback()
     {
         if (finishFrame == 0)
         {
             Debug.Log("Finish Frame is 0, Platformer not died becoming present again");
-            pFrames.Clear();
-            sFrames.Clear();
-            bFrames.Clear();
-            finishFrame = 0;
             tObjectState = TimeObjectState.Present;
 
             m_Sprite.material = AssetManager.SpriteMaterials["Sprite"];
-            //vhsEffect.enabled = false;
+            vhsEffect.enabled = false;
         }
     }
 }

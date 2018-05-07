@@ -194,7 +194,14 @@ public class TimeObject : MonoBehaviour
                             //Just in case a frame or to is skipped we will attempt to 
                             //keep object in sync by subtracting the difference between their finish frame and current game time
                             //- (finishFrame - Game.t)
-                            currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - Game.t) - 1);
+                            if (finishFrame != 0)
+                            {
+                                currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - Game.t) - 1);
+                            }
+                            else //With no finish frame we just start from the end of the list
+                            {
+                                currentFrame = bFrames.Count - 1;
+                            }
                         }
                         break;
                 }

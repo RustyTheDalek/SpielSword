@@ -82,13 +82,6 @@ public class PlatformerCharacter2D : MonoBehaviour
             m_Anim.SetBool("Dead", dead);
         }
 
-        //Want to make sure the Character reverses from death if time is moving backwards
-        if (Game.timeState == TimeState.Backward)
-        {
-            //Debug.Log("Exiting Death");
-            m_Anim.SetTrigger("ExitDeath");
-        }
-
         //We want to make sure attacks are triggered only when time is moving forwards
         if (Game.timeState == TimeState.Forward)
         {

@@ -29,7 +29,7 @@ public class GroundMinions : Character {
     public bool playerHere;
     public int attackCount;
 
-    public bool queuedAttack
+    public bool QueuedAttack
     {
         get
         {
@@ -86,22 +86,25 @@ public float timer = 0;
     {
         base.Update();
 
-        timer += Time.deltaTime;
-
-        if (timer > .046875f)
+        if (Alive)
         {
-            Movement();
-            timer = 0f;
-        }
+            timer += Time.deltaTime;
 
-        // Get a player check from PlayerCheck to see if player is present
-        if (playerHere)
-        {
-            FindFoe();
+            if (timer > .046875f)
+            {
+                Movement();
+                timer = 0f;
+            }
+
+            // Get a player check from PlayerCheck to see if player is present
+            if (playerHere)
+            {
+                FindFoe();
+            }
         }
     }
 
-        void Movement()
+    void Movement()
     {
         #region Find the floor
         findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
@@ -163,7 +166,7 @@ public float timer = 0;
     void Attack(int attack)
     {
         animData["Move"] = 0;
-        if (attacking || queuedAttack)
+        if (attacking || QueuedAttack)
         {
             // makes sure a attack isn't already playing befor continuing
             return;
@@ -198,16 +201,6 @@ public float timer = 0;
     {
         Debug.Log("Minion took Damage!");
         health -= 1;
-
-        if (health <= 0)
-        {
-            OnDeath();
-        }
-    }
-
-    public void OnDeath()
-    {
-        gameObject.SetActive(false);
     }
 
     public void OnAttacking()
