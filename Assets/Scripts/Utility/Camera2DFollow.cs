@@ -3,9 +3,9 @@ using UnityEngine;
 public class Camera2DFollow : MonoBehaviour
 {
     public Transform target;
-    public float damping = 1;
-    public float lookAheadFactor = 3;
-    public float lookAheadReturnSpeed = 0.5f;
+    public float damping = .25f;
+    public float lookAheadFactor = 10;
+    public float lookAheadReturnSpeed = 20;
     public float lookAheadMoveThreshold = 0.1f;
     public Vector3 offset;
 
