@@ -77,7 +77,7 @@ public float timer = 0;
         findWall = new Vector2(transform.position.x + (xDir*0.6f), transform.position.y);
 
         //total number of attacks
-        attackCount = 4;
+        attackCount = 3;
 
     }
 	
@@ -177,13 +177,17 @@ public float timer = 0;
         }
         else if (attack == 1)
         {
-            animi.SetBool("Attack2", true);
+            
+            if (xDir == 1)
+            {
+                animi.SetBool("Attack2", true);
+            }
+            else if (xDir == -1)
+            {
+                animi.SetBool("Attack3", true);
+            }
         }
         else if (attack == 2)
-        {
-            animi.SetBool("Attack3", true);
-        }
-        else if (attack == 3)
         {
             animi.SetBool("Attack4", true);
         }
