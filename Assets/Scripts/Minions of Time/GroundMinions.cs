@@ -173,18 +173,19 @@ public float timer = 0;
         }
         else if (attack == 0)
         {
-            animi.SetBool("Attack1", true);
+            animi.SetBool("Attack3", true);
         }
         else if (attack == 1)
         {
-            
+            // obsolete if not attacking behind self 
+            // as facing direction will always end in a right attack
             if (xDir == 1)
             {
                 animi.SetBool("Attack2", true);
             }
             else if (xDir == -1)
             {
-                animi.SetBool("Attack3", true);
+                animi.SetBool("Attack1", true);
             }
         }
         else if (attack == 2)

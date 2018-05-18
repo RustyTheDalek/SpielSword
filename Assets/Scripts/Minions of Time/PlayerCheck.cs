@@ -57,6 +57,20 @@ public class PlayerCheck : MonoBehaviour {
         onEnter = true;
     }
 
+    void OnTriggerStay2D(Collider2D player)
+    {
+        if(player.attachedRigidbody.position.x >= 
+            parentMinion.transform.position.x)
+        {
+            parentMinion.GetComponent<GroundMinions>().xDir = 1;
+        }
+        else if (player.attachedRigidbody.position.x <= 
+            parentMinion.transform.position.x)
+        {
+            parentMinion.GetComponent<GroundMinions>().xDir = -1;
+        }
+    }
+
     void OnTriggerExit2D(Collider2D player)
     {
         onEnter = false;
