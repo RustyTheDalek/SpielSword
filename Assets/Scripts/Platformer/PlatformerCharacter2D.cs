@@ -30,6 +30,10 @@ public class PlatformerCharacter2D : MonoBehaviour
     bool meleeAttack;
     bool rangedAttack;
     bool jump;
+    /// <summary>
+    /// to enable/disable the faced direction based on movemment
+    /// </summary>
+    public bool manualFaceDirection;
     public int xDir =  0;
 
     private void Awake()
@@ -39,6 +43,7 @@ public class PlatformerCharacter2D : MonoBehaviour
         m_CeilingCheck = transform.Find("CeilingCheck");
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        manualFaceDirection = false;
     }
 
 
@@ -100,18 +105,15 @@ public class PlatformerCharacter2D : MonoBehaviour
 
             m_Rigidbody2D.velocity = new Vector2(xDir * m_MaxSpeed, m_Rigidbody2D.velocity.y);
 
-            // If the input is moving the player right and the player is facing left...
-            if (xDir > 0 && !m_FacingRight)
+            if (!manualFaceDirection)
             {
-                // ... flip the player.
-                Flip();
+                DirectionLogic(xDir);
             }
-            // Otherwise if the input is moving the player left and the player is facing right...
-            else if (xDir < 0 && m_FacingRight)
+            else
             {
-                // ... flip the player.
-                Flip();
+                DirectionLogic((int)animData["ManualFacedDirection"]);
             }
+            
         }
         // If the player should jump...
         if (m_Grounded && jump && m_Anim.GetBool("Ground"))
@@ -128,6 +130,22 @@ public class PlatformerCharacter2D : MonoBehaviour
         if (!attack)
         {
             m_Anim.SetBool("CanAttack", true);
+        }
+    }
+
+    private void DirectionLogic(int desiredDirection)
+    {
+        // If the input is moving the player right and the player is facing left...
+        if (desiredDirection > 0 && !m_FacingRight)
+        {
+            // ... flip the player.
+            Flip();
+        }
+        // Otherwise if the input is moving the player left and the player is facing right...
+        else if (desiredDirection < 0 && m_FacingRight)
+        {
+            // ... flip the player.
+            Flip();
         }
     }
 

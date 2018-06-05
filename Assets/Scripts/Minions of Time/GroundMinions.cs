@@ -58,12 +58,12 @@ public float timer = 0;
         distanceFromWall = 0.4f;
         distanceToFloor = 0.8f;
 
+        animData.Add("ManualFacedDirection", 0);
     }
 
     // Use this for initialization
     public void Start ()
     {
-
         attacking = false;
         playerHere = false;
 
@@ -85,7 +85,6 @@ public float timer = 0;
 	public override void Update ()
     {
         base.Update();
-
         if (Alive)
         {
             timer += Time.deltaTime;
@@ -142,7 +141,13 @@ public float timer = 0;
             xDir *= -1;
         }
         #endregion
-        if (!attacking && !lastAttacking)
+
+        if (attacking)
+        {
+            m_Platformer.manualFaceDirection = true;
+            animData["ManualFacedDirection"] = xDir;
+        }
+        else if (!attacking && !lastAttacking)
         {
             //regardless continue moving
             animData["Move"] = xDir;
@@ -185,7 +190,7 @@ public float timer = 0;
             }
             else if (xDir == -1)
             {
-                animi.SetBool("Attack1", true);
+                animi.SetBool("Attack2", true);
             }
         }
         else if (attack == 2)
