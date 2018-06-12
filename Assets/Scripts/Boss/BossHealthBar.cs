@@ -21,10 +21,9 @@ public class BossHealthBar : MonoBehaviour
         standardSprite = healthBar.sprite;
     }
 	
-	// Update is called once per frame
-	void Update ()
+	public void UpdateFill(float health, float MAXHealth)
     {
-        healthBar.fillAmount = BossManager.health/BossManager.MAXHEALTH;
+        healthBar.fillAmount = health/ MAXHealth;
 	}
 
     /// <summary>

@@ -40,7 +40,7 @@ public class Head : MonoBehaviour {
     public void OnHit(float damageMultiplier)
     {
         Debug.Log("Boss took " + 1 * damageMultiplier + " Damage!");
-        Golem.health -= 1 * damageMultiplier;
+        GetComponentInParent<BossManager>().health -= 1 * damageMultiplier;
         GetComponent<SpriteRenderer>().sprite = damageHead;
         damageTimer.StartTimer();
     }

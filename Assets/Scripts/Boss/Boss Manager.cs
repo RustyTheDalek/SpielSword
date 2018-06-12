@@ -12,9 +12,11 @@ using System;
 public abstract class BossManager : MonoBehaviour
 {
     public const float MAXHEALTH = 400;
-    public static float health = MAXHEALTH;
+    public float health = MAXHEALTH;
 
-    public static BossState bossState = BossState.Waking;
+    public BossHealthBar bossHealthBar;
+
+    public BossState bossState = BossState.Waking;
 
     #region Attack variables
 
@@ -118,8 +120,6 @@ public abstract class BossManager : MonoBehaviour
 
 	public List<SpriteRenderer> bossParts;
 
-    public BossHealthBar bossHealthBar;
-
     #region Variables for retracing the Boss' Actions
     //List of Boss parts that are tracked for rewind
     List<Animator> bossAnims = new List<Animator>();
@@ -143,7 +143,7 @@ public abstract class BossManager : MonoBehaviour
     public delegate void BossDeath();
     public static event BossDeath OnBossDeath;
 
-    public bool ImmediateStart = true;
+    public bool immediateStart = true;
 
     public static bool ready = false;
 
@@ -170,12 +170,14 @@ public abstract class BossManager : MonoBehaviour
 
         bossAnims.AddRange(objs);
 
-        if (!ImmediateStart)
+        if (immediateStart)
         {
             foreach (Animator bossPart in bossAnims)
             {
-                bossPart.enabled = false;
+                bossPart.enabled = true;
             }
+
+            bossHealthBar.gameObject.SetActive(true);
         }
 
         OnStageOne();
@@ -346,6 +348,8 @@ public abstract class BossManager : MonoBehaviour
         {
             case TimeState.Forward:
 
+                bossHealthBar.UpdateFill(health, MAXHEALTH);
+
                 if (health <= MAXHEALTH * .8f)
                 {
                     DamageBoss(0);
@@ -459,7 +463,7 @@ public abstract class BossManager : MonoBehaviour
 
                 if (TimeObjectManager.t < trackedHealth.Count && TimeObjectManager.t >= 0)
                 {
-                    Golem.health = trackedHealth[(int)TimeObjectManager.t];
+                    health = trackedHealth[(int)TimeObjectManager.t];
                 }
                 break;
         }

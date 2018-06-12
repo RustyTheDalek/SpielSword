@@ -176,11 +176,6 @@ public class VillagerManager : MonoBehaviour {
 
         if (remainingVillagers.Count > 0)
         {
-            //Prevent previous Villager from being controlled
-            if (activeVillager)
-            {
-                Golem.health = BossManager.MAXHEALTH;
-            }
 
             //Get the next Villager
             activeVillager = remainingVillagers[0];

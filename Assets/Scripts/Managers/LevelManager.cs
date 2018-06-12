@@ -94,6 +94,7 @@ public class LevelManager : MonoBehaviour {
         }
 
         bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
+        currentBoss = GetComponentInChildren<BossManager>();
 
         if (trackCam == null)
             trackCam = GetComponentInChildren<Camera2DFollow>();

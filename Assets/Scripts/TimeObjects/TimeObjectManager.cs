@@ -46,7 +46,6 @@ public class TimeObjectManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //Increment Game time
         t += (int)Time.timeScale * (int)timeState * (int)pastTimeScale;
     }

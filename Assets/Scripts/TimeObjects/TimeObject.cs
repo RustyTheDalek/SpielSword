@@ -113,7 +113,7 @@ public class TimeObject : MonoBehaviour
                             }
                             tObjectState = TimeObjectState.PastPlaying;
 
-                            if(OnStartPlayback != null)
+                            if (OnStartPlayback != null)
                                 OnStartPlayback();
                         }
 
@@ -129,7 +129,7 @@ public class TimeObject : MonoBehaviour
                         {
                             if (finishFrame == 0)
                             {
-                                Debug.Log("Gotta finish");
+                                Debug.Log("Gotta finish: " + name);
                                 tObjectState = TimeObjectState.Present;
                                 OnTrackFrame();
                             }
@@ -165,7 +165,7 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastPlaying:
 
-                        if (TimeObjectManager.t <= startFrame)
+                        if (TimeObjectManager.t <= startFrame || TimeObjectManager.t <= LevelManager.fightStart)
                         {
                             tObjectState = TimeObjectState.PastStart;
 
