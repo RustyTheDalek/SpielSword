@@ -14,6 +14,14 @@ public class DebugPnl : MonoBehaviour {
 
     bool active = false;
 
+    public static bool debugText = false;
+
+#if UNITY_EDITOR
+
+    public static GUIStyle debugStyle = new GUIStyle();
+
+#endif
+
     private void Start()
     {
         try
@@ -44,19 +52,19 @@ public class DebugPnl : MonoBehaviour {
             if (active)
             {
                 transform.localScale = Vector3.one;
-                Game.debugText = true;
+                DebugPnl.debugText = true;
             }
             else
             { 
                 transform.localScale = Vector3.zero;
-                Game.debugText = false;
+                DebugPnl.debugText = false;
             }
         }
     }
 
     public void ToggleGodMode()
     {
-        Game.GodMode = !Game.GodMode;
+        LevelManager.GodMode = !LevelManager.GodMode;
     }
 
     public void KillVillager()

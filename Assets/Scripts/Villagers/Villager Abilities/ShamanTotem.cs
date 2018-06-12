@@ -13,9 +13,9 @@ public class ShamanTotem : SpawnableSpriteTimeObject
             if (!comboUsed)
             {
                 Debug.Log("Used Totem");
-                Game.combosUsed++;
+                LevelManager.combosUsed++;
                 comboUsed = true;
-                Game.IncScore();
+                LevelManager.IncreaseScore();
             }
         }
     }

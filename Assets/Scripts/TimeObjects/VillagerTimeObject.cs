@@ -89,11 +89,11 @@ public class VillagerTimeObject : RigidbodyTimeObject
             //villager.health = vFrames[currentFrame].health;
             animData["Move"] = vFrames[currentFrame].move;
 
-            switch (Game.timeState)
+            switch (TimeObjectManager.timeState)
             {
                 case TimeState.Forward:
 
-                    //villager.animData.jump = actions[Game.t].jump;
+                    //villager.animData.jump = actions[TimeObjectManager.t].jump;
 
                     switch (villager.attackType)
                     {

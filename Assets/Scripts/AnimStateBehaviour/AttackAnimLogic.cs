@@ -17,7 +17,7 @@ public class AttackAnimLogic : StateMachineBehaviour {
             animator.GetComponent<VillagerTimeObject>().attackStart = true;
         }
 
-        if (Game.timeState == TimeState.Forward)
+        if (TimeObjectManager.timeState == TimeState.Forward)
         {
             animator.SetBool("CanAttack", false);
         }
@@ -27,7 +27,7 @@ public class AttackAnimLogic : StateMachineBehaviour {
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (Game.timeState == TimeState.Backward)
+        if (TimeObjectManager.timeState == TimeState.Backward)
         {
             animator.SetBool("CanAttack", false);
         }

@@ -10,13 +10,13 @@ public class VillagerCharacter2D : PlatformerCharacter2D
     public override void Move(Hashtable animData)
     {
         if ((bool)animData["Martyed"] && !m_Anim.GetNextAnimatorStateInfo(0).IsName("Marty") &&
-            Game.timeState == TimeState.Forward)
+            TimeObjectManager.timeState == TimeState.Forward)
 
         {
             m_Anim.SetTrigger("Martyed");
         }
 
-        if (Game.timeState == TimeState.Backward)
+        if (TimeObjectManager.timeState == TimeState.Backward)
         {
             m_Anim.SetTrigger("UnMarty");
         }

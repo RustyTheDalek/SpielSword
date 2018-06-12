@@ -20,7 +20,7 @@ public class DebugTxt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        classTxt.enabled = Game.debugText;
+        classTxt.enabled = DebugPnl.debugText;
     }
 }
 #endif

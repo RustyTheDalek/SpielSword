@@ -51,7 +51,7 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         if(!m_Sprite.enabled)
         {
             tObjectState = TimeObjectState.PresentDead;
-            finishFrame = Game.t;
+            finishFrame = TimeObjectManager.t;
         }
     }
 
@@ -62,7 +62,7 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
             gameObject.SetActive(sSFrames[currentFrame].active);
             m_Sprite.enabled = sSFrames[currentFrame].active;
 
-            switch (Game.timeState)
+            switch (TimeObjectManager.timeState)
             {
                 case TimeState.Forward:
 

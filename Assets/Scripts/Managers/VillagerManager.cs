@@ -221,8 +221,8 @@ public class VillagerManager : MonoBehaviour {
     {
         if(totalLives <= 10)
         {
-            Game.LessThanTenLives = true;
-            Game.IncScore();
+            LevelManager.LessThanTenLives = true;
+            LevelManager.IncreaseScore();
         }
     }
 

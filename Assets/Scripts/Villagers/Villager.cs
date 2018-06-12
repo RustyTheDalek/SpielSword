@@ -307,7 +307,7 @@ public abstract class Villager : Character
     public virtual void OnPastHit(Collider2D collider)
     {
         if (collider.GetComponent<BossAttack>() && !(bool)animData["Dead"] &&
-            Game.timeState == TimeState.Forward)
+            TimeObjectManager.timeState == TimeState.Forward)
         {
             Debug.Log("Past Villager Hit By Boss Attack");
             animData["Dead"] = true;

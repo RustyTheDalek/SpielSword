@@ -21,11 +21,11 @@ public class GameTime : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        text.text = "Time: " + Game.t +
-            "\nTimeState: " + Game.timeState +
+        text.text = "Time: " + TimeObjectManager.t +
+            "\nTimeState: " + TimeObjectManager.timeState +
             "\nTimeScale: " + Time.timeScale + 
-            "\nPastTimeScale: " + Game.PastTimeScale;
+            "\nPastTimeScale: " + TimeObjectManager.pastTimeScale;
 
-        text.enabled = Game.debugText;
+        text.enabled = DebugPnl.debugText;
     }
 }

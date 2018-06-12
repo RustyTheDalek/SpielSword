@@ -60,7 +60,7 @@ public class TimeObject : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (Game.debugText)
+        if (DebugPnl.debugText)
         {
             Handles.Label(transform.position, "Time State: " + tObjectState.ToString()
                                 + "\nTotal Frames: " + TotalFrames +
@@ -78,7 +78,7 @@ public class TimeObject : MonoBehaviour
 
     protected virtual void Awake()
     {
-        startFrame = Game.t;
+        startFrame = TimeObjectManager.t;
 
         OnTrackFrame += TrackTransform;
         OnPlayFrame += PlayTransormFrame;
@@ -88,7 +88,7 @@ public class TimeObject : MonoBehaviour
 
     protected virtual void Update()
     {
-        switch (Game.timeState)
+        switch (TimeObjectManager.timeState)
         {
             case TimeState.Forward:
 
@@ -101,15 +101,15 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastStart:
 
-                        if (Game.t >= startFrame)
+                        if (TimeObjectManager.t >= startFrame)
                         {
                             //This (hopefully keeps the object in sync if game time 
                             //skips past it's start frame somehow
-                            if (Game.t > startFrame)
+                            if (TimeObjectManager.t > startFrame)
                             {
-                                //Debug.Log("Game time (" + Game.t + ") + greater than " +
+                                //Debug.Log("Game time (" + TimeObjectManager.t + ") + greater than " +
                                 //    "start frame (" + startFrame + ") + skipping ahead");
-                                currentFrame = Game.t - startFrame;
+                                currentFrame = TimeObjectManager.t - startFrame;
                             }
                             tObjectState = TimeObjectState.PastPlaying;
 
@@ -123,9 +123,9 @@ public class TimeObject : MonoBehaviour
 
                         //If finish frame is 0 then timeobject hasn't finished yet and 
                         //will need extra tracking
-                        if (Game.t >= finishFrame && finishFrame != 0 ||
+                        if (TimeObjectManager.t >= finishFrame && finishFrame != 0 ||
                             (finishFrame == 0 && 
-                            Game.t >= bFrames[bFrames.Count - 1].timeStamp))
+                            TimeObjectManager.t >= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             if (finishFrame == 0)
                             {
@@ -165,7 +165,7 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastPlaying:
 
-                        if (Game.t <= startFrame)
+                        if (TimeObjectManager.t <= startFrame)
                         {
                             tObjectState = TimeObjectState.PastStart;
 
@@ -184,8 +184,8 @@ public class TimeObject : MonoBehaviour
 
                         //We want to make sure it starts at the right time or starts 
                         //reversing if it's in the present
-                        if (Game.t <= finishFrame || (finishFrame == 0 && 
-                            Game.t <= bFrames[bFrames.Count - 1].timeStamp))
+                        if (TimeObjectManager.t <= finishFrame || (finishFrame == 0 && 
+                            TimeObjectManager.t <= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             tObjectState = TimeObjectState.PastPlaying;
                             if(OnStartReverse != null)
@@ -193,10 +193,10 @@ public class TimeObject : MonoBehaviour
 
                             //Just in case a frame or to is skipped we will attempt to 
                             //keep object in sync by subtracting the difference between their finish frame and current game time
-                            //- (finishFrame - Game.t)
+                            //- (finishFrame - TimeObjectManager.t)
                             if (finishFrame != 0)
                             {
-                                currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - Game.t) - 1);
+                                currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - TimeObjectManager.t) - 1);
                             }
                             else //With no finish frame we just start from the end of the list
                             {
@@ -217,7 +217,7 @@ public class TimeObject : MonoBehaviour
             m_Position = transform.position,
             m_Rotation = transform.rotation,
             m_Scale = transform.localScale,
-            timeStamp = Game.t,
+            timeStamp = TimeObjectManager.t,
 
             enabled = gameObject.activeSelf
         };
@@ -234,7 +234,7 @@ public class TimeObject : MonoBehaviour
 
             gameObject.SetActive(bFrames[currentFrame].enabled);
 
-            currentFrame += Game.GameScale;
+            currentFrame += TimeObjectManager.GameScale;
         }
     }
 
@@ -247,7 +247,7 @@ public class TimeObject : MonoBehaviour
 
         if (finishFrame == 0)
         {
-            finishFrame = Game.t;
+            finishFrame = TimeObjectManager.t;
         }
     }
 

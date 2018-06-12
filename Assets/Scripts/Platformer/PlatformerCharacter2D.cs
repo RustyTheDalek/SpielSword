@@ -69,7 +69,7 @@ public class PlatformerCharacter2D : MonoBehaviour
             // Set the vertical animation
             m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
 
-            //m_Anim.SetFloat("TimeDirection", (float)Game.timeState);
+            //m_Anim.SetFloat("TimeDirection", (float)TimeObjectManager.timeState);
         }
     }
 
@@ -82,13 +82,13 @@ public class PlatformerCharacter2D : MonoBehaviour
         xDir = (int)animData["Move"];
 
         //If dead and not in dead state we want to trigger the death animation
-        if (Game.timeState == TimeState.Forward)
+        if (TimeObjectManager.timeState == TimeState.Forward)
         {
             m_Anim.SetBool("Dead", dead);
         }
 
         //We want to make sure attacks are triggered only when time is moving forwards
-        if (Game.timeState == TimeState.Forward)
+        if (TimeObjectManager.timeState == TimeState.Forward)
         {
             m_Anim.SetBool("MeleeAttack", meleeAttack);
             m_Anim.SetBool("RangedAttack", rangedAttack);

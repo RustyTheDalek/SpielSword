@@ -28,10 +28,10 @@ public class EndGamePnl : MonoBehaviour {
     public void OpenSlate()
     {
 
-        StageReached.text += Game.stageReached;             Debug.Log("Stage Reached : " + Game.stageReached);
-        CombosUsed.text += Game.combosUsed;                 Debug.Log("Combos Used: " + Game.combosUsed);
+        StageReached.text += LevelManager.stageReached;             Debug.Log("Stage Reached : " + LevelManager.stageReached);
+        CombosUsed.text += LevelManager.combosUsed;                 Debug.Log("Combos Used: " + LevelManager.combosUsed);
         //TODO: Change this to convert to appropriate time
-        TimeTaken.text += Game.t / 60 + "s";                Debug.Log("Time Taken: " + (Game.t / 6) + "s");
+        TimeTaken.text += TimeObjectManager.t / 60 + "s";                Debug.Log("Time Taken: " + (TimeObjectManager.t / 6) + "s");
         VillagersUsed.text += VillagerManager.totalLives;   Debug.Log("Villagers Used: " + VillagerManager.totalLives);
 
         if (anim)

@@ -16,7 +16,7 @@ public class MeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (Game.timeState == TimeState.Forward)
+        if (TimeObjectManager.timeState == TimeState.Forward)
         {
             if (collision.name == "Head")
             {

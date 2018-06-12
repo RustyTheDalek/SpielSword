@@ -47,7 +47,7 @@ public class ScanLineEffect : MonoBehaviour
 
             for (int i = 0; i < xScanLines.Length; i++)
             {
-                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i + 1);
+                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)TimeObjectManager.timeState * Random.Range(1, i + 1);
                 xScanLines[i] = XScanLineLogic(xScanLines[i]);
             }
         }

@@ -52,14 +52,14 @@ public class VHSEffect : MonoBehaviour {
             sRenderer.GetPropertyBlock(mpb);
 
             //Moves the "Smudge effect"
-            yScanLine += Time.deltaTime * yScanSpeed * (int)Game.timeState;
+            yScanLine += Time.deltaTime * yScanSpeed * (int)TimeObjectManager.timeState;
 
             //Moves all the scan lines around
             for (int i = 0; i < xScanLines.Length; i++)
             {
-                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)Game.timeState * Random.Range(1, i+1);
+                xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)TimeObjectManager.timeState * Random.Range(1, i+1);
                 xScanLines[i] = XScanLineLogic(xScanLines[i]);
-                mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * (int)Time.timeScale * Game.PastTimeScale);
+                mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * (int)Time.timeScale * TimeObjectManager.pastTimeScale);
             }
 
             //Clamps the smudge effect
@@ -68,7 +68,7 @@ public class VHSEffect : MonoBehaviour {
                 yScanSpeed *= -1 * Random.Range(0.1f, 1);
             }
 
-            mpb.SetFloat("_yScanLine", yScanLine * (int)Time.timeScale * Game.PastTimeScale);
+            mpb.SetFloat("_yScanLine", yScanLine * (int)Time.timeScale * TimeObjectManager.pastTimeScale);
             mpb.SetFloat("_noiseStrength", noiseStrength);
             mpb.SetFloat("_ScanJitter", scanJitter);
             sRenderer.SetPropertyBlock(mpb);

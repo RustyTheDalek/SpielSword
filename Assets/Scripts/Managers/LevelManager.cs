@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LevelManager : MonoBehaviour {
 
+    public SkipStageType skipStageType = SkipStageType.VillagerWipe;
+
     public BossManager currentBoss;
 
     public VillagerManager vilManager;
@@ -23,9 +25,36 @@ public class LevelManager : MonoBehaviour {
     public static BoxCollider2D gameBounds;
 
     /// <summary>
+    /// What time the fight started
+    /// </summary>
+    public static int fightStart = 0;
+
+    /// <summary>
     /// Boss Health UI
     /// </summary>
     RectTransform bossHealth;
+
+    #region Score Variables
+
+    public const int MAXSCORE = 5;
+
+    private static int _Score = 0;
+
+    public static int stageReached = 1, combosUsed, livesUsed;
+
+    public static bool ReachedStage3,
+                        ReachedStage5,
+                        LessThanTenLives;
+
+    public static int TotalScore
+    {
+        get
+        {
+            return _Score;
+        }
+    }
+
+    #endregion
 
     #region Events
     public delegate void PlayerDeathEvent();
@@ -36,11 +65,16 @@ public class LevelManager : MonoBehaviour {
 
     #endregion
 
+    /// <summary>
+    /// Invcinibilty mode for testing
+    /// </summary>
+    public static bool GodMode = false;
+
+    public static bool paused;
+
     private void Awake()
     {
         BossManager.OnBossDeath += IncreaseScore;
-
-        TimeObjectManager.OnNewRoundReady += OnNewRound;
 
         ArenaEntry.OnPlayerEnterArena += EnableBossUI;
 
@@ -65,12 +99,6 @@ public class LevelManager : MonoBehaviour {
             trackCam = GetComponentInChildren<Camera2DFollow>();
     }
 
-    void OnNewRound()
-    {
-        Game.bossReady = false;
-        Game.bossState = BossState.Waking;
-    }
-
     void EnableBossUI()
     {
         bossHealth.gameObject.SetActive(true);
@@ -79,7 +107,7 @@ public class LevelManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        switch (Game.timeState)
+        switch (TimeObjectManager.timeState)
         {
             case TimeState.Forward:
 
@@ -97,7 +125,7 @@ public class LevelManager : MonoBehaviour {
                     }
                     else //Otherwise start reversing time
                     {
-                        Game.timeState = TimeState.Backward;
+                        TimeObjectManager.timeState = TimeState.Backward;
                         currentBoss.GetComponent<BossManager>().SetAnimators(false);
 
                         OnPlayerDeath();
@@ -105,82 +133,15 @@ public class LevelManager : MonoBehaviour {
 
                 }
 
-                switch (Game.bossState)
-                {
-
-                    case BossState.Waking:
-
-                        if (Game.bossReady)
-                        {
-                            currentBoss.NextStage();
-                            Game.bossState = BossState.Attacking;
-                        }
-
-                        break;
-
-                    case BossState.Attacking:
-
-                        if (Game.StageMetEarly)
-                        {
-                            Game.bossState = BossState.StartSkippingStage;
-                        }
-                        break;
-
-                    case BossState.StartSkippingStage:
-
-                        switch (Game.skipStageType)
-                        {
-                            case SkipStageType.FastForward:
-
-                                currentBoss.SetTriggers(Game.StageMetEarly);
-                                currentBoss.StartFastForward();
-                                Game.bossState = BossState.SkippingStage;
-                                break;
-
-                            case SkipStageType.VillagerWipe:
-
-                                currentBoss.TrimStage();
-                                currentBoss.NextStage();
-
-                                Game.bossState = BossState.SkippingStage;
-
-                                break;
-                        }
-
-                        break;
-
-                    case BossState.SkippingStage:
-
-                        switch (Game.skipStageType)
-                        {
-                            case SkipStageType.FastForward:
-
-                                if (Game.StageMetEarly)
-                                {
-                                    currentBoss.FastforwardSkip();
-                                }
-                                else
-                                {
-                                    currentBoss.StopFastForward();
-                                    Game.PastTimeScale = 1;
-                                }
-                                break;
-
-                            case SkipStageType.VillagerWipe:
-
-                                Game.bossState = BossState.Attacking;
-                                break;
-                        }
-                        break;
-
-                }
                 break;
         }
 	}
 
-    void IncreaseScore()
+    public static void IncreaseScore()
     {
-        Game.IncScore();
+        _Score++;
+
+        Debug.Log("Score increased");
     }
 
     void TrackNewVillager(Villager newVillager)

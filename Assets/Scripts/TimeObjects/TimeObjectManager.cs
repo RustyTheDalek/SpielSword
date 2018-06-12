@@ -7,11 +7,35 @@
 /// </summary>
 public class TimeObjectManager : MonoBehaviour
 {
+    /// <summary>
+    /// current game time, 0 = start of level.
+    /// </summary>
+    public static int t = 0;
+
+    /// <summary>
+    /// Scaling for Time Helps speed up reversal
+    /// </summary>
+    public float longestTime = 0;
+
+    public static TimeState timeState = TimeState.Forward;
+
+    /// <summary>
+    /// Scaling for fastforward of boss and past objects
+    /// </summary>
+    public static float pastTimeScale = 1;
+
+    public static int GameScale
+    {
+        get
+        {
+            return (int)timeState * (int)Time.timeScale * (int)pastTimeScale;
+        }
+    }
+
+    public AnimationCurve rewindCurve;
 
     public delegate void NewRoundReadyEvent();
     public static event NewRoundReadyEvent OnNewRoundReady;
-
-    public AnimationCurve rewindCurve;
 
     // Use this for initialization
     void Start ()
@@ -24,38 +48,38 @@ public class TimeObjectManager : MonoBehaviour
     {
 
         //Increment Game time
-        Game.t += (int)Time.timeScale * (int)Game.timeState * (int)Game.PastTimeScale;
+        t += (int)Time.timeScale * (int)timeState * (int)pastTimeScale;
     }
 
     void SetMaxReverseSpeed()
     {
-        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(Game.longestTime / 60, .1f, 100));
+        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime / 60, .1f, 100));
 
         rewindCurve.MoveKey(1, keyframe);
     }
 
     private void LateUpdate()
     {
-        if (Game.t < Game.FightStart)
+        if (t < LevelManager.fightStart)
         {
             //Skips time ahead to when fight starts
-            Game.t = Game.FightStart;
+            t = LevelManager.fightStart;
 
-            Game.timeState = TimeState.Forward;
+            timeState = TimeState.Forward;
             Time.timeScale = 1;
 
             if (OnNewRoundReady != null)
                 OnNewRoundReady();
         }
 
-        if (Game.timeState == TimeState.Forward)
+        if (timeState == TimeState.Forward)
         {
-            if (Game.t > Game.longestTime)
-                Game.longestTime = Game.t;
+            if (t > longestTime)
+                longestTime = t;
         }
         else
         {
-            float newTimeScale = rewindCurve.Evaluate((float)Game.t / (float)Game.longestTime);
+            float newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime);
             Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }
     }

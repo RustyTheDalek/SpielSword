@@ -32,10 +32,10 @@ public class VillagerVHSEffect : VHSEffect {
 
                 for (int i = 0; i < xScanLines.Length; i++)
                 {
-                    mpb.SetFloat("_xScanLine" + i, xScanLines[i] * Time.timeScale * Game.PastTimeScale);
+                    mpb.SetFloat("_xScanLine" + i, xScanLines[i] * Time.timeScale * TimeObjectManager.pastTimeScale);
                 }
 
-                mpb.SetFloat("_yScanLine", yScanLine * Time.timeScale * Game.PastTimeScale);
+                mpb.SetFloat("_yScanLine", yScanLine * Time.timeScale * TimeObjectManager.pastTimeScale);
                 mpb.SetFloat("_noiseStrength", noiseStrength);
                 mpb.SetFloat("_ScanJitter", scanJitter);
                 hatRenderer.SetPropertyBlock(mpb);

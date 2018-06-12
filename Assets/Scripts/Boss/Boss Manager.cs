@@ -14,6 +14,8 @@ public abstract class BossManager : MonoBehaviour
     public const float MAXHEALTH = 400;
     public static float health = MAXHEALTH;
 
+    public static BossState bossState = BossState.Waking;
+
     #region Attack variables
 
     public List<List<int>> stageAttacks = new List<List<int>>();
@@ -143,6 +145,8 @@ public abstract class BossManager : MonoBehaviour
 
     public bool ImmediateStart = true;
 
+    public static bool ready = false;
+
     public virtual void Start ()
 	{
         //Sets the counter for the list to zero
@@ -219,17 +223,6 @@ public abstract class BossManager : MonoBehaviour
         SetVHSEffect(true);
     }
 
-    public void FastforwardSkip()
-    {
-        //Here we're trying to get a percentage of how far into the Stage the boss is
-        //We use the attack list as a rudimentry method then use the smoothing value 
-        //to have it interoplate between the values
-        float value = (float)((float)(numberOAttacks[(int)bossStage] + Smoothing) / 
-            (float)stageAttacks[(int)bossStage].Count);
-        //Debug.Log(value + " : " + Smoothing + " : " + bossSpeedUp.Evaluate(value));
-        Game.PastTimeScale = bossSpeedUp.Evaluate(value);
-    }
-
     public void StopFastForward()
     {
         bossHealthBar.SetHealthBar(HealthBarState.Standard);
@@ -260,28 +253,6 @@ public abstract class BossManager : MonoBehaviour
     }
 
     #endregion
-
-    /// <summary>
-    /// This helps to see if stage was entered early by seeing if the boss still has 
-    /// attacks to perform in this stage
-    /// </summary>
-    /// <returns></returns>
-    bool EarlyStageCheck()
-    {
-        //If there isn't a time for when the stage was entered then there's no need to check
-        if (TimeEnteredCurrentStage != 0 && Game.t < TimeEnteredCurrentStage)
-        {
-            Game.StageMetEarly = true;
-            //We want to overwrite the Time entered current stage 
-            TimeEnteredCurrentStage = Game.t;
-        }
-        else
-        {
-            Game.StageMetEarly = false;
-        }
-
-        return Game.StageMetEarly;
-    }
 
     void StageListings(Action<int> stageAttacks)
     {
@@ -331,7 +302,7 @@ public abstract class BossManager : MonoBehaviour
         {
             case StageFinishType.Healthloss:
 
-                if (health < stageHealthLimits[(int)bossStage] && !EarlyStageCheck())
+                if (health < stageHealthLimits[(int)bossStage])
                     return true;
 
                 break;
@@ -371,7 +342,7 @@ public abstract class BossManager : MonoBehaviour
         }
         #endregion
 
-        switch (Game.timeState)
+        switch (TimeObjectManager.timeState)
         {
             case TimeState.Forward:
 
@@ -385,8 +356,19 @@ public abstract class BossManager : MonoBehaviour
                     DamageBoss(1);
                 }
 
-                switch (Game.bossState)
+                switch (bossState)
                 {
+
+                    case BossState.Waking:
+
+                        if(ready)
+                        {
+                            NextStage();
+                            bossState = BossState.Attacking;
+                        }
+
+                        break;
+
                     case BossState.Attacking:
 
                         switch (bossStage)
@@ -397,7 +379,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage())
                                 {
-                                    TimeEnteredCurrentStage = Game.t;
+                                    TimeEnteredCurrentStage = TimeObjectManager.t;
                                     bossStage = BossStage.Two;
                                     OnStageTwo();
                                 }
@@ -409,7 +391,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage())
                                 {
-                                    TimeEnteredCurrentStage = Game.t;
+                                    TimeEnteredCurrentStage = TimeObjectManager.t;
                                     bossStage = BossStage.Three;
                                     OnStageThree();
                                 }
@@ -422,7 +404,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage())
                                 {
-                                    TimeEnteredCurrentStage = Game.t;
+                                    TimeEnteredCurrentStage = TimeObjectManager.t;
                                     bossStage = BossStage.Four;
                                     OnStageFour();
                                 }
@@ -435,7 +417,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage(false))
                                 {
-                                    TimeEnteredCurrentStage = Game.t;
+                                    TimeEnteredCurrentStage = TimeObjectManager.t;
                                     bossStage = BossStage.Five;
                                     OnStageFive();
                                 }
@@ -451,11 +433,11 @@ public abstract class BossManager : MonoBehaviour
 
                         if (Alive)
                         {
-                            if (Game.t < trackedHealth.Count)
+                            if (TimeObjectManager.t < trackedHealth.Count)
                             {
-                                //if (trackedHealth[(int)Game.t] < health)
+                                //if (trackedHealth[(int)TimeObjectManager.t] < health)
                                 //{
-                                //    health = trackedHealth[(int)Game.t];
+                                //    health = trackedHealth[(int)TimeObjectManager.t];
                                 //}
                             }
                             else
@@ -475,16 +457,22 @@ public abstract class BossManager : MonoBehaviour
 
             case TimeState.Backward:
 
-                if (Game.t < trackedHealth.Count && Game.t >= 0)
+                if (TimeObjectManager.t < trackedHealth.Count && TimeObjectManager.t >= 0)
                 {
-                    Golem.health = trackedHealth[(int)Game.t];
+                    Golem.health = trackedHealth[(int)TimeObjectManager.t];
                 }
                 break;
         }
     }
-
+    
+    /// <summary>
+    /// Resets Boss for start of next fight
+    /// </summary>
     public virtual void Reset()
     {
+        ready = false;
+        bossState = BossState.Waking;   
+
         SetAnimators(true);
 
         bossStage = BossStage.None;
@@ -500,8 +488,6 @@ public abstract class BossManager : MonoBehaviour
             stageReplaying[i] = true;
         }
 
-        Game.PastTimeScale = 1;
-
         health = MAXHEALTH;
 
         //foreach (ObjectTracking obj in trackedBossObjs)
@@ -513,7 +499,10 @@ public abstract class BossManager : MonoBehaviour
     public void StartFight()
     {
         Debug.Log("Starting fight!");
-        Game.FightStart = Game.t;
+
+        //TODO:Maybe move this to a different event function as it's not strictly 
+        //something that the Boss Manager could track
+        LevelManager.fightStart = TimeObjectManager.t;
 
         foreach(Animator bossPart in bossAnims)
         {
@@ -530,28 +519,28 @@ public abstract class BossManager : MonoBehaviour
 
     public virtual void OnStageTwo()
     {
-        Game.stageReached = 2;
+        LevelManager.stageReached = 2;
     }
 
     public virtual void OnStageThree()
     {
-        Game.IncScore();
-        Game.stageReached = 3;
+        LevelManager.IncreaseScore();
+        LevelManager.stageReached = 3;
     }
     public virtual void OnStageFour()
     {
-        Game.stageReached = 4;
+        LevelManager.stageReached = 4;
     }
 
     public virtual void OnStageFive()
     {
-        Game.IncScore();
-        Game.stageReached = 5;
+        LevelManager.IncreaseScore();
+        LevelManager.stageReached = 5;
     }
 
     public void OnDeath()
     {
-        Game.bossState = BossState.Dead;
+        bossState = BossState.Dead;
 
         Detach(gameObject);
     }

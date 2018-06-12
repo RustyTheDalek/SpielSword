@@ -23,9 +23,9 @@ public class PausePnl : MonoBehaviour {
     {
         if (Input.GetButtonDown("Pause"))
         {
-            Game.paused = !Game.paused;
+            LevelManager.paused = !LevelManager.paused;
 
-            if (Game.paused)
+            if (LevelManager.paused)
             { 
                 Pause();
             }

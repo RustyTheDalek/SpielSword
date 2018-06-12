@@ -18,7 +18,7 @@ public class BossTimeObject : RigidbodyTimeObject
     {
         base.Awake();
 
-        startFrame = Game.t;
+        startFrame = TimeObjectManager.t;
 
         _Animator = GetComponent<Animator>();
 
@@ -39,6 +39,6 @@ public class BossTimeObject : RigidbodyTimeObject
 
     void OnAnimatorMove()
     {
-        _Animator.speed = Game.PastTimeScale;
+        _Animator.speed = TimeObjectManager.pastTimeScale;
     }
 }

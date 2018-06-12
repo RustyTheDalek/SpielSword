@@ -50,7 +50,7 @@ public class Aura : SpawnableSpriteTimeObject
 
             if (finishFrame == 0)
             {
-                finishFrame = Game.t;
+                finishFrame = TimeObjectManager.t;
             }
 
             auraActive = false;
@@ -94,9 +94,9 @@ public class Aura : SpawnableSpriteTimeObject
         {
             if (!comboUsed)
             {
-                Game.combosUsed ++;
+                LevelManager.combosUsed ++;
                 comboUsed = true;
-                Game.IncScore();
+                LevelManager.IncreaseScore();
             }
         }
     }
