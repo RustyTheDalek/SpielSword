@@ -141,7 +141,7 @@ public abstract class BossManager : MonoBehaviour
     public abstract bool Attacking { get; }
 
     public delegate void BossDeath();
-    public static event BossDeath OnBossDeath;
+    public event BossDeath OnBossDeath;
 
     public bool immediateStart = true;
 
@@ -531,6 +531,7 @@ public abstract class BossManager : MonoBehaviour
         LevelManager.IncreaseScore();
         LevelManager.stageReached = 3;
     }
+
     public virtual void OnStageFour()
     {
         LevelManager.stageReached = 4;
@@ -640,4 +641,10 @@ public abstract class BossManager : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDestroy()
+    {
+        OnBossDeath -= OnDeath;
+    }
+
 }

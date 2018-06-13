@@ -21,9 +21,12 @@ public class EndGamePnl : MonoBehaviour {
     void Start ()
     {
         anim = GetComponent<Animator>();
-
-        BossManager.OnBossDeath += OpenSlate;
 	}
+
+    public void Setup(BossManager bManager)
+    {
+        bManager.OnBossDeath += OpenSlate;
+    }
 
     public void OpenSlate()
     {
@@ -52,5 +55,10 @@ public class EndGamePnl : MonoBehaviour {
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("Village");
+    }
+
+    public void Unsubscribe(BossManager bManager)
+    {
+        bManager.OnBossDeath -= OpenSlate;
     }
 }

@@ -19,6 +19,8 @@ public class LevelManager : MonoBehaviour {
 
     public Camera2DFollow trackCam;
 
+    EndGamePnl endGamePnl;
+
     /// <summary>
     /// Bounds for the Arena at present
     /// </summary>
@@ -74,12 +76,11 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        BossManager.OnBossDeath += IncreaseScore;
-
         ArenaEntry.OnPlayerEnterArena += EnableBossUI;
 
         VillagerManager.OnNextVillager += TrackNewVillager;
     }
+
 
     // Use this for initialization
     void Start ()
@@ -94,10 +95,18 @@ public class LevelManager : MonoBehaviour {
         }
 
         bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
+
         currentBoss = GetComponentInChildren<BossManager>();
+        currentBoss.OnBossDeath += IncreaseScore;
 
         if (trackCam == null)
             trackCam = GetComponentInChildren<Camera2DFollow>();
+
+        endGamePnl = GetComponentInChildren<EndGamePnl>();
+
+        endGamePnl.Setup(currentBoss);
+
+        vilManager.Setup(currentBoss);
     }
 
     void EnableBossUI()
@@ -166,5 +175,12 @@ public class LevelManager : MonoBehaviour {
             }
         }
         return true;
+    }
+
+    private void OnDestroy()
+    {
+        currentBoss.OnBossDeath -= IncreaseScore;
+
+        vilManager.Unsubscribe(currentBoss);
     }
 }

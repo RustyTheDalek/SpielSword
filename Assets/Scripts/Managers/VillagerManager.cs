@@ -59,7 +59,6 @@ public class VillagerManager : MonoBehaviour {
 
     void Awake()
     {
-        BossManager.OnBossDeath += CheckLivesUsed;
         TimeObjectManager.OnNewRoundReady += OnNewRound;
 
         Transform[] objs = GetComponentsInChildren<Transform>();
@@ -70,6 +69,11 @@ public class VillagerManager : MonoBehaviour {
         deadVillagersTrans = objs[4];
         levelStart = objs[5];
         arenaStart = objs[6];
+    }
+
+    public void Setup(BossManager bManager)
+    {
+        bManager.OnBossDeath += CheckLivesUsed;
     }
 
     // Use this for initialization
@@ -242,5 +246,10 @@ public class VillagerManager : MonoBehaviour {
     }
 
     #endregion
+
+    public void Unsubscribe(BossManager bManager)
+    {
+        bManager.OnBossDeath -= CheckLivesUsed;
+    }
 
 }
