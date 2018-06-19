@@ -7,16 +7,27 @@ public class FlightMinions : Character {
 
     private float distanceToFloor;
     private float distanceFromWall;
+    private int speed;
     private Vector2 findFloor;
     private Vector2 findWall;
     private Vector2 findPlayer;
+    private Vector3 orbitPoint;
+    private Vector3 orginalPosition;
+    private Vector3 playerPosition;
     private Ray2D ray;
     private bool inAir;
+    private bool attacking;
+    private bool lastAttacking;
+    private bool returning;
+    private Quaternion rotation;
+    private Quaternion current;
+
 
     public LayerMask layerGround;
     public LayerMask layerGroundOnly;
     public LayerMask layerVillagerOnly;
-    public GameObject orbitPoint;
+    public int orbitPointX;
+    public int orbitPointY;
     public GameObject actPlayer;
     public bool playerHere;
 
@@ -47,6 +58,13 @@ public class FlightMinions : Character {
         }
         findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
         findWall = new Vector2(transform.position.x + (xDir * 0.6f), transform.position.y);
+        orbitPoint = new Vector3(transform.position.x + orbitPointX,
+            transform.position.y + orbitPointY, 0);
+        orginalPosition = transform.position;
+
+        speed = 8;
+
+        attacking = false;
 
     }
 
@@ -63,21 +81,33 @@ public class FlightMinions : Character {
             timer = 0f;
         }
 
-        if (playerHere)
+        if (playerHere && !returning)
         {
             FindFoe();
         }
+        else
+        {
+            attacking = false;
+        }
 
-        //Vector3 relativePos = orbitPoint.transform.position - transform.position;
-        //Quaternion rotation = Quaternion.LookRotation(relativePos);
-
-        //Quaternion current = transform.localRotation;
-
-        //transform.localRotation = Quaternion.Lerp(current, rotation, Time.deltaTime);
-        //transform.Translate(0, 0, 3 * Time.deltaTime);
-        //transform.rotation = Quaternion.identity;
-        transform.RotateAround(orbitPoint.transform.position, Vector3.forward, 90 * Time.deltaTime);
-        transform.rotation = Quaternion.identity;
+        if (!attacking)
+        {
+            if(lastAttacking && transform.position != orginalPosition || returning)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, orginalPosition, speed * Time.deltaTime);
+                returning = true;
+                if (transform.position == orginalPosition)
+                {
+                    returning = false;
+                }
+            }
+            else
+            {
+                transform.RotateAround(orbitPoint, Vector3.forward, 90 * Time.deltaTime);
+                transform.rotation = Quaternion.identity;
+            }
+        }
+        lastAttacking = attacking;
     }
 
     void Movement()
@@ -88,30 +118,48 @@ public class FlightMinions : Character {
 
     void FindFoe()
     {
-        findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x, actPlayer.transform.position.y - transform.position.y).normalized;
-        Debug.Log("I'll find him");
-        Debug.DrawRay(transform.position, findPlayer, Color.green);
+        findPlayer = new Vector2(actPlayer.transform.position.x - 
+            transform.position.x, actPlayer.transform.position.y - transform.position.y).normalized;
         bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
-        if (rayResult)
+        if (!rayResult)
         {
-            Debug.Log("i Dont see him");
-        }
-        else
-        {
-            Debug.Log("Get help he is here");
             Attack();
         }
     }
 
     void Attack()
     {
-        Vector3 relativePos = actPlayer.transform.position - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(relativePos);
+        if (!attacking)
+        {
+            // sets the players location
+            playerPosition = actPlayer.transform.position;
+            rotation = Quaternion.LookRotation(new Vector3(playerPosition.x, playerPosition.y, 0));
 
-        Quaternion current = transform.localRotation;
+            //Vector3 relativePos = actPlayer.transform.position - transform.position;
+            //rotation = Quaternion.LookRotation(new Vector3(relativePos.x, relativePos.y, 0));
 
+
+            current = new Quaternion (transform.localRotation.x, transform.localRotation.y, 0, 0);
+
+            orginalPosition = transform.position;
+        }
+
+        // move to players first know position
         transform.localRotation = Quaternion.Lerp(current, rotation, Time.deltaTime);
-        transform.Translate(Vector3.forward * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+        //transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+
+        //  Not accurate plz fix
+        if (transform.position != actPlayer.transform.position)
+            // ^^ this
+        {
+            attacking = true;
+        }
+        else
+        {
+            attacking = false;
+        }
     }
 
 }

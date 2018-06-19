@@ -62,12 +62,26 @@ public class PlayerCheck : MonoBehaviour {
         if(player.attachedRigidbody.position.x >= 
             parentMinion.transform.position.x)
         {
-            parentMinion.GetComponent<GroundMinions>().xDir = 1;
+            if (groundEnemy)
+            {
+                parentMinion.GetComponent<GroundMinions>().xDir = 1;
+            }
+            else
+            {
+                parentMinion.GetComponent<FlightMinions>().xDir = 1;
+            }
         }
         else if (player.attachedRigidbody.position.x <= 
             parentMinion.transform.position.x)
         {
-            parentMinion.GetComponent<GroundMinions>().xDir = -1;
+            if (groundEnemy)
+            {
+                parentMinion.GetComponent<GroundMinions>().xDir = -1;
+            }
+            else
+            {
+                parentMinion.GetComponent<FlightMinions>().xDir = -1;
+            }
         }
     }
 

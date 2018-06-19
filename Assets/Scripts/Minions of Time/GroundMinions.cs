@@ -142,7 +142,7 @@ public float timer = 0;
         }
         #endregion
 
-        if (attacking)
+        if (!attacking && lastAttacking)
         {
             m_Platformer.manualFaceDirection = true;
             animData["ManualFacedDirection"] = xDir;
@@ -150,6 +150,7 @@ public float timer = 0;
         else if (!attacking && !lastAttacking)
         {
             //regardless continue moving
+            m_Platformer.manualFaceDirection = false;
             animData["Move"] = xDir;
         }
         lastAttacking = attacking;
