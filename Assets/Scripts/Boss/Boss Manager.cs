@@ -160,7 +160,7 @@ public abstract class BossManager : MonoBehaviour
 
     public bool immediateStart = true;
 
-    public virtual void Start ()
+    public virtual void Setup(ArenaEntry arenaEntry)
 	{
         //Sets the counter for the list to zero
         for(int i = 0; i < 5; i++)
@@ -214,7 +214,7 @@ public abstract class BossManager : MonoBehaviour
         OnBossDeath += OnDeath;
         TimeObjectManager.OnNewRoundReady += Reset;
 
-        ArenaEntry.OnPlayerEnterArena += StartFight;
+        arenaEntry.OnPlayerEnterArena += StartFight;
     }
 
     #region Stage skipping ideas
@@ -511,8 +511,6 @@ public abstract class BossManager : MonoBehaviour
 
         //NextStage();
         //Game.bossState = BossState.Attacking;
-
-        ArenaEntry.OnPlayerEnterArena -= StartFight;
     }
 
     //What happens the first time a stage is entered
@@ -605,9 +603,10 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    public void Unsubscribe(ArenaEntry arenaEntry)
     {
         OnBossDeath -= OnDeath;
+        arenaEntry.OnPlayerEnterArena -= StartFight;
     }
 
     #region Debug Functions

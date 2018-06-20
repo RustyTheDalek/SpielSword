@@ -11,6 +11,8 @@ public class LevelManager : MonoBehaviour {
 
     public SkipStageType skipStageType = SkipStageType.VillagerWipe;
 
+    #region LevelObjects
+
     public BossManager currentBoss;
 
     public VillagerManager vilManager;
@@ -18,6 +20,11 @@ public class LevelManager : MonoBehaviour {
     public TimeObjectManager timeManager;
 
     public Camera2DFollow trackCam;
+
+    ArenaEntry arenaEntryPoint;
+    ArenaGate arenaGate;
+
+    #endregion
 
     EndGamePnl endGamePnl;
 
@@ -76,8 +83,6 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        ArenaEntry.OnPlayerEnterArena += EnableBossUI;
-
         VillagerManager.OnNextVillager += TrackNewVillager;
     }
 
@@ -106,8 +111,16 @@ public class LevelManager : MonoBehaviour {
 
         endGamePnl.Setup(currentBoss);
 
-        vilManager.Setup(currentBoss);
+        arenaGate = GetComponentInChildren<ArenaGate>();
+        arenaEntryPoint = GetComponentInChildren<ArenaEntry>();
+        arenaEntryPoint.OnPlayerEnterArena += EnableBossUI;
+
+        vilManager.Setup(currentBoss, arenaEntryPoint);
+        arenaGate.Setup(arenaEntryPoint);
+        currentBoss.Setup(arenaEntryPoint);
     }
+
+
 
     void EnableBossUI()
     {
@@ -180,7 +193,10 @@ public class LevelManager : MonoBehaviour {
     private void OnDestroy()
     {
         currentBoss.OnBossDeath -= IncreaseScore;
+        arenaEntryPoint.OnPlayerEnterArena += EnableBossUI;
 
-        vilManager.Unsubscribe(currentBoss);
+        vilManager.Unsubscribe(currentBoss, arenaEntryPoint);
+        currentBoss.Unsubscribe(arenaEntryPoint);
+        arenaGate.Unsubscribe(arenaEntryPoint);
     }
 }

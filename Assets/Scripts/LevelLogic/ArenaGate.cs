@@ -16,9 +16,9 @@ public class ArenaGate : MonoBehaviour {
     bool closing = false;
 
 	// Use this for initialization
-	void Start ()
+	public void Setup(ArenaEntry arenaEntry)
     {
-        ArenaEntry.OnPlayerEnterArena += CloseGate;
+        arenaEntry.OnPlayerEnterArena += CloseGate;
 
         TimeObjectManager.OnNewRoundReady += ForceCloseGate;
 	}
@@ -28,7 +28,6 @@ public class ArenaGate : MonoBehaviour {
         Debug.Log("Closing Gate");
         transform.localPosition = closingPos;
         closing = true;
-        ArenaEntry.OnPlayerEnterArena -= CloseGate;
     }
 
     //This ensures the gate is properly close in case player somehow dies before it 
@@ -51,5 +50,10 @@ public class ArenaGate : MonoBehaviour {
                 closing = false;
             }
         }
+    }
+
+    public void Unsubscribe(ArenaEntry arenaEntry)
+    {
+        arenaEntry.OnPlayerEnterArena -= CloseGate;
     }
 }

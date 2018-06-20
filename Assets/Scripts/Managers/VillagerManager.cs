@@ -69,15 +69,11 @@ public class VillagerManager : MonoBehaviour {
         deadVillagersTrans = objs[4];
         levelStart = objs[5];
         arenaStart = objs[6];
-    }
 
-    public void Setup(BossManager bManager)
-    {
-        bManager.OnBossDeath += CheckLivesUsed;
     }
 
     // Use this for initialization
-    void Start ()
+    public void Setup (BossManager bManager, ArenaEntry arenaEntry)
     {
         //Setup lists
         remainingVillagers = new List<Villager>();
@@ -103,7 +99,9 @@ public class VillagerManager : MonoBehaviour {
         EnterLevel();
 
         LevelManager.OnPlayerDeath += OnVillagerDeath;
-        ArenaEntry.OnPlayerEnterArena += ArenaCheckpoint;
+
+        bManager.OnBossDeath += CheckLivesUsed;
+        arenaEntry.OnPlayerEnterArena += ArenaCheckpoint;
     }
 
     private void SetupVillager(GameObject villager, Vector3 spawnOffset)
@@ -232,7 +230,6 @@ public class VillagerManager : MonoBehaviour {
     {
         Debug.Log("Reached Checkpoint, now spawning in Arena");
         spawnPos = arenaStart.transform.position;
-        ArenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
     }
 
     #region DebugFunctions
@@ -247,9 +244,10 @@ public class VillagerManager : MonoBehaviour {
 
     #endregion
 
-    public void Unsubscribe(BossManager bManager)
+    public void Unsubscribe(BossManager bManager, ArenaEntry arenaEntry)
     {
         bManager.OnBossDeath -= CheckLivesUsed;
+        arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
     }
 
 }

@@ -7,7 +7,7 @@
 public class ArenaEntry : MonoBehaviour {
 
     public delegate void PlayerEnteredArenaEvent();
-    public static event PlayerEnteredArenaEvent OnPlayerEnterArena;
+    public event PlayerEnteredArenaEvent OnPlayerEnterArena;
 
     bool playerEntered = false;
 
