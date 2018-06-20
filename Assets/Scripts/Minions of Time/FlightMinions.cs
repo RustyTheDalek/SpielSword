@@ -14,6 +14,7 @@ public class FlightMinions : Character {
     private Vector3 orbitPoint;
     private Vector3 orginalPosition;
     private Vector3 playerPosition;
+    private Vector3 relativePos;
     private Ray2D ray;
     private bool inAir;
     private bool attacking;
@@ -85,9 +86,9 @@ public class FlightMinions : Character {
         {
             FindFoe();
         }
-        else
+        else if (attacking)
         {
-            attacking = false;
+            HomeIn();
         }
 
         if (!attacking)
@@ -133,26 +134,46 @@ public class FlightMinions : Character {
         {
             // sets the players location
             playerPosition = actPlayer.transform.position;
-            rotation = Quaternion.LookRotation(new Vector3(playerPosition.x, playerPosition.y, 0));
+            
+            //current = new Quaternion (0, 0, transform.localRotation.z, 0);
 
-            //Vector3 relativePos = actPlayer.transform.position - transform.position;
-            //rotation = Quaternion.LookRotation(new Vector3(relativePos.x, relativePos.y, 0));
+            //if (m_Platformer.m_FacingRight)
+            //{
+            //    rotation.z -= 90;
+            //}
+            //else
+            //{
+            //    rotation.z += 90;
+            //}
 
-
-            current = new Quaternion (transform.localRotation.x, transform.localRotation.y, 0, 0);
-
+            // Sets the old location to return too
             orginalPosition = transform.position;
         }
 
-        // move to players first know position
-        transform.localRotation = Quaternion.Lerp(current, rotation, Time.deltaTime);
+        HomeIn();        
+    }
+    /// <summary>
+    /// Move to players first know position
+    /// </summary>
+    void HomeIn()
+    {
+        #region Rotate to align with target
+        relativePos = transform.position - playerPosition;
+        rotation = Quaternion.LookRotation(relativePos, Vector3.right);
+        rotation.x = 0;
+        rotation.y = 0;
+        
+        current = transform.rotation;
+
+        transform.localRotation = Quaternion.Slerp(current, rotation , Time.deltaTime * 16);
+        //transform.LookAt(playerPosition, Vector3.right);
+        #endregion
+
+        // Move Enemy to Player
         transform.position = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
-        //transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-
-        //  Not accurate plz fix
-        if (transform.position != actPlayer.transform.position)
-            // ^^ this
+        // once location is reached stop the attack
+        if (transform.position != playerPosition)
         {
             attacking = true;
         }
