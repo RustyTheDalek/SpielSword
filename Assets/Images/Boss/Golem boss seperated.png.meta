@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 0d520124fca620249ab140b82c660937
-timeCreated: 1496078644
+timeCreated: 1529458307
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -19,6 +19,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -34,10 +36,13 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: 16
     mipBias: -1
-    wrapMode: 1
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -100,8 +105,8 @@ TextureImporter:
         y: 628
         width: 227
         height: 382
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.12}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: 39.5, y: -191}
@@ -316,6 +321,7 @@ TextureImporter:
         - {x: -2.5, y: -191}
         - {x: -1.5, y: -190}
         - {x: 0.5, y: -191}
+      physicsShape: []
       tessellationDetail: 1
     - serializedVersion: 2
       name: Larm Stage 1
@@ -368,6 +374,7 @@ TextureImporter:
         - {x: -50, y: -246.5}
         - {x: -35, y: -225.5}
         - {x: -5, y: -246.5}
+      physicsShape: []
       tessellationDetail: 0.1
     - serializedVersion: 2
       name: Chest Stage 1
@@ -602,6 +609,7 @@ TextureImporter:
         - {x: 17, y: -144}
         - {x: 27, y: -137}
         - {x: 29, y: -133}
+      physicsShape: []
       tessellationDetail: 0.5
     - serializedVersion: 2
       name: Rarm Stage 1
@@ -683,6 +691,7 @@ TextureImporter:
         - {x: 158, y: -147.5}
         - {x: 158, y: -141.5}
         - {x: 155, y: -142.5}
+      physicsShape: []
       tessellationDetail: -1
     - serializedVersion: 2
       name: UpperRing Stage 1
@@ -873,6 +882,7 @@ TextureImporter:
         - {x: -18.5, y: -42.5}
         - {x: 17.5, y: -42.5}
         - {x: 18.5, y: -41.5}
+      physicsShape: []
       tessellationDetail: 1
     - serializedVersion: 2
       name: MidRing Stage 1
@@ -895,6 +905,7 @@ TextureImporter:
         - {x: 60.5, y: -7}
         - {x: 83.5, y: 17}
         - {x: 83.5, y: 30}
+      physicsShape: []
       tessellationDetail: -1
     - serializedVersion: 2
       name: LowerRing Stage 1
@@ -918,8 +929,10 @@ TextureImporter:
         - {x: 15, y: -14}
         - {x: 11, y: -14}
         - {x: 10, y: -17}
+      physicsShape: []
       tessellationDetail: -1
     outline: []
+    physicsShape: []
   spritePackingTag: 
   userData: 
   assetBundleName: 

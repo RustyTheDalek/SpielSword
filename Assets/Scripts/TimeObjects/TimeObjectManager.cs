@@ -52,7 +52,7 @@ public class TimeObjectManager : MonoBehaviour
 
     void SetMaxReverseSpeed()
     {
-        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime / 60, .1f, 100));
+        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime / 30, .1f, 100), 0, 0);
 
         rewindCurve.MoveKey(1, keyframe);
     }
@@ -78,7 +78,7 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            float newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime);
+            float newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime - LevelManager.fightStart);
             Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }
     }

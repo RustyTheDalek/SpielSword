@@ -118,11 +118,26 @@ public abstract class BossManager : MonoBehaviour
 		}
 	}
 
-	public List<SpriteRenderer> bossParts;
+    /// <summary>
+    /// Parts of Boss that can be damaged
+    /// </summary>
+    public List<SpriteRenderer> bossLimbs;
+
+    /// <summary>
+    /// All parts of Boss including attacks 
+    /// </summary>
+    List<SpriteRenderer> bossComponents;
 
     #region Variables for retracing the Boss' Actions
-    //List of Boss parts that are tracked for rewind
-    List<Animator> bossAnims = new List<Animator>();
+
+    protected Animator animator;
+
+    protected AnimatorStateInfo animatorStateInfo;
+
+    public void SetAnimator(bool _Enabled)
+    {
+        animator.enabled = _Enabled;
+    }
 
     public List<float> trackedHealth = new List<float>();
     #endregion
@@ -134,11 +149,11 @@ public abstract class BossManager : MonoBehaviour
     {
         get
         {
-            return Mathf.Repeat(bossAnims[0].GetCurrentAnimatorStateInfo(0).normalizedTime, 1);
+            return Mathf.Repeat(animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1);
         }
     }
 
-    public abstract bool Attacking { get; }
+    public bool attacking;
 
     public delegate void BossDeath();
     public event BossDeath OnBossDeath;
@@ -164,21 +179,10 @@ public abstract class BossManager : MonoBehaviour
             stageAttacks[i] = new List<int>();
         }
 
-        //Get All objects that can be tracked
-        //Currently assumes anything with an Animator needs to be tracked
-        Animator[] objs = GetComponentsInChildren<Animator>();
-
-        bossAnims.AddRange(objs);
+        animator = GetComponent<Animator>();
 
         if (immediateStart)
-        {
-            foreach (Animator bossPart in bossAnims)
-            {
-                bossPart.enabled = true;
-            }
-
-            bossHealthBar.gameObject.SetActive(true);
-        }
+            animator.enabled = true;
 
         OnStageOne();
 
@@ -261,7 +265,7 @@ public abstract class BossManager : MonoBehaviour
         //pulls up the next attack in sequence
         for (int i = NumberOAttacks4Stage; i <= CurrentStageAtttacks.Count; i++)
         {
-            if (Attacking)
+            if (attacking)
             {
                 // makes sure a attack isn't already playing befor continuing
                 return;
@@ -276,7 +280,7 @@ public abstract class BossManager : MonoBehaviour
     void StageAttackLogic(Action<int> stageAttacks)
     {
         // checks to make sure an attack is possible
-        if (!Attacking)
+        if (!attacking)
         {
             // Checks to make sure the list hasn't been run and that there is a list
             if (CurrentStageAtttacks.Count > NumberOAttacks4Stage && CurrentStageReplay)
@@ -475,9 +479,9 @@ public abstract class BossManager : MonoBehaviour
     public virtual void Reset()
     {
         ready = false;
-        bossState = BossState.Waking;   
+        bossState = BossState.Waking;
 
-        SetAnimators(true);
+        animator.enabled = true;
 
         bossStage = BossStage.None;
 
@@ -493,11 +497,6 @@ public abstract class BossManager : MonoBehaviour
         }
 
         health = MAXHEALTH;
-
-        //foreach (ObjectTracking obj in trackedBossObjs)
-        //{
-        //    obj.Reset();
-        //} 
     }
 
     public void StartFight()
@@ -508,10 +507,8 @@ public abstract class BossManager : MonoBehaviour
         //something that the Boss Manager could track
         LevelManager.fightStart = TimeObjectManager.t;
 
-        foreach(Animator bossPart in bossAnims)
-        {
-            bossPart.enabled = true;
-        }
+        animator.enabled = true;
+
         //NextStage();
         //Game.bossState = BossState.Attacking;
 
@@ -562,7 +559,7 @@ public abstract class BossManager : MonoBehaviour
 
 	void Detach(GameObject target)
 	{
-		foreach (SpriteRenderer sprite in bossParts)
+		foreach (SpriteRenderer sprite in bossLimbs)
 		{
 			if (!sprite.GetComponent<Rigidbody2D>())
 			{
@@ -571,10 +568,6 @@ public abstract class BossManager : MonoBehaviour
 			
 			sprite.GetComponent<Rigidbody2D>().isKinematic = false;
 			
-			if (sprite.GetComponent<Animator>())
-			{
-				sprite.GetComponent<Animator>().enabled = false;
-			}
 			sprite.GetComponent<PolygonCollider2D>().enabled = true;
 			
 			if(sprite.GetComponent<BossAttack>())
@@ -585,19 +578,11 @@ public abstract class BossManager : MonoBehaviour
 		}
 		
 		transform.DetachChildren();  
-	}// Controls the death of the boss
-
-    public void SetAnimators(bool enabled)
-    {
-        foreach (Animator obj in bossAnims)
-        {
-            obj.GetComponent<Animator>().enabled = enabled;
-        }
-    }
+	}
 
     void SetVHSEffect(bool enable)
     {
-        foreach (SpriteRenderer part in bossParts)
+        foreach (SpriteRenderer part in bossComponents)
         {
             string val = (enable == true) ? "VHSSprite" : "Sprite";
             part.material = AssetManager.SpriteMaterials[val];
@@ -611,13 +596,18 @@ public abstract class BossManager : MonoBehaviour
     /// <param name="trigger"> Whether we want Colldiers to become triggers</param>
     public void SetTriggers(bool trigger)
     {
-        foreach (Animator bossAttack in bossAnims)
+        foreach (SpriteRenderer bossAttack in bossLimbs)
         {
             if (bossAttack.GetComponent<BossAttack>())
             {
                 bossAttack.GetComponent<Collider2D>().isTrigger = trigger;
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        OnBossDeath -= OnDeath;
     }
 
     #region Debug Functions
@@ -641,10 +631,5 @@ public abstract class BossManager : MonoBehaviour
     }
 
     #endregion
-
-    private void OnDestroy()
-    {
-        OnBossDeath -= OnDeath;
-    }
 
 }

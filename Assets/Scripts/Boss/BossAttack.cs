@@ -7,8 +7,6 @@
 /// </summary>
 public class BossAttack : MonoBehaviour
 {
-    public bool attacking = false;
-
     void OnCollisionEnter2D(Collision2D coll)
     {
         //BossAttack can only damage Villagers, has to be enabled and God mode off for 

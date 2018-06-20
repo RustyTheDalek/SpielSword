@@ -136,7 +136,7 @@ public class LevelManager : MonoBehaviour {
                     else //Otherwise start reversing time
                     {
                         TimeObjectManager.timeState = TimeState.Backward;
-                        currentBoss.GetComponent<BossManager>().SetAnimators(false);
+                        currentBoss.SetAnimator(false);
 
                         OnPlayerDeath();
                     }
