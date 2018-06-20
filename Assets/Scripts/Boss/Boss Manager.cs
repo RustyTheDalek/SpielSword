@@ -160,8 +160,6 @@ public abstract class BossManager : MonoBehaviour
 
     public bool immediateStart = true;
 
-    public static bool ready = false;
-
     public virtual void Start ()
 	{
         //Sets the counter for the list to zero
@@ -354,6 +352,8 @@ public abstract class BossManager : MonoBehaviour
 
                 bossHealthBar.UpdateFill(health, MAXHEALTH);
 
+                animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
                 if (health <= MAXHEALTH * .8f)
                 {
                     DamageBoss(0);
@@ -369,8 +369,9 @@ public abstract class BossManager : MonoBehaviour
 
                     case BossState.Waking:
 
-                        if(ready)
+                        if(animatorStateInfo.IsName("Idle"))
                         {
+                            Debug.Log("Ready");
                             NextStage();
                             bossState = BossState.Attacking;
                         }
@@ -478,7 +479,6 @@ public abstract class BossManager : MonoBehaviour
     /// </summary>
     public virtual void Reset()
     {
-        ready = false;
         bossState = BossState.Waking;
 
         animator.enabled = true;
