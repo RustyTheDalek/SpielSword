@@ -22,6 +22,7 @@ public class FlightMinions : Character {
     private bool returning;
     private Quaternion rotation;
     private Quaternion current;
+    private Collider2D[] playerColliders;
 
 
     public LayerMask layerGround;
@@ -30,6 +31,7 @@ public class FlightMinions : Character {
     public int orbitPointX;
     public int orbitPointY;
     public GameObject actPlayer;
+    public GameObject actCollision;
     public bool playerHere;
 
     public float timer = 0;
@@ -65,6 +67,7 @@ public class FlightMinions : Character {
 
         speed = 8;
 
+        playerColliders = actCollision.GetComponents<Collider2D>();
         attacking = false;
 
     }
@@ -176,11 +179,35 @@ public class FlightMinions : Character {
         if (transform.position != playerPosition)
         {
             attacking = true;
+            foreach (Collider2D collider in playerColliders)
+            {
+                collider.enabled = true;
+            }
+            //ColliderTransform.GetChild(0).GetComponent<Collider>();
+
         }
         else
         {
             attacking = false;
+            foreach (Collider2D collider in playerColliders)
+            {
+                collider.enabled = false;
+            }
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.layer == (LayerMask.NameToLayer("Weapon")))
+        {
+            OnHit();
+        }
+    }
+
+    public void OnHit()
+    {
+        Debug.Log("Minion took Damage!");
+        health -= 1;
     }
 
 }
