@@ -18,6 +18,26 @@ public class Spielunker : Villager
     Transform hookTrans;
     #endregion
 
+    static GameObject _Hook;
+
+    static GameObject Hook
+    {
+        get
+        {
+            if (_Hook == null)
+            {
+                _Hook = new GameObject();
+
+                UnityEngine.Object obj = Resources.Load("Hook");
+
+                _Hook = (GameObject)obj;
+                _Hook.CreatePool(10);
+            }
+
+            return _Hook;
+        }
+    }
+
     #region Unity Methods
 
     public override void Awake()
@@ -38,7 +58,7 @@ public class Spielunker : Villager
         {
             Vector2 hookPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            curHook = AssetManager.Hook.Spawn(hookTrans.transform.position);
+            curHook = Hook.Spawn(hookTrans.transform.position);
 
             curHook.GetComponent<HookRope>().destination = hookPoint;
             curHook.GetComponent<HookRope>().player = gameObject;

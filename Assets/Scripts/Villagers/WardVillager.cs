@@ -25,6 +25,36 @@ public abstract class WardVillager : Villager
     #region Private Fields
     #endregion
 
+    static Dictionary<string, GameObject> _Wards;
+
+    static Dictionary<string, GameObject> Wards
+    {
+        get
+        {
+            if (_Wards == null)
+            {
+                _Wards = new Dictionary<string, GameObject>();
+
+                Object[] objs = Resources.LoadAll("Wards");
+
+                GameObject gObj;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as GameObject != null)
+                    {
+                        gObj = (GameObject)obj;
+
+                        _Wards.Add(gObj.name, gObj);
+                        _Wards[gObj.name].CreatePool(50);
+                    }
+                }
+            }
+
+            return _Wards;
+        }
+    }
+
     #region Unity Methods
     public override void Awake()
     {
@@ -56,7 +86,7 @@ public abstract class WardVillager : Villager
     {
         if (villagerState == VillagerState.PresentVillager)
         {
-            currentWard = AssetManager.Wards[wardName].Spawn(transform.position + wardOffset);
+            currentWard = Wards[wardName].Spawn(transform.position + wardOffset);
             currentWard.GetComponent<SpawnableSpriteTimeObject>().creator = gameObject;
             wardActive = true;
             animData["CanSpecial"] = false;
@@ -69,7 +99,7 @@ public abstract class WardVillager : Villager
         {
             Debug.Log("Warlock Ranged Attack");
 
-            rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
+            rangedAtk = Projectile.Spawn(rangedTrans.position);
 
             float direction = rangedTrans.position.x - transform.position.x;
 

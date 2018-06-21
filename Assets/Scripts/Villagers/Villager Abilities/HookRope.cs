@@ -32,6 +32,26 @@ public class HookRope : MonoBehaviour
 
     #endregion
 
+    static GameObject _RopeNode;
+
+    static GameObject RopeNode
+    {
+        get
+        {
+            if (_RopeNode == null)
+            {
+                _RopeNode = new GameObject();
+
+                UnityEngine.Object obj = Resources.Load("RopeNode");
+
+                _RopeNode = (GameObject)obj;
+                _RopeNode.CreatePool(10);
+            }
+
+            return _RopeNode;
+        }
+    }
+
     #region Unity Methods
     void Start()
     {
@@ -93,7 +113,7 @@ public class HookRope : MonoBehaviour
         pos2Create *= distance;
         pos2Create += lastNode.transform.position;
 
-        GameObject go = AssetManager.RopeNode.Spawn(pos2Create);
+        GameObject go = RopeNode.Spawn(pos2Create);
 
         go.transform.SetParent(transform);
 

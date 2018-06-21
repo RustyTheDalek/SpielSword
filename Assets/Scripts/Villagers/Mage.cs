@@ -5,6 +5,26 @@ using UnityEngine;
 
 public class Mage : AuraVillager {
 
+    static GameObject _MageAura;
+
+    public static GameObject MageAura
+    {
+        get
+        {
+            if (_MageAura == null)
+            {
+                _MageAura = new GameObject();
+
+                UnityEngine.Object obj = Resources.Load("MageAura");
+
+                _MageAura = (GameObject)obj;
+                _MageAura.CreatePool(25);
+            }
+
+            return _MageAura;
+        }
+    }
+
     // Use this for initialization
     public override void Start ()
     {
@@ -14,6 +34,6 @@ public class Mage : AuraVillager {
 
     protected override GameObject Aura()
     {
-        return AssetManager.MageAura.Spawn(transform.position);
+        return MageAura.Spawn(transform.position);
     }
 }

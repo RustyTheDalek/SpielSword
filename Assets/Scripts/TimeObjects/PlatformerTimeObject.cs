@@ -88,7 +88,7 @@ public class PlatformerTimeObject : SpriteTimeObject
             Debug.Log("Finish Frame is 0, Platformer not died becoming present again");
             tObjectState = TimeObjectState.Present;
 
-            m_Sprite.material = AssetManager.SpriteMaterials["Sprite"];
+            m_Sprite.material = SpriteMaterials["Sprite"];
             vhsEffect.enabled = false;
         }
     }

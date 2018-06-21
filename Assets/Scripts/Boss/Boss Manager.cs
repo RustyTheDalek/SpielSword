@@ -224,14 +224,14 @@ public abstract class BossManager : MonoBehaviour
     {
         bossHealthBar.SetHealthBar(HealthBarState.Invincible);
 
-        SetVHSEffect(true);
+        //SetVHSEffect(true);
     }
 
     public void StopFastForward()
     {
         bossHealthBar.SetHealthBar(HealthBarState.Standard);
 
-        SetVHSEffect(false);
+        //SetVHSEffect(false);
     }
 
     //Idea 2 : Skip to next Stage
@@ -578,15 +578,15 @@ public abstract class BossManager : MonoBehaviour
 		transform.DetachChildren();  
 	}
 
-    void SetVHSEffect(bool enable)
-    {
-        foreach (SpriteRenderer part in bossComponents)
-        {
-            string val = (enable == true) ? "VHSSprite" : "Sprite";
-            part.material = AssetManager.SpriteMaterials[val];
-            part.GetComponent<VHSEffect>().enabled = enable;
-        }
-    }
+    //void SetVHSEffect(bool enable)
+    //{
+    //    foreach (SpriteRenderer part in bossComponents)
+    //    {
+    //        string val = (enable == true) ? "VHSSprite" : "Sprite";
+    //        part.material = AssetManager.SpriteMaterials[val];
+    //        part.GetComponent<VHSEffect>().enabled = enable;
+    //    }
+    //}
 
     /// <summary>
     /// Turns Boss animations parts into Triggers based on Boolean

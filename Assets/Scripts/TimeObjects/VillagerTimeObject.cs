@@ -36,6 +36,36 @@ public class VillagerTimeObject : RigidbodyTimeObject
 
     #endregion
 
+    static Dictionary<string, Sprite> _VillagerSprites;
+
+    protected static Dictionary<string, Sprite> VillagerSprites
+    {
+        get
+        {
+            if (_VillagerSprites == null)
+            {
+                _VillagerSprites = new Dictionary<string, Sprite>();
+
+                Object[] objs = Resources.LoadAll("Sprites");
+
+                Sprite sprite;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as Sprite != null)
+                    {
+                        sprite = (Sprite)obj;
+
+                        //Debug.Log(sprite.name);
+                        _VillagerSprites.Add(sprite.name, sprite);
+                    }
+                }
+            }
+
+            return _VillagerSprites;
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -122,7 +152,7 @@ public class VillagerTimeObject : RigidbodyTimeObject
 
                 case TimeState.Backward:
 
-                    m_Sprite.sprite = AssetManager.VillagerSprites[vFrames[currentFrame].spriteName];
+                    m_Sprite.sprite = VillagerSprites[vFrames[currentFrame].spriteName];
                     villager.hat.localPosition = vFrames[currentFrame].hatPos;
                     transform.localScale = vFrames[currentFrame].scale;
 
@@ -188,7 +218,7 @@ public class VillagerTimeObject : RigidbodyTimeObject
 
     protected void OnVillagerFinishReverse()
     {
-        m_HatSprite.material = AssetManager.SpriteMaterials["Sprite"];
+        m_HatSprite.material = SpriteMaterials["Sprite"];
 
 
         m_Sprite.color = new Color(m_Sprite.color.r,
@@ -221,7 +251,7 @@ public class VillagerTimeObject : RigidbodyTimeObject
 
     protected void OnVillagerStartReverse()
     { 
-        m_HatSprite.material = AssetManager.SpriteMaterials["VHSSprite"];
-        m_HatSprite.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
+        m_HatSprite.material = SpriteMaterials["VHSSprite"];
+        m_HatSprite.GetComponentInChildren<SpriteRenderer>().material = SpriteMaterials["VHSSprite"];
     }
 }

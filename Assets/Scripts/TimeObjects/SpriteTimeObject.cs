@@ -14,6 +14,28 @@ public class SpriteTimeObject : TimeObject
     protected SpriteFrameData tempSFrame;
     protected List<SpriteFrameData> sFrames = new List<SpriteFrameData>();
 
+    static Dictionary<string, Material> _SpriteMaterials;
+
+    protected static Dictionary<string, Material> SpriteMaterials
+    {
+        get
+        {
+            if (_SpriteMaterials == null)
+            {
+                _SpriteMaterials = new Dictionary<string, Material>();
+
+                Object[] objs = Resources.LoadAll("Materials");
+
+                foreach (object obj in objs)
+                {
+                    _SpriteMaterials.Add(((Material)obj).name, (Material)obj);
+                }
+            }
+
+            return _SpriteMaterials;
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -58,19 +80,19 @@ public class SpriteTimeObject : TimeObject
 
     protected void OnSpriteFinishReverse()
     {
-        m_Sprite.material = AssetManager.SpriteMaterials["Sprite"];
+        m_Sprite.material = SpriteMaterials["Sprite"];
         vhsEffect.enabled = false;
     }
 
     protected void OnSpriteStartReverse()
     {
-        m_Sprite.material = AssetManager.SpriteMaterials["VHSSprite"];
+        m_Sprite.material = SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
     }
 
     protected override void OnPast()
     {
-        m_Sprite.material = AssetManager.SpriteMaterials["VHSSprite"];
+        m_Sprite.material = SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
 
         base.OnPast();

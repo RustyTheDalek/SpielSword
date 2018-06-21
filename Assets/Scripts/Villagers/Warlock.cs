@@ -54,7 +54,7 @@ public class Warlock : WardVillager
         {
             Debug.Log("Warlock Ranged Attack");
 
-            rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
+            rangedAtk = Projectile.Spawn(rangedTrans.position);
 
             float direction = rangedTrans.position.x - transform.position.x;
 

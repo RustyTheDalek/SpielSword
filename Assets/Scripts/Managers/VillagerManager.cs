@@ -57,6 +57,67 @@ public class VillagerManager : MonoBehaviour {
 
     public VillagerClass classToSpawn = VillagerClass.Warlock;
 
+    #region Assets
+    Dictionary<string, GameObject> _Villagers;
+
+    Dictionary<string, GameObject> Villagers
+    {
+        get
+        {
+            if (_Villagers == null)
+            {
+                _Villagers = new Dictionary<string, GameObject>();
+
+                Object[] objs = Resources.LoadAll("Villagers");
+
+                GameObject gObj;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as GameObject != null)
+                    {
+                        gObj = (GameObject)obj;
+
+                        _Villagers.Add(gObj.name, gObj);
+                        _Villagers[gObj.name].CreatePool(50);
+                    }
+                }
+            }
+
+            return _Villagers;
+        }
+    }
+
+    List<Sprite> _Hats;
+
+    List<Sprite> Hats
+    {
+        get
+        {
+            if (_Hats == null)
+            {
+                _Hats = new List<Sprite>();
+
+                Object[] objs = Resources.LoadAll("Sprites/Hats");
+
+                Sprite sprite;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as Sprite != null)
+                    {
+                        sprite = (Sprite)obj;
+
+                        _Hats.Add(sprite);
+                    }
+                }
+            }
+
+            return _Hats;
+        }
+    }
+    #endregion
+
     void Awake()
     {
         TimeObjectManager.OnNewRoundReady += OnNewRound;
@@ -88,7 +149,7 @@ public class VillagerManager : MonoBehaviour {
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
             //classToSpawn = VillagerClass.Berserker;
 
-            GameObject temp = AssetManager.Villagers[classToSpawn.ToString()].Spawn();
+            GameObject temp = Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
             SetupVillager(temp, spawnOffset);
         }
@@ -191,7 +252,7 @@ public class VillagerManager : MonoBehaviour {
             currentVillagerLayer++;
 
             //Add a random Hat to the active Villager
-            activeVillager.hat.GetComponent<SpriteRenderer>().sprite = AssetManager.Hats[Random.Range(0, AssetManager.Hats.Count)];
+            activeVillager.hat.GetComponent<SpriteRenderer>().sprite = Hats[Random.Range(0, Hats.Count)];
             activeVillager.hat.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
 
             currentVillagerLayer++;

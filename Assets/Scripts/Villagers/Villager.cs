@@ -87,6 +87,25 @@ public abstract class Villager : Character
     #region Private Variables
     #endregion
 
+    static GameObject _Projectile;
+
+    protected static GameObject Projectile
+    {
+        get
+        {
+            if (_Projectile == null)
+            {
+                _Projectile = new GameObject();
+
+                _Projectile = (GameObject)Resources.Load("Range");
+
+                _Projectile.CreatePool(100);
+            }
+
+            return _Projectile;
+        }
+    }
+
     public override void Awake()
     {
         m_Animator = GetComponent<Animator>();
@@ -330,7 +349,7 @@ public abstract class Villager : Character
         if (villagerState == VillagerState.PresentVillager)
         {
 
-            rangedAtk = AssetManager.Projectile.Spawn(rangedTrans.position);
+            rangedAtk = Projectile.Spawn(rangedTrans.position);
             rangedAtk.GetComponent<VillagerAttack>().damageMult = damageMult;
 
             float direction = rangedTrans.position.x - transform.position.x;
