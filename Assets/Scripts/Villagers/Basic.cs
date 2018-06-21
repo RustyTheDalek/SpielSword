@@ -11,8 +11,12 @@ public class Basic : Villager
     {
         base.Awake();
 
-        VillageExit.OnPlayerLeftVillage += StopControl;
         WorldMapManager.OnPlayerEnterVillage += StartControl;
+    }
+
+    public void Setup(VillageExit villageExit)
+    {
+        villageExit.OnPlayerLeftVillage += StopControl;
     }
 
     protected void StopControl()
@@ -26,5 +30,10 @@ public class Basic : Villager
     {
         xDir = -1;
         villagerState = VillagerState.PresentVillager;
+    }
+
+    public void Unsubscribe(VillageExit villageExit)
+    {
+        villageExit.OnPlayerLeftVillage -= StopControl;  
     }
 }

@@ -8,7 +8,7 @@
 public class VillageExit : MonoBehaviour {
 
     public delegate void PlayerLeftVillageEvent();
-    public static event PlayerLeftVillageEvent OnPlayerLeftVillage;
+    public event PlayerLeftVillageEvent OnPlayerLeftVillage;
 
     bool playerEntered = false;
 

@@ -20,9 +20,13 @@ public class CameraTransitions : MonoBehaviour {
             positions.Add(obj.name, obj.transform);
         }
 
-        VillageExit.OnPlayerLeftVillage += EnterWorldMap;
         WorldMapManager.OnPlayerEnterVillage += EnterVillage;
 	}
+
+    public void Setup(VillageExit villageExit)
+    {
+        villageExit.OnPlayerLeftVillage += EnterWorldMap;
+    }
 
     protected void EnterVillage()
     {
@@ -37,5 +41,10 @@ public class CameraTransitions : MonoBehaviour {
         transform.position = new Vector3(   positions["WorldMap"].position.x, 
                                             positions["WorldMap"].position.y, 
                                             transform.position.z);
+    }
+
+    public void Unsubscribe(VillageExit villageExit)
+    {
+        villageExit.OnPlayerLeftVillage -= EnterWorldMap;
     }
 }

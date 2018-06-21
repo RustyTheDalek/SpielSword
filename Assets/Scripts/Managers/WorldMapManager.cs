@@ -9,17 +9,26 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class WorldMapManager : MonoBehaviour {
 
+    #region WorldMapObjects
+
     Dictionary<string,Node> worldNodes = new Dictionary<string,Node>();
 
     MapVillager mapVillager;
+    Basic bVillager;
 
     Node currentNode, newNode;
+
+    VillageExit villageExit;
+
+    CameraTransitions cameraTransitions;
 
     bool moving = false, active = false;
 
     Vector2 direction;
 
     public float speed = 5;
+
+    #endregion
 
     public delegate void PlayerEnteredVillageEvent();
     public static event PlayerEnteredVillageEvent OnPlayerEnterVillage;
@@ -40,8 +49,15 @@ public class WorldMapManager : MonoBehaviour {
 
         currentNode = worldNodes["VillageNode"];
 
-        VillageExit.OnPlayerLeftVillage += Enable;
-	}
+        villageExit = GetComponentInChildren<VillageExit>();
+        villageExit.OnPlayerLeftVillage += Enable;
+
+        bVillager = GetComponentInChildren<Basic>();
+        bVillager.Setup(villageExit);
+
+        cameraTransitions = GetComponentInChildren<CameraTransitions>();
+        cameraTransitions.Setup(villageExit);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -128,4 +144,11 @@ public class WorldMapManager : MonoBehaviour {
     {
         active = true;
     }
+
+    private void OnDestroy()
+    {
+        villageExit.OnPlayerLeftVillage -= Enable;
+        cameraTransitions.Unsubscribe(villageExit);
+    }
+
 }
