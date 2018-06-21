@@ -37,12 +37,13 @@ public class Rogue : Villager {
         specialType = SpecialType.Press;
 	}
 
+    //TODO this current ability is more like a dash than a teleport since it can't go through things
     public void Blink()
     {
         //Figure out which was Rogue is facing
         float direction = melee.transform.position.x - transform.position.x;
 
-        //Test in that direction to see if the
+        //Test in that direction to see if there is something in way
         teleportTest = Physics2D.CircleCast(transform.position + Vector3.up * yOffset, .5f, Vector3.right * Mathf.Sign(direction), distance, collisionLayers);
 
         Vector3 newPos;
@@ -54,7 +55,9 @@ public class Rogue : Villager {
             Debug.Log("Didn't teleport full distance because: " + teleportTest.collider.name + " was in the way");
         }
         else //Nothing was hit within the Distance so we can teleport the full distance
-        newPos = transform.position + Vector3.right * Mathf.Sign(direction) * distance;
+        {
+            newPos = transform.position + Vector3.right * Mathf.Sign(direction) * distance;
+        }
 
         transform.position = newPos;
     }
