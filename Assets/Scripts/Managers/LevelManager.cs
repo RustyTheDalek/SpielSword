@@ -29,14 +29,9 @@ public class LevelManager : MonoBehaviour {
     EndGamePnl endGamePnl;
 
     /// <summary>
-    /// Bounds for the Arena at present
+    /// Bounds for the Arena
     /// </summary>
-    public static BoxCollider2D gameBounds;
-
-    /// <summary>
-    /// What time the fight started
-    /// </summary>
-    public static int fightStart = 0;
+    static BoxCollider2D arenaBounds;
 
     /// <summary>
     /// Boss Health UI
@@ -67,10 +62,11 @@ public class LevelManager : MonoBehaviour {
 
     #region Events
     public delegate void PlayerDeathEvent();
+    //Not ideal to be static but makes sense since player dying causes time to rewind
     public static event PlayerDeathEvent OnPlayerDeath;
 
     public delegate void GameOverEvent();
-    public static event GameOverEvent OnGameOver;
+    public event GameOverEvent OnGameOver;
 
     #endregion
 
@@ -86,13 +82,12 @@ public class LevelManager : MonoBehaviour {
         VillagerManager.OnNextVillager += TrackNewVillager;
     }
 
-
     // Use this for initialization
     void Start ()
     {
         try
         {
-            gameBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
+            arenaBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
         }
         catch
         {
@@ -118,9 +113,9 @@ public class LevelManager : MonoBehaviour {
         vilManager.Setup(currentBoss, arenaEntryPoint);
         arenaGate.Setup(arenaEntryPoint);
         currentBoss.Setup(arenaEntryPoint);
+        timeManager.Setup(arenaEntryPoint);
+
     }
-
-
 
     void EnableBossUI()
     {
@@ -176,12 +171,12 @@ public class LevelManager : MonoBehaviour {
     {
         foreach (CircleCollider2D coll in colliders)
         {
-            if (!gameBounds.bounds.Contains(position))
+            if (!arenaBounds.bounds.Contains(position))
             {
                 return false;
             }
 
-            if (!gameBounds.bounds.Intersects(coll.bounds))
+            if (!arenaBounds.bounds.Intersects(coll.bounds))
             {
                 Debug.Log("Postion will not be in map no teleport allowed");
                 return false;
@@ -198,5 +193,6 @@ public class LevelManager : MonoBehaviour {
         vilManager.Unsubscribe(currentBoss, arenaEntryPoint);
         currentBoss.Unsubscribe(arenaEntryPoint);
         arenaGate.Unsubscribe(arenaEntryPoint);
+        timeManager.Unsubscribe(arenaEntryPoint);
     }
 }

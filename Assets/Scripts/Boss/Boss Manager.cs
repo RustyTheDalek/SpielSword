@@ -503,10 +503,6 @@ public abstract class BossManager : MonoBehaviour
     {
         Debug.Log("Starting fight!");
 
-        //TODO:Maybe move this to a different event function as it's not strictly 
-        //something that the Boss Manager could track
-        LevelManager.fightStart = TimeObjectManager.t;
-
         animator.enabled = true;
 
         //NextStage();

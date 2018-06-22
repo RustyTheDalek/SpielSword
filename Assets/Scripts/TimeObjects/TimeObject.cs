@@ -165,7 +165,7 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastPlaying:
 
-                        if (TimeObjectManager.t <= startFrame || TimeObjectManager.t <= LevelManager.fightStart)
+                        if (TimeObjectManager.t <= startFrame || TimeObjectManager.t <= TimeObjectManager.startT)
                         {
                             tObjectState = TimeObjectState.PastStart;
 
@@ -267,6 +267,11 @@ public class TimeObject : MonoBehaviour
                 OnStartReverse();
                 break;
         }
+    }
+
+    private void OnDestroy()
+    {
+        LevelManager.OnPlayerDeath -= SoftReset;
     }
 }
                                                           

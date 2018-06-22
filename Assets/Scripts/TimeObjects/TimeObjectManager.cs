@@ -13,6 +13,11 @@ public class TimeObjectManager : MonoBehaviour
     public static int t = 0;
 
     /// <summary>
+    /// When does 'Time' start. changes when player reaches boss fight
+    /// </summary>
+    public static int startT;
+
+    /// <summary>
     /// Scaling for Time Helps speed up reversal
     /// </summary>
     public float longestTime = 0;
@@ -43,6 +48,16 @@ public class TimeObjectManager : MonoBehaviour
         LevelManager.OnPlayerDeath += SetMaxReverseSpeed;
     }
 
+    public void Setup(ArenaEntry arenaEntry)
+    {
+        arenaEntry.OnPlayerEnterArena += SetStartOfFight;
+    }
+
+    public void Unsubscribe(ArenaEntry arenaEntry)
+    {
+        arenaEntry.OnPlayerEnterArena -= SetStartOfFight;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -50,19 +65,12 @@ public class TimeObjectManager : MonoBehaviour
         t += (int)Time.timeScale * (int)timeState * (int)pastTimeScale;
     }
 
-    void SetMaxReverseSpeed()
-    {
-        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime / 30, .1f, 100), 0, 0);
-
-        rewindCurve.MoveKey(1, keyframe);
-    }
-
     private void LateUpdate()
     {
-        if (t < LevelManager.fightStart)
+        if (t < startT)
         {
             //Skips time ahead to when fight starts
-            t = LevelManager.fightStart;
+            t = startT;
 
             timeState = TimeState.Forward;
             Time.timeScale = 1;
@@ -78,8 +86,25 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            float newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime - LevelManager.fightStart);
+            float newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime - startT);
             Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }
+    }
+
+    public void SetStartOfFight()
+    {
+        startT = t;
+    }
+
+    void SetMaxReverseSpeed()
+    {
+        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime / 30, .1f, 100), 0, 0);
+
+        rewindCurve.MoveKey(1, keyframe);
+    }
+
+    private void OnDestroy()
+    {
+        LevelManager.OnPlayerDeath -= SetMaxReverseSpeed;
     }
 }

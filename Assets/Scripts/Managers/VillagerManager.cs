@@ -309,6 +309,8 @@ public class VillagerManager : MonoBehaviour {
     {
         bManager.OnBossDeath -= CheckLivesUsed;
         arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
+
+        LevelManager.OnPlayerDeath -= OnVillagerDeath;
     }
 
 }
