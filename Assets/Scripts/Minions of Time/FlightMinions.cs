@@ -7,6 +7,7 @@ public class FlightMinions : Character {
 
     private float distanceToFloor;
     private float distanceFromWall;
+    private float cooldownAttack;
     private int speed;
     private Vector2 findFloor;
     private Vector2 findWall;
@@ -20,6 +21,7 @@ public class FlightMinions : Character {
     private bool attacking;
     private bool lastAttacking;
     private bool returning;
+    private bool onCooldown;
     private Quaternion rotation;
     private Quaternion current;
     private Collider2D[] playerColliders;
@@ -52,6 +54,7 @@ public class FlightMinions : Character {
 
         //actPlayer = GameObject.FindGameObjectWithTag("Player");
         playerHere = false;
+        onCooldown = false;
 
         //Set a random start direction
         xDir = Random.Range(0, 2);
@@ -75,43 +78,60 @@ public class FlightMinions : Character {
     // Update is called once per frame
     public override void Update()
     {
-        base.Update();
-
-        timer += Time.deltaTime;
-
-        if (timer > .046875f)
+        if (Alive)
         {
-            Movement();
-            timer = 0f;
-        }
+            base.Update();
 
-        if (playerHere && !returning)
-        {
-            FindFoe();
-        }
-        else if (attacking)
-        {
-            HomeIn();
-        }
+            timer += Time.deltaTime;
 
-        if (!attacking)
-        {
-            if(lastAttacking && transform.position != orginalPosition || returning)
+            if (onCooldown)
             {
-                transform.position = Vector3.MoveTowards(transform.position, orginalPosition, speed * Time.deltaTime);
-                returning = true;
-                if (transform.position == orginalPosition)
+                cooldownAttack += Time.deltaTime;
+            }
+
+            if (cooldownAttack >= 2.5f)
+            {
+                onCooldown = false;
+            }
+
+            if (timer > .046875f)
+            {
+                Movement();
+                timer = 0f;
+            }
+
+            if (playerHere && !returning && !onCooldown)
+            {
+                FindFoe();
+            }
+            else if (attacking)
+            {
+                HomeIn();
+            }
+
+            if (!attacking && !onCooldown)
+            {
+                if (lastAttacking && transform.position != orginalPosition || returning)
                 {
-                    returning = false;
+                    transform.position = Vector3.MoveTowards(transform.position, orginalPosition, speed * Time.deltaTime);
+                    returning = true;
+                    cooldownAttack = 0f;
+                    onCooldown = false;
+                    if (transform.position == orginalPosition)
+                    {
+                        returning = false;
+                    }
+                }
+                else
+                {
+                    transform.RotateAround(orbitPoint, Vector3.forward, 90 * Time.deltaTime);
+                    transform.rotation = Quaternion.identity;
+
                 }
             }
-            else
-            {
-                transform.RotateAround(orbitPoint, Vector3.forward, 90 * Time.deltaTime);
-                transform.rotation = Quaternion.identity;
-            }
+            lastAttacking = attacking;
         }
-        lastAttacking = attacking;
+        
     }
 
     void Movement()
@@ -137,7 +157,6 @@ public class FlightMinions : Character {
         {
             // sets the players location
             playerPosition = actPlayer.transform.position;
-            
             //current = new Quaternion (0, 0, transform.localRotation.z, 0);
 
             //if (m_Platformer.m_FacingRight)
@@ -189,6 +208,8 @@ public class FlightMinions : Character {
         else
         {
             attacking = false;
+            onCooldown = true;
+            returning = true;
             foreach (Collider2D collider in playerColliders)
             {
                 collider.enabled = false;
