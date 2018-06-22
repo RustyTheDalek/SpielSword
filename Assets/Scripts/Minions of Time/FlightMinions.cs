@@ -16,21 +16,37 @@ public class FlightMinions : Character {
     private Vector3 orginalPosition;
     private Vector3 playerPosition;
     private Vector3 relativePos;
+    private Vector3 moveForce;
     private Ray2D ray;
     private bool inAir;
     private bool attacking;
     private bool lastAttacking;
+    /// <summary>
+    /// Is returning following a succesful 
+    /// attack to it's original position
+    /// </summary>
     private bool returning;
+    /// <summary>
+    /// Attack is currently unusable for the duration
+    /// </summary>
     private bool onCooldown;
     private Quaternion rotation;
     private Quaternion current;
     private Collider2D[] playerColliders;
-
+    private Rigidbody2D rb;
 
     public LayerMask layerGround;
     public LayerMask layerGroundOnly;
     public LayerMask layerVillagerOnly;
+    /// <summary>
+    /// Sets along the X axis away from the enemy 
+    /// as to where the point of orbit should be
+    /// </summary>
     public int orbitPointX;
+    /// <summary>
+    /// Sets along the Y axis away from the enemy 
+    /// as to where the point of orbit should be
+    /// </summary>
     public int orbitPointY;
     public GameObject actPlayer;
     public GameObject actCollision;
@@ -43,20 +59,18 @@ public class FlightMinions : Character {
         base.Awake();
 
         m_Platformer = GetComponent<PlatformerCharacter2D>();
+        rb = GetComponent<Rigidbody2D>();
 
         distanceFromWall = 0.4f;
         distanceToFloor = 0.8f;
     }
-
-    // Use this for initialization
+    
     public void Start()
     {
-
-        //actPlayer = GameObject.FindGameObjectWithTag("Player");
         playerHere = false;
         onCooldown = false;
 
-        //Set a random start direction
+        //Set a random start direction, obsolite atm
         xDir = Random.Range(0, 2);
         if (xDir == 0)
         {
@@ -84,44 +98,57 @@ public class FlightMinions : Character {
 
             timer += Time.deltaTime;
 
+            // checks to see if the attack is on a cooldown
             if (onCooldown)
             {
                 cooldownAttack += Time.deltaTime;
             }
 
+            // checks to see if enoght time has passed for the cooldown
             if (cooldownAttack >= 2.5f)
             {
                 onCooldown = false;
             }
 
+            //possibly obsolite
             if (timer > .046875f)
             {
                 Movement();
                 timer = 0f;
             }
 
+            // if there is a player and not doing anything else
             if (playerHere && !returning && !onCooldown)
             {
+                // find the player a proceed to attack them
                 FindFoe();
             }
             else if (attacking)
             {
+                // continue to move to the players location
                 HomeIn();
             }
 
+            // makes sure the enemy isn't doing something
             if (!attacking && !onCooldown)
             {
+                // checks that the enemy has finished attacking and is not where they began
+                // or that they are already returning
                 if (lastAttacking && transform.position != orginalPosition || returning)
                 {
+                    //move them back to where they started
                     transform.position = Vector3.MoveTowards(transform.position, orginalPosition, speed * Time.deltaTime);
                     returning = true;
+                    // resets any cool down
                     cooldownAttack = 0f;
                     onCooldown = false;
+                    //if the enemy has made it back home then it no longer needs to return
                     if (transform.position == orginalPosition)
                     {
                         returning = false;
                     }
                 }
+                //if there is no need to return back then continue to orbit a set point
                 else
                 {
                     transform.RotateAround(orbitPoint, Vector3.forward, 90 * Time.deltaTime);
@@ -129,6 +156,7 @@ public class FlightMinions : Character {
 
                 }
             }
+            // is used to check that the last frame was an attack
             lastAttacking = attacking;
         }
         
@@ -140,10 +168,15 @@ public class FlightMinions : Character {
         //animData["Move"] = xDir;
     }
 
+    /// <summary>
+    /// Ensures it can see the player
+    /// </summary>
     void FindFoe()
     {
+        // Takes players location
         findPlayer = new Vector2(actPlayer.transform.position.x - 
             transform.position.x, actPlayer.transform.position.y - transform.position.y).normalized;
+        // See if it can draw to the player
         bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
         if (!rayResult)
         {
@@ -151,29 +184,23 @@ public class FlightMinions : Character {
         }
     }
 
+    /// <summary>
+    /// Set the inital position of the player 
+    /// and the location it is when it begins the attack
+    /// </summary>
     void Attack()
     {
         if (!attacking)
         {
             // sets the players location
             playerPosition = actPlayer.transform.position;
-            //current = new Quaternion (0, 0, transform.localRotation.z, 0);
-
-            //if (m_Platformer.m_FacingRight)
-            //{
-            //    rotation.z -= 90;
-            //}
-            //else
-            //{
-            //    rotation.z += 90;
-            //}
-
+            
             // Sets the old location to return too
             orginalPosition = transform.position;
         }
-
         HomeIn();        
     }
+
     /// <summary>
     /// Move to players first know position
     /// </summary>
@@ -188,13 +215,20 @@ public class FlightMinions : Character {
         current = transform.rotation;
 
         transform.localRotation = Quaternion.Slerp(current, rotation , Time.deltaTime * 16);
-        //transform.LookAt(playerPosition, Vector3.right);
         #endregion
 
-        // Move Enemy to Player
-        transform.position = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+        #region Move to location of players first know location
+        moveForce = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+        //Vector3 direction = rb.transform.position - moveForce;
+        //rb.AddForceAtPosition(direction.normalized, transform.position);
+        //rb.MovePosition(moveForce);
+        //Vector3 dir = (playerPosition - transform.position).normalized * speed;
+        //rb.velocity = dir;
+        //rb.AddRelativeForce(Vector3.forward * speed);
+        rb.AddRelativeForce(moveForce, ForceMode2D.Force);
+        #endregion
 
-        // once location is reached stop the attack
+        // enable the collisions for damage to player
         if (transform.position != playerPosition)
         {
             attacking = true;
@@ -202,9 +236,8 @@ public class FlightMinions : Character {
             {
                 collider.enabled = true;
             }
-            //ColliderTransform.GetChild(0).GetComponent<Collider>();
-
         }
+        // once location is reached stop the attack, disable the collisions
         else
         {
             attacking = false;
