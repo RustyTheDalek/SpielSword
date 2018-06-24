@@ -59,6 +59,17 @@ public class VillagerManager : MonoBehaviour {
 
     public VillagerClass classToSpawn = VillagerClass.Warlock;
 
+    public delegate void VillagerManagerEvent();
+
+    /// <summary>
+    /// In future will deal with minutia of what happens when a player loses all lives
+    /// </summary>
+    public event VillagerManagerEvent OnOutOfLives;
+    /// <summary>
+    /// What happens when active villager dies
+    /// </summary>
+    public event VillagerManagerEvent OnActiveDeath;
+
     #region Assets
     Dictionary<string, GameObject> _Villagers;
 
@@ -161,7 +172,7 @@ public class VillagerManager : MonoBehaviour {
         NextVillager();
         EnterLevel();
 
-        LevelManager.OnPlayerDeath += OnVillagerDeath;
+        OnActiveDeath += OnVillagerDeath;
 
         arenaEntry.OnPlayerEnterArena += ArenaCheckpoint;
     }
@@ -208,6 +219,34 @@ public class VillagerManager : MonoBehaviour {
             }
         }
 	}
+
+    private void LateUpdate()
+    {
+        switch (TimeObjectManager.timeState)
+        {
+            case TimeState.Forward:
+
+                if (!activeVillager.Alive)
+                {
+                    //Game over if no lives
+                    if (RemainingVillagers <= 0)
+                    {
+                        Debug.Log("Game Over");
+
+                        //TODO:On game over probably have Golem keep going and character just dies
+                        if (OnOutOfLives != null)
+                            OnOutOfLives();
+                    }
+                    else
+                    {
+                        if (OnActiveDeath != null)
+                            OnActiveDeath();
+                    }
+                }
+
+                break;
+        }
+    }
 
     public void OnVillagerDeath()
     {
@@ -300,7 +339,10 @@ public class VillagerManager : MonoBehaviour {
     public void Unsubscribe(ArenaEntry arenaEntry)
     {
         arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
+    }
 
-        LevelManager.OnPlayerDeath -= OnVillagerDeath;
+    private void OnDestroy()
+    {
+        OnActiveDeath -= OnVillagerDeath;
     }
 }

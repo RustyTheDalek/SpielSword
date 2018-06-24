@@ -42,20 +42,6 @@ public class LevelManager : MonoBehaviour {
 
     public int score = 0;
 
-    public static bool ReachedStage3,
-                        ReachedStage5,
-                        LessThanTenLives;
-
-    #endregion
-
-    #region Events
-    public delegate void PlayerDeathEvent();
-    //Not ideal to be static but makes sense since player dying causes time to rewind
-    public static event PlayerDeathEvent OnPlayerDeath;
-
-    public delegate void GameOverEvent();
-    public event GameOverEvent OnGameOver;
-
     #endregion
 
     /// <summary>
@@ -92,9 +78,10 @@ public class LevelManager : MonoBehaviour {
         vilManager.Setup(currentBoss, arenaEntryPoint);
         arenaGate.Setup(arenaEntryPoint);
         currentBoss.Setup(arenaEntryPoint);
-        timeManager.Setup(arenaEntryPoint);
+        timeManager.Setup(arenaEntryPoint, vilManager);
 
         currentBoss.OnBossDeath += CalculateScore;
+        vilManager.OnOutOfLives += LoadVillage;
 
     }
 
@@ -102,41 +89,11 @@ public class LevelManager : MonoBehaviour {
     {
         bossHealth.gameObject.SetActive(true);
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    public void LoadVillage()
     {
-        switch (TimeObjectManager.timeState)
-        {
-            case TimeState.Forward:
-
-                livesTxt.text = "x" + vilManager.totalLives;
-
-                if (!vilManager.activeVillager.Alive)
-                {
-                    //Game over if no lives
-                    if (vilManager.RemainingVillagers <= 0)
-                    {
-                        Debug.Log("Game Over");
-                        //TODO:On game over probably have Golem keep going and character just dies
-                        if (OnGameOver != null)
-                            OnGameOver();
-
-                        SceneManager.LoadScene("Village");
-                    }
-                    else //Otherwise start reversing time
-                    {
-                        TimeObjectManager.timeState = TimeState.Backward;
-                        currentBoss.SetAnimator(false);
-
-                        OnPlayerDeath();
-                    }
-
-                }
-
-                break;
-        }
-	}
+        SceneManager.LoadScene("Village");
+    }
 
     public void CalculateScore()
     {
@@ -180,6 +137,6 @@ public class LevelManager : MonoBehaviour {
         vilManager.Unsubscribe(arenaEntryPoint);
         currentBoss.Unsubscribe(arenaEntryPoint);
         arenaGate.Unsubscribe(arenaEntryPoint);
-        timeManager.Unsubscribe(arenaEntryPoint);
+        timeManager.Unsubscribe(arenaEntryPoint, vilManager);
     }
 }

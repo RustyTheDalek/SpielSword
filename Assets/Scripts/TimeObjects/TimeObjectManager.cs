@@ -42,20 +42,16 @@ public class TimeObjectManager : MonoBehaviour
     public delegate void NewRoundReadyEvent();
     public static event NewRoundReadyEvent OnNewRoundReady;
 
-    // Use this for initialization
-    void Start ()
-    {
-        LevelManager.OnPlayerDeath += SetMaxReverseSpeed;
-    }
-
-    public void Setup(ArenaEntry arenaEntry)
+    public void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager)
     {
         arenaEntry.OnPlayerEnterArena += SetStartOfFight;
+        villagerManager.OnActiveDeath += ReverseTime;
     }
 
-    public void Unsubscribe(ArenaEntry arenaEntry)
+    public void Unsubscribe(ArenaEntry arenaEntry, VillagerManager villagerManager)
     {
         arenaEntry.OnPlayerEnterArena -= SetStartOfFight;
+        villagerManager.OnActiveDeath -= ReverseTime;
     }
 
     // Update is called once per frame
@@ -96,15 +92,12 @@ public class TimeObjectManager : MonoBehaviour
         startT = t;
     }
 
-    void SetMaxReverseSpeed()
+    void ReverseTime()
     {
+        timeState = TimeState.Backward;
+
         Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime / 30, .1f, 100), 0, 0);
 
         rewindCurve.MoveKey(1, keyframe);
-    }
-
-    private void OnDestroy()
-    {
-        LevelManager.OnPlayerDeath -= SetMaxReverseSpeed;
     }
 }

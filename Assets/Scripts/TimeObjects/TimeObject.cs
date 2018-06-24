@@ -82,8 +82,6 @@ public class TimeObject : MonoBehaviour
 
         OnTrackFrame += TrackTransform;
         OnPlayFrame += PlayTransormFrame;
-
-        LevelManager.OnPlayerDeath += SoftReset;
     }
 
     protected virtual void Update()
@@ -124,7 +122,7 @@ public class TimeObject : MonoBehaviour
                         //If finish frame is 0 then timeobject hasn't finished yet and 
                         //will need extra tracking
                         if (TimeObjectManager.t >= finishFrame && finishFrame != 0 ||
-                            (finishFrame == 0 && 
+                            (finishFrame == 0 &&
                             TimeObjectManager.t >= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             if (finishFrame == 0)
@@ -137,7 +135,7 @@ public class TimeObject : MonoBehaviour
                             {
                                 tObjectState = TimeObjectState.PastFinished;
 
-                                if(OnFinishPlayback != null)
+                                if (OnFinishPlayback != null)
                                     OnFinishPlayback();
 
                                 currentFrame = finishFrame;
@@ -160,6 +158,14 @@ public class TimeObject : MonoBehaviour
 
                 switch (tObjectState)
                 {
+                    //When time is reversing if objects are present we need to begin reversing them
+                    case TimeObjectState.Present:
+                    case TimeObjectState.PresentDead:
+
+                        OnPast();
+
+                        break;
+
                     case TimeObjectState.PastStart:
                         break;
 
@@ -169,7 +175,7 @@ public class TimeObject : MonoBehaviour
                         {
                             tObjectState = TimeObjectState.PastStart;
 
-                            if(OnFinishReverse != null)
+                            if (OnFinishReverse != null)
                                 OnFinishReverse();
 
                             currentFrame = 0;
@@ -184,11 +190,11 @@ public class TimeObject : MonoBehaviour
 
                         //We want to make sure it starts at the right time or starts 
                         //reversing if it's in the present
-                        if (TimeObjectManager.t <= finishFrame || (finishFrame == 0 && 
+                        if (TimeObjectManager.t <= finishFrame || (finishFrame == 0 &&
                             TimeObjectManager.t <= bFrames[bFrames.Count - 1].timeStamp))
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            if(OnStartReverse != null)
+                            if (OnStartReverse != null)
                                 OnStartReverse();
 
                             //Just in case a frame or to is skipped we will attempt to 
@@ -267,11 +273,6 @@ public class TimeObject : MonoBehaviour
                 OnStartReverse();
                 break;
         }
-    }
-
-    private void OnDestroy()
-    {
-        LevelManager.OnPlayerDeath -= SoftReset;
     }
 }
                                                           
