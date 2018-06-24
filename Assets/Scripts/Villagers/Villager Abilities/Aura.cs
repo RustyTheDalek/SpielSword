@@ -11,7 +11,7 @@ public class Aura : SpawnableSpriteTimeObject
     public float auraLife  = 5,
                     auraTimer = 0;
 
-    bool comboUsed = false;
+    public static bool comboUsed = false;
 
     protected override void Awake()
     {
@@ -94,9 +94,8 @@ public class Aura : SpawnableSpriteTimeObject
         {
             if (!comboUsed)
             {
-                LevelManager.combosUsed ++;
+                VillagerManager.combosUsed++;
                 comboUsed = true;
-                LevelManager.IncreaseScore();
             }
         }
     }

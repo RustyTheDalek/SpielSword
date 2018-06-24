@@ -103,6 +103,8 @@ public abstract class BossManager : MonoBehaviour
     List<int> stageTimers;
     List<float> stageHealthLimits;
 
+    public int highestStageReached = 1;
+
     #endregion
 
     /// <summary>
@@ -514,24 +516,22 @@ public abstract class BossManager : MonoBehaviour
 
     public virtual void OnStageTwo()
     {
-        LevelManager.stageReached = 2;
+        highestStageReached++;
     }
 
     public virtual void OnStageThree()
     {
-        LevelManager.IncreaseScore();
-        LevelManager.stageReached = 3;
+        highestStageReached++;
     }
 
     public virtual void OnStageFour()
     {
-        LevelManager.stageReached = 4;
+        highestStageReached++;
     }
 
     public virtual void OnStageFive()
     {
-        LevelManager.IncreaseScore();
-        LevelManager.stageReached = 5;
+        highestStageReached++;
     }
 
     public void OnDeath()

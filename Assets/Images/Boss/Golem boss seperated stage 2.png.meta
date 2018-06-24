@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 6a883d6d1298c8045a5353af4b687a73
-timeCreated: 1465912094
+timeCreated: 1529800511
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -40,14 +40,16 @@ TextureImporter:
     21300066: The boss seperated stage 2_33
     21300068: The boss seperated stage 2_34
     21300070: The boss seperated stage 2_35
-  serializedVersion: 2
+  serializedVersion: 4
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -57,23 +59,22 @@ TextureImporter:
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 8
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: 16
     mipBias: -1
-    wrapMode: 1
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
@@ -81,49 +82,42 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Head Stage 2
+    - serializedVersion: 2
+      name: Head Stage 2
       rect:
         serializedVersion: 2
         x: 514
         y: 628
         width: 227
         height: 383
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.122}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 90.5, y: -145.5}
-        - {x: 93.5, y: -103.5}
-        - {x: 112.5, y: -1.5}
-        - {x: 113.5, y: 5.5}
-        - {x: 113.5, y: 127.5}
-        - {x: 110.5, y: 142.5}
-        - {x: 80.5, y: 170.5}
-        - {x: 55.5, y: 182.5}
-        - {x: 17.5, y: 191.5}
-        - {x: -7.5, y: 191.5}
-        - {x: -34.5, y: 185.5}
-        - {x: -60.5, y: 176.5}
-        - {x: -73.5, y: 168.5}
-        - {x: -96.5, y: 145.5}
-        - {x: -102.5, y: 132.5}
-        - {x: -110.5, y: 102.5}
-        - {x: -110.5, y: 44.5}
-        - {x: -103.5, y: -9.5}
-        - {x: -82.5, y: -106.5}
-        - {x: -78.5, y: -162.5}
-        - {x: -63.5, y: -181.5}
-        - {x: -43.5, y: -189.5}
-        - {x: -36.5, y: -191.5}
-        - {x: 52.5, y: -191.5}
-        - {x: 77.5, y: -177.5}
-        - {x: 86.5, y: -163.5}
-    - name: Larm Stage 2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Larm Stage 2
       rect:
         serializedVersion: 2
         x: 28
@@ -133,82 +127,11 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 39.5, y: -250}
-        - {x: 44.5, y: -250}
-        - {x: 44.5, y: -248}
-        - {x: 42.5, y: -246}
-        - {x: 39.5, y: -247}
-      - - {x: 88.5, y: -233}
-        - {x: 87.5, y: -236}
-        - {x: 87.5, y: -250}
-        - {x: 104.5, y: -250}
-        - {x: 104.5, y: -246}
-        - {x: 95.5, y: -233}
-      - - {x: 16.5, y: -245}
-        - {x: 16.5, y: -246}
-        - {x: 18.5, y: -248}
-        - {x: 19.5, y: -248}
-        - {x: 22.5, y: -245}
-        - {x: 22.5, y: -243}
-        - {x: 19.5, y: -242}
-      - - {x: 31.5, y: -237}
-        - {x: 29.5, y: -237}
-        - {x: 27.5, y: -242}
-        - {x: 27.5, y: -246}
-        - {x: 28.5, y: -247}
-        - {x: 31.5, y: -248}
-        - {x: 38.5, y: -248}
-        - {x: 38.5, y: -241}
-        - {x: 34.5, y: -238}
-      - - {x: -95.5, y: -247}
-        - {x: -92.5, y: -246}
-        - {x: -92.5, y: -243}
-        - {x: -95.5, y: -242}
-        - {x: -97.5, y: -244}
-      - - {x: 132.5, y: -240}
-        - {x: 132.5, y: -196}
-        - {x: 127.5, y: -181}
-        - {x: 118.5, y: -90}
-        - {x: 73.5, y: 49}
-        - {x: 61.5, y: 50}
-        - {x: 23.5, y: 203}
-        - {x: 4.5, y: 250}
-        - {x: -10.5, y: 250}
-        - {x: -11.5, y: 241}
-        - {x: -58.5, y: 62}
-        - {x: -87.5, y: 13}
-        - {x: -124.5, y: -56}
-        - {x: -146.5, y: -179}
-        - {x: -146.5, y: -212}
-        - {x: -139.5, y: -229}
-        - {x: -127.5, y: -239}
-        - {x: -115.5, y: -244}
-        - {x: -109.5, y: -246}
-        - {x: -104.5, y: -247}
-        - {x: -42.5, y: -247}
-        - {x: -4.5, y: -246}
-        - {x: 3.5, y: -247}
-        - {x: 126.5, y: -247}
-      - - {x: 137.5, y: -240}
-        - {x: 137.5, y: -244}
-        - {x: 138.5, y: -246}
-        - {x: 146.5, y: -246}
-        - {x: 146.5, y: -233}
-        - {x: 143.5, y: -234}
-      - - {x: -146.5, y: -141}
-        - {x: -146.5, y: -155}
-        - {x: -143.5, y: -154}
-        - {x: -141.5, y: -151}
-        - {x: -141.5, y: -148}
-        - {x: -144.5, y: -141}
-      - - {x: 139.5, y: -100}
-        - {x: 139.5, y: -110}
-        - {x: 144.5, y: -119}
-        - {x: 146.5, y: -119}
-        - {x: 146.5, y: -101}
-        - {x: 142.5, y: -99}
-    - name: Chest Stage 2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Chest Stage 2
       rect:
         serializedVersion: 2
         x: 342
@@ -218,65 +141,11 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -68.5, y: -91}
-        - {x: 72.5, y: -92}
-        - {x: 74.5, y: -134}
-        - {x: 37.5, y: -153}
-        - {x: 40.5, y: -162}
-        - {x: 85.5, y: -162}
-        - {x: 134.5, y: -126}
-        - {x: 165.5, y: -75}
-        - {x: 183.5, y: -32}
-        - {x: 290.5, y: -41}
-        - {x: 292.5, y: -37}
-        - {x: 292.5, y: -15}
-        - {x: 250.5, y: 28}
-        - {x: 212.5, y: 67}
-        - {x: 178.5, y: 93}
-        - {x: 99.5, y: 146}
-        - {x: 47.5, y: 162}
-        - {x: -53.5, y: 162}
-        - {x: -97.5, y: 147}
-        - {x: -180.5, y: 93}
-        - {x: -219.5, y: 56}
-        - {x: -221.5, y: 52}
-        - {x: -292.5, y: -17}
-        - {x: -292.5, y: -25}
-        - {x: -277.5, y: -42}
-        - {x: -202.5, y: -33}
-        - {x: -163.5, y: -79}
-        - {x: -147.5, y: -97}
-        - {x: -144.5, y: -85}
-        - {x: -113.5, y: -61}
-        - {x: -124.5, y: -113}
-        - {x: -125.5, y: -139}
-        - {x: -84.5, y: -162}
-        - {x: -45.5, y: -162}
-        - {x: -38.5, y: -161}
-        - {x: -33.5, y: -155}
-        - {x: -70.5, y: -134}
-      - - {x: -17.5, y: -95}
-        - {x: -20.5, y: -104}
-        - {x: -20.5, y: -132}
-        - {x: -18.5, y: -145}
-        - {x: 22.5, y: -145}
-        - {x: 24.5, y: -141}
-        - {x: 24.5, y: -96}
-        - {x: 20.5, y: -95}
-      - - {x: 186.5, y: -116}
-        - {x: 188.5, y: -118}
-        - {x: 191.5, y: -117}
-        - {x: 191.5, y: -114}
-        - {x: 189.5, y: -112}
-        - {x: 186.5, y: -113}
-      - - {x: -135.5, y: -78}
-        - {x: -133.5, y: -80}
-        - {x: -130.5, y: -79}
-        - {x: -129.5, y: -75}
-        - {x: -131.5, y: -73}
-        - {x: -134.5, y: -74}
-    - name: Rarm Stage 2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Rarm Stage 2
       rect:
         serializedVersion: 2
         x: 961
@@ -286,68 +155,11 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -160, y: -228}
-        - {x: -148, y: -228}
-        - {x: -148, y: -227}
-        - {x: -153, y: -222}
-        - {x: -160, y: -222}
-      - - {x: -95, y: -227}
-        - {x: -95, y: -228}
-        - {x: -87, y: -228}
-        - {x: -87, y: -227}
-        - {x: -90, y: -224}
-        - {x: -92, y: -224}
-      - - {x: 96, y: -197}
-        - {x: 111, y: -222}
-        - {x: 145, y: -217}
-        - {x: 160, y: -197}
-        - {x: 160, y: -147}
-        - {x: 144, y: -82}
-        - {x: 136, y: -28}
-        - {x: 84, y: 64}
-        - {x: 68, y: 62}
-        - {x: 46, y: 167}
-        - {x: 37, y: 188}
-        - {x: 36, y: 198}
-        - {x: 19, y: 225}
-        - {x: -27, y: 225}
-        - {x: -29, y: 224}
-        - {x: -64, y: 116}
-        - {x: -70, y: 77}
-        - {x: -88, y: 75}
-        - {x: -102, y: 41}
-        - {x: -131, y: -35}
-        - {x: -144, y: -114}
-        - {x: -157, y: -171}
-        - {x: -157, y: -207}
-        - {x: -148, y: -224}
-        - {x: -127, y: -214}
-        - {x: -111, y: -187}
-        - {x: -58, y: -221}
-        - {x: -22, y: -217}
-        - {x: -1, y: -228}
-        - {x: 21, y: -228}
-        - {x: 42, y: -195}
-        - {x: 71, y: -210}
-        - {x: 81, y: -213}
-      - - {x: 25, y: -228}
-        - {x: 24, y: -225}
-        - {x: 20, y: -225}
-        - {x: 19, y: -228}
-      - - {x: 152, y: -222}
-        - {x: 145, y: -227}
-        - {x: 145, y: -228}
-        - {x: 160, y: -228}
-        - {x: 160, y: -225}
-        - {x: 156, y: -223}
-      - - {x: -107, y: -201}
-        - {x: -105, y: -203}
-        - {x: -102, y: -202}
-        - {x: -102, y: -199}
-        - {x: -104, y: -197}
-        - {x: -107, y: -198}
-    - name: UpperRing Stage 2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UpperRing Stage 2
       rect:
         serializedVersion: 2
         x: 476
@@ -357,29 +169,11 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 138, y: 42}
-        - {x: -51, y: 5}
-        - {x: -60, y: -6}
-        - {x: -60, y: -39}
-        - {x: -47, y: -42}
-        - {x: 81, y: -42}
-        - {x: 153, y: 33}
-        - {x: 153, y: 42}
-      - - {x: -86, y: 11}
-        - {x: -82, y: 6}
-        - {x: -79, y: 7}
-        - {x: -78, y: 11}
-        - {x: -82, y: 14}
-        - {x: -85, y: 14}
-      - - {x: -94, y: 16}
-        - {x: -94, y: 14}
-        - {x: -92, y: 12}
-        - {x: -89, y: 12}
-        - {x: -87, y: 14}
-        - {x: -88, y: 17}
-        - {x: -92, y: 18}
-    - name: MidRing Stage 2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: MidRing Stage 2
       rect:
         serializedVersion: 2
         x: 553
@@ -389,19 +183,11 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 40, y: 17}
-        - {x: -77, y: 29}
-        - {x: -93, y: 29}
-        - {x: -93, y: 18}
-        - {x: -90, y: 15}
-        - {x: -78, y: 1}
-        - {x: -47, y: -29}
-        - {x: 17, y: -29}
-        - {x: 54, y: -5}
-        - {x: 54, y: 3}
-        - {x: 44, y: 17}
-    - name: LowerRing stage 2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: LowerRing stage 2
       rect:
         serializedVersion: 2
         x: 597
@@ -411,18 +197,11 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -39, y: 17}
-        - {x: -39, y: 4}
-        - {x: -13, y: -17}
-        - {x: 15, y: -17}
-        - {x: 39, y: 3}
-        - {x: 39, y: 17}
-      - - {x: 16, y: -17}
-        - {x: 15, y: -14}
-        - {x: 11, y: -14}
-        - {x: 10, y: -17}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
     outline: []
+    physicsShape: []
   spritePackingTag: 
   userData: 
   assetBundleName: 

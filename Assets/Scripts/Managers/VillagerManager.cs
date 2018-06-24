@@ -21,6 +21,8 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     Vector3 spawnPos;
 
+    public static int combosUsed;
+
     public int villagersToSpawn;
 
     public Villager activeVillager;
@@ -48,7 +50,7 @@ public class VillagerManager : MonoBehaviour {
     public delegate void NewVillagerEvent(Villager newVillager);
     public static NewVillagerEvent OnNextVillager;
 
-    public static int totalLives = 0;
+    public int totalLives = 1;
 
     /// <summary>
     /// Render Layer for CurrentVillager
@@ -161,7 +163,6 @@ public class VillagerManager : MonoBehaviour {
 
         LevelManager.OnPlayerDeath += OnVillagerDeath;
 
-        bManager.OnBossDeath += CheckLivesUsed;
         arenaEntry.OnPlayerEnterArena += ArenaCheckpoint;
     }
 
@@ -275,15 +276,6 @@ public class VillagerManager : MonoBehaviour {
         activeVillager.GetComponent<Rigidbody2D>().isKinematic = false;
     }
 
-    void CheckLivesUsed()
-    {
-        if(totalLives <= 10)
-        {
-            LevelManager.LessThanTenLives = true;
-            LevelManager.IncreaseScore();
-        }
-    }
-
     /// <summary>
     /// Changes the start point to the Arena once it's been reached
     /// </summary>
@@ -305,12 +297,10 @@ public class VillagerManager : MonoBehaviour {
 
     #endregion
 
-    public void Unsubscribe(BossManager bManager, ArenaEntry arenaEntry)
+    public void Unsubscribe(ArenaEntry arenaEntry)
     {
-        bManager.OnBossDeath -= CheckLivesUsed;
         arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
 
         LevelManager.OnPlayerDeath -= OnVillagerDeath;
     }
-
 }

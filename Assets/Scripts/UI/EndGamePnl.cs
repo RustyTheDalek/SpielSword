@@ -23,19 +23,14 @@ public class EndGamePnl : MonoBehaviour {
         anim = GetComponent<Animator>();
 	}
 
-    public void Setup(BossManager bManager)
-    {
-        bManager.OnBossDeath += OpenSlate;
-    }
-
-    public void OpenSlate()
+    public void OpenSlate(int stageReached, int combosUsed, int totalLives)
     {
 
-        StageReached.text += LevelManager.stageReached;             Debug.Log("Stage Reached : " + LevelManager.stageReached);
-        CombosUsed.text += LevelManager.combosUsed;                 Debug.Log("Combos Used: " + LevelManager.combosUsed);
+        StageReached.text += stageReached;  Debug.Log("Stage Reached : " + stageReached);
+        CombosUsed.text += combosUsed;      Debug.Log("Combos Used: " + combosUsed);
         //TODO: Change this to convert to appropriate time
-        TimeTaken.text += TimeObjectManager.t / 60 + "s";                Debug.Log("Time Taken: " + (TimeObjectManager.t / 6) + "s");
-        VillagersUsed.text += VillagerManager.totalLives;   Debug.Log("Villagers Used: " + VillagerManager.totalLives);
+        TimeTaken.text += TimeObjectManager.t / 60 + "s";   Debug.Log("Time Taken: " + (TimeObjectManager.t / 6) + "s");
+        VillagersUsed.text += totalLives;                   Debug.Log("Villagers Used: " + totalLives);
 
         if (anim)
             anim.SetTrigger("Open");
@@ -55,10 +50,5 @@ public class EndGamePnl : MonoBehaviour {
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("Village");
-    }
-
-    public void Unsubscribe(BossManager bManager)
-    {
-        bManager.OnBossDeath -= OpenSlate;
     }
 }

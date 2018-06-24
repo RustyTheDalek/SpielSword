@@ -59,7 +59,7 @@ public class Warlock : WardVillager
             float direction = rangedTrans.position.x - transform.position.x;
 
             rangedAtk.GetComponent<VillagerAttack>().lifeTime = .25f;
-            rangedAtk.GetComponent<VillagerAttack>().damage = 2;
+            rangedAtk.GetComponent<VillagerAttack>().damage = damageMult;
             rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
                 , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
         }

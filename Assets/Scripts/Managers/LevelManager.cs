@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Manages (No shit) the Level itself, handles logic relating to playing the level 
@@ -24,6 +25,8 @@ public class LevelManager : MonoBehaviour {
     ArenaEntry arenaEntryPoint;
     ArenaGate arenaGate;
 
+    Text livesTxt;
+
     #endregion
 
     EndGamePnl endGamePnl;
@@ -42,21 +45,11 @@ public class LevelManager : MonoBehaviour {
 
     public const int MAXSCORE = 5;
 
-    private static int _Score = 0;
-
-    public static int stageReached = 1, combosUsed, livesUsed;
+    public int score = 0;
 
     public static bool ReachedStage3,
                         ReachedStage5,
                         LessThanTenLives;
-
-    public static int TotalScore
-    {
-        get
-        {
-            return _Score;
-        }
-    }
 
     #endregion
 
@@ -94,26 +87,27 @@ public class LevelManager : MonoBehaviour {
             Debug.LogWarning("No GameBounds cannot detect entry");
         }
 
+        livesTxt = GameObject.Find("livesUsedTxt").GetComponent<Text>();
+
         bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
 
         currentBoss = GetComponentInChildren<BossManager>();
-        currentBoss.OnBossDeath += IncreaseScore;
 
         if (trackCam == null)
             trackCam = GetComponentInChildren<Camera2DFollow>();
 
         endGamePnl = GetComponentInChildren<EndGamePnl>();
 
-        endGamePnl.Setup(currentBoss);
-
         arenaGate = GetComponentInChildren<ArenaGate>();
         arenaEntryPoint = GetComponentInChildren<ArenaEntry>();
         arenaEntryPoint.OnPlayerEnterArena += EnableBossUI;
-
+        
         vilManager.Setup(currentBoss, arenaEntryPoint);
         arenaGate.Setup(arenaEntryPoint);
         currentBoss.Setup(arenaEntryPoint);
         timeManager.Setup(arenaEntryPoint);
+
+        currentBoss.OnBossDeath += CalculateScore;
 
     }
 
@@ -128,6 +122,8 @@ public class LevelManager : MonoBehaviour {
         switch (TimeObjectManager.timeState)
         {
             case TimeState.Forward:
+
+                livesTxt.text = "x" + vilManager.totalLives;
 
                 if (!vilManager.activeVillager.Alive)
                 {
@@ -155,11 +151,34 @@ public class LevelManager : MonoBehaviour {
         }
 	}
 
-    public static void IncreaseScore()
+    public void CalculateScore()
     {
-        _Score++;
+        //Starts at 1 as Boss has obviously died
+        score = 1;
 
-        Debug.Log("Score increased");
+        //Check to see if combo was used
+        if(ShamanTotem.comboUsed || Aura.comboUsed)
+        {
+            score++;
+        }
+
+        //Did you finish the fight in a short number of lives
+        if(vilManager.totalLives < 10 )
+        {
+            score++;
+        }
+
+        if(currentBoss.highestStageReached >= 3)
+        {
+            score++;
+
+            if(currentBoss.highestStageReached >= 4)
+            {
+                score++;
+            }
+        }
+
+        endGamePnl.OpenSlate(currentBoss.highestStageReached, VillagerManager.combosUsed, vilManager.totalLives);
     }
 
     void TrackNewVillager(Villager newVillager)
@@ -187,10 +206,9 @@ public class LevelManager : MonoBehaviour {
 
     private void OnDestroy()
     {
-        currentBoss.OnBossDeath -= IncreaseScore;
         arenaEntryPoint.OnPlayerEnterArena += EnableBossUI;
 
-        vilManager.Unsubscribe(currentBoss, arenaEntryPoint);
+        vilManager.Unsubscribe(arenaEntryPoint);
         currentBoss.Unsubscribe(arenaEntryPoint);
         arenaGate.Unsubscribe(arenaEntryPoint);
         timeManager.Unsubscribe(arenaEntryPoint);
