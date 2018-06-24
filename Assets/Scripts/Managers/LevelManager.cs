@@ -85,6 +85,11 @@ public class LevelManager : MonoBehaviour {
 
     }
 
+    void Update()
+    {
+        livesTxt.text = "x" + vilManager.totalLives;
+    }
+
     void EnableBossUI()
     {
         bossHealth.gameObject.SetActive(true);
