@@ -12,6 +12,8 @@ public class PausePnl : MonoBehaviour {
 
     float dTimeScale;
 
+    public bool paused;
+
     // Use this for initialization
     void Start ()
     {
@@ -23,9 +25,9 @@ public class PausePnl : MonoBehaviour {
     {
         if (Input.GetButtonDown("Pause"))
         {
-            LevelManager.paused = !LevelManager.paused;
+            paused = !paused;
 
-            if (LevelManager.paused)
+            if (paused)
             { 
                 Pause();
             }
