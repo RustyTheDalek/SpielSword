@@ -32,11 +32,6 @@ public class LevelManager : MonoBehaviour {
     EndGamePnl endGamePnl;
 
     /// <summary>
-    /// Bounds for the Arena
-    /// </summary>
-    static BoxCollider2D arenaBounds;
-
-    /// <summary>
     /// Boss Health UI
     /// </summary>
     RectTransform bossHealth;
@@ -78,14 +73,6 @@ public class LevelManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        try
-        {
-            arenaBounds = GetComponentInChildren<ArenaEntry>().GetComponent<BoxCollider2D>();
-        }
-        catch
-        {
-            Debug.LogWarning("No GameBounds cannot detect entry");
-        }
 
         livesTxt = GameObject.Find("livesUsedTxt").GetComponent<Text>();
 
@@ -184,24 +171,6 @@ public class LevelManager : MonoBehaviour {
     void TrackNewVillager(Villager newVillager)
     {
         trackCam.target = newVillager.transform;
-    }
-
-    public static bool MoveRequest(CircleCollider2D[] colliders, Vector3 position)
-    {
-        foreach (CircleCollider2D coll in colliders)
-        {
-            if (!arenaBounds.bounds.Contains(position))
-            {
-                return false;
-            }
-
-            if (!arenaBounds.bounds.Intersects(coll.bounds))
-            {
-                Debug.Log("Postion will not be in map no teleport allowed");
-                return false;
-            }
-        }
-        return true;
     }
 
     private void OnDestroy()
