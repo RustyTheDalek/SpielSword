@@ -28,7 +28,7 @@ public class PausePnl : MonoBehaviour {
             paused = !paused;
 
             if (paused)
-            { 
+            {
                 Pause();
             }
             else

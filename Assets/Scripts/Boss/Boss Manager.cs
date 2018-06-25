@@ -162,7 +162,7 @@ public abstract class BossManager : MonoBehaviour
 
     public bool immediateStart = true;
 
-    public virtual void Setup(ArenaEntry arenaEntry)
+    public virtual void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager)
 	{
         //Sets the counter for the list to zero
         for(int i = 0; i < 5; i++)
@@ -217,6 +217,7 @@ public abstract class BossManager : MonoBehaviour
         TimeObjectManager.OnNewRoundReady += Reset;
 
         arenaEntry.OnPlayerEnterArena += StartFight;
+        villagerManager.OnActiveDeath += DisableAnimator;
     }
 
     #region Stage skipping ideas
@@ -501,6 +502,11 @@ public abstract class BossManager : MonoBehaviour
         health = MAXHEALTH;
     }
 
+    public void DisableAnimator()
+    {
+        animator.enabled = false;
+    }
+
     public void StartFight()
     {
         Debug.Log("Starting fight!");
@@ -599,10 +605,11 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
-    public void Unsubscribe(ArenaEntry arenaEntry)
+    public void Unsubscribe(ArenaEntry arenaEntry, VillagerManager villagerManager)
     {
         OnBossDeath -= OnDeath;
         arenaEntry.OnPlayerEnterArena -= StartFight;
+        villagerManager.OnActiveDeath -= DisableAnimator;
     }
 
     #region Debug Functions

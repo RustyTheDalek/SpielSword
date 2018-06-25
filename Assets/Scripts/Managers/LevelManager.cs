@@ -75,7 +75,7 @@ public class LevelManager : MonoBehaviour {
         
         vilManager.Setup(currentBoss, arenaEntryPoint);
         arenaGate.Setup(arenaEntryPoint);
-        currentBoss.Setup(arenaEntryPoint);
+        currentBoss.Setup(arenaEntryPoint, vilManager);
         timeManager.Setup(arenaEntryPoint, vilManager);
 
         currentBoss.OnBossDeath += CalculateScore;
@@ -138,7 +138,7 @@ public class LevelManager : MonoBehaviour {
         arenaEntryPoint.OnPlayerEnterArena += EnableBossUI;
 
         vilManager.Unsubscribe(arenaEntryPoint);
-        currentBoss.Unsubscribe(arenaEntryPoint);
+        currentBoss.Unsubscribe(arenaEntryPoint, vilManager);
         arenaGate.Unsubscribe(arenaEntryPoint);
         timeManager.Unsubscribe(arenaEntryPoint, vilManager);
     }

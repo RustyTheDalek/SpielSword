@@ -22,6 +22,8 @@ public class TimeObjectManager : MonoBehaviour
     /// </summary>
     public float longestTime = 0;
 
+    public float newTimeScale;
+
     public static TimeState timeState = TimeState.Forward;
 
     /// <summary>
@@ -82,7 +84,7 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            float newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime - startT);
+            newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime);
             Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }
     }
@@ -96,7 +98,7 @@ public class TimeObjectManager : MonoBehaviour
     {
         timeState = TimeState.Backward;
 
-        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime / 30, .1f, 100), 0, 0);
+        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime, .1f, 100), 0, 0);
 
         rewindCurve.MoveKey(1, keyframe);
     }

@@ -248,31 +248,5 @@ public class Golem : BossManager {
         base.Reset();
 
 		animator.Play("WakeUp", 0);
-
-        //for (int stage = 1; stage <= 5; stage++)
-        //{
-        //    for (int attack = 1; attack <= 2; attack++)
-        //    {
-        //        leftArm.SetBool("S" + stage + "Attack" + attack, false);
-        //        rightArm.SetBool("S" +stage + "Attack" + attack, false);
-        //    }
-
-        //    if (stage == 4)
-        //    {
-        //        leftArm.SetBool("S" + stage + "Special", false);
-        //        rightArm.SetBool("S" + stage + "Special", false);
-
-        //        leftArm.SetBool("S" + stage + "Stun", false);
-        //        rightArm.SetBool("S" + stage + "Stun", false);
-
-        //    }
-
-        //    if (stage == 5)
-        //    {
-        //        leftArm.SetBool("S" + stage+ "SpecialStun", false);
-        //        rightArm.SetBool("S" + stage + "SpecialStun", false);
-
-        //    }
-        //}
     }
 }
