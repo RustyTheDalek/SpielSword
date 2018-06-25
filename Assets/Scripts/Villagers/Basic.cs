@@ -10,13 +10,12 @@ public class Basic : Villager
     public override void Awake()
     {
         base.Awake();
-
-        WorldMapManager.OnPlayerEnterVillage += StartControl;
     }
 
-    public void Setup(VillageExit villageExit)
+    public void Setup(VillageExit villageExit, WorldMapManager wMapManager)
     {
         villageExit.OnPlayerLeftVillage += StopControl;
+        wMapManager.OnPlayerEnterVillage += StartControl;
     }
 
     protected void StopControl()
@@ -32,8 +31,9 @@ public class Basic : Villager
         villagerState = VillagerState.PresentVillager;
     }
 
-    public void Unsubscribe(VillageExit villageExit)
+    public void Unsubscribe(VillageExit villageExit, WorldMapManager wMapManager)
     {
-        villageExit.OnPlayerLeftVillage -= StopControl;  
+        villageExit.OnPlayerLeftVillage  -= StopControl;
+        wMapManager.OnPlayerEnterVillage -= StartControl;
     }
 }

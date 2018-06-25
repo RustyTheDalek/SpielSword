@@ -12,9 +12,9 @@ public class VillageExit : MonoBehaviour {
 
     bool playerEntered = false;
 
-    private void Awake()
+    public void Setup(WorldMapManager wMapManager)
     {
-        WorldMapManager.OnPlayerEnterVillage += Enable;
+        wMapManager.OnPlayerEnterVillage += Enable;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -39,5 +39,10 @@ public class VillageExit : MonoBehaviour {
     void Enable()
     {
         playerEntered = false;
+    }
+
+    public void Unsubscribe(WorldMapManager wMapManager)
+    {
+        wMapManager.OnPlayerEnterVillage -= Enable;
     }
 }

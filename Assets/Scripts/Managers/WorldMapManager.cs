@@ -30,8 +30,8 @@ public class WorldMapManager : MonoBehaviour {
 
     #endregion
 
-    public delegate void PlayerEnteredVillageEvent();
-    public static event PlayerEnteredVillageEvent OnPlayerEnterVillage;
+    public delegate void WorldMapEvent();
+    public event WorldMapEvent OnPlayerEnterVillage;
 
     // Use this for initialization
     void Start ()
@@ -51,12 +51,13 @@ public class WorldMapManager : MonoBehaviour {
 
         villageExit = GetComponentInChildren<VillageExit>();
         villageExit.OnPlayerLeftVillage += Enable;
+        villageExit.Setup(this);
 
         bVillager = GetComponentInChildren<Basic>();
-        bVillager.Setup(villageExit);
+        bVillager.Setup(villageExit, this);
 
         cameraTransitions = GetComponentInChildren<CameraTransitions>();
-        cameraTransitions.Setup(villageExit);
+        cameraTransitions.Setup(villageExit, this);
     }
 	
 	// Update is called once per frame
@@ -148,7 +149,9 @@ public class WorldMapManager : MonoBehaviour {
     private void OnDestroy()
     {
         villageExit.OnPlayerLeftVillage -= Enable;
-        cameraTransitions.Unsubscribe(villageExit);
+        villageExit.Unsubscribe(this);
+        cameraTransitions.Unsubscribe(villageExit, this);
+        bVillager.Unsubscribe(villageExit, this);
     }
 
 }
