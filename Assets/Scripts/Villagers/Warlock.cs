@@ -24,14 +24,14 @@ public class Warlock : WardVillager
 
     public override void Awake()
     {
-        base.Awake();
-
         specialType = SpecialType.Press;
 
         teleportObj = Instantiate(Resources.Load("Particles/TeleportFX") as GameObject, transform, false);
         teleport = teleportObj.GetComponent<ParticleSystem>();
 
         wardName = "WarlockWard";
+
+        base.Awake();
     }
 
 

@@ -75,6 +75,7 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     public virtual void Move(Hashtable animData)
     {
+        //rangedAttack = false;
         dead = (bool)animData["Dead"];
         meleeAttack = (bool)animData["MeleeAttack"];
         rangedAttack = (bool)animData["RangedAttack"];
@@ -90,8 +91,11 @@ public class PlatformerCharacter2D : MonoBehaviour
         //We want to make sure attacks are triggered only when time is moving forwards
         if (TimeObjectManager.timeState == TimeState.Forward)
         {
-            m_Anim.SetBool("MeleeAttack", meleeAttack);
-            m_Anim.SetBool("RangedAttack", rangedAttack);
+            if(meleeAttack)
+                m_Anim.SetTrigger("MeleeAttack");
+
+            if(rangedAttack)
+                m_Anim.SetTrigger("RangedAttack");
         }
         
         //only control the player if grounded or airControl is turned on
@@ -122,14 +126,6 @@ public class PlatformerCharacter2D : MonoBehaviour
             m_Grounded = false;
             m_Anim.SetBool("Ground", false);
             m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-        }
-    }
-
-    public void CanAttack(bool attack)
-    {
-        if (!attack)
-        {
-            m_Anim.SetBool("CanAttack", true);
         }
     }
 

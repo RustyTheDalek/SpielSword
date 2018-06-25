@@ -85,6 +85,8 @@ public abstract class Villager : Character
     #endregion
 
     #region Private Variables
+
+    bool attack = false;
     #endregion
 
     static GameObject _Projectile;
@@ -192,16 +194,17 @@ public abstract class Villager : Character
                 xDir = ((Input.GetKey(KeyCode.D)) ?  1 : xDir);
                 xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
 
+                attack = Input.GetButtonDown("Attack");
+
                 switch (attackType)
                 {
                     case AttackType.Melee:
-                        animData["MeleeAttack"] = Input.GetKey(KeyCode.DownArrow);
-                        m_Villager.CanAttack((bool)animData["MeleeAttack"]);
+                        animData["MeleeAttack"] = attack;
                         break;
 
                     case AttackType.Ranged:
-                        animData["RangedAttack"] = Input.GetKeyDown(KeyCode.DownArrow);
-                        m_Villager.CanAttack((bool)animData["RangedAttack"]);
+
+                        animData["RangedAttack"] = attack;
                         break;    
                 }
 
@@ -229,6 +232,8 @@ public abstract class Villager : Character
                     Kill();
                 }
 #endif
+
+                m_Villager.Move(animData);
 
                 break;
 
@@ -267,7 +272,6 @@ public abstract class Villager : Character
 
                 //animData.dead = !alive;
 
-                m_Villager.Move(animData);
                 m_Jump = false;
                 break;
 
@@ -357,16 +361,6 @@ public abstract class Villager : Character
             rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
                 , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
         }
-    }
-
-    public void CannotAttack()
-    {
-        GetComponentInChildren<MeleeAttack>().GetComponent<CircleCollider2D>().enabled = false;
-    }
-
-    public void CanAttack()
-    {
-        GetComponentInChildren<MeleeAttack>().GetComponent<CircleCollider2D>().enabled = true;
     }
 
     public void SetDamageMult(int val)

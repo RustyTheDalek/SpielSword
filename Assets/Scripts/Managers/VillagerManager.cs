@@ -21,6 +21,9 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     Vector3 spawnPos;
 
+    /// <summary>
+    /// How many combos have been used by the player
+    /// </summary>
     public int totalCombos;
 
     public int villagersToSpawn;
@@ -160,7 +163,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            classToSpawn = VillagerClass.Priest;
+            //classToSpawn = VillagerClass.Priest;
 
             GameObject temp = Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
@@ -186,7 +189,7 @@ public class VillagerManager : MonoBehaviour {
 
         villager.SetActive(false);
 
-        if(villager.GetComponent<AuraVillager>())
+        if (villager.GetComponent<AuraVillager>())
             villager.GetComponent<AuraVillager>().Setup(this);
 
         if (villager.GetComponent<Shaman>())
@@ -274,13 +277,6 @@ public class VillagerManager : MonoBehaviour {
         }
 
         pastVillagers.Add(activeVillager);
-
-        if (activeVillager.GetComponent<AuraVillager>())
-            activeVillager.GetComponent<AuraVillager>().Unsubscribe(this);
-
-        if (activeVillager.GetComponent<Shaman>())
-            activeVillager.GetComponent<Shaman>().Unsubscribe(this);
-        
     }
 
     public void OnNewRound()
@@ -358,6 +354,24 @@ public class VillagerManager : MonoBehaviour {
     public void Unsubscribe(ArenaEntry arenaEntry)
     {
         arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
+
+        foreach (Villager villager in remainingVillagers)
+        {
+            if(villager.GetComponent<AuraVillager>())
+                villager.GetComponent<AuraVillager>().Unsubscribe(this);
+
+            if (villager.GetComponent<Shaman>())
+                villager.GetComponent<Shaman>().Unsubscribe(this);
+        }
+
+        foreach (Villager villager in pastVillagers)
+        {
+            if (villager.GetComponent<AuraVillager>())
+                villager.GetComponent<AuraVillager>().Unsubscribe(this);
+
+            if (villager.GetComponent<Shaman>())
+                villager.GetComponent<Shaman>().Unsubscribe(this);
+        }
     }
 
     private void OnDestroy()

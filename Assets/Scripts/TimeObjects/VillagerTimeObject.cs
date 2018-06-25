@@ -11,8 +11,7 @@ public class VillagerTimeObject : RigidbodyTimeObject
 {
     #region Public Variables
 
-    public bool attackStart,
-                endFinish,
+    public bool endFinish,
                 endRecorded,
                 deathOrMarty = true; //Whether te villager is going to die or fade from existence
 
@@ -128,14 +127,10 @@ public class VillagerTimeObject : RigidbodyTimeObject
                     switch (villager.attackType)
                     {
                         case AttackType.Melee:
-                            //vAnimData.meleeAttack = frames[currentFrame].meleeAttack;
-                            m_Villager.CanAttack((bool)animData["MeleeAttack"]);
                             animData["MeleeAttack"] = vFrames[currentFrame].meleeAttack;
                             break;
 
                         case AttackType.Ranged:
-                            //vAnimData.rangedAttack = frames[currentFrame].rangedAttack;
-                            m_Villager.CanAttack((bool)animData["RangedAttack"]);
                             animData["RangedAttack"] = vFrames[currentFrame].rangedAttack;
                             break;
                     }
@@ -177,12 +172,12 @@ public class VillagerTimeObject : RigidbodyTimeObject
         {
             case AttackType.Melee:
                 //tempFrame.meleeAttack = villager.animData.meleeAttack;
-                tempFrame.meleeAttack = attackStart;
+                tempFrame.meleeAttack = (bool)villager.animData["MeleeAttack"];
                 break;
 
             case AttackType.Ranged:
                 //tempFrame.rangedAttack = villager.animData.rangedAttack;
-                tempFrame.rangedAttack = attackStart;
+                tempFrame.rangedAttack = (bool)villager.animData["RangedAttack"];
                 break;
         }
         tempFrame.special = (bool)villager.animData["PlayerSpecial"];
@@ -190,8 +185,6 @@ public class VillagerTimeObject : RigidbodyTimeObject
         tempFrame.dead = !villager.Alive;
 
         vFrames.Add(tempFrame);
-
-        attackStart = false;
         endFinish = false;
     }
 

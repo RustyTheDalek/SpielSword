@@ -94,11 +94,16 @@ public class Aura : SpawnableSpriteTimeObject
         {
             if (!comboUsed)
             {
-                Debug.Log("Aura combo");
                 comboUsed = true;
 
                 if (OnEnterAuraEvent != null)
+                {
                     OnEnterAuraEvent();
+                }
+                else
+                {
+                    Debug.LogWarning("No event tied");
+                }
             }
         }
     }
