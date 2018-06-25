@@ -16,7 +16,7 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
     /// <summary>
     /// Who created the Sprite object, if any
     /// </summary>
-    public GameObject creator;
+    public Villager creator;
 
     protected override void Awake()
     {
@@ -28,6 +28,14 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         OnPlayFrame += PlaySpawnableSpriteFrame;
         OnFinishReverse += OnFinishSpawnableSpriteReverse;
         OnFinishPlayback += OnFinishSpawnableSpritePlayback;
+    }
+
+    private void OnEnable()
+    {
+        if(TimeObjectManager.t > 0 && startFrame == 0)
+        {
+            startFrame = TimeObjectManager.t;
+        }
     }
 
     protected virtual void Start()

@@ -21,7 +21,7 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     Vector3 spawnPos;
 
-    public static int combosUsed;
+    public int totalCombos;
 
     public int villagersToSpawn;
 
@@ -160,7 +160,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            //classToSpawn = VillagerClass.Berserker;
+            classToSpawn = VillagerClass.Priest;
 
             GameObject temp = Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
@@ -185,6 +185,19 @@ public class VillagerManager : MonoBehaviour {
         remainingVillagers.Add(villager.GetComponent<Villager>());
 
         villager.SetActive(false);
+
+        if(villager.GetComponent<AuraVillager>())
+            villager.GetComponent<AuraVillager>().Setup(this);
+
+        if (villager.GetComponent<Shaman>())
+            villager.GetComponent<Shaman>().Setup(this);
+
+    }
+
+    public void IncCombosUsed()
+    {
+        totalCombos++;
+        Debug.Log("Combo has been used");
     }
 	
 	// Update is called once per frame
@@ -262,6 +275,12 @@ public class VillagerManager : MonoBehaviour {
 
         pastVillagers.Add(activeVillager);
 
+        if (activeVillager.GetComponent<AuraVillager>())
+            activeVillager.GetComponent<AuraVillager>().Unsubscribe(this);
+
+        if (activeVillager.GetComponent<Shaman>())
+            activeVillager.GetComponent<Shaman>().Unsubscribe(this);
+        
     }
 
     public void OnNewRound()

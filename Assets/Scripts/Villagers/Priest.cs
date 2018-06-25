@@ -30,8 +30,8 @@ public class Priest : AuraVillager
         attackType = AttackType.Melee;
     }
 
-    protected override GameObject Aura()
+    protected override Aura Aura()
     {
-        return PriestAura.Spawn(transform.position);
+        return PriestAura.Spawn().GetComponent<Aura>();
     }
 }

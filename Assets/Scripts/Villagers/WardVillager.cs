@@ -9,7 +9,7 @@ public abstract class WardVillager : Villager
     /// <summary>
     /// Reference to current ward in use by the Villager
     /// </summary>
-    public GameObject currentWard;
+    public SpawnableSpriteTimeObject currentWard;
 
     public bool wardActive;
     #endregion
@@ -61,6 +61,11 @@ public abstract class WardVillager : Villager
         base.Awake();
 
         animData["PlayerSpecialIsTrigger"] = true;
+
+        //Spawn Ward but deactivate
+        currentWard = Wards[wardName].Spawn().GetComponent<SpawnableSpriteTimeObject>();
+        currentWard.creator = this;
+        currentWard.gameObject.SetActive(false);
     }
 
     #endregion
@@ -86,8 +91,8 @@ public abstract class WardVillager : Villager
     {
         if (villagerState == VillagerState.PresentVillager)
         {
-            currentWard = Wards[wardName].Spawn(transform.position + wardOffset);
-            currentWard.GetComponent<SpawnableSpriteTimeObject>().creator = gameObject;
+            currentWard.gameObject.SetActive(true);
+            currentWard.transform.position = transform.position + wardOffset;
             wardActive = true;
             animData["CanSpecial"] = false;
         }

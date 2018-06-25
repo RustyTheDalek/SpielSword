@@ -21,23 +21,13 @@ public class TimeObject : MonoBehaviour
     public int currentFrame;
 
     #region Events
-    public delegate void PlayingFrame();
-    public event PlayingFrame OnPlayFrame;
-
-    public delegate void StartingPlayback();
-    public event StartingPlayback OnStartPlayback;
-
-    public delegate void FinishingPlayback();
-    public event StartingPlayback OnFinishPlayback;
-
-    public delegate void StartReverse();
-    public event StartReverse OnStartReverse;
-
-    public delegate void FinishReverse();
-    public event FinishReverse OnFinishReverse;
-
-    public delegate void TrackingFrame();
-    public event TrackingFrame OnTrackFrame;
+    public delegate void TimeObjectEvent();
+    public event TimeObjectEvent OnPlayFrame;
+    public event TimeObjectEvent OnStartPlayback;
+    public event TimeObjectEvent OnFinishPlayback;
+    public event TimeObjectEvent OnStartReverse;
+    public event TimeObjectEvent OnFinishReverse;
+    public event TimeObjectEvent OnTrackFrame;
     #endregion
 
     protected int TotalFrames

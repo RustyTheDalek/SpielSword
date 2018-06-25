@@ -49,8 +49,6 @@ public class LevelManager : MonoBehaviour {
     /// </summary>
     public static bool GodMode = false;
 
-    public static bool paused;
-
     private void Awake()
     {
         VillagerManager.OnNextVillager += TrackNewVillager;
@@ -106,7 +104,7 @@ public class LevelManager : MonoBehaviour {
         score = 1;
 
         //Check to see if combo was used
-        if(ShamanTotem.comboUsed || Aura.comboUsed)
+        if(vilManager.totalCombos > 0)
         {
             score++;
         }
@@ -127,7 +125,7 @@ public class LevelManager : MonoBehaviour {
             }
         }
 
-        endGamePnl.OpenSlate(currentBoss.highestStageReached, VillagerManager.combosUsed, vilManager.totalLives);
+        endGamePnl.OpenSlate(currentBoss.highestStageReached, vilManager.totalCombos, vilManager.totalLives);
     }
 
     void TrackNewVillager(Villager newVillager)

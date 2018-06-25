@@ -11,7 +11,9 @@ public class Aura : SpawnableSpriteTimeObject
     public float auraLife  = 5,
                     auraTimer = 0;
 
-    public static bool comboUsed = false;
+    public bool comboUsed = false;
+
+    public event TimeObjectEvent OnEnterAuraEvent;
 
     protected override void Awake()
     {
@@ -20,8 +22,6 @@ public class Aura : SpawnableSpriteTimeObject
         OnPlayFrame -= PlaySpriteFrame;
         OnTrackFrame -= TrackSpriteFrame;
     }
-
-
 
     // Use this for initialization
     protected override void Start()
@@ -90,12 +90,15 @@ public class Aura : SpawnableSpriteTimeObject
 
     protected virtual void OnEnterAura(Collider2D coll)
     {
-        if (coll.gameObject != creator)
+        if (coll.gameObject != creator.gameObject)
         {
             if (!comboUsed)
             {
-                VillagerManager.combosUsed++;
+                Debug.Log("Aura combo");
                 comboUsed = true;
+
+                if (OnEnterAuraEvent != null)
+                    OnEnterAuraEvent();
             }
         }
     }

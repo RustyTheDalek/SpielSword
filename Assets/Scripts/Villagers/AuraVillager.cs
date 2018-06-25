@@ -9,6 +9,8 @@ public abstract class AuraVillager : Villager
 
     bool AuraActive;
 
+    Aura currentAura;
+
     #endregion
 
     public override void Awake()
@@ -17,6 +19,14 @@ public abstract class AuraVillager : Villager
 
         specialType = SpecialType.Press;
         animData["PlayerSpecialIsTrigger"] = true;
+    }
+
+    public void Setup(VillagerManager vilManager)
+    {
+        currentAura = Aura();
+        currentAura.gameObject.SetActive(false);
+        currentAura.creator = this;
+        currentAura.OnEnterAuraEvent += vilManager.IncCombosUsed;
     }
 
     public override void OnSpecial(bool _PlayerSpecial)
@@ -31,13 +41,17 @@ public abstract class AuraVillager : Villager
     {
         if (villagerState == VillagerState.PresentVillager)
         {
-            GameObject temp = Aura();
-            temp.GetComponent<Aura>().creator = gameObject;
-
+            currentAura.gameObject.SetActive(true);
+            currentAura.transform.position = transform.position;
             AuraActive = true;
             animData["CanSpecial"] = false;
         }
     }
 
-    protected abstract GameObject Aura();
+    protected abstract Aura Aura();
+
+    public void Unsubscribe(VillagerManager villagerManager)
+    {
+        currentAura.OnEnterAuraEvent -= villagerManager.IncCombosUsed;
+    }
 }

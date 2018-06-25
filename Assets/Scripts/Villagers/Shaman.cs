@@ -15,14 +15,24 @@ public class Shaman : WardVillager
 
     #region Unity Methods
     public override void Awake()
-    {
-        base.Awake();
-
+    { 
         wardOffset = new Vector3(-2, 2, 0);
 
         wardName = "ShamanTotem";
 
         specialType = SpecialType.Press;
+
+        base.Awake();
+    }
+
+    public void Setup(VillagerManager villagerManager)
+    {
+        currentWard.GetComponent<ShamanTotem>().OnUsedTotem += villagerManager.IncCombosUsed;
+    }
+
+    public void Unsubscribe(VillagerManager villagerManager)
+    {
+        currentWard.GetComponent<ShamanTotem>().OnUsedTotem -= villagerManager.IncCombosUsed;
     }
 
     #endregion

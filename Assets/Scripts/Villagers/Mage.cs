@@ -32,8 +32,8 @@ public class Mage : AuraVillager {
         attackType = AttackType.Ranged;
 	}
 
-    protected override GameObject Aura()
+    protected override Aura Aura()
     {
-        return MageAura.Spawn(transform.position);
+        return MageAura.Spawn(transform.position).GetComponent<Aura>();
     }
 }
