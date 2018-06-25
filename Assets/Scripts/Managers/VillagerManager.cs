@@ -50,9 +50,6 @@ public class VillagerManager : MonoBehaviour {
         }
     }
 
-    public delegate void NewVillagerEvent(Villager newVillager);
-    public static NewVillagerEvent OnNextVillager;
-
     public int totalLives = 1;
 
     /// <summary>
@@ -63,6 +60,7 @@ public class VillagerManager : MonoBehaviour {
     public VillagerClass classToSpawn = VillagerClass.Warlock;
 
     public delegate void VillagerManagerEvent();
+    public delegate void NewVillagerEvent(Villager newVillager);
 
     /// <summary>
     /// In future will deal with minutia of what happens when a player loses all lives
@@ -72,6 +70,8 @@ public class VillagerManager : MonoBehaviour {
     /// What happens when active villager dies
     /// </summary>
     public event VillagerManagerEvent OnActiveDeath;
+
+    public event NewVillagerEvent OnNextVillager;
 
     #region Assets
     Dictionary<string, GameObject> _Villagers;

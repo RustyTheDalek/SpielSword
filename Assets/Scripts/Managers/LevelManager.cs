@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        VillagerManager.OnNextVillager += TrackNewVillager;
+        vilManager.OnNextVillager += TrackNewVillager;
     }
 
     // Use this for initialization
@@ -135,7 +135,8 @@ public class LevelManager : MonoBehaviour {
 
     private void OnDestroy()
     {
-        arenaEntryPoint.OnPlayerEnterArena += EnableBossUI;
+        arenaEntryPoint.OnPlayerEnterArena -= EnableBossUI;
+        vilManager.OnNextVillager -= TrackNewVillager;
 
         vilManager.Unsubscribe(arenaEntryPoint);
         currentBoss.Unsubscribe(arenaEntryPoint, vilManager);
