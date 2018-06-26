@@ -136,8 +136,6 @@ public class VillagerManager : MonoBehaviour {
 
     void Awake()
     {
-        TimeObjectManager.OnNewRoundReady += OnNewRound;
-
         Transform[] objs = GetComponentsInChildren<Transform>();
 
         activeVillagerTrans = objs[1];
@@ -150,7 +148,7 @@ public class VillagerManager : MonoBehaviour {
     }
 
     // Use this for initialization
-    public void Setup (BossManager bManager, ArenaEntry arenaEntry)
+    public void Setup (TimeObjectManager timeManager, ArenaEntry arenaEntry)
     {
         //Setup lists
         remainingVillagers = new List<Villager>();
@@ -163,7 +161,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            //classToSpawn = VillagerClass.Priest;
+            classToSpawn = VillagerClass.Priest;
 
             GameObject temp = Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
@@ -178,6 +176,7 @@ public class VillagerManager : MonoBehaviour {
         OnActiveDeath += OnVillagerDeath;
 
         arenaEntry.OnPlayerEnterArena += ArenaCheckpoint;
+        timeManager.OnRestartLevel += StartFightWNewVillager;
     }
 
     private void SetupVillager(GameObject villager, Vector3 spawnOffset)
@@ -279,7 +278,7 @@ public class VillagerManager : MonoBehaviour {
         pastVillagers.Add(activeVillager);
     }
 
-    public void OnNewRound()
+    public void StartFightWNewVillager()
     {
         NextVillager();
         EnterLevel();
@@ -351,8 +350,9 @@ public class VillagerManager : MonoBehaviour {
 
     #endregion
 
-    public void Unsubscribe(ArenaEntry arenaEntry)
+    public void Unsubscribe(TimeObjectManager timeManager,ArenaEntry arenaEntry)
     {
+        timeManager.OnRestartLevel -= StartFightWNewVillager;
         arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
 
         foreach (Villager villager in remainingVillagers)

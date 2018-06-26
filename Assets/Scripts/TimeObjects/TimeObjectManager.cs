@@ -41,8 +41,11 @@ public class TimeObjectManager : MonoBehaviour
 
     public AnimationCurve rewindCurve;
 
-    public delegate void NewRoundReadyEvent();
-    public static event NewRoundReadyEvent OnNewRoundReady;
+    public delegate void TimeManagerEvent();
+    /// <summary>
+    /// Restart of level after Time has rewind following players death
+    /// </summary>
+    public event TimeManagerEvent OnRestartLevel;
 
     public void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager)
     {
@@ -73,8 +76,8 @@ public class TimeObjectManager : MonoBehaviour
             timeState = TimeState.Forward;
             Time.timeScale = 1;
 
-            if (OnNewRoundReady != null)
-                OnNewRoundReady();
+            if (OnRestartLevel != null)
+                OnRestartLevel();
         }
 
         if (timeState == TimeState.Forward)

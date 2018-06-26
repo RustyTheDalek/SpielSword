@@ -162,7 +162,7 @@ public abstract class BossManager : MonoBehaviour
 
     public bool immediateStart = true;
 
-    public virtual void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager)
+    public virtual void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
 	{
         //Sets the counter for the list to zero
         for(int i = 0; i < 5; i++)
@@ -214,7 +214,7 @@ public abstract class BossManager : MonoBehaviour
         }
 
         OnBossDeath += OnDeath;
-        TimeObjectManager.OnNewRoundReady += Reset;
+        timeManager.OnRestartLevel += Reset;
 
         arenaEntry.OnPlayerEnterArena += StartFight;
         villagerManager.OnActiveDeath += DisableAnimator;
@@ -605,11 +605,12 @@ public abstract class BossManager : MonoBehaviour
         }
     }
 
-    public void Unsubscribe(ArenaEntry arenaEntry, VillagerManager villagerManager)
+    public void Unsubscribe(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
     {
         OnBossDeath -= OnDeath;
         arenaEntry.OnPlayerEnterArena -= StartFight;
         villagerManager.OnActiveDeath -= DisableAnimator;
+        timeManager.OnRestartLevel -= Reset;
     }
 
     #region Debug Functions

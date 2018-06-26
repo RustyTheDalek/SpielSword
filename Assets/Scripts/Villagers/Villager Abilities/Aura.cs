@@ -33,7 +33,7 @@ public class Aura : SpawnableSpriteTimeObject
 
         OnPlayFrame += PlayAuraFrame;
 
-        TimeObjectManager.OnNewRoundReady += DecreaseStrength;
+        OnStartPlayback += DecreaseStrength;
     }
 
     // Update is called once per frame
@@ -84,7 +84,7 @@ public class Aura : SpawnableSpriteTimeObject
         }
         else
         {
-            TimeObjectManager.OnNewRoundReady -= DecreaseStrength;
+            OnStartPlayback -= DecreaseStrength;
         }
     }
 
@@ -139,7 +139,6 @@ public class Aura : SpawnableSpriteTimeObject
             }
         }
     }
-
 
     void OnTriggerExit2D(Collider2D coll)
     {

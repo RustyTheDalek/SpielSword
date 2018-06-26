@@ -73,9 +73,9 @@ public class LevelManager : MonoBehaviour {
         arenaEntryPoint = GetComponentInChildren<ArenaEntry>();
         arenaEntryPoint.OnPlayerEnterArena += EnableBossUI;
         
-        vilManager.Setup(currentBoss, arenaEntryPoint);
-        arenaGate.Setup(arenaEntryPoint);
-        currentBoss.Setup(arenaEntryPoint, vilManager);
+        vilManager.Setup(timeManager, arenaEntryPoint);
+        arenaGate.Setup(arenaEntryPoint, timeManager);
+        currentBoss.Setup(arenaEntryPoint, vilManager, timeManager);
         timeManager.Setup(arenaEntryPoint, vilManager);
 
         currentBoss.OnBossDeath += CalculateScore;
@@ -138,9 +138,9 @@ public class LevelManager : MonoBehaviour {
         arenaEntryPoint.OnPlayerEnterArena -= EnableBossUI;
         vilManager.OnNextVillager -= TrackNewVillager;
 
-        vilManager.Unsubscribe(arenaEntryPoint);
-        currentBoss.Unsubscribe(arenaEntryPoint, vilManager);
-        arenaGate.Unsubscribe(arenaEntryPoint);
+        vilManager.Unsubscribe(timeManager, arenaEntryPoint);
+        currentBoss.Unsubscribe(arenaEntryPoint, vilManager, timeManager);
+        arenaGate.Unsubscribe(arenaEntryPoint, timeManager);
         timeManager.Unsubscribe(arenaEntryPoint, vilManager);
     }
 }

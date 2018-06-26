@@ -16,11 +16,11 @@ public class ArenaGate : MonoBehaviour {
     bool closing = false;
 
 	// Use this for initialization
-	public void Setup(ArenaEntry arenaEntry)
+	public void Setup(ArenaEntry arenaEntry, TimeObjectManager timeManager)
     {
         arenaEntry.OnPlayerEnterArena += CloseGate;
 
-        TimeObjectManager.OnNewRoundReady += ForceCloseGate;
+        timeManager.OnRestartLevel += ForceCloseGate;
 	}
 	
 	void CloseGate()
@@ -52,8 +52,9 @@ public class ArenaGate : MonoBehaviour {
         }
     }
 
-    public void Unsubscribe(ArenaEntry arenaEntry)
+    public void Unsubscribe(ArenaEntry arenaEntry, TimeObjectManager timeManager)
     {
         arenaEntry.OnPlayerEnterArena -= CloseGate;
+        timeManager.OnRestartLevel -= ForceCloseGate;
     }
 }
