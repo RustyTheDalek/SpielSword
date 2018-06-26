@@ -218,14 +218,14 @@ public class FlightMinions : Character {
         #endregion
 
         #region Move to location of players first know location
-        moveForce = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
         //Vector3 direction = rb.transform.position - moveForce;
         //rb.AddForceAtPosition(direction.normalized, transform.position);
         //rb.MovePosition(moveForce);
         //Vector3 dir = (playerPosition - transform.position).normalized * speed;
         //rb.velocity = dir;
         //rb.AddRelativeForce(Vector3.forward * speed);
-        rb.AddRelativeForce(moveForce, ForceMode2D.Force);
+        //rb.AddRelativeForce(moveForce, ForceMode2D.Force);
         #endregion
 
         // enable the collisions for damage to player
