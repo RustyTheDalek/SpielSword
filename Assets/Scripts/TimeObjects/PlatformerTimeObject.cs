@@ -92,4 +92,12 @@ public class PlatformerTimeObject : SpriteTimeObject
             vhsEffect.enabled = false;
         }
     }
+
+    private void OnDestroy()
+    {
+        OnTrackFrame -= TrackPlatformerFrame;
+        OnPlayFrame -= PlayPlatformerFrame;
+        OnFinishPlayback -= OnFinishPlatformerPlayback;
+    }
+
 }

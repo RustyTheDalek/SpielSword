@@ -8,19 +8,14 @@ using UnityEngine;
 /// </summary>
 public class BossTimeObject : RigidbodyTimeObject
 {
-
     private SpriteFrameData tempFrame;
     private List<SpriteFrameData> frames = new List<SpriteFrameData>();
-
-    Animator _Animator;
 
     protected override void Awake()
     {
         base.Awake();
 
         startFrame = TimeObjectManager.t;
-
-        _Animator = GetComponent<Animator>();
 
         OnStartPlayback += OnStartBossTimeObjectPlayback;
     }
@@ -36,8 +31,8 @@ public class BossTimeObject : RigidbodyTimeObject
         m_Sprite.color = new Color(m_Sprite.color.r, m_Sprite.color.g, m_Sprite.color.b, 1f);
     }
 
-    void OnAnimatorMove()
+    private void OnDestroy()
     {
-        _Animator.speed = TimeObjectManager.pastTimeScale;
+        OnStartPlayback -= OnStartBossTimeObjectPlayback;
     }
 }

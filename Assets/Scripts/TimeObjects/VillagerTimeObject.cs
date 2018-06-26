@@ -247,4 +247,13 @@ public class VillagerTimeObject : RigidbodyTimeObject
         m_HatSprite.material = SpriteMaterials["VHSSprite"];
         m_HatSprite.GetComponentInChildren<SpriteRenderer>().material = SpriteMaterials["VHSSprite"];
     }
+
+    private void OnDestroy()
+    {
+        OnPlayFrame -= OnVillagerPlayFrame;
+        OnTrackFrame -= OnVillagerTrackFrame;
+        OnFinishPlayback -= OnVillagerFinishPlayback;
+        OnStartReverse -= OnVillagerStartReverse;
+        OnFinishReverse -= OnVillagerFinishReverse;
+    }
 }

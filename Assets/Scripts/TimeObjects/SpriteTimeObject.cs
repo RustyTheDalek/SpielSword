@@ -97,4 +97,13 @@ public class SpriteTimeObject : TimeObject
 
         base.OnPast();
     }
+
+    private void OnDestroy()
+    {
+        OnPlayFrame -= PlaySpriteFrame;
+        OnTrackFrame -= TrackSpriteFrame;
+
+        OnStartReverse -= OnSpriteStartReverse;
+        OnFinishReverse -= OnSpriteFinishReverse;
+    }
 }

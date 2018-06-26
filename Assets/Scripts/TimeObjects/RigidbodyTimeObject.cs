@@ -32,4 +32,11 @@ public class RigidbodyTimeObject : SpriteTimeObject
     {
         m_Rigidbody2D.simulated = true;
     }
+
+    private void OnDestroy()
+    {
+        OnStartReverse -= OnRigidbody2DStartReverse;
+        OnFinishReverse -= OnRigidbody2DFinishReverse;
+    }
+
 }

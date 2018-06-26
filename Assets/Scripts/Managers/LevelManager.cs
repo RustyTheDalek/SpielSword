@@ -137,9 +137,11 @@ public class LevelManager : MonoBehaviour {
     {
         arenaEntryPoint.OnPlayerEnterArena -= EnableBossUI;
         vilManager.OnNextVillager -= TrackNewVillager;
+        vilManager.OnOutOfLives -= LoadVillage;
 
         vilManager.Unsubscribe(timeManager, arenaEntryPoint);
         currentBoss.Unsubscribe(arenaEntryPoint, vilManager, timeManager);
+        currentBoss.OnBossDeath -= CalculateScore;
         arenaGate.Unsubscribe(arenaEntryPoint, timeManager);
         timeManager.Unsubscribe(arenaEntryPoint, vilManager);
     }

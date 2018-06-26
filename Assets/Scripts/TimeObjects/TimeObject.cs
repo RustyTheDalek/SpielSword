@@ -247,22 +247,10 @@ public class TimeObject : MonoBehaviour
         }
     }
 
-    public virtual void SoftReset()
+    private void OnDestroy()
     {
-
-        switch (tObjectState)
-        {
-            case TimeObjectState.Present:
-            case TimeObjectState.PresentDead:
-                OnPast();
-                break;
-
-            case TimeObjectState.PastPlaying:
-            case TimeObjectState.PastFinished:
-            case TimeObjectState.PastStart:
-                OnStartReverse();
-                break;
-        }
+        OnTrackFrame -= TrackTransform;
+        OnPlayFrame -= PlayTransormFrame;
     }
 }
                                                           

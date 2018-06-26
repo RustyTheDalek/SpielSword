@@ -149,4 +149,12 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
             Debug.LogError("Frames " + TotalFrames + " : " + sSFrames.Count);
         }
     }
+
+    private void OnDestroy()
+    {
+        OnTrackFrame -= TrackSpawnableSpriteFrame;
+        OnPlayFrame -= PlaySpawnableSpriteFrame;
+        OnFinishReverse -= OnFinishSpawnableSpriteReverse;
+        OnFinishPlayback -= OnFinishSpawnableSpritePlayback;
+    }
 }

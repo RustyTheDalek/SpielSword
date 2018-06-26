@@ -10,9 +10,6 @@ public abstract class Villager : Character
 {
     #region Public Variables
 
-    public delegate void ActiveVillagerDeath();
-    public static event ActiveVillagerDeath OnActiveVillagerDeath;
-
     public VillagerState villagerState = VillagerState.Waiting;
 
     //Target X position for Villager to aim for when they're waiting in queue
@@ -183,12 +180,6 @@ public abstract class Villager : Character
         {
             case VillagerState.PresentVillager:
 
-                //Invokes current villager death event
-                if (!Alive)
-                {
-                    if(OnActiveVillagerDeath != null)
-                        OnActiveVillagerDeath();
-                }
                 //Get PlayerMovement
                 xDir = 0;
                 xDir = ((Input.GetKey(KeyCode.D)) ?  1 : xDir);
