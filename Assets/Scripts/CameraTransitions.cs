@@ -21,7 +21,7 @@ public class CameraTransitions : MonoBehaviour {
         }
 	}
 
-    public void Setup(VillageExit villageExit, WorldMapManager wMapManager)
+    public void Setup(VillageExit villageExit, VillageAndMapManager wMapManager)
     {
         villageExit.OnPlayerLeftVillage += EnterWorldMap;
         wMapManager.OnPlayerEnterVillage += EnterVillage;
@@ -42,7 +42,7 @@ public class CameraTransitions : MonoBehaviour {
                                             transform.position.z);
     }
 
-    public void Unsubscribe(VillageExit villageExit, WorldMapManager wMapManager)
+    public void Unsubscribe(VillageExit villageExit, VillageAndMapManager wMapManager)
     {
         villageExit.OnPlayerLeftVillage -= EnterWorldMap;
         wMapManager.OnPlayerEnterVillage -= EnterVillage;

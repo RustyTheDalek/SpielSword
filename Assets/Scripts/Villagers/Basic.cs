@@ -12,7 +12,7 @@ public class Basic : Villager
         base.Awake();
     }
 
-    public void Setup(VillageExit villageExit, WorldMapManager wMapManager)
+    public void Setup(VillageExit villageExit, VillageAndMapManager wMapManager)
     {
         villageExit.OnPlayerLeftVillage += StopControl;
         wMapManager.OnPlayerEnterVillage += StartControl;
@@ -31,7 +31,7 @@ public class Basic : Villager
         villagerState = VillagerState.PresentVillager;
     }
 
-    public void Unsubscribe(VillageExit villageExit, WorldMapManager wMapManager)
+    public void Unsubscribe(VillageExit villageExit, VillageAndMapManager wMapManager)
     {
         villageExit.OnPlayerLeftVillage  -= StopControl;
         wMapManager.OnPlayerEnterVillage -= StartControl;

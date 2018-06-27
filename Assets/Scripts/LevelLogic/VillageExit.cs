@@ -12,7 +12,7 @@ public class VillageExit : MonoBehaviour {
 
     bool playerEntered = false;
 
-    public void Setup(WorldMapManager wMapManager)
+    public void Setup(VillageAndMapManager wMapManager)
     {
         wMapManager.OnPlayerEnterVillage += Enable;
     }
@@ -41,7 +41,7 @@ public class VillageExit : MonoBehaviour {
         playerEntered = false;
     }
 
-    public void Unsubscribe(WorldMapManager wMapManager)
+    public void Unsubscribe(VillageAndMapManager wMapManager)
     {
         wMapManager.OnPlayerEnterVillage -= Enable;
     }

@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Manages moving between nodes on the world map
+/// Manages Village and World map
 /// Created by : Ian Jones - 10/04/18
 /// </summary>
-public class WorldMapManager : MonoBehaviour {
+public class VillageAndMapManager : MonoBehaviour {
 
     #region WorldMapObjects
 
@@ -26,7 +25,10 @@ public class WorldMapManager : MonoBehaviour {
 
     Vector2 direction;
 
-    public float speed = 5;
+    /// <summary>
+    /// How quickly map node travels
+    /// </summary>
+    public float nodeTravelSpeed = 5;
 
     #endregion
 
@@ -118,7 +120,7 @@ public class WorldMapManager : MonoBehaviour {
             }
             else //What to do when reaching a node
             {   
-                mapVillager.transform.Translate(direction * Time.deltaTime * speed);
+                mapVillager.transform.Translate(direction * Time.deltaTime * nodeTravelSpeed);
 
                 if (Vector3.Distance(mapVillager.transform.position, newNode.transform.position) < .5f)
                 {
