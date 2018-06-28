@@ -51,8 +51,15 @@ public class FlightMinions : Character {
     public GameObject actPlayer;
     public GameObject actCollision;
     public bool playerHere;
-
+    /// <summary>
+    /// Sets the minion to move left insted of orbit
+    /// </summary>
+    public bool dumbFire;
     public float timer = 0;
+    /// <summary>
+    /// Kill object once it has passed over the threshold for the level
+    /// </summary>
+    public float killZone;
 
     public override void Awake()
     {
@@ -69,20 +76,15 @@ public class FlightMinions : Character {
     {
         playerHere = false;
         onCooldown = false;
+        xDir = 1;
 
-        //Set a random start direction, obsolite atm
-        xDir = Random.Range(0, 2);
-        if (xDir == 0)
-        {
-            xDir = -1;
-        }
         findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
         findWall = new Vector2(transform.position.x + (xDir * 0.6f), transform.position.y);
         orbitPoint = new Vector3(transform.position.x + orbitPointX,
             transform.position.y + orbitPointY, 0);
         orginalPosition = transform.position;
 
-        speed = 8;
+        speed = 20;
 
         playerColliders = actCollision.GetComponents<Collider2D>();
         attacking = false;
@@ -95,6 +97,12 @@ public class FlightMinions : Character {
         if (Alive)
         {
             base.Update();
+
+            // if off the side of the level disable
+            if (transform.position.x < killZone && dumbFire)
+            {
+                gameObject.SetActive(false);
+            }
 
             timer += Time.deltaTime;
 
@@ -138,6 +146,10 @@ public class FlightMinions : Character {
                 {
                     //move them back to where they started
                     transform.position = Vector3.MoveTowards(transform.position, orginalPosition, speed * Time.deltaTime);
+                    #region move by physics test code
+                    // moveForce = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+                    // rb.MovePosition(moveForce);
+                    #endregion
                     returning = true;
                     // resets any cool down
                     cooldownAttack = 0f;
@@ -151,9 +163,16 @@ public class FlightMinions : Character {
                 //if there is no need to return back then continue to orbit a set point
                 else
                 {
-                    transform.RotateAround(orbitPoint, Vector3.forward, 90 * Time.deltaTime);
-                    transform.rotation = Quaternion.identity;
-
+                    if (!dumbFire)
+                    {
+                        transform.RotateAround(orbitPoint, Vector3.forward, 90 * Time.deltaTime);
+                        transform.rotation = Quaternion.identity;
+                    }
+                    else
+                    {
+                        // if the entity was spawned just move left
+                        rb.velocity = new Vector2(-10, rb.velocity.y);
+                    }
                 }
             }
             // is used to check that the last frame was an attack
@@ -219,13 +238,11 @@ public class FlightMinions : Character {
 
         #region Move to location of players first know location
         transform.position = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
-        //Vector3 direction = rb.transform.position - moveForce;
-        //rb.AddForceAtPosition(direction.normalized, transform.position);
-        //rb.MovePosition(moveForce);
-        //Vector3 dir = (playerPosition - transform.position).normalized * speed;
-        //rb.velocity = dir;
-        //rb.AddRelativeForce(Vector3.forward * speed);
-        //rb.AddRelativeForce(moveForce, ForceMode2D.Force);
+        #endregion
+
+        #region move by physics test code
+        // moveForce = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+        // rb.MovePosition(moveForce);
         #endregion
 
         // enable the collisions for damage to player

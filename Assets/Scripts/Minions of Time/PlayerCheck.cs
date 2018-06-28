@@ -21,7 +21,7 @@ public class PlayerCheck : MonoBehaviour {
 
         if (parentMinion.GetComponent<GroundMinions>() != null)
         {
-            Debug.Log("Ground Enemy");
+            //Debug.Log("Ground Enemy");
             groundEnemy = true;
             //parentComponent = parentMinion.GetComponent<FlightMinions>();
         }
