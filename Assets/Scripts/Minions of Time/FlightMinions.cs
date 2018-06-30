@@ -5,12 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(PlatformerCharacter2D))]
 public class FlightMinions : Character {
 
-    private float distanceToFloor;
-    private float distanceFromWall;
     private float cooldownAttack;
     private int speed;
-    private Vector2 findFloor;
-    private Vector2 findWall;
     private Vector2 findPlayer;
     private Vector3 orbitPoint;
     private Vector3 orginalPosition;
@@ -68,8 +64,6 @@ public class FlightMinions : Character {
         m_Platformer = GetComponent<PlatformerCharacter2D>();
         rb = GetComponent<Rigidbody2D>();
 
-        distanceFromWall = 0.4f;
-        distanceToFloor = 0.8f;
     }
     
     public void Start()
@@ -78,8 +72,6 @@ public class FlightMinions : Character {
         onCooldown = false;
         xDir = 1;
 
-        findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
-        findWall = new Vector2(transform.position.x + (xDir * 0.6f), transform.position.y);
         orbitPoint = new Vector3(transform.position.x + orbitPointX,
             transform.position.y + orbitPointY, 0);
         orginalPosition = transform.position;

@@ -6,7 +6,7 @@ using UnityEngine;
 /// FlyingEnemySpawner
 /// Created     : Sean Taylor - 28/06/18
 /// </summary>
-public class SpawnList : MonoBehaviour {
+public class SpawnList {
 
     public float spawnTime;
     public float spawnHeight;
