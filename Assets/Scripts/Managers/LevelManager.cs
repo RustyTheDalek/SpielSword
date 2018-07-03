@@ -135,14 +135,32 @@ public class LevelManager : MonoBehaviour {
 
     private void OnDestroy()
     {
-        arenaEntryPoint.OnPlayerEnterArena -= EnableBossUI;
-        vilManager.OnNextVillager -= TrackNewVillager;
-        vilManager.OnOutOfLives -= LoadVillage;
+        if (arenaEntryPoint)
+        {
+            arenaEntryPoint.OnPlayerEnterArena -= EnableBossUI;
+        }
 
-        vilManager.Unsubscribe(timeManager, arenaEntryPoint);
-        currentBoss.Unsubscribe(arenaEntryPoint, vilManager, timeManager);
-        currentBoss.OnBossDeath -= CalculateScore;
-        arenaGate.Unsubscribe(arenaEntryPoint, timeManager);
-        timeManager.Unsubscribe(arenaEntryPoint, vilManager);
+        if (vilManager && timeManager & arenaEntryPoint)
+        {
+            vilManager.OnNextVillager -= TrackNewVillager;
+            vilManager.OnOutOfLives -= LoadVillage;
+            vilManager.Unsubscribe(timeManager, arenaEntryPoint);
+        }
+
+        if (currentBoss && arenaEntryPoint && vilManager && timeManager)
+        {
+            currentBoss.Unsubscribe(arenaEntryPoint, vilManager, timeManager);
+            currentBoss.OnBossDeath -= CalculateScore; 
+        }
+
+        if (arenaGate && arenaEntryPoint && timeManager)
+        {
+            arenaGate.Unsubscribe(arenaEntryPoint, timeManager);
+        }
+
+        if (timeManager && arenaEntryPoint && vilManager)
+        {
+            timeManager.Unsubscribe(arenaEntryPoint, vilManager);
+        }
     }
 }

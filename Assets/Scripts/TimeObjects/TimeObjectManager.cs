@@ -100,9 +100,5 @@ public class TimeObjectManager : MonoBehaviour
     void ReverseTime()
     {
         timeState = TimeState.Backward;
-
-        Keyframe keyframe = new Keyframe(.5f, Mathf.Clamp(longestTime, .1f, 100), 0, 0);
-
-        rewindCurve.MoveKey(1, keyframe);
     }
 }

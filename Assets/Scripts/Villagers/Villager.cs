@@ -182,8 +182,9 @@ public abstract class Villager : Character
 
                 //Get PlayerMovement
                 xDir = 0;
-                xDir = ((Input.GetKey(KeyCode.D)) ?  1 : xDir);
-                xDir = ((Input.GetKey(KeyCode.A)) ? -1 : xDir);
+                //xDir = ((Input.GetAxis(Horiz    ?  1 : xDir);
+                //xDir = ((Input.GetButton("right")) ? -1 : xDir);
+                xDir = (int)Input.GetAxisRaw("Horizontal");
 
                 attack = Input.GetButtonDown("Attack");
 
@@ -202,18 +203,18 @@ public abstract class Villager : Character
                 switch (specialType)
                 {
                     case SpecialType.Hold:
-                        OnSpecial(Input.GetKey(KeyCode.LeftArrow));
+                        OnSpecial(Input.GetButton("Special"));
                         break;
 
                     case SpecialType.Press:
-                        OnSpecial(Input.GetKeyDown(KeyCode.LeftArrow));
+                        OnSpecial(Input.GetButtonDown("Special"));
                         break;
                 }
 
                 if (!m_Jump)
                 {
                     // Read the jump input in Update so button presses aren't missed.
-                    m_Jump = Input.GetKeyDown(KeyCode.Space);
+                    m_Jump = Input.GetButtonDown("Jump");
                 }
 
 #if UNITY_EDITOR

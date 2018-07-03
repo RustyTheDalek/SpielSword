@@ -352,25 +352,35 @@ public class VillagerManager : MonoBehaviour {
 
     public void Unsubscribe(TimeObjectManager timeManager,ArenaEntry arenaEntry)
     {
-        timeManager.OnRestartLevel -= StartFightWNewVillager;
-        arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
+        if(timeManager)
+            timeManager.OnRestartLevel -= StartFightWNewVillager;
 
-        foreach (Villager villager in remainingVillagers)
+        if(arenaEntry)
+            arenaEntry.OnPlayerEnterArena -= ArenaCheckpoint;
+
+        if (remainingVillagers != null)
         {
-            if(villager.GetComponent<AuraVillager>())
-                villager.GetComponent<AuraVillager>().Unsubscribe(this);
+            foreach (Villager villager in remainingVillagers)
+            {
+                if (villager.GetComponent<AuraVillager>())
+                    villager.GetComponent<AuraVillager>().Unsubscribe(this);
 
-            if (villager.GetComponent<Shaman>())
-                villager.GetComponent<Shaman>().Unsubscribe(this);
+                if (villager.GetComponent<Shaman>())
+                    villager.GetComponent<Shaman>().Unsubscribe(this);
+            } 
         }
 
-        foreach (Villager villager in pastVillagers)
-        {
-            if (villager.GetComponent<AuraVillager>())
-                villager.GetComponent<AuraVillager>().Unsubscribe(this);
 
-            if (villager.GetComponent<Shaman>())
-                villager.GetComponent<Shaman>().Unsubscribe(this);
+        if (pastVillagers != null)
+        {
+            foreach (Villager villager in pastVillagers)
+            {
+                if (villager.GetComponent<AuraVillager>())
+                    villager.GetComponent<AuraVillager>().Unsubscribe(this);
+
+                if (villager.GetComponent<Shaman>())
+                    villager.GetComponent<Shaman>().Unsubscribe(this);
+            }
         }
     }
 

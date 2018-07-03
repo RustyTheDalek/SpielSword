@@ -9,8 +9,9 @@ using System.Collections;
 public class PlatformerCharacter2D : MonoBehaviour
 {
     [SerializeField] private bool m_AirControl = true;                 // Whether or not a player can steer while jumping;
-    [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the character can travel in the x axis.
-    [SerializeField] private float m_JumpForce = 400f;                  // Amount of force added when the character jumps.
+    [SerializeField] private float m_MaxSpeed = 5f;                    // The fastest the character can travel in the x axis.
+    [SerializeField] private float m_MoveForce = 10f;                  // Strength of force that moves Character
+    [SerializeField] private float m_JumpForce = 400f;                 // Amount of force added when the character jumps.
     //[Range(0, 1)] [SerializeField] private float m_CrouchSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
     [SerializeField] private LayerMask m_WhatIsGround;                  // A mask determining what is ground to the character
 
@@ -34,7 +35,7 @@ public class PlatformerCharacter2D : MonoBehaviour
     /// to enable/disable the faced direction based on movemment
     /// </summary>
     public bool manualFaceDirection;
-    public int xDir =  0;
+    public int xDir = 0, deltaXDir = 0;
 
     private void Awake()
     {
@@ -101,22 +102,24 @@ public class PlatformerCharacter2D : MonoBehaviour
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl && !dead)
         {
-            // Reduce the speed if crouching by the crouchSpeed multiplier
-            //animData.floatas["Move"] = (!m_Grounded ? (float)animData.floatas["Move"] * .8f : animData.floatas["Move"]);
 
             // The Speed animator parameter is set to the absolute value of the horizontal input.
             m_Anim.SetFloat("Speed", Mathf.Abs(xDir));
 
-            m_Rigidbody2D.velocity = new Vector2(xDir * m_MaxSpeed, m_Rigidbody2D.velocity.y);
+            m_Rigidbody2D.AddForce(transform.right * xDir * m_MoveForce * Time.deltaTime, ForceMode2D.Impulse);
+
+            //If the player stops moving or changes direction then we reduce Velocity to zero
+            if(deltaXDir != xDir)
+                m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
+
+            m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(
+                    m_Rigidbody2D.velocity.x, -m_MaxSpeed, m_MaxSpeed),
+                    m_Rigidbody2D.velocity.y);
 
             if (!manualFaceDirection)
-            {
                 DirectionLogic(xDir);
-            }
             else
-            {
                 DirectionLogic((int)animData["ManualFacedDirection"]);
-            }
             
         }
         // If the player should jump...
@@ -125,8 +128,10 @@ public class PlatformerCharacter2D : MonoBehaviour
             // Add a vertical force to the player.
             m_Grounded = false;
             m_Anim.SetBool("Ground", false);
-            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce), ForceMode2D.Impulse);
         }
+
+        deltaXDir = xDir;
     }
 
     private void DirectionLogic(int desiredDirection)
