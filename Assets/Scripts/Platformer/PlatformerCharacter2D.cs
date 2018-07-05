@@ -16,10 +16,12 @@ public class PlatformerCharacter2D : MonoBehaviour
     [SerializeField] private LayerMask m_WhatIsGround;                  // A mask determining what is ground to the character
 
     private Transform m_GroundCheck;    // A position marking where to check if the character is grounded.
-    const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+    const float k_GroundedRadius = .25f; // Radius of the overlap circle to determine if grounded
     private bool m_Grounded;            // Whether or not the character is grounded.
     private Transform m_CeilingCheck;   // A position marking where to check for ceilings
     const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the character can stand up
+
+    private Transform m_Back, m_Front;  //Transforms for the Front and back of character
 
     protected Animator m_Anim;            // Reference to the character's animator component.
     private Rigidbody2D m_Rigidbody2D;
@@ -37,16 +39,22 @@ public class PlatformerCharacter2D : MonoBehaviour
     public bool manualFaceDirection;
     public int xDir = 0, deltaXDir = 0;
 
+    /// <summary>
+    /// Which direction the force should be applied in
+    /// </summary>
+    Vector2 moveVector = Vector2.right;
+
     private void Awake()
     {
         // Setting up references.
         m_GroundCheck = transform.Find("GroundCheck");
         m_CeilingCheck = transform.Find("CeilingCheck");
+        m_Back = transform.Find("Back");
+        m_Front = transform.Find("Front");
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         manualFaceDirection = false;
     }
-
 
     private void FixedUpdate()
     {
@@ -70,7 +78,62 @@ public class PlatformerCharacter2D : MonoBehaviour
             // Set the vertical animation
             m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
 
-            //m_Anim.SetFloat("TimeDirection", (float)TimeObjectManager.timeState);
+            if (m_Grounded)
+            {
+                //Fire ray behind player and in front
+                RaycastHit2D backHit = Physics2D.Raycast(m_Back.position,
+                    -transform.up, 1, m_WhatIsGround);
+
+                RaycastHit2D frontHit = Physics2D.Raycast(m_Front.position,
+                    -transform.up, 1, m_WhatIsGround);
+
+
+                Debug.DrawRay(m_Back.position, backHit.normal, Color.cyan);
+                Debug.DrawRay(m_Front.position, frontHit.normal, Color.cyan);
+
+                //Finding the average between the two
+                Vector2 avgNormal = (backHit.normal + frontHit.normal) / 2;
+
+                Debug.DrawRay(m_CeilingCheck.position, avgNormal, Color.blue);
+
+                //Then we find the perpendicular Vector of the two to give us a nice 
+                //direction along platform we're running across
+                moveVector = new Vector2(avgNormal.y, -avgNormal.x);
+
+                Debug.DrawRay(transform.position, moveVector, Color.magenta);
+
+            }
+            else
+            {
+                //If in air we don't want odd move Vectors
+                moveVector = transform.right;
+            }
+        }
+    }
+
+    //This works with Triggers in the world to prevent players from flying off of Ramps
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.tag == "RampUp")
+        {
+            //Only fire if moving in the right direction and well actually moving
+            if (!jump && Vector2.Angle(m_Rigidbody2D.velocity, collision.transform.right) < 90)
+            {
+                if (m_Rigidbody2D.velocity.y > 0)
+                {
+                    Debug.Log("Slowing");
+                    m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
+                }
+            }
+        }
+
+        if (collision.tag == "RampDown")
+        {
+            //Only fire if moving in the right direction and well actually moving
+            if (!jump && Vector2.Angle(m_Rigidbody2D.velocity, collision.transform.right) < 90)
+            {
+                m_Rigidbody2D.AddForce(new Vector2(0, -100));
+            }
         }
     }
 
@@ -106,11 +169,15 @@ public class PlatformerCharacter2D : MonoBehaviour
             // The Speed animator parameter is set to the absolute value of the horizontal input.
             m_Anim.SetFloat("Speed", Mathf.Abs(xDir));
 
-            m_Rigidbody2D.AddForce(transform.right * xDir * m_MoveForce * Time.deltaTime, ForceMode2D.Impulse);
+            Vector2 directionForce = moveVector * xDir * m_MoveForce * Time.deltaTime;
+
+            m_Rigidbody2D.AddForce(directionForce, ForceMode2D.Impulse);
+
+            Debug.DrawRay(transform.position, directionForce.normalized, Color.red);
 
             //If the player stops moving or changes direction then we reduce Velocity to zero
-            if(deltaXDir != xDir)
-                m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
+            if ((deltaXDir != xDir && m_Grounded))
+                m_Rigidbody2D.velocity = new Vector2(0, 0);
 
             m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(
                     m_Rigidbody2D.velocity.x, -m_MaxSpeed, m_MaxSpeed),
@@ -125,9 +192,11 @@ public class PlatformerCharacter2D : MonoBehaviour
         // If the player should jump...
         if (m_Grounded && jump && m_Anim.GetBool("Ground"))
         {
-            // Add a vertical force to the player.
             m_Grounded = false;
             m_Anim.SetBool("Ground", false);
+            //Since the direction force for movement can result in positive Y Velocity 
+            //we want to reset Y Velocity before a jump to prevent them going flying
+            m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0); 
             m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce), ForceMode2D.Impulse);
         }
 
