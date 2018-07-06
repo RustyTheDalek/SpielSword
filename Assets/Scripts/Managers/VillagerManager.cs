@@ -161,7 +161,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            classToSpawn = VillagerClass.Priest;
+            //classToSpawn = VillagerClass.Priest;
 
             GameObject temp = Villagers[classToSpawn.ToString()].Spawn();
             temp.name = classToSpawn.ToString() + i;
