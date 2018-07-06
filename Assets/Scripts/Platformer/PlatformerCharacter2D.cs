@@ -50,7 +50,21 @@ public class PlatformerCharacter2D : MonoBehaviour
         m_GroundCheck = transform.Find("GroundCheck");
         m_CeilingCheck = transform.Find("CeilingCheck");
         m_Back = transform.Find("Back");
+        if(m_Back == null)
+        {
+            Debug.Log("No back transform creating one, pls add to prefab");
+            m_Back = new GameObject("Back").transform;
+            m_Back.transform.SetParent(transform);
+            m_Back.localPosition = new Vector3(-.5f, .5f, 0);
+        }
         m_Front = transform.Find("Front");
+        if (m_Front == null)
+        {
+            Debug.Log("No Front transform creating one, pls add to prefab");
+            m_Front = new GameObject("Front").transform;
+            m_Front.transform.SetParent(transform);
+            m_Front.localPosition = new Vector3(.5f, .5f, 0);
+        }
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         manualFaceDirection = false;
