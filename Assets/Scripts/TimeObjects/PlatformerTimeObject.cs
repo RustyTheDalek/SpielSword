@@ -16,14 +16,14 @@ public class PlatformerTimeObject : SpriteTimeObject
     protected Character m_Character;
     protected PlatformerCharacter2D m_Platformer;
 
+    protected PlatformerFrameData tempFrame;
+    protected List<PlatformerFrameData> pFrames = new List<PlatformerFrameData>();
+
     #endregion
 
     #region Private Variables
 
     PlatformerAnimData pAnimData;
-
-    PlatformerFrameData tempFrame;
-    List<PlatformerFrameData> pFrames = new List<PlatformerFrameData>();
 
     #endregion
 

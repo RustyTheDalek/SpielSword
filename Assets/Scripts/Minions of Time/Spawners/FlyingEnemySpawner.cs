@@ -75,6 +75,11 @@ public class FlyingEnemySpawner : MonoBehaviour {
             }
         }
     }
+
+    public void Setup(TimeObjectManager tManager)
+    {
+        tManager.OnRestartLevel += ResetTime;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -126,5 +131,15 @@ public class FlyingEnemySpawner : MonoBehaviour {
                 #endregion
             }
         }
+    }
+
+    public void Unsubscribe(TimeObjectManager tManager)
+    {
+        tManager.OnRestartLevel -= ResetTime;
+    }
+
+    private void ResetTime()
+    {
+        timePassed = 0;
     }
 }
