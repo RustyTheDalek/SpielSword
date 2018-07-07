@@ -16,7 +16,7 @@ public class PlatformerCharacter2D : MonoBehaviour
     [SerializeField] private LayerMask m_WhatIsGround;                  // A mask determining what is ground to the character
 
     private Transform m_GroundCheck;    // A position marking where to check if the character is grounded.
-    const float k_GroundedRadius = .25f; // Radius of the overlap circle to determine if grounded
+    const float k_GroundedRadius = .1f; // Radius of the overlap circle to determine if grounded
     private bool m_Grounded;            // Whether or not the character is grounded.
     private Transform m_CeilingCheck;   // A position marking where to check for ceilings
     const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the character can stand up
@@ -151,6 +151,15 @@ public class PlatformerCharacter2D : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //When player collides with Ground for first time then reduce xVelocity
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
+        }
+    }
+
     public virtual void Move(Hashtable animData)
     {
         //rangedAttack = false;
@@ -189,9 +198,9 @@ public class PlatformerCharacter2D : MonoBehaviour
 
             Debug.DrawRay(transform.position, directionForce.normalized, Color.red);
 
-            //If the player stops moving or changes direction then we reduce Velocity to zero
+            //If the player stops moving or changes direction then we reduce xVelocity to zero
             if ((deltaXDir != xDir && m_Grounded))
-                m_Rigidbody2D.velocity = new Vector2(0, 0);
+                m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
 
             m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(
                     m_Rigidbody2D.velocity.x, -m_MaxSpeed, m_MaxSpeed),
