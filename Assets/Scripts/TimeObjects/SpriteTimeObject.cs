@@ -55,6 +55,8 @@ public class SpriteTimeObject : TimeObject
 
         OnStartReverse += OnSpriteStartReverse;
         OnFinishReverse += OnSpriteFinishReverse;
+
+        OnStartPlayback += OnSpriteStartPlayback;
     }
 
     protected void PlaySpriteFrame()
@@ -82,12 +84,24 @@ public class SpriteTimeObject : TimeObject
     {
         m_Sprite.material = SpriteMaterials["Sprite"];
         vhsEffect.enabled = false;
+
+        //If Object did not exist at start we need to hide it
+        if(startFrame != 0)
+        {
+            m_Sprite.enabled = false;
+        }
     }
 
     protected void OnSpriteStartReverse()
     {
         m_Sprite.material = SpriteMaterials["VHSSprite"];
         vhsEffect.enabled = true;
+    }
+
+    protected void OnSpriteStartPlayback()
+    {
+        if (!m_Sprite.enabled && startFrame != 0)
+            m_Sprite.enabled = true;
     }
 
     protected override void OnPast()

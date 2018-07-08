@@ -6,7 +6,7 @@ using UnityEngine;
 /// Created by : Ian Jones - 11/11/17
 /// Updated by : Ian Jones - 06/04/18
 /// </summary>
-public class PlatformerTimeObject : SpriteTimeObject
+public class PlatformerTimeObject : RigidbodyTimeObject
 {
     #region Public Variables
     #endregion
@@ -19,14 +19,15 @@ public class PlatformerTimeObject : SpriteTimeObject
     protected PlatformerFrameData tempFrame;
     protected List<PlatformerFrameData> pFrames = new List<PlatformerFrameData>();
 
+    protected PlatformerAnimData pAnimData;
+
+    protected Rigidbody2D m_Rigidbody;
+
     #endregion
 
     #region Private Variables
 
-    PlatformerAnimData pAnimData;
-
     #endregion
-
 
     protected override void Awake()
     {
@@ -34,10 +35,13 @@ public class PlatformerTimeObject : SpriteTimeObject
 
         m_Character = GetComponent<Character>();
         m_Platformer = GetComponent<PlatformerCharacter2D>();
+        m_Rigidbody = GetComponent<Rigidbody2D>();
 
         OnTrackFrame += TrackPlatformerFrame;
         OnPlayFrame += PlayPlatformerFrame;
         OnFinishPlayback += OnFinishPlatformerPlayback;
+        OnStartPlayback += OnPlatformerStartPlayback;
+        OnStartReverse += OnPlatformerStartReverse;
     }
 
     protected override void OnPast()
@@ -93,11 +97,24 @@ public class PlatformerTimeObject : SpriteTimeObject
         }
     }
 
+    protected void OnPlatformerStartReverse()
+    { 
+        m_Platformer.Move();
+        m_Platformer.enabled = false;
+    }
+
+    protected void OnPlatformerStartPlayback()
+    {
+        m_Platformer.enabled = true;
+    }
+
     private void OnDestroy()
     {
         OnTrackFrame -= TrackPlatformerFrame;
         OnPlayFrame -= PlayPlatformerFrame;
         OnFinishPlayback -= OnFinishPlatformerPlayback;
+        OnStartPlayback -= OnPlatformerStartPlayback;
+        OnStartReverse -= OnPlatformerStartReverse;
     }
 
 }

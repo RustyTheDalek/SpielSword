@@ -226,6 +226,13 @@ public class PlatformerCharacter2D : MonoBehaviour
         deltaXDir = xDir;
     }
 
+    //Reset for animator
+    public void Move()
+    {
+        m_Anim.SetFloat("Speed", 0);
+        m_Anim.SetBool("Dead", false);
+    }
+
     private void DirectionLogic(int desiredDirection)
     {
         // If the input is moving the player right and the player is facing left...

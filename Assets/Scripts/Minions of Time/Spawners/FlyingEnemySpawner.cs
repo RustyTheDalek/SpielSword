@@ -5,7 +5,7 @@ using UnityEngine;
 /// Script for spawning flying enemys
 /// Created     : Sean Taylor - 28/06/18
 /// </summary>
-public class FlyingEnemySpawner : MonoBehaviour {
+public class FlyingEnemySpawner : TimeObjectLite {
 
     private float spawnTime;
     private float spawnHeight;
@@ -44,16 +44,7 @@ public class FlyingEnemySpawner : MonoBehaviour {
             prepareSpawn = noToSpawn;
         }
         // creates a bunch of clones of the enemy
-        for (int i = 0; i <= prepareSpawn; i++)
-        {
-            spawn = Instantiate(enemyToSpawn,
-                    transform.position, Quaternion.identity, transform);
-            script = spawn.GetComponent<FlightMinions>();
-            script.dumbFire = true;
-            script.killZone = despawnZoneX;
-            spawns.Add(spawn);
-            spawn.SetActive(false);
-        }
+        enemyToSpawn.CreatePool(prepareSpawn);
     }
 
     // link all
@@ -82,7 +73,8 @@ public class FlyingEnemySpawner : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	protected override void TOLUpdate ()
+    {
         // messure game time
         timePassed += Time.deltaTime;
         // keeps count of how many have been spawned so far
@@ -91,44 +83,50 @@ public class FlyingEnemySpawner : MonoBehaviour {
             // uses the time set to decided when to spawn the enemys
             if (timePassed > spawnOrder[currentSpawn].spawnTime)
             {
-                #region searches for a clone that isn't active
-                for (int i = 0; i < spawns.Count; i++)
-                {
-                    if (!spawns[i].activeSelf)
-                    {
-                        spawnToUse = spawns[i];
-                        break;
-                    }
-                }
-                #endregion
+                //#region searches for a clone that isn't active
+                //for (int i = 0; i < spawns.Count; i++)
+                //{
+                //    if (!spawns[i].activeSelf)
+                //    {
+                //        spawnToUse = spawns[i];
+                //        break;
+                //    }
+                //}
+                //#endregion
 
-                #region if no clones are avaliable to use incress the time on remaining spawns
-                if (spawnToUse == null)
-                {
-                    for (int i = currentSpawn; i <= spawnOrder.Count; i++)
-                    {
-                        if (i == spawns.Count)
-                        {
-                            spawnOrder[i].spawnTime += Random.Range(minSpawnInterval, maxSpawnInterval);
-                        }
-                        else
-                        {
-                            spawnOrder[i].spawnTime += spawnOrder[i + 1].spawnTime -
-                            spawnOrder[i].spawnTime;
-                        }
-                    }
-                }
-                #endregion
+                //#region if no clones are avaliable to use incress the time on remaining spawns
+                //if (spawnToUse == null)
+                //{
+                //    for (int i = currentSpawn; i <= spawnOrder.Count; i++)
+                //    {
+                //        if (i == spawns.Count)
+                //        {
+                //            spawnOrder[i].spawnTime += Random.Range(minSpawnInterval, maxSpawnInterval);
+                //        }
+                //        else
+                //        {
+                //            spawnOrder[i].spawnTime += spawnOrder[i + 1].spawnTime -
+                //            spawnOrder[i].spawnTime;
+                //        }
+                //    }
+                //}
+                //#endregion
 
-                #region move the clone to the spawner based on height and enable
-                else
-                {
-                    spawnToUse.transform.position = new Vector3(transform.position.x,
-                                        spawnOrder[currentSpawn].spawnHeight, transform.position.z);
-                    spawnToUse.SetActive(true);
-                    currentSpawn += 1;
-                }
-                #endregion
+                //#region move the clone to the spawner based on height and enable
+                //else
+                //{
+                spawnToUse = enemyToSpawn.Spawn(transform, new Vector3(
+                                                    0,
+                                                    spawnOrder[currentSpawn].spawnHeight,
+                                                    transform.position.z));
+
+                script = spawnToUse.GetComponent<FlightMinions>();
+                script.dumbFire = true;
+                script.killZone = despawnZoneX;
+                spawns.Add(spawnToUse);
+                currentSpawn += 1;
+                //}
+                //#endregion
             }
         }
     }
