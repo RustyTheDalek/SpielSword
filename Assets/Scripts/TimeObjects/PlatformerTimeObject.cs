@@ -64,7 +64,7 @@ public class PlatformerTimeObject : RigidbodyTimeObject
             jump = (bool)m_Character.animData["Jump"],
             meleeAttack = (bool)m_Character.animData["MeleeAttack"],
             rangedAttack = (bool)m_Character.animData["RangedAttack"],
-            dead = m_Character.Alive,
+            dead = !m_Character.Alive,
 
         };
 

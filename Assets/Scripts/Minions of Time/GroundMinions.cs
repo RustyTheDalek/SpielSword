@@ -47,7 +47,7 @@ public class GroundMinions : Character {
         }
     }
 
-public float timer = 0;
+    public float timer = 0;
     
     public override void Awake()
     {
