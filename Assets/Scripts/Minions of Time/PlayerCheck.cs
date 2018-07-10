@@ -8,6 +8,7 @@ public class PlayerCheck : MonoBehaviour {
 
     //public Component parentComponent;
     bool groundEnemy;
+    bool flyingEnemy;
     bool onEnter;
     bool onExit;
 
@@ -23,12 +24,19 @@ public class PlayerCheck : MonoBehaviour {
         {
             //Debug.Log("Ground Enemy");
             groundEnemy = true;
+            flyingEnemy = false;
             //parentComponent = parentMinion.GetComponent<FlightMinions>();
+        }
+        else if (parentMinion.GetComponent<FlightMinions>() != null)
+        {
+            groundEnemy = false;
+            flyingEnemy = true;
+            //parentComponent = parentMinion.GetComponent<GroundMinions>();
         }
         else
         {
             groundEnemy = false;
-            //parentComponent = parentMinion.GetComponent<GroundMinions>();
+            flyingEnemy = false;
         }
     }
 	
@@ -50,10 +58,15 @@ public class PlayerCheck : MonoBehaviour {
                     parentMinion.GetComponent<GroundMinions>().actPlayer = player.gameObject;
                     parentMinion.GetComponent<GroundMinions>().playerHere = true;
                 }
-                else
+                else if (flyingEnemy)
                 {
                     parentMinion.GetComponent<FlightMinions>().actPlayer = player.gameObject;
                     parentMinion.GetComponent<FlightMinions>().playerHere = true;
+                }
+                else
+                {
+                    parentMinion.GetComponent<PlayerGrapple>().actPlayer = player.gameObject;
+                    parentMinion.GetComponent<PlayerGrapple>().playerHere = true;
                 }
             }
             onEnter = true;
@@ -71,7 +84,7 @@ public class PlayerCheck : MonoBehaviour {
                 {
                     parentMinion.GetComponent<GroundMinions>().xDir = 1;
                 }
-                else
+                else if (flyingEnemy)
                 {
                     parentMinion.GetComponent<FlightMinions>().xDir = 1;
                 }
@@ -83,7 +96,7 @@ public class PlayerCheck : MonoBehaviour {
                 {
                     parentMinion.GetComponent<GroundMinions>().xDir = -1;
                 }
-                else
+                else if (flyingEnemy)
                 {
                     parentMinion.GetComponent<FlightMinions>().xDir = -1;
                 }
@@ -103,9 +116,13 @@ public class PlayerCheck : MonoBehaviour {
                 {
                     parentMinion.GetComponent<GroundMinions>().playerHere = false;
                 }
-                else
+                else if (flyingEnemy)
                 {
                     parentMinion.GetComponent<FlightMinions>().playerHere = false;
+                }
+                else
+                {
+                    parentMinion.GetComponent<PlayerGrapple>().playerHere = false;
                 }
             }
             onExit = true;
