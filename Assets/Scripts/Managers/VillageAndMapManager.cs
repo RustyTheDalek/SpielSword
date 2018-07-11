@@ -43,13 +43,15 @@ public class VillageAndMapManager : MonoBehaviour {
 
     List<SaveGamePnl> savePnls = new List<SaveGamePnl>();
 
+    public string startPosition;
+
     void Awake()
     {
         GameManager.gManager.OnNewGame += StartIntro;
         GameManager.gManager.OnLoadAllSaves += SetupSaves;
         GameManager.gManager.OnLoadSave += StartGame;
 
-        savePnls.AddRange(GetComponentsInChildren<SaveGamePnl>());
+        savePnls.AddRange(GetComponentsInChildren<SaveGamePnl>(true));
     }
 
     // Use this for initialization
@@ -86,6 +88,8 @@ public class VillageAndMapManager : MonoBehaviour {
         {
             startupSequences.Add(timeline.name, timeline);
         }
+
+        cameraTransitions.TransitionTo(startPosition);
     }
 	
 	// Update is called once per frame
