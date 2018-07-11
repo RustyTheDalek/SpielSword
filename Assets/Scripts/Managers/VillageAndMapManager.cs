@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -32,8 +33,24 @@ public class VillageAndMapManager : MonoBehaviour {
 
     #endregion
 
+    Dictionary<string, PlayableAsset> startupSequences = new Dictionary<string, PlayableAsset>();
+    PlayableDirector startupDirector;
+
+    bool playingStartup = false;
+
     public delegate void WorldMapEvent();
     public event WorldMapEvent OnPlayerEnterVillage;
+
+    List<SaveGamePnl> savePnls = new List<SaveGamePnl>();
+
+    void Awake()
+    {
+        GameManager.gManager.OnNewGame += StartIntro;
+        GameManager.gManager.OnLoadAllSaves += SetupSaves;
+        GameManager.gManager.OnLoadSave += StartGame;
+
+        savePnls.AddRange(GetComponentsInChildren<SaveGamePnl>());
+    }
 
     // Use this for initialization
     void Start ()
@@ -47,19 +64,28 @@ public class VillageAndMapManager : MonoBehaviour {
             worldNodes.Add(node.name, node);
         }
 
-        mapVillager = GetComponentInChildren<MapVillager>();
-
         currentNode = worldNodes["VillageNode"];
+
+        mapVillager = GetComponentInChildren<MapVillager>();
 
         villageExit = GetComponentInChildren<VillageExit>();
         villageExit.OnPlayerLeftVillage += Enable;
         villageExit.Setup(this);
 
-        bVillager = GetComponentInChildren<Basic>();
+        bVillager = GetComponentInChildren<Basic>(true);
         bVillager.Setup(villageExit, this);
 
         cameraTransitions = GetComponentInChildren<CameraTransitions>();
         cameraTransitions.Setup(villageExit, this);
+
+        startupDirector = GetComponent<PlayableDirector>();
+
+        PlayableAsset[] Timelines = Resources.LoadAll<PlayableAsset>("Timelines");
+        
+        foreach(PlayableAsset timeline in Timelines)
+        {
+            startupSequences.Add(timeline.name, timeline);
+        }
     }
 	
 	// Update is called once per frame
@@ -67,24 +93,9 @@ public class VillageAndMapManager : MonoBehaviour {
     {
         if (active)
         {
-            //Allos logic for selecting levels
-            switch (currentNode.name)
+            if (Input.GetButtonDown("Jump") && currentNode.name.Contains("Level"))
             {
-                case "World1":
-
-                    if(Input.GetKeyDown(KeyCode.Space))
-                    {
-                        SceneManager.LoadScene("First Level");
-                    }
-                    break;
-
-                case "World2":
-
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        SceneManager.LoadScene("Second Level");
-                    }
-                    break;
+                SceneManager.LoadScene(currentNode.name);
             }
 
             //Directional moving
@@ -141,7 +152,47 @@ public class VillageAndMapManager : MonoBehaviour {
                 }
             }
         }
+
+        if (playingStartup && startupDirector.state != PlayState.Playing)
+        {
+            switch (startupDirector.playableAsset.name)
+            {
+                case "Intro0":
+
+                    Debug.Log("Intro cinematic complete");
+                    GameManager.gManager.currentSave.StoryProgress++;
+                    GameManager.gManager.Save();
+                    playingStartup = false;
+                    break;
+            }
+        }
 	}
+
+    void StartIntro()
+    {
+        startupDirector.playableAsset = startupSequences["Intro0"];
+        startupDirector.Play();
+        playingStartup = true;
+    }
+
+    /// <summary>
+    /// In future this will load the right sequence based on 
+    /// </summary>
+    void StartGame(SaveData save)
+    { 
+        //We would use save here to set things up as needed
+        startupDirector.playableAsset = startupSequences["Intro" + save.StoryProgress];
+        startupDirector.Play();
+    }
+
+    void SetupSaves(List<SaveData> saves)
+    {
+        for (int i = 0; i < saves.Count; i++)
+        {
+            Debug.Log("Saves: " + saves.Count + " : " + "Panels: " + savePnls.Count);
+            savePnls[i].LoadInfo(saves[i]);
+        }
+    }
 
     private void Enable()
     {
@@ -150,6 +201,9 @@ public class VillageAndMapManager : MonoBehaviour {
 
     private void OnDestroy()
     {
+        GameManager.gManager.OnNewGame -= StartIntro;
+        GameManager.gManager.OnLoadAllSaves -= SetupSaves;
+
         villageExit.OnPlayerLeftVillage -= Enable;
         villageExit.Unsubscribe(this);
         cameraTransitions.Unsubscribe(villageExit, this);

@@ -7,4 +7,6 @@
 public class Node : MonoBehaviour
 {
     public Node Left, Right, Up, Down;
+
+    public string LevelName;
 }

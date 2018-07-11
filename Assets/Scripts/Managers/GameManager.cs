@@ -10,34 +10,35 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour {
 
-    static GameManager gManager;
+    public static GameManager gManager;
 
     #region SaveVariables
 
     /// <summary>
     /// Loaded Save
     /// </summary>
-    SaveData currentSave;
+    public SaveData currentSave;
+
     /// <summary>
     /// List of available saves
     /// </summary>
-    List<SaveData> saves;
+    List<SaveData> saves = new List<SaveData>();
 
     /// <summary>
     /// Array of save names found in the right directory;
     /// </summary>
     string[] saveNames;
 
-    List<LevelStats> levels;
-
-    /// <summary>
-    /// Hats player has unlocked 
-    /// </summary>
-    List<string> hats;
-
-    int storyProgress;
-
     #endregion
+
+    public delegate void GameManagerEvent();
+    public event GameManagerEvent OnNewGame;
+
+    public delegate void GameManagerLoadSavesEvent(List<SaveData> savesLoaded);
+    public event GameManagerLoadSavesEvent OnLoadAllSaves;
+
+    public delegate void GameManagerLoadSaveEvent(SaveData saveLoaded);
+    public event GameManagerLoadSaveEvent OnLoadSave;
 
     private void Awake()
     {
@@ -55,33 +56,42 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        //First we need to see if there is save(s).
+        //First we need to see if there are save(s).
         Debug.Log("Looking for saves in " + Application.persistentDataPath);
         saveNames = Directory.GetFiles(Application.persistentDataPath);
 
         //If so Load 'em up
         if (saveNames.Length > 0)
         {
-            Debug.Log("I've found " + saveNames.Length + "saves");
+            Debug.Log("I've found " + saveNames.Length + " saves");
 
             foreach (string saveName in saveNames)
             {
-                LoadIntoSaves(saveName);
+                string formattedName = saveName.Remove(0, Application.persistentDataPath.Length + 1);
+                formattedName = formattedName.Remove(5, 4);
+                LoadIntoSaves(formattedName);
             }
+
+            if (OnLoadAllSaves != null)
+                OnLoadAllSaves(saves);
         }
         else
         {
             Debug.Log("No new saves");
-            //Load single new Game button
         }
     }
 
-    void Save(string saveName, bool newSave = false)
+    public void Save()
+    {
+        Save(currentSave.SaveName);
+    }
+
+    public void Save(string _SaveName, bool newSave = false)
     {
         BinaryFormatter bf = new BinaryFormatter();
 
         FileStream file = File.Create(
-            Application.persistentDataPath + "/" + saveName + ".dat");
+            Application.persistentDataPath + "/" + _SaveName + ".dat");
 
         SaveData saveData;
 
@@ -89,6 +99,7 @@ public class GameManager : MonoBehaviour {
         {
             saveData = new SaveData
             {
+                SaveName = _SaveName,
                 Hats = new List<string>(),
                 Levels = new List<LevelStats>(),
                 StoryProgress = 0,
@@ -98,14 +109,17 @@ public class GameManager : MonoBehaviour {
         {
             saveData = new SaveData
             {
-                Hats = hats,
-                Levels = levels,
-                StoryProgress = storyProgress
+                SaveName = _SaveName,
+                Hats = currentSave.Hats,
+                Levels = currentSave.Levels,
+                StoryProgress = currentSave.StoryProgress
             };
         }
 
         bf.Serialize(file, saveData);
         file.Close();
+
+        currentSave = saveData;
     }
 
     void LoadIntoSaves(string filename)
@@ -113,13 +127,19 @@ public class GameManager : MonoBehaviour {
         saves.Add(Load(filename));
     }
 
-    void LoadChosenSave(string filename)
+    public void LoadChosenSave(string filename)
     {
         currentSave = Load(filename);
+
+        if (currentSave != null)
+        {
+            if (OnLoadSave != null)
+                OnLoadSave(currentSave);
+        }
     }
 
     SaveData Load(string saveName)
-    {
+    { 
         if (File.Exists(Application.persistentDataPath + "/" + saveName + ".dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
@@ -131,7 +151,7 @@ public class GameManager : MonoBehaviour {
         }
         else
         {
-            Debug.LogWarning("Couldn't find save: " + saveName);
+            Debug.LogWarning("Couldn't find save: " + saveName + " in " + Application.persistentDataPath);
             return null;
         }
     }
@@ -139,10 +159,10 @@ public class GameManager : MonoBehaviour {
     public void StartNewGame(string saveName)
     {
         //Create a new save
-        //Save(saveName, true);
-        //Fade Save game Canvas
+        Save(saveName, true);
 
-        //Animate to start game window
+        if (OnNewGame != null)
+            OnNewGame();
     }
 
 #if UNITY_EDITOR
@@ -152,55 +172,4 @@ public class GameManager : MonoBehaviour {
     }
 #endif
 }
-
-[Serializable]
-class SaveData
-{
-    /// <summary>
-    /// Stats for levels played
-    /// </summary>
-    List<LevelStats> _Levels;
-    public List<LevelStats> Levels
-    {
-        get
-        {
-            return _Levels;
-        }
-        set
-        {
-            _Levels = value;
-        }
-    }
-
-    /// <summary>
-    /// Hats player has unlocked 
-    /// </summary>
-    List<string> _Hats;
-    public List<string> Hats
-    {
-        get
-        {
-            return _Hats;
-        }
-        set
-        {
-            _Hats = value;
-        }
-    }
-
-    /// <summary>
-    /// Progression in story
-    /// </summary>
-    int _StoryProgress;
-    public int StoryProgress
-    {
-        get
-        {
-            return _StoryProgress;
-        }
-        set
-        {
-            _StoryProgress = value;
-        }
-    }
-}
+ 
