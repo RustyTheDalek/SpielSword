@@ -1,0 +1,577 @@
+fileFormatVersion: 2
+guid: 7a067eca4c826a649bf513d13fb330b5
+timeCreated: 1531304564
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: flight enemy_0
+    21300002: flight enemy_1
+    21300004: flight enemy_2
+    21300006: flight enemy_3
+    21300008: flight enemy_4
+    21300010: flight enemy_5
+    21300012: flight enemy_6
+    21300014: flight enemy_7
+    21300016: flight enemy_8
+    21300018: flight enemy_9
+    21300020: flight enemy_10
+    21300022: flight enemy_11
+    21300024: flight enemy_12
+    21300026: flight enemy_13
+    21300028: flight enemy_14
+    21300030: flight enemy_15
+    21300032: flight enemy_16
+    21300034: flight enemy_17
+    21300036: flight enemy_18
+    21300038: flight enemy_19
+    21300040: flight enemy_20
+    21300042: flight enemy_21
+    21300044: flight enemy_22
+    21300046: flight enemy_23
+    21300048: flight enemy_24
+    21300050: flight enemy_25
+    21300052: flight enemy_26
+    21300054: flight enemy_27
+    21300056: flight enemy_28
+    21300058: flight enemy_29
+    21300060: flight enemy_30
+    21300062: flight enemy_31
+    21300064: flight enemy_32
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: flight enemy_0
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 6375
+        width: 1440
+        height: 2298
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_1
+      rect:
+        serializedVersion: 2
+        x: 2476
+        y: 6407
+        width: 1705
+        height: 1969
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_2
+      rect:
+        serializedVersion: 2
+        x: 4474
+        y: 6688
+        width: 1576
+        height: 1565
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_3
+      rect:
+        serializedVersion: 2
+        x: 6630
+        y: 6343
+        width: 849
+        height: 2285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_4
+      rect:
+        serializedVersion: 2
+        x: 7849
+        y: 6419
+        width: 550
+        height: 1995
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_5
+      rect:
+        serializedVersion: 2
+        x: 8780
+        y: 6478
+        width: 533
+        height: 1983
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_6
+      rect:
+        serializedVersion: 2
+        x: 9706
+        y: 6492
+        width: 598
+        height: 1989
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_7
+      rect:
+        serializedVersion: 2
+        x: 10626
+        y: 6322
+        width: 744
+        height: 2241
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_8
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 4509
+        width: 1276
+        height: 1652
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_9
+      rect:
+        serializedVersion: 2
+        x: 2423
+        y: 4148
+        width: 1819
+        height: 2071
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_10
+      rect:
+        serializedVersion: 2
+        x: 4409
+        y: 3794
+        width: 1904
+        height: 2584
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_11
+      rect:
+        serializedVersion: 2
+        x: 6694
+        y: 3460
+        width: 739
+        height: 2238
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_12
+      rect:
+        serializedVersion: 2
+        x: 7873
+        y: 3542
+        width: 611
+        height: 1986
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_13
+      rect:
+        serializedVersion: 2
+        x: 8886
+        y: 3495
+        width: 533
+        height: 1972
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_14
+      rect:
+        serializedVersion: 2
+        x: 9700
+        y: 3560
+        width: 551
+        height: 1997
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_15
+      rect:
+        serializedVersion: 2
+        x: 10544
+        y: 3442
+        width: 849
+        height: 2280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_16
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 1967
+        width: 332
+        height: 690
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_17
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 2499
+        width: 892
+        height: 885
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_18
+      rect:
+        serializedVersion: 2
+        x: 2792
+        y: 2447
+        width: 325
+        height: 813
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_19
+      rect:
+        serializedVersion: 2
+        x: 6835
+        y: 1210
+        width: 1018
+        height: 1371
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_20
+      rect:
+        serializedVersion: 2
+        x: 8225
+        y: 1194
+        width: 1033
+        height: 1387
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_21
+      rect:
+        serializedVersion: 2
+        x: 9513
+        y: 1192
+        width: 1019
+        height: 1376
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_22
+      rect:
+        serializedVersion: 2
+        x: 10849
+        y: 1181
+        width: 1019
+        height: 1376
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_23
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 314
+        width: 741
+        height: 1464
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_24
+      rect:
+        serializedVersion: 2
+        x: 1321
+        y: 1544
+        width: 1032
+        height: 644
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_25
+      rect:
+        serializedVersion: 2
+        x: 2670
+        y: 1567
+        width: 588
+        height: 574
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_26
+      rect:
+        serializedVersion: 2
+        x: 3797
+        y: 1732
+        width: 600
+        height: 357
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_27
+      rect:
+        serializedVersion: 2
+        x: 4784
+        y: 1621
+        width: 481
+        height: 708
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_28
+      rect:
+        serializedVersion: 2
+        x: 5602
+        y: 1569
+        width: 495
+        height: 778
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_29
+      rect:
+        serializedVersion: 2
+        x: 1316
+        y: 378
+        width: 749
+        height: 691
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_30
+      rect:
+        serializedVersion: 2
+        x: 2389
+        y: 419
+        width: 1089
+        height: 697
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_31
+      rect:
+        serializedVersion: 2
+        x: 3750
+        y: 442
+        width: 665
+        height: 1013
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: flight enemy_32
+      rect:
+        serializedVersion: 2
+        x: 4708
+        y: 407
+        width: 1365
+        height: 844
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    outline: []
+    physicsShape: []
+  spritePackingTag: FlyingMinion
+  userData: 
+  assetBundleName: flyingminion
+  assetBundleVariant: 
