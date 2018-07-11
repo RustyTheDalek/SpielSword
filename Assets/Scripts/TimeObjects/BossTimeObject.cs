@@ -15,8 +15,6 @@ public class BossTimeObject : RigidbodyTimeObject
     {
         base.Awake();
 
-        startFrame = TimeObjectManager.t;
-
         OnStartPlayback += OnStartBossTimeObjectPlayback;
     }
 

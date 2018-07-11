@@ -20,6 +20,8 @@ public class LevelManager : MonoBehaviour {
 
     public TimeObjectManager timeManager;
 
+    public FlyingEnemySpawner flyingEnemySpawner;
+
     public Camera2DFollow trackCam;
 
     ArenaEntry arenaEntryPoint;
@@ -80,6 +82,9 @@ public class LevelManager : MonoBehaviour {
 
         currentBoss.OnBossDeath += CalculateScore;
         vilManager.OnOutOfLives += LoadVillage;
+
+        flyingEnemySpawner = GetComponentInChildren<FlyingEnemySpawner>(true);
+        flyingEnemySpawner.Setup(timeManager);
 
     }
 
@@ -161,6 +166,11 @@ public class LevelManager : MonoBehaviour {
         if (timeManager && arenaEntryPoint && vilManager)
         {
             timeManager.Unsubscribe(arenaEntryPoint, vilManager);
+        }
+
+        if(flyingEnemySpawner && timeManager)
+        {
+            flyingEnemySpawner.Unsubscribe(timeManager);
         }
     }
 }

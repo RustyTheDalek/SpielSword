@@ -7,7 +7,7 @@ using UnityEngine;
 /// Created by : Ian Jones - 19/03/17
 /// Updated by : Ian Jones - 06/04/18
 /// </summary>
-public class VillagerTimeObject : RigidbodyTimeObject
+public class VillagerTimeObject : PlatformerTimeObject
 {
     #region Public Variables
 

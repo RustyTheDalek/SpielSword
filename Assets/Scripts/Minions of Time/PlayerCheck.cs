@@ -8,6 +8,7 @@ public class PlayerCheck : MonoBehaviour {
 
     //public Component parentComponent;
     bool groundEnemy;
+    bool flyingEnemy;
     bool onEnter;
     bool onExit;
 
@@ -17,18 +18,25 @@ public class PlayerCheck : MonoBehaviour {
         onEnter = false;
         onExit = true;
 
-        parentMinion = GetComponentInParent<Character>().gameObject;
+        //parentMinion = GetComponentInParent<Character>().gameObject;
 
         if (parentMinion.GetComponent<GroundMinions>() != null)
         {
             //Debug.Log("Ground Enemy");
             groundEnemy = true;
+            flyingEnemy = false;
             //parentComponent = parentMinion.GetComponent<FlightMinions>();
+        }
+        else if (parentMinion.GetComponent<FlightMinions>() != null)
+        {
+            groundEnemy = false;
+            flyingEnemy = true;
+            //parentComponent = parentMinion.GetComponent<GroundMinions>();
         }
         else
         {
             groundEnemy = false;
-            //parentComponent = parentMinion.GetComponent<GroundMinions>();
+            flyingEnemy = false;
         }
     }
 	
@@ -39,67 +47,85 @@ public class PlayerCheck : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D player)
     {
-        onExit = false;
-        if (!onEnter)
+        if (player.GetComponent<Villager>())
         {
-            //Debug.Log("I sense a player");
-            if (groundEnemy)
+            onExit = false;
+            if (!onEnter)
             {
-                parentMinion.GetComponent<GroundMinions>().actPlayer = player.gameObject;
-                parentMinion.GetComponent<GroundMinions>().playerHere = true;
+                //Debug.Log("I sense a player");
+                if (groundEnemy)
+                {
+                    parentMinion.GetComponent<GroundMinions>().actPlayer = player.gameObject;
+                    parentMinion.GetComponent<GroundMinions>().playerHere = true;
+                }
+                else if (flyingEnemy)
+                {
+                    parentMinion.GetComponent<FlightMinions>().actPlayer = player.gameObject;
+                    parentMinion.GetComponent<FlightMinions>().playerHere = true;
+                }
+                else
+                {
+                    parentMinion.GetComponent<PlayerGrapple>().actPlayer = player.gameObject;
+                    parentMinion.GetComponent<PlayerGrapple>().playerHere = true;
+                }
             }
-            else
-            {
-                parentMinion.GetComponent<FlightMinions>().actPlayer = player.gameObject;
-                parentMinion.GetComponent<FlightMinions>().playerHere = true;
-            }
+            onEnter = true;
         }
-        onEnter = true;
     }
 
     void OnTriggerStay2D(Collider2D player)
     {
-        if(player.attachedRigidbody.position.x >= 
-            parentMinion.transform.position.x)
+        if (player.GetComponent<Villager>())
         {
-            if (groundEnemy)
+            if (player.attachedRigidbody.position.x >=
+                parentMinion.transform.position.x)
             {
-                parentMinion.GetComponent<GroundMinions>().xDir = 1;
+                if (groundEnemy)
+                {
+                    parentMinion.GetComponent<GroundMinions>().xDir = 1;
+                }
+                else if (flyingEnemy)
+                {
+                    parentMinion.GetComponent<FlightMinions>().xDir = 1;
+                }
             }
-            else
+            else if (player.attachedRigidbody.position.x <=
+                parentMinion.transform.position.x)
             {
-                parentMinion.GetComponent<FlightMinions>().xDir = 1;
-            }
-        }
-        else if (player.attachedRigidbody.position.x <= 
-            parentMinion.transform.position.x)
-        {
-            if (groundEnemy)
-            {
-                parentMinion.GetComponent<GroundMinions>().xDir = -1;
-            }
-            else
-            {
-                parentMinion.GetComponent<FlightMinions>().xDir = -1;
+                if (groundEnemy)
+                {
+                    parentMinion.GetComponent<GroundMinions>().xDir = -1;
+                }
+                else if (flyingEnemy)
+                {
+                    parentMinion.GetComponent<FlightMinions>().xDir = -1;
+                }
             }
         }
     }
 
     void OnTriggerExit2D(Collider2D player)
     {
-        onEnter = false;
-        if (!onExit)
+        if (player.GetComponent<Villager>())
         {
-            //Debug.Log("Dont you want to play?");
-            if (groundEnemy)
+            onEnter = false;
+            if (!onExit)
             {
-                parentMinion.GetComponent<GroundMinions>().playerHere = false;
+                //Debug.Log("Dont you want to play?");
+                if (groundEnemy)
+                {
+                    parentMinion.GetComponent<GroundMinions>().playerHere = false;
+                }
+                else if (flyingEnemy)
+                {
+                    parentMinion.GetComponent<FlightMinions>().playerHere = false;
+                }
+                else
+                {
+                    parentMinion.GetComponent<PlayerGrapple>().playerHere = false;
+                }
             }
-            else
-            {
-                parentMinion.GetComponent<FlightMinions>().playerHere = false;
-            }
+            onExit = true;
         }
-        onExit = true;
     }
 }
