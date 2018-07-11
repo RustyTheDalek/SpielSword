@@ -45,6 +45,11 @@ public abstract class Villager : Character
     /// </summary>
     public bool shielded = false;
 
+    /// <summary>
+    /// If a Villager is able to carry out actions
+    /// </summary>
+    public bool canAct = true;
+
     public float damageMult = 1;
 
     /// <summary>
@@ -179,51 +184,45 @@ public abstract class Villager : Character
         switch(villagerState)
         {
             case VillagerState.PresentVillager:
-
-                //Get PlayerMovement
-                xDir = 0;
-                //xDir = ((Input.GetAxis(Horiz    ?  1 : xDir);
-                //xDir = ((Input.GetButton("right")) ? -1 : xDir);
-                xDir = (int)Input.GetAxisRaw("Horizontal");
-
-                attack = Input.GetButtonDown("Attack");
-
-                switch (attackType)
+                if (canAct)
                 {
-                    case AttackType.Melee:
-                        animData["MeleeAttack"] = attack;
-                        break;
+                    //Get PlayerMovement
+                    xDir = 0;
+                    //xDir = ((Input.GetAxis(Horiz    ?  1 : xDir);
+                    //xDir = ((Input.GetButton("right")) ? -1 : xDir);
+                    xDir = (int)Input.GetAxisRaw("Horizontal");
 
-                    case AttackType.Ranged:
+                    attack = Input.GetButtonDown("Attack");
 
-                        animData["RangedAttack"] = attack;
-                        break;    
+                    switch (attackType)
+                    {
+                        case AttackType.Melee:
+                            animData["MeleeAttack"] = attack;
+                            break;
+
+                        case AttackType.Ranged:
+
+                            animData["RangedAttack"] = attack;
+                            break;
+                    }
+
+                    switch (specialType)
+                    {
+                        case SpecialType.Hold:
+                            OnSpecial(Input.GetButton("Special"));
+                            break;
+
+                        case SpecialType.Press:
+                            OnSpecial(Input.GetButtonDown("Special"));
+                            break;
+                    }
+
+                    if (!m_Jump)
+                    {
+                        // Read the jump input in Update so button presses aren't missed.
+                        m_Jump = Input.GetButtonDown("Jump");
+                    }
                 }
-
-                switch (specialType)
-                {
-                    case SpecialType.Hold:
-                        OnSpecial(Input.GetButton("Special"));
-                        break;
-
-                    case SpecialType.Press:
-                        OnSpecial(Input.GetButtonDown("Special"));
-                        break;
-                }
-
-                if (!m_Jump)
-                {
-                    // Read the jump input in Update so button presses aren't missed.
-                    m_Jump = Input.GetButtonDown("Jump");
-                }
-
-#if UNITY_EDITOR
-
-                if (Input.GetKeyDown(KeyCode.K))
-                {
-                    Kill();
-                }
-#endif
 
                 m_Villager.Move(animData);
 

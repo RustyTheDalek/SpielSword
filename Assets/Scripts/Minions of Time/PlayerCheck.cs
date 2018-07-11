@@ -18,7 +18,7 @@ public class PlayerCheck : MonoBehaviour {
         onEnter = false;
         onExit = true;
 
-        parentMinion = GetComponentInParent<Character>().gameObject;
+        //parentMinion = GetComponentInParent<Character>().gameObject;
 
         if (parentMinion.GetComponent<GroundMinions>() != null)
         {
