@@ -17,6 +17,11 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     #endregion
 
     #region Protected Variables
+
+    /// <summary>
+    /// Which direction the walking force should be applied in
+    /// </summary>
+    protected Vector2 moveVector = Vector2.right;
     #endregion
 
     #region Private Variabeles

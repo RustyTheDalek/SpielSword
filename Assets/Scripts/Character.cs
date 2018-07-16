@@ -84,6 +84,7 @@ public class Character : MonoBehaviour {
 
     public virtual void FixedUpdate()
     {
+        animData["Move"] = moveDir;
         m_Character.Move(animData);
     }
 }

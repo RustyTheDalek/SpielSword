@@ -25,11 +25,6 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     [SerializeField] protected float m_MoveForce = 10f;                  // Strength of force that moves Character
 
-    /// <summary>
-    /// Which direction the force should be applied in
-    /// </summary>
-    protected Vector2 moveVector = Vector2.right;
-
     #endregion
 
     #region Private Variables
@@ -63,6 +58,8 @@ public class PlatformerCharacter2D : MonoBehaviour
         meleeAttack = (bool)animData["MeleeAttack"];
         rangedAttack = (bool)animData["RangedAttack"];
         moveDir = (Vector2)animData["Move"];
+
+        Debug.DrawRay(transform.position, moveDir, Color.green);
 
         m_Anim.SetBool("Dead", dead);
 

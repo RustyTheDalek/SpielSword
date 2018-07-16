@@ -34,16 +34,17 @@ public class FlightMinions : Character {
     public LayerMask layerGround;
     public LayerMask layerGroundOnly;
     public LayerMask layerVillagerOnly;
+
     /// <summary>
-    /// Sets along the X axis away from the enemy 
-    /// as to where the point of orbit should be
+    /// Distance Minion orbits from origin
     /// </summary>
-    public int orbitPointX;
+    public int orbitDistance = 5;
+
     /// <summary>
-    /// Sets along the Y axis away from the enemy 
-    /// as to where the point of orbit should be
+    /// The strength of the force that maintains the distance
     /// </summary>
-    public int orbitPointY;
+    public float distanceAmp = 2;
+
     public GameObject actPlayer;
     public GameObject actCollision;
     public bool playerHere;
@@ -72,11 +73,11 @@ public class FlightMinions : Character {
     {
         playerHere = false;
         onCooldown = false;
-        moveDir = Vector2.right;
+        moveDir = Vector2.zero;
 
-        orbitPoint = new Vector3(transform.position.x + orbitPointX,
-            transform.position.y + orbitPointY, 0);
         orginalPosition = transform.position;
+        //Move the Minion by the distance we want him to Orbit
+        transform.position = transform.position + Vector3.right * orbitDistance;
 
         speed = 20;
 
@@ -138,18 +139,16 @@ public class FlightMinions : Character {
                 // or that they are already returning
                 if (lastAttacking && transform.position != orginalPosition || returning)
                 {
-                    //move them back to where they started
-                    transform.position = Vector3.MoveTowards(transform.position, orginalPosition, speed * Time.deltaTime);
-                    #region move by physics test code
-                    // moveForce = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
-                    // rb.MovePosition(moveForce);
-                    #endregion
+                    //calculate return vector
+                    moveDir = (orginalPosition - transform.position);
+                    moveDir = moveDir.normalized;
+
                     returning = true;
                     // resets any cool down
                     cooldownAttack = 0f;
                     onCooldown = false;
                     //if the enemy has made it back home then it no longer needs to return
-                    if (transform.position == orginalPosition)
+                    if ( (transform.position - orginalPosition).magnitude <= orbitDistance)
                     {
                         returning = false;
                     }
@@ -159,13 +158,22 @@ public class FlightMinions : Character {
                 {
                     if (!dumbFire)
                     {
-                        transform.RotateAround(orbitPoint, Vector3.forward, 90 * Time.deltaTime);
-                        transform.rotation = Quaternion.identity;
+                        //This code finds vector towards the it's origin then finds the 
+                        //perpendicular vector with a clockwise bias so that it moves
+                        //that direction
+                        Vector2 toOriginal = transform.position - orginalPosition;
+                        Vector2 forwardPoint = new Vector2(-toOriginal.y, toOriginal.x) / 
+                            Mathf.Sqrt(toOriginal.x.Sqd() + toOriginal.y.Sqd());
+                        //We use the direction to the Origin and the desired distance to 
+                        //adjust the move direction to keep them the righht distance away
+                        moveDir = forwardPoint.normalized + (toOriginal.normalized * 
+                            (orbitDistance - toOriginal.magnitude) * distanceAmp); 
                     }
                     else
                     {
                         // if the entity was spawned just move left
-                        rb.velocity = new Vector2(-10, rb.velocity.y);
+                        //rb.velocity = new Vector2(-10, rb.velocity.y);
+                        moveDir = Vector2.left;
                     }
                 }
             }
@@ -209,7 +217,8 @@ public class FlightMinions : Character {
             playerPosition = actPlayer.transform.position;
             
             // Sets the old location to return too
-            orginalPosition = transform.position;
+            //TODO:Find out why this is
+            //orginalPosition = transform.position;
         }
         HomeIn();        
     }
@@ -220,18 +229,20 @@ public class FlightMinions : Character {
     void HomeIn()
     {
         #region Rotate to align with target
-        relativePos = transform.position - playerPosition;
-        rotation = Quaternion.LookRotation(relativePos, Vector3.right);
-        rotation.x = 0;
-        rotation.y = 0;
+        //relativePos = transform.position - playerPosition;
+        //rotation = Quaternion.LookRotation(relativePos, Vector3.right);
+        //rotation.x = 0;
+        //rotation.y = 0;
         
-        current = transform.rotation;
+        //current = transform.rotation;
 
-        transform.localRotation = Quaternion.Slerp(current, rotation , Time.deltaTime * 16);
+        //transform.localRotation = Quaternion.Slerp(current, rotation , Time.deltaTime * 16);
         #endregion
 
         #region Move to location of players first know location
-        transform.position = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+
+        moveDir = (playerPosition - transform.position);
+        moveDir = moveDir.normalized;
         #endregion
 
         #region move by physics test code
@@ -274,6 +285,5 @@ public class FlightMinions : Character {
         Debug.Log("Minion took Damage!");
         health -= 1;
     }
-
 }
 
