@@ -12,12 +12,12 @@ public class Character : MonoBehaviour {
     public AttackType attackType;
 
     /// <summary>
-    /// The Left right direction for movement
+    /// The direction for movement
     /// Left = -1
     /// None =  0
     /// Right=  1
     /// </summary>
-    public int xDir;
+    public Vector2 moveDir;
 
     public bool Alive
     {
@@ -33,11 +33,9 @@ public class Character : MonoBehaviour {
 
     #region Protected Variables
 
-    protected PlatformerCharacter2D m_Platformer;
+    private PlatformerCharacter2D m_Character;
 
     protected float health = 1;
-
-    protected bool m_Jump;
 
     #endregion
 
@@ -47,9 +45,9 @@ public class Character : MonoBehaviour {
 
     #endregion
 
-    public virtual void Awake()
+    protected virtual void Awake()
     {
-        m_Platformer = GetComponent<PlatformerCharacter2D>();
+        m_Character = GetComponent<PlatformerCharacter2D>();
 
         CreateHashtable();
     }
@@ -58,11 +56,10 @@ public class Character : MonoBehaviour {
     {
         animData = new Hashtable
         {
-            { "Move", 0 },
+            { "Move", new Vector2(0,0) },
             { "Dead", false },
             { "MeleeAttack", false },
-            { "RangedAttack", false },
-            { "Jump", false }
+            { "RangedAttack", false }
         };
     }
 
@@ -81,12 +78,12 @@ public class Character : MonoBehaviour {
     {
         GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
 
-        animData["Move"] = 0;
+        animData["Move"] = Vector2.zero;
 
     }
 
     public virtual void FixedUpdate()
     {
-        m_Platformer.Move(animData);
+        m_Character.Move(animData);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlatformerCharacter2D))]
+[RequireComponent(typeof(FlyingCharacter2D))]
 public class FlightMinions : Character {
 
     private float cooldownAttack;
@@ -57,11 +57,13 @@ public class FlightMinions : Character {
     /// </summary>
     public float killZone;
 
-    public override void Awake()
+    private FlyingCharacter2D m_Flying;
+
+    protected override void Awake()
     {
         base.Awake();
 
-        m_Platformer = GetComponent<PlatformerCharacter2D>();
+        m_Flying = GetComponent<FlyingCharacter2D>();
         rb = GetComponent<Rigidbody2D>();
 
     }
@@ -70,7 +72,7 @@ public class FlightMinions : Character {
     {
         playerHere = false;
         onCooldown = false;
-        xDir = 1;
+        moveDir = Vector2.right;
 
         orbitPoint = new Vector3(transform.position.x + orbitPointX,
             transform.position.y + orbitPointY, 0);

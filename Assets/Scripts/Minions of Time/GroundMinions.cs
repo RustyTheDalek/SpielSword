@@ -8,8 +8,8 @@ using UnityEngine;
 /// Updated by : Sean Taylor      - 24/04/18
 /// </summary>
 
-[RequireComponent(typeof(PlatformerCharacter2D))]
-public class GroundMinions : Character {
+[RequireComponent(typeof(GroundCharacter2D))]
+public class GroundMinions : GroundCharacter {
 
     private float distanceToFloor;
     private float distanceFromWall;
@@ -49,11 +49,9 @@ public class GroundMinions : Character {
 
     public float timer = 0;
     
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
-
-        m_Platformer = GetComponent<PlatformerCharacter2D>();
 
         distanceFromWall = 0.4f;
         distanceToFloor = 0.8f;
@@ -68,13 +66,13 @@ public class GroundMinions : Character {
         playerHere = false;
 
         //Set a random start direction
-        xDir = Random.Range(0, 2);
-        if (xDir == 0)
+        moveDir = new Vector2(Random.Range(0, 2), 0);
+        if (moveDir.x == 0)
         {
-            xDir = -1;
+            moveDir.x = -1;
         }
-        findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
-        findWall = new Vector2(transform.position.x + (xDir*0.6f), transform.position.y);
+        findFloor = new Vector2(transform.position.x + moveDir.x, transform.position.y);
+        findWall = new Vector2(transform.position.x + (moveDir.x * 0.6f), transform.position.y);
 
         //total number of attacks
         attackCount = 3;
@@ -106,7 +104,7 @@ public class GroundMinions : Character {
     void Movement()
     {
         #region Find the floor
-        findFloor = new Vector2(transform.position.x + xDir, transform.position.y);
+        findFloor = new Vector2(transform.position.x + moveDir.x, transform.position.y);
         bool raycastResult = Physics2D.Raycast(findFloor, Vector2.down, distanceToFloor, layerGround);
 
         //ray cast below the player to ensure ground is still there
@@ -115,17 +113,17 @@ public class GroundMinions : Character {
             if (!raycastResult)
             {
                 //if not reverse the direction
-                xDir *= -1;
+                moveDir.x *= -1;
             }
         }
         inAir = !raycastResult;
         #endregion
 
         #region Find the wall
-        findWall = new Vector2(transform.position.x + (xDir * 0.6f), transform.position.y);
+        findWall = new Vector2(transform.position.x + (moveDir.x * 0.6f), transform.position.y);
         Vector2 facedDirection;
 
-        if (xDir == 1)
+        if (moveDir.x == 1)
         {
             facedDirection = Vector2.right;
         }
@@ -138,20 +136,20 @@ public class GroundMinions : Character {
         if (Physics2D.Raycast(findWall, facedDirection, distanceFromWall, layerGround))
         {
             //if not reverse the direction
-            xDir *= -1;
+            moveDir.x *= -1;
         }
         #endregion
 
         if (!attacking && lastAttacking)
         {
-            m_Platformer.manualFaceDirection = true;
-            animData["ManualFacedDirection"] = xDir;
+            m_Ground.bManualFaceDirection = true;
+            animData["ManualFacedDirection"] = (int)moveDir.x;
         }
         else if (!attacking && !lastAttacking)
         {
             //regardless continue moving
-            m_Platformer.manualFaceDirection = false;
-            animData["Move"] = xDir;
+            m_Ground.bManualFaceDirection = false;
+            animData["Move"] = moveDir;
         }
         lastAttacking = attacking;
     }
@@ -171,7 +169,7 @@ public class GroundMinions : Character {
 
     void Attack(int attack)
     {
-        animData["Move"] = 0;
+        animData["Move"] = Vector2.zero;
         if (attacking || QueuedAttack)
         {
             // makes sure a attack isn't already playing befor continuing
@@ -185,11 +183,11 @@ public class GroundMinions : Character {
         {
             // obsolete if not attacking behind self 
             // as facing direction will always end in a right attack
-            if (xDir == 1)
+            if (moveDir.x == 1)
             {
                 animi.SetBool("Attack2", true);
             }
-            else if (xDir == -1)
+            else if (moveDir.x == -1)
             {
                 animi.SetBool("Attack2", true);
             }

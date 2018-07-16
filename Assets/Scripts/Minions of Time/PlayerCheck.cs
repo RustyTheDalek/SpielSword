@@ -82,11 +82,11 @@ public class PlayerCheck : MonoBehaviour {
             {
                 if (groundEnemy)
                 {
-                    parentMinion.GetComponent<GroundMinions>().xDir = 1;
+                    parentMinion.GetComponent<GroundMinions>().moveDir.x = 1;
                 }
                 else if (flyingEnemy)
                 {
-                    parentMinion.GetComponent<FlightMinions>().xDir = 1;
+                    parentMinion.GetComponent<FlightMinions>().moveDir.x = 1;
                 }
             }
             else if (player.attachedRigidbody.position.x <=
@@ -94,11 +94,11 @@ public class PlayerCheck : MonoBehaviour {
             {
                 if (groundEnemy)
                 {
-                    parentMinion.GetComponent<GroundMinions>().xDir = -1;
+                    parentMinion.GetComponent<GroundMinions>().moveDir.x = -1;
                 }
                 else if (flyingEnemy)
                 {
-                    parentMinion.GetComponent<FlightMinions>().xDir = -1;
+                    parentMinion.GetComponent<FlightMinions>().moveDir.x = -1;
                 }
             }
         }
