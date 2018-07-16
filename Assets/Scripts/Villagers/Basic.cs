@@ -7,7 +7,7 @@
 /// </summary>
 public class Basic : Villager
 {
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
     }
@@ -20,14 +20,14 @@ public class Basic : Villager
 
     protected void StopControl()
     {
-        xDir = 0;
+        moveDir = new Vector2(0,0);
         transform.position = new Vector3(transform.position.x - 3, transform.position.y);
         villagerState = VillagerState.Waiting;
     }
 
     protected void StartControl()
     {
-        xDir = -1;
+        moveDir = Vector2.left;
         villagerState = VillagerState.PresentVillager;
     }
 

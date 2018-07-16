@@ -14,7 +14,7 @@ public class Shaman : WardVillager
     #endregion
 
     #region Unity Methods
-    public override void Awake()
+    protected override void Awake()
     { 
         wardOffset = new Vector3(-2, 2, 0);
 

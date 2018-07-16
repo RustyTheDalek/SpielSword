@@ -11,12 +11,12 @@ public class VillagerMarty : StateMachineBehaviour {
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Tracks the in which the Villager dies so the Aninmation can be reversed when needed
-        if (stateInfo.normalizedTime >= 1 && animator.GetComponent<Villager>().villagerState == VillagerState.PresentVillager 
-            && animator.GetComponent<VillagerTimeObject>().endRecorded == false && 
-            animator.GetComponent<VillagerTimeObject>().deathOrMarty == false)
-        {
-            //Debug.Log("Death recorded");
-            animator.GetComponent<VillagerTimeObject>().endFinish = true;
-        }
+        //if (stateInfo.normalizedTime >= 1 && animator.GetComponent<Villager>().villagerState == VillagerState.PresentVillager 
+        //    && animator.GetComponent<VillagerTimeObject>().endRecorded == false && 
+        //    animator.GetComponent<VillagerTimeObject>().deathOrMarty == false)
+        //{
+        //    //Debug.Log("Death recorded");
+        //    animator.GetComponent<VillagerTimeObject>().endFinish = true;
+        //}
     }
 }

@@ -12,11 +12,10 @@ public class VillagerDeath : StateMachineBehaviour {
     {
         //Tracks the in which the Villager dies so the Aninmation can be reversed when needed
         if (stateInfo.normalizedTime >= 1 && animator.GetComponent<Villager>().villagerState == VillagerState.PresentVillager 
-            && animator.GetComponent<VillagerTimeObject>().endRecorded == false && 
-            animator.GetComponent<VillagerTimeObject>().deathOrMarty == true)
+            && animator.GetComponent<Villager>().deathEnd == false)
         {
             //Debug.Log("Death recorded");
-            animator.GetComponent<VillagerTimeObject>().endFinish = true;
+            animator.GetComponent<Villager>().deathEnd = true;
         }
     }
 }

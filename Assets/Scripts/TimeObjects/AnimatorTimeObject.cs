@@ -6,7 +6,7 @@ using UnityEngine;
 /// Created by : Ian Jones - 11/11/17
 /// Updated by : Ian Jones - 06/04/18
 /// </summary>
-public class PlatformerTimeObject : RigidbodyTimeObject
+public class AnimatorTimeObject : RigidbodyTimeObject
 {
     #region Public Variables
     #endregion
@@ -16,12 +16,16 @@ public class PlatformerTimeObject : RigidbodyTimeObject
     protected Character m_Character;
     protected PlatformerCharacter2D m_Platformer;
 
-    protected PlatformerFrameData tempFrame;
-    protected List<PlatformerFrameData> pFrames = new List<PlatformerFrameData>();
+    protected AnimatorFrameData tempFrame;
+    protected List<AnimatorFrameData> pFrames = new List<AnimatorFrameData>();
+
+    public Dictionary<string, Sprite> sprites;
 
     protected PlatformerAnimData pAnimData;
 
     protected Rigidbody2D m_Rigidbody;
+
+    protected Animator m_Anim;
 
     #endregion
 
@@ -36,12 +40,16 @@ public class PlatformerTimeObject : RigidbodyTimeObject
         m_Character = GetComponent<Character>();
         m_Platformer = GetComponent<PlatformerCharacter2D>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
+        m_Anim = GetComponent<Animator>();
 
         OnTrackFrame += TrackPlatformerFrame;
         OnPlayFrame += PlayPlatformerFrame;
         OnFinishPlayback += OnFinishPlatformerPlayback;
         OnStartPlayback += OnPlatformerStartPlayback;
         OnStartReverse += OnPlatformerStartReverse;
+
+        sprites = new Dictionary<string, Sprite>();
+
     }
 
     protected override void OnPast()
@@ -49,7 +57,7 @@ public class PlatformerTimeObject : RigidbodyTimeObject
         tObjectState = TimeObjectState.PastFinished;
     }
 
-    protected void Start()
+    protected virtual void Start()
     {
         //TODO:Remove this as it might not be totally nesecary 
         tObjectState = TimeObjectState.Present;
@@ -57,15 +65,16 @@ public class PlatformerTimeObject : RigidbodyTimeObject
 
     protected void TrackPlatformerFrame()
     {
-        tempFrame = new PlatformerFrameData()
+        //Adds new sprite to List
+        if(!sprites.ContainsKey(m_Sprite.sprite.name))
         {
-            move = m_Character.xDir,
-            //TODO:Stop using animdata if nessecary
-            jump = (bool)m_Character.animData["Jump"],
-            meleeAttack = (bool)m_Character.animData["MeleeAttack"],
-            rangedAttack = (bool)m_Character.animData["RangedAttack"],
-            dead = !m_Character.Alive,
+            Debug.Log("New Sprite: " + m_Sprite.sprite.name + ", saving");
+            sprites.Add(m_Sprite.sprite.name, m_Sprite.sprite);
+        }
 
+        tempFrame = new AnimatorFrameData()
+        {
+            sprite = m_Sprite.sprite.name
         };
 
         pFrames.Add(tempFrame);
@@ -76,13 +85,8 @@ public class PlatformerTimeObject : RigidbodyTimeObject
     {
         if (Tools.WithinRange(currentFrame, pFrames))
         {
-            m_Character.xDir = pFrames[currentFrame].move;
-            m_Character.animData["Jump"] = pFrames[currentFrame].jump;
-            m_Character.animData["MeleeAttack"] = pFrames[currentFrame].meleeAttack;
-            m_Character.animData["RangedAttack"] = pFrames[currentFrame].rangedAttack;
-            m_Character.animData["Dead"] = pFrames[currentFrame].dead;
+            m_Sprite.sprite = sprites[pFrames[currentFrame].sprite];
         }
-
     }
 
     protected void OnFinishPlatformerPlayback()
@@ -93,7 +97,6 @@ public class PlatformerTimeObject : RigidbodyTimeObject
             tObjectState = TimeObjectState.Present;
 
             m_Sprite.material = SpriteMaterials["Sprite"];
-            vhsEffect.enabled = false;
         }
     }
 
@@ -101,6 +104,7 @@ public class PlatformerTimeObject : RigidbodyTimeObject
     { 
         m_Platformer.Move();
         m_Platformer.enabled = false;
+        m_Anim.enabled = false;
     }
 
     protected void OnPlatformerStartPlayback()

@@ -3,7 +3,7 @@
 /// <summary>
 /// To be used with Minions so they rewind but don't replay
 /// </summary>
-public class MinionTimeObject : PlatformerTimeObject {
+public class MinionTimeObject : AnimatorTimeObject {
 
     // Use this for initialization
     protected override void Awake()

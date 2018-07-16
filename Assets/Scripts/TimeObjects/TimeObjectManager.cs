@@ -87,7 +87,7 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            newTimeScale = rewindCurve.Evaluate((float)t / (float)longestTime);
+            newTimeScale = rewindCurve.Evaluate((float)t - startT / (float)longestTime);
             Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }
     }

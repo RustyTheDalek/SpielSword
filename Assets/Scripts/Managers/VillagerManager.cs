@@ -241,7 +241,7 @@ public class VillagerManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
-                if (!activeVillager.Alive)
+                if (!activeVillager.Alive && activeVillager.deathEnd)
                 {
                     //Game over if no lives
                     if (RemainingVillagers <= 0)

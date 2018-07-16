@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
 /// <summary>
 /// Logs Game time info to attached Text object
 /// Created on : Ian Jones      - 19/03/17
@@ -30,3 +31,4 @@ public class GameTime : MonoBehaviour {
         text.enabled = DebugPnl.debugText;
     }
 }
+#endif

@@ -9,7 +9,6 @@ using UnityEngine;
 public class SpriteTimeObject : TimeObject
 {
     protected SpriteRenderer m_Sprite;
-    protected VHSEffect vhsEffect;
 
     protected SpriteFrameData tempSFrame;
     protected List<SpriteFrameData> sFrames = new List<SpriteFrameData>();
@@ -40,15 +39,6 @@ public class SpriteTimeObject : TimeObject
     {
         base.Awake();
         m_Sprite = GetComponent<SpriteRenderer>();
-
-        if (GetComponent<VHSEffect>())
-        {
-            vhsEffect = GetComponent<VHSEffect>();
-        }
-        else
-        {
-            vhsEffect = gameObject.AddComponent<VHSEffect>();
-        }
 
         OnPlayFrame += PlaySpriteFrame;
         OnTrackFrame += TrackSpriteFrame;
@@ -82,8 +72,6 @@ public class SpriteTimeObject : TimeObject
 
     protected void OnSpriteFinishReverse()
     {
-        m_Sprite.material = SpriteMaterials["Sprite"];
-        vhsEffect.enabled = false;
 
         //If Object did not exist at start we need to hide it
         if(startFrame != 0)
@@ -94,8 +82,6 @@ public class SpriteTimeObject : TimeObject
 
     protected void OnSpriteStartReverse()
     {
-        m_Sprite.material = SpriteMaterials["VHSSprite"];
-        vhsEffect.enabled = true;
     }
 
     protected void OnSpriteStartPlayback()
@@ -106,9 +92,6 @@ public class SpriteTimeObject : TimeObject
 
     protected override void OnPast()
     {
-        m_Sprite.material = SpriteMaterials["VHSSprite"];
-        vhsEffect.enabled = true;
-
         base.OnPast();
     }
 
