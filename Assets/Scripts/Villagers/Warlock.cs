@@ -22,7 +22,7 @@ public class Warlock : WardVillager
 
     #endregion
 
-    public override void Awake()
+    protected override void Awake()
     {
         specialType = SpecialType.Press;
 

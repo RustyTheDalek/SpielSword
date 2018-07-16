@@ -13,7 +13,7 @@ public abstract class AuraVillager : Villager
 
     #endregion
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
 

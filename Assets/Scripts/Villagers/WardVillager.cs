@@ -56,7 +56,7 @@ public abstract class WardVillager : Villager
     }
 
     #region Unity Methods
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
 

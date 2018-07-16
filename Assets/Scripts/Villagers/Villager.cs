@@ -6,7 +6,7 @@
 /// Updated by : Ian Jones - 10/04/18
 /// </summary>
 [RequireComponent(typeof(VillagerCharacter2D))]
-public abstract class Villager : Character
+public abstract class Villager : GroundCharacter
 {
     #region Public Variables
 
@@ -51,6 +51,8 @@ public abstract class Villager : Character
     public bool canAct = true;
 
     public float damageMult = 1;
+
+    public bool deathEnd = false;
 
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
@@ -110,7 +112,7 @@ public abstract class Villager : Character
         }
     }
 
-    public override void Awake()
+    protected override void Awake()
     {
         m_Animator = GetComponent<Animator>();
         m_Villager = GetComponent<VillagerCharacter2D>();
@@ -184,13 +186,16 @@ public abstract class Villager : Character
         switch(villagerState)
         {
             case VillagerState.PresentVillager:
-                if (canAct)
+
+                animData["Dead"] = !Alive;
+
+                if (canAct && Alive)
                 {
                     //Get PlayerMovement
-                    xDir = 0;
+                    moveDir = Vector2.zero;
                     //xDir = ((Input.GetAxis(Horiz    ?  1 : xDir);
                     //xDir = ((Input.GetButton("right")) ? -1 : xDir);
-                    xDir = (int)Input.GetAxisRaw("Horizontal");
+                    moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
 
                     attack = Input.GetButtonDown("Attack");
 
@@ -235,12 +240,12 @@ public abstract class Villager : Character
                 {
                     if (Mathf.Abs(transform.localPosition.x - targetX) > .5f)
                     {
-                        xDir = (int)Mathf.Clamp01(targetX - transform.localPosition.x);
+                        moveDir = new Vector2((int)Mathf.Clamp01(targetX - transform.localPosition.x),0);
                     }
                     else
                     {
                         advancing = false;
-                        xDir = 0;
+                        moveDir = Vector2.zero;
                     }
                 }
 
@@ -258,17 +263,15 @@ public abstract class Villager : Character
         {
             case VillagerState.PresentVillager:
 
-                animData["Move"] = xDir;
+                animData["Move"] = moveDir;
                 animData["Jump"] = m_Jump;
-
-                //animData.dead = !alive;
 
                 m_Jump = false;
                 break;
 
             case VillagerState.Waiting:
 
-                animData["Move"] = xDir;
+                animData["Move"] = moveDir;
                 animData["Dead"] = false;
                 animData["Jump"] = false;
                 animData["MeleeAttack"] = false;
@@ -361,6 +364,11 @@ public abstract class Villager : Character
         {
             melee.GetComponent<MeleeAttack>().damageMult = val;
         }
+    }
+
+    public void OnDeathEnd()
+    {
+        deathEnd = true;
     }
 }
 
