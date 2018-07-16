@@ -1,50 +1,50 @@
 fileFormatVersion: 2
 guid: 7a067eca4c826a649bf513d13fb330b5
-timeCreated: 1531304564
+timeCreated: 1531436471
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: flight enemy_0
-    21300002: flight enemy_1
-    21300004: flight enemy_2
-    21300006: flight enemy_3
-    21300008: flight enemy_4
-    21300010: flight enemy_5
-    21300012: flight enemy_6
-    21300014: flight enemy_7
-    21300016: flight enemy_8
-    21300018: flight enemy_9
-    21300020: flight enemy_10
-    21300022: flight enemy_11
-    21300024: flight enemy_12
-    21300026: flight enemy_13
-    21300028: flight enemy_14
-    21300030: flight enemy_15
-    21300032: flight enemy_16
-    21300034: flight enemy_17
-    21300036: flight enemy_18
-    21300038: flight enemy_19
-    21300040: flight enemy_20
-    21300042: flight enemy_21
-    21300044: flight enemy_22
-    21300046: flight enemy_23
-    21300048: flight enemy_24
-    21300050: flight enemy_25
-    21300052: flight enemy_26
-    21300054: flight enemy_27
-    21300056: flight enemy_28
-    21300058: flight enemy_29
-    21300060: flight enemy_30
-    21300062: flight enemy_31
-    21300064: flight enemy_32
+    21300000: Flight_Enemy
+    21300002: Flight_Enemy_2
+    21300004: Flight_Enemy_3
+    21300006: Long_Rock_Left
+    21300008: Long_Rock_Left_2
+    21300010: Long_Rock_Left_3
+    21300012: Long_Rock_Left_4
+    21300014: Long_Rock_Left_5
+    21300016: Flight_Enemy_4
+    21300018: Flight_Enemy_5
+    21300020: Flight_Enemy_6
+    21300022: Long_Rock_Right_5
+    21300024: Long_Rock_Right_4
+    21300026: Long_Rock_Right_3
+    21300028: Long_Rock_Right_2
+    21300030: Long_Rock_Right
+    21300032: Rock_3
+    21300034: Rock_1
+    21300036: Rock_2
+    21300038: Red_Eye_Open
+    21300040: Green_Eye_Open
+    21300042: Red_Eye_Half
+    21300044: Green_Eye_Half
+    21300046: Rock_9
+    21300048: Rock_4
+    21300050: Rock_5
+    21300052: Rock_6
+    21300054: Rock_7
+    21300056: Rock_8
+    21300058: Rock_10
+    21300060: Rock_11
+    21300062: Rock_12
+    21300064: Rock_13
   serializedVersion: 4
   mipmaps:
-    mipMapMode: 0
-    enableMipMap: 0
+    mipMapMode: 1
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
-    borderMipMap: 0
+    borderMipMap: 1
     mipMapsPreserveCoverage: 0
     alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
@@ -63,8 +63,8 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
+    filterMode: 2
+    aniso: 16
     mipBias: -1
     wrapU: 1
     wrapV: 1
@@ -89,17 +89,17 @@ TextureImporter:
   textureFormatSet: 0
   platformSettings:
   - buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -108,35 +108,35 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: flight enemy_0
+      name: Flight_Enemy
       rect:
         serializedVersion: 2
         x: 741
         y: 6375
         width: 1440
         height: 2298
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5071519, y: 0.25799525}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_1
+      name: Flight_Enemy_2
       rect:
         serializedVersion: 2
         x: 2476
         y: 6407
-        width: 1705
+        width: 1715
         height: 1969
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_2
+      name: Flight_Enemy_3
       rect:
         serializedVersion: 2
         x: 4474
@@ -144,195 +144,195 @@ TextureImporter:
         width: 1576
         height: 1565
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_3
+      name: Long_Rock_Left
       rect:
         serializedVersion: 2
         x: 6630
-        y: 6343
+        y: 6353
         width: 849
         height: 2285
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5970443, y: 0.8380308}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_4
+      name: Long_Rock_Left_2
       rect:
         serializedVersion: 2
-        x: 7849
+        x: 7839
         y: 6419
         width: 550
         height: 1995
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.42510033, y: 0.91297925}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_5
+      name: Long_Rock_Left_3
       rect:
         serializedVersion: 2
         x: 8780
-        y: 6478
+        y: 6468
         width: 533
         height: 1983
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.59661007, y: 0.87393034}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_6
+      name: Long_Rock_Left_4
       rect:
         serializedVersion: 2
         x: 9706
         y: 6492
         width: 598
         height: 1989
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.46555576, y: 0.85726917}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_7
+      name: Long_Rock_Left_5
       rect:
         serializedVersion: 2
         x: 10626
-        y: 6322
+        y: 6332
         width: 744
         height: 2241
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.48615748, y: 0.8446673}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_8
+      name: Flight_Enemy_4
       rect:
         serializedVersion: 2
         x: 812
         y: 4509
         width: 1276
         height: 1652
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5322841, y: 0.67455375}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_9
+      name: Flight_Enemy_5
       rect:
         serializedVersion: 2
         x: 2423
         y: 4148
         width: 1819
         height: 2071
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.52830863, y: 0.6193474}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_10
+      name: Flight_Enemy_6
       rect:
         serializedVersion: 2
         x: 4409
         y: 3794
         width: 1904
         height: 2584
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5108176, y: 0.7471045}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_11
+      name: Long_Rock_Right_5
       rect:
         serializedVersion: 2
         x: 6694
         y: 3460
         width: 739
         height: 2238
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.4877573, y: 0.84052795}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_12
+      name: Long_Rock_Right_4
       rect:
         serializedVersion: 2
         x: 7873
         y: 3542
         width: 611
         height: 1986
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5674212, y: 0.87855124}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_13
+      name: Long_Rock_Right_3
       rect:
         serializedVersion: 2
         x: 8886
         y: 3495
         width: 533
         height: 1972
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.4613571, y: 0.8446815}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_14
+      name: Long_Rock_Right_2
       rect:
         serializedVersion: 2
         x: 9700
         y: 3560
         width: 551
         height: 1997
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5934523, y: 0.8867804}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_15
+      name: Long_Rock_Right
       rect:
         serializedVersion: 2
         x: 10544
         y: 3442
         width: 849
         height: 2280
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.45147786, y: 0.82973826}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_16
+      name: Rock_3
       rect:
         serializedVersion: 2
         x: 562
@@ -340,13 +340,13 @@ TextureImporter:
         width: 332
         height: 690
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_17
+      name: Rock_1
       rect:
         serializedVersion: 2
         x: 1336
@@ -354,13 +354,13 @@ TextureImporter:
         width: 892
         height: 885
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_18
+      name: Rock_2
       rect:
         serializedVersion: 2
         x: 2792
@@ -368,13 +368,13 @@ TextureImporter:
         width: 325
         height: 813
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_19
+      name: Red_Eye_Open
       rect:
         serializedVersion: 2
         x: 6835
@@ -382,13 +382,13 @@ TextureImporter:
         width: 1018
         height: 1371
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_20
+      name: Green_Eye_Open
       rect:
         serializedVersion: 2
         x: 8225
@@ -396,13 +396,13 @@ TextureImporter:
         width: 1033
         height: 1387
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_21
+      name: Red_Eye_Half
       rect:
         serializedVersion: 2
         x: 9513
@@ -410,13 +410,13 @@ TextureImporter:
         width: 1019
         height: 1376
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_22
+      name: Green_Eye_Half
       rect:
         serializedVersion: 2
         x: 10849
@@ -424,13 +424,13 @@ TextureImporter:
         width: 1019
         height: 1376
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_23
+      name: Rock_9
       rect:
         serializedVersion: 2
         x: 322
@@ -438,13 +438,13 @@ TextureImporter:
         width: 741
         height: 1464
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_24
+      name: Rock_4
       rect:
         serializedVersion: 2
         x: 1321
@@ -452,13 +452,13 @@ TextureImporter:
         width: 1032
         height: 644
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_25
+      name: Rock_5
       rect:
         serializedVersion: 2
         x: 2670
@@ -466,13 +466,13 @@ TextureImporter:
         width: 588
         height: 574
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_26
+      name: Rock_6
       rect:
         serializedVersion: 2
         x: 3797
@@ -480,13 +480,13 @@ TextureImporter:
         width: 600
         height: 357
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_27
+      name: Rock_7
       rect:
         serializedVersion: 2
         x: 4784
@@ -494,13 +494,13 @@ TextureImporter:
         width: 481
         height: 708
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_28
+      name: Rock_8
       rect:
         serializedVersion: 2
         x: 5602
@@ -508,27 +508,27 @@ TextureImporter:
         width: 495
         height: 778
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_29
+      name: Rock_10
       rect:
         serializedVersion: 2
-        x: 1316
-        y: 378
+        x: 1326
+        y: 368
         width: 749
         height: 691
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_30
+      name: Rock_11
       rect:
         serializedVersion: 2
         x: 2389
@@ -536,13 +536,13 @@ TextureImporter:
         width: 1089
         height: 697
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_31
+      name: Rock_12
       rect:
         serializedVersion: 2
         x: 3750
@@ -550,13 +550,13 @@ TextureImporter:
         width: 665
         height: 1013
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: flight enemy_32
+      name: Rock_13
       rect:
         serializedVersion: 2
         x: 4708
@@ -564,7 +564,7 @@ TextureImporter:
         width: 1365
         height: 844
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
