@@ -83,6 +83,7 @@ public class FlightMinions : Character {
 
         playerColliders = actCollision.GetComponents<Collider2D>();
         attacking = false;
+        animData.Add("MaxSpeed", 7f);
 
     }
 
@@ -215,7 +216,8 @@ public class FlightMinions : Character {
         {
             // sets the players location
             playerPosition = actPlayer.transform.position;
-            
+            animData["MeleeAttack"] = true;
+            animData["MaxSpeed"] = 15f;
             // Sets the old location to return too
             //TODO:Find out why this is
             //orginalPosition = transform.position;
@@ -254,21 +256,15 @@ public class FlightMinions : Character {
         if (transform.position != playerPosition)
         {
             attacking = true;
-            foreach (Collider2D collider in playerColliders)
-            {
-                collider.enabled = true;
-            }
         }
         // once location is reached stop the attack, disable the collisions
         else
         {
+            animData["MeleeAttack"] = false;
+            animData["MaxSpeed"] = 7f;
             attacking = false;
             onCooldown = true;
             returning = true;
-            foreach (Collider2D collider in playerColliders)
-            {
-                collider.enabled = false;
-            }
         }
     }
 

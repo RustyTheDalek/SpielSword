@@ -10,6 +10,8 @@ public class FlyingCharacter2D : PlatformerCharacter2D
     {
         base.Move(animData);
 
+        m_MaxVelocity = (float)animData["MaxSpeed"];
+
         m_Rigidbody2D.AddForce(moveDir * m_MoveForce * Time.deltaTime, ForceMode2D.Impulse);
 
         m_Rigidbody2D.velocity = Vector2.ClampMagnitude(m_Rigidbody2D.velocity, m_MaxVelocity);

@@ -334,6 +334,16 @@ public abstract class Villager : GroundCharacter
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Somethink hit moi");
+        if(collision.gameObject.layer == (LayerMask.NameToLayer("Minion")) && !LevelManager.GodMode)
+        {
+            Debug.Log("It was minion");
+            OnHit();
+        }
+    }
+
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (villagerState == VillagerState.PastVillager)
