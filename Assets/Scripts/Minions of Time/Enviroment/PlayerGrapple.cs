@@ -8,7 +8,6 @@ public class PlayerGrapple : MonoBehaviour {
     private int amountOfCharacters;
     private int selectedCharacters;
     private List<int> characters = new List<int>();
-    //private int[] characters = new int[10];
     private int progression;
     private bool restricted;
 
@@ -48,17 +47,18 @@ public class PlayerGrapple : MonoBehaviour {
 
     void ValidCharacters()
     {
-        validCharacters.Add("A", 0);
-        validCharacters.Add("D", 1);
-        validCharacters.Add("W", 2);
-        validCharacters.Add("S", 3);
-        validCharacters.Add("Q", 4);
-        validCharacters.Add("F", 5);
-        validCharacters.Add("C", 6);
-        validCharacters.Add("E", 7);
-        validCharacters.Add("R", 8);
-        validCharacters.Add("Z",9);
-        validCharacters.Add("X", 10);
+        // Lower case due to inputString
+        validCharacters.Add("a", 0);
+        validCharacters.Add("d", 1);
+        validCharacters.Add("w", 2);
+        validCharacters.Add("s", 3);
+        validCharacters.Add("q", 4);
+        validCharacters.Add("f", 5);
+        validCharacters.Add("v", 6);
+        validCharacters.Add("e", 7);
+        validCharacters.Add("r", 8);
+        validCharacters.Add("z",9);
+        validCharacters.Add("x", 10);
     }
 
     void FindFoe()
@@ -75,6 +75,8 @@ public class PlayerGrapple : MonoBehaviour {
     {
         //disable player movment
         actPlayer.GetComponent<Villager>().canAct = false;
+        actPlayer.GetComponent<Villager>().moveDir =
+                new Vector2(0, 0);
 
         animi.SetBool("Fire", true);
         switch (difficulty)
@@ -108,6 +110,14 @@ public class PlayerGrapple : MonoBehaviour {
 
    void restrict()
     {
+        int intOut;
+        if(validCharacters.TryGetValue(playerInput, out intOut)){ }
+
+        if (characters[progression] == intOut)
+        {
+            progression++;
+        }
+
         if (progression == characters.Count)
         {
             actPlayer.GetComponent<Villager>().canAct = true;
@@ -115,53 +125,5 @@ public class PlayerGrapple : MonoBehaviour {
             restricted = false;
             animi.SetBool("Fire", false);
         }
-
-        if (characters[progression] == validCharacters[playerInput])
-        {
-            progression++;
-        }
-
-
-        //switch (playerInput)
-        //{
-        //    case "A":
-        //        //if (characters[progression] == validCharacters.ContainsValue("A"))
-        //        //thing
-        //        break;
-        //    case "D":
-        //        //thing
-        //        break;
-        //    case "W":
-        //        //thing
-        //        break;
-        //    case "S":
-        //        //thing
-        //        break;
-        //    case "Q":
-        //        //thing
-        //        break;
-        //    case "F":
-        //        //thing
-        //        break;
-        //    case "C":
-        //        //thing
-        //        break;
-        //    case "E":
-        //        //thing
-        //        break;
-        //    case "R":
-        //        //thing
-        //        break;
-        //    case "Z":
-        //        //thing
-        //        break;
-        //    case "X":
-        //        //thing
-        //        break;
-        //    default:
-        //        Debug.Log("Non valid key: " + playerInput);
-        //        break;
-        //}
-
     }
 }
