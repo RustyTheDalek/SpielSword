@@ -260,19 +260,34 @@ public class FlightMinions : Character {
         // once location is reached stop the attack, disable the collisions
         else
         {
-            animData["MeleeAttack"] = false;
-            animData["MaxSpeed"] = 7f;
-            attacking = false;
-            onCooldown = true;
-            returning = true;
+            StopAttacking();
         }
+    }
+
+    void StopAttacking()
+    {
+        animData["MeleeAttack"] = false;
+        animData["MaxSpeed"] = 7f;
+        attacking = false;
+        onCooldown = true;
+        returning = true;
+        actPlayer = null;
+        playerHere = false;
     }
 
     void OnCollisionEnter2D(Collision2D coll)
     {
+        Debug.Log("Minion hit something");
+
         if (coll.gameObject.layer == (LayerMask.NameToLayer("Weapon")))
         {
             OnHit();
+        }
+
+        if(coll.gameObject.layer == LayerMask.NameToLayer("Villager") && attacking && coll.gameObject == actPlayer)
+        {
+            Debug.Log("I hit the big boy!");
+            StopAttacking();
         }
     }
 

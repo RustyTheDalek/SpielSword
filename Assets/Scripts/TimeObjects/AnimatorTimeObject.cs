@@ -68,7 +68,6 @@ public class AnimatorTimeObject : RigidbodyTimeObject
         //Adds new sprite to List
         if(!sprites.ContainsKey(m_Sprite.sprite.name))
         {
-            Debug.Log("New Sprite: " + m_Sprite.sprite.name + ", saving");
             sprites.Add(m_Sprite.sprite.name, m_Sprite.sprite);
         }
 

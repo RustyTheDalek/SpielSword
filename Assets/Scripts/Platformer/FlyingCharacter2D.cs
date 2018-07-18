@@ -10,6 +10,8 @@ public class FlyingCharacter2D : PlatformerCharacter2D
     {
         base.Move(animData);
 
+        m_Anim.SetBool("MeleeAttack", meleeAttack);
+
         m_MaxVelocity = (float)animData["MaxSpeed"];
 
         m_Rigidbody2D.AddForce(moveDir * m_MoveForce * Time.deltaTime, ForceMode2D.Impulse);
