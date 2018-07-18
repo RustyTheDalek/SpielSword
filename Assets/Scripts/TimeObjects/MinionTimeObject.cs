@@ -35,6 +35,8 @@ public class MinionTimeObject : AnimatorTimeObject {
         {
             GetComponent<GroundMinions>().enabled = true;
         }
+
+        m_Anim.enabled = true;
     }
 
     private void DisableMinion()
