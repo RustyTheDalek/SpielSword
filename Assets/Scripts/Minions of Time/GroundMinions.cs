@@ -1,224 +1,98 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Script to control the Ground based minions Boss
-/// Created by : Sean Taylor      - ~06/17
-/// Updated by : Sean Taylor      - 24/04/18
+/// Script to control the Ground based minions
 /// </summary>
+[RequireComponent(typeof(GroundMinionCharacter))]
+public class GroundMinions : Minion
+{
+    #region Public Variables
 
-[RequireComponent(typeof(GroundCharacter2D))]
-public class GroundMinions : GroundCharacter {
+    #endregion
 
-    private float distanceToFloor;
-    private float distanceFromWall;
-    private Vector2 findFloor;
-    private Vector2 findWall;
-    private Vector2 findPlayer;
-    private Ray2D ray;
-    private bool inAir;
-    private bool attacking;
+    #region Protected Variables
 
-    public Animator animi;
-    public LayerMask layerGround;
-    public LayerMask layerGroundOnly;
-    public LayerMask layerVillagerOnly;
-    public GameObject actPlayer;
-    public bool lastAttacking;
-    public bool playerHere;
-    public int attackCount;
+    protected GroundMinionCharacter m_GroundMinion;
 
-    public bool QueuedAttack
-    {
-        get
-        {
-            if (animi.GetBool("Attack1") ||
-                animi.GetBool("Attack2") ||
-                animi.GetBool("Attack3") ||
-                animi.GetBool("Attack4"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
+    protected readonly int m_HashAttackLeft = Animator.StringToHash("AttackLeft");
+    protected readonly int m_HashAttackRight = Animator.StringToHash("AttackRight");
 
-    public float timer = 0;
-    
+    #endregion
+
+    #region Private Variables
+
+    private float distanceToFloor = .8f;
+    private float distanceFromWall = .4f;
+
+    bool attackLeft = false,
+        attackRight = false;
+
+    #endregion
+
     protected override void Awake()
     {
         base.Awake();
 
-        distanceFromWall = 0.4f;
-        distanceToFloor = 0.8f;
-
-        animData.Add("ManualFacedDirection", 0);
+        m_GroundMinion = GetComponent<GroundMinionCharacter>();
     }
 
     // Use this for initialization
-    public void Start ()
+    protected override void Start ()
     {
-        attacking = false;
-        playerHere = false;
-
+        base.Start();
         //Set a random start direction
-        moveDir = new Vector2(Random.Range(0, 2), 0);
-        if (moveDir.x == 0)
-        {
-            moveDir.x = -1;
-        }
-        findFloor = new Vector2(transform.position.x + moveDir.x, transform.position.y);
-        findWall = new Vector2(transform.position.x + (moveDir.x * 0.6f), transform.position.y);
-
-        //total number of attacks
-        attackCount = 3;
-
-    }
-	
-	// Update is called once per frame
-	public override void Update ()
-    {
-        base.Update();
-        if (Alive)
-        {
-            timer += Time.deltaTime;
-
-            if (timer > .046875f)
-            {
-                Movement();
-                timer = 0f;
-            }
-
-            // Get a player check from PlayerCheck to see if player is present
-            if (playerHere)
-            {
-                FindFoe();
-            }
-        }
+        moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
     }
 
-    void Movement()
+    protected override void Patrol()
     {
         #region Find the floor
-        findFloor = new Vector2(transform.position.x + moveDir.x, transform.position.y);
-        bool raycastResult = Physics2D.Raycast(findFloor, Vector2.down, distanceToFloor, layerGround);
 
-        //ray cast below the player to ensure ground is still there
-        if (inAir != !raycastResult)
+        if(!Physics2D.Raycast(m_GroundMinion.m_Front.position, Vector2.down, distanceToFloor, layerGroundOnly))
         {
-            if (!raycastResult)
-            {
-                //if not reverse the direction
-                moveDir.x *= -1;
-            }
+            moveDir.x *= -1;
         }
-        inAir = !raycastResult;
+
+        Debug.DrawRay(m_GroundMinion.m_Front.position, Vector2.down * distanceToFloor, Color.green);
+
         #endregion
 
         #region Find the wall
-        findWall = new Vector2(transform.position.x + (moveDir.x * 0.6f), transform.position.y);
-        Vector2 facedDirection;
 
-        if (moveDir.x == 1)
-        {
-            facedDirection = Vector2.right;
-        }
-        else
-        {
-            facedDirection = Vector2.left;
-        }
+        Debug.DrawRay(m_GroundMinion.m_Front.position, moveDir * distanceFromWall, Color.red);
 
-        //ray cast infront the player to ensure there is no wall
-        if (Physics2D.Raycast(findWall, facedDirection, distanceFromWall, layerGround))
+        if (Physics2D.Raycast(m_GroundMinion.m_Front.position, moveDir, distanceFromWall, layerGround))
         {
-            //if not reverse the direction
             moveDir.x *= -1;
         }
+
         #endregion
 
-        if (!attacking && lastAttacking)
-        {
-            m_Ground.bManualFaceDirection = true;
-            animData["ManualFacedDirection"] = (int)moveDir.x;
-        }
-        else if (!attacking && !lastAttacking)
-        {
-            //regardless continue moving
-            m_Ground.bManualFaceDirection = false;
-            animData["Move"] = moveDir;
-        }
-        lastAttacking = attacking;
+        m_GroundMinion.Move(moveDir);
     }
 
-    void FindFoe()
+    protected override void Attack()
     {
-        findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x,actPlayer.transform.position.y - transform.position.y).normalized;
-        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
-        if (rayResult){}
+        prevDir = moveDir;
+        moveDir = Vector2.zero;
+
+        if (moveDir.x > 1)
+        {
+            m_Animator.SetTrigger(m_HashAttackLeft);
+        }
         else
         {
-            int attack = Random.Range(0, attackCount - 1);
-            Attack(attack);
+            m_Animator.SetTrigger(m_HashAttackRight);
         }
-        
+
+        StartRest();
     }
 
-    void Attack(int attack)
+    protected override void StartRest()
     {
-        animData["Move"] = Vector2.zero;
-        if (attacking || QueuedAttack)
-        {
-            // makes sure a attack isn't already playing befor continuing
-            return;
-        }
-        else if (attack == 0)
-        {
-            animi.SetBool("Attack3", true);
-        }
-        else if (attack == 1)
-        {
-            // obsolete if not attacking behind self 
-            // as facing direction will always end in a right attack
-            if (moveDir.x == 1)
-            {
-                animi.SetBool("Attack2", true);
-            }
-            else if (moveDir.x == -1)
-            {
-                animi.SetBool("Attack2", true);
-            }
-        }
-        else if (attack == 2)
-        {
-            animi.SetBool("Attack4", true);
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D coll)
-    {
-        if (coll.gameObject.layer == (LayerMask.NameToLayer("Weapon")))
-        {
-            OnHit();
-        }
-    }
-
-    public void OnHit()
-    {
-        Debug.Log("Minion took Damage!");
-        health -= 1;
-    }
-
-    public void OnAttacking()
-    {
-        attacking = true;
-    }
-
-    public void ExitAttacking()
-    {
-        attacking = false;
+        base.StartRest();
     }
 }

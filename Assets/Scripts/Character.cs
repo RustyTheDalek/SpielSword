@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Common class that Villagers (Player) and Minions (Enemys) derive from
+/// Base class for player character and NPCS
 /// </summary>
 public class Character : MonoBehaviour {
 
     #region Public Variables
+
+    public bool Alive
+    {
+        get
+        {
+            return health > 0;
+        }
+    }
 
     public AttackType attackType;
 
@@ -19,16 +27,6 @@ public class Character : MonoBehaviour {
     /// </summary>
     public Vector2 moveDir;
 
-    public bool Alive
-    {
-        get
-        {
-            return health > 0;
-        }
-    }
-
-    public Hashtable animData;
-
     #endregion
 
     #region Protected Variables
@@ -37,54 +35,45 @@ public class Character : MonoBehaviour {
 
     protected float health = 1;
 
+    protected Animator m_Animator;
+    protected Rigidbody2D m_rigidbody;
+
+    protected readonly int m_HashDeadPara = Animator.StringToHash("Dead");
+
     #endregion
 
     #region Private Variables
-
-    private bool died = false;
 
     #endregion
 
     protected virtual void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
-
-        CreateHashtable();
+        m_Animator = GetComponent<Animator>();
+        m_rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    protected virtual void CreateHashtable()
+    protected virtual void Update()
     {
-        animData = new Hashtable
-        {
-            { "Move", new Vector2(0,0) },
-            { "Dead", false },
-            { "MeleeAttack", false },
-            { "RangedAttack", false }
-        };
-    }
+        m_Animator.SetBool(m_HashDeadPara, !Alive);
 
-    public virtual void Update()
-    {
-        animData["Dead"] = !Alive;
-
-        if(!Alive && !died)
-        {
-            died = true;
-            OnDeath();
-        }
+        if (!Alive)
+            return;
     }
 
     public virtual void OnDeath()
     {
         GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
-
-        animData["Move"] = Vector2.zero;
-
     }
 
     public virtual void FixedUpdate()
     {
-        animData["Move"] = moveDir;
-        m_Character.Move(animData);
+        if (!Alive)
+            return;
+
+        m_Animator.SetFloat("xSpeed", m_rigidbody.velocity.x);
+        m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
+        m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
+        m_Character.Move(moveDir);
     }
 }

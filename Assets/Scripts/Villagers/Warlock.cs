@@ -34,18 +34,11 @@ public class Warlock : WardVillager
         base.Awake();
     }
 
-
-    protected override void OnWardActive(bool _PlayerSpecial)
+    protected override void OnWardUse()
     {
-        //TODO: Finalise functionality
-        //If the Player presses the button once the Ward is active do the teleport
-        //In future maybe destroyd current copy?
-        if (_PlayerSpecial)
-        {
-            Debug.Log("Teleporting");
-            transform.position = currentWard.transform.position;
-            teleport.Play();
-        }
+        Debug.Log("Teleporting");
+        transform.position = currentWard.transform.position;
+        teleport.Play();
     }
 
     public override void FireProjectile()

@@ -126,4 +126,22 @@ public class PlayerGrapple : MonoBehaviour {
             animi.SetBool("Fire", false);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == (LayerMask.NameToLayer("Villager")))
+        {
+            actPlayer = collision.gameObject;
+            playerHere = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == (LayerMask.NameToLayer("Villager")))
+        {
+            actPlayer = null;
+            playerHere = false;
+        }
+    }
 }

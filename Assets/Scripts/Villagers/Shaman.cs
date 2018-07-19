@@ -20,8 +20,6 @@ public class Shaman : WardVillager
 
         wardName = "ShamanTotem";
 
-        specialType = SpecialType.Press;
-
         base.Awake();
     }
 
@@ -39,12 +37,9 @@ public class Shaman : WardVillager
 
     #region Protected Methods
 
-    protected override void OnWardActive(bool _PlayerSpecial)
+    protected override void OnWardUse()
     {
-        if (_PlayerSpecial)
-        {
-            currentWard.transform.position = transform.position + wardOffset;
-        }
+        currentWard.transform.position = transform.position + wardOffset;
     }
 
     #endregion

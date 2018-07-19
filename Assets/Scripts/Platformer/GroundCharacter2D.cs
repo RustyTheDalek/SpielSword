@@ -9,10 +9,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     #region public Variables
 
-    /// <summary>
-    /// to enable/disable the faced direction based on movemment
-    /// </summary>
-    public bool bManualFaceDirection = false;
+    public bool m_Grounded;            // Whether or not the character is grounded.
 
     #endregion
 
@@ -22,6 +19,11 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     /// Which direction the walking force should be applied in
     /// </summary>
     protected Vector2 moveVector = Vector2.right;
+
+    /// <summary>
+    /// Previous move
+    /// </summary>
+    protected Vector2 deltaMoveDir = Vector2.zero;
     #endregion
 
     #region Private Variabeles
@@ -41,16 +43,16 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     private Transform m_Ground;    // A position marking where to check if the character is grounded.
     private const float k_GroundedRadius = .1f; // Radius of the overlap circle to determine if grounded
-    private bool m_Grounded;            // Whether or not the character is grounded.
     private Transform m_Ceiling;   // A position marking where to check for ceilings
 
-    private Transform m_Back, m_Front;  //Transforms for the Front and back of character used when calculating what direction move force should be applied
+    public Transform m_Back, m_Front;  //Transforms for the Front and back of character used when calculating what direction move force should be applied
 
     private Collider2D[] colliders;
 
     private bool jump;
     private bool m_FacingRight = true;  // For determining which way the character is currently facing.
 
+    private Vector2 directionForce;
     #endregion
 
     protected override void Awake()
@@ -78,26 +80,24 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         }
     }
 
-    protected override void FixedUpdate()
+    protected void FixedUpdate()
     {
-        base.FixedUpdate();
-
         GroundCheck();
-
         CalcMoveVector();
     }
 
-    public override void Move(Hashtable animData)
+    private void OnDrawGizmosSelected()
     {
-        base.Move(animData);
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, directionForce.normalized);
+    }
 
-        jump = (bool)animData["Jump"];
-
+    public virtual void Move(Vector2 moveDir, bool jump)
+    {
         // If the player should jump...
-        if (m_Grounded && jump && m_Anim.GetBool("Ground"))
+        if (m_Grounded && jump)
         {
             m_Grounded = false;
-            m_Anim.SetBool("Ground", false);
             //Since the direction force for movement can result in positive Y Velocity 
             //we want to reset Y Velocity before a jump to prevent them going flying
             m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
@@ -105,13 +105,12 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         }
 
         //only control the player if grounded or airControl is turned on
-        if (m_Grounded || m_AirControl && !dead)
+        if (m_Grounded || m_AirControl)
         {
-            Vector2 directionForce = moveVector * moveDir.x * m_MoveForce * Time.deltaTime;
+            //moveVector = Vector2.right;
+            directionForce = moveVector * moveDir.x * m_MoveForce * Time.deltaTime;
 
             m_Rigidbody2D.AddForce(directionForce, ForceMode2D.Impulse);
-
-            Debug.DrawRay(transform.position, directionForce.normalized, Color.red);
 
             //If the player stops moving or changes direction then we reduce xVelocity to zero
             if ((deltaMoveDir.x != moveDir.x && m_Grounded))
@@ -120,12 +119,11 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(
                     m_Rigidbody2D.velocity.x, -m_MaxSpeed, m_MaxSpeed),
                     m_Rigidbody2D.velocity.y);
-
-            if (!bManualFaceDirection)
-                DirectionLogic((int)moveDir.x);
-            else
-                DirectionLogic((int)animData["ManualFacedDirection"]);
         }
+
+        DirectionLogic((int)moveDir.x);
+
+        deltaMoveDir = moveDir;
     }
 
     /// <summary>
@@ -135,6 +133,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     {
         if (m_Grounded)
         {
+            //TODO:See why altering the parent objects scale affects this
             //Fire ray behind player and in front
             RaycastHit2D backHit = Physics2D.Raycast(m_Back.position,
                 -transform.up, 1, m_WhatIsGround);
@@ -142,9 +141,11 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             RaycastHit2D frontHit = Physics2D.Raycast(m_Front.position,
                 -transform.up, 1, m_WhatIsGround);
 
+            if (backHit)
+                Debug.DrawRay(m_Back.position, backHit.normal, Color.cyan);
 
-            Debug.DrawRay(m_Back.position, backHit.normal, Color.cyan);
-            Debug.DrawRay(m_Front.position, frontHit.normal, Color.cyan);
+            if(frontHit)
+                Debug.DrawRay(m_Front.position, frontHit.normal, Color.cyan);
 
             //Finding the average between the two
             Vector2 avgNormal = (backHit.normal + frontHit.normal) / 2;
@@ -182,11 +183,9 @@ public class GroundCharacter2D : PlatformerCharacter2D {
                 m_Grounded = true;
             }
         }
-
-        m_Anim.SetBool("Ground", m_Grounded);
     }
 
-    private void DirectionLogic(int desiredDirection)
+    protected void DirectionLogic(int desiredDirection)
     {
         // If the input is moving the player right and the player is facing left...
         if (desiredDirection > 0 && !m_FacingRight)

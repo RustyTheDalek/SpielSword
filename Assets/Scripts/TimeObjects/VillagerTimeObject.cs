@@ -15,7 +15,7 @@ public class VillagerTimeObject : AnimatorTimeObject
 
     #region Protected Variables
 
-    protected VillagerCharacter2D m_Villager;
+    protected GroundCharacter2D m_Ground;
 
     protected SpriteRenderer m_HatSprite;
 
@@ -35,7 +35,7 @@ public class VillagerTimeObject : AnimatorTimeObject
         base.Awake();
 
         villager = GetComponent<Villager>();
-        m_Villager = GetComponent<VillagerCharacter2D>();
+        m_Ground = GetComponent<GroundCharacter2D>();
         m_HatSprite = transform.Find("Hat").GetComponent<SpriteRenderer>();
     }
 

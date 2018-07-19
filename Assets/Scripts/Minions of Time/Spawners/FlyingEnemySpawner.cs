@@ -5,7 +5,8 @@ using UnityEngine;
 /// Script for spawning flying enemys
 /// Created     : Sean Taylor - 28/06/18
 /// </summary>
-public class FlyingEnemySpawner : TimeObjectLite {
+public class FlyingEnemySpawner : TimeObjectLite
+{
 
     private float spawnTime;
     private float spawnHeight;
@@ -29,7 +30,7 @@ public class FlyingEnemySpawner : TimeObjectLite {
     public float minSpawnInterval;
     public int noToSpawn;
     public GameObject enemyToSpawn;
-    
+
     // initialize all 
     public void Awake()
     {
@@ -48,7 +49,8 @@ public class FlyingEnemySpawner : TimeObjectLite {
     }
 
     // link all
-    void Start () {
+    void Start()
+    {
         // sets the spawn time and what height it will be created at
         for (int i = 0; i <= noToSpawn; i++)
         {
@@ -71,9 +73,9 @@ public class FlyingEnemySpawner : TimeObjectLite {
     {
         tManager.OnRestartLevel += ResetTime;
     }
-	
-	// Update is called once per frame
-	protected override void TOLUpdate ()
+
+    // Update is called once per frame
+    protected override void TOLUpdate()
     {
         // messure game time
         timePassed += Time.deltaTime;
@@ -121,7 +123,7 @@ public class FlyingEnemySpawner : TimeObjectLite {
                                                     transform.position.z));
 
                 script = spawnToUse.GetComponent<FlightMinions>();
-                script.dumbFire = true;
+                script.state = MinionState.Migrating;
                 script.killZone = despawnZoneX;
                 spawns.Add(spawnToUse);
                 currentSpawn += 1;

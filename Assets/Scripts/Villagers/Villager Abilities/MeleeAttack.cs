@@ -22,10 +22,6 @@ public class MeleeAttack : MonoBehaviour
             {
                 collision.GetComponent<Head>().OnHit(Damage);
             }
-            else if (collision.GetComponent<GroundMinions>())
-            {
-                collision.GetComponent<GroundMinions>().OnHit();
-            }
         }
     }
 }

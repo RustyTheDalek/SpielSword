@@ -27,16 +27,7 @@ public class Rogue : Villager {
     /// </summary>
     public LayerMask collisionLayers;
 
-	// Use this for initialization
-	public override void Start ()
-    {
-        //Need to set Rogue animator here
-        base.Start();
-
-        attackType = AttackType.Melee;
-        specialType = SpecialType.Press;
-	}
-
+    //TODO : Look into this, little janky at the moment
     //TODO this current ability is more like a dash than a teleport since it can't go through things
     public void Blink()
     {

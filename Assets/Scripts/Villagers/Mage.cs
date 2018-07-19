@@ -25,13 +25,6 @@ public class Mage : AuraVillager {
         }
     }
 
-    // Use this for initialization
-    public override void Start ()
-    {
-        base.Start();
-        attackType = AttackType.Ranged;
-	}
-
     protected override Aura Aura()
     {
         return MageAura.Spawn(transform.position).GetComponent<Aura>();

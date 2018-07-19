@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class SpielSword : Villager
 {
-    Rigidbody2D m_RigidBody;
+    //Rigidbody2D m_RigidBody;
 
     public BoxCollider2D spielsword;
 
     // Use this for initialization
-    public override void Start()
+    public void Start()
     {
-        //base.Start();
-
         specialType = SpecialType.Hold;
-
-        m_RigidBody = GetComponent<Rigidbody2D>();
     }
 
     public void Spielcrafice()
@@ -26,8 +22,8 @@ public class SpielSword : Villager
 
     public void SetBodyType(RigidbodyType2D type)
     {
-        m_RigidBody.bodyType = type;
-        m_RigidBody.velocity = Vector3.zero;
+        m_rigidbody.bodyType = type;
+        m_rigidbody.velocity = Vector3.zero;
     }
 
     public void EnableSpiel()
@@ -40,6 +36,7 @@ public class SpielSword : Villager
     public void DisableSpiel()
     {
         //Debug.Break();
+        canSpecial = false;
         spielsword.enabled = false;
     }
 }

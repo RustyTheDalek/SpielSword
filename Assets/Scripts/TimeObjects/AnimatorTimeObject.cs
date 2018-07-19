@@ -101,7 +101,6 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
     protected void OnPlatformerStartReverse()
     { 
-        m_Platformer.Move();
         m_Platformer.enabled = false;
         m_Anim.enabled = false;
     }

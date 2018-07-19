@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour
                 complete = false; //Is the timer finished
 
     //Constructor for the timer
-    public void Setup(string _ID, float _MaxTime, bool _CountsDown)
+    public void Setup(string _ID, float _MaxTime, bool _CountsDown = true)
     {
         ID = _ID;
         MAXTime = _MaxTime;

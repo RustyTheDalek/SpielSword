@@ -5,5 +5,4 @@ public enum VillagerState
 {
     PresentVillager,
     PastVillager,
-    Waiting,
 }

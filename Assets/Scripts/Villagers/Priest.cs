@@ -24,12 +24,6 @@ public class Priest : AuraVillager
         }
     }
 
-    public override void Start()
-    {
-        base.Start();
-        attackType = AttackType.Melee;
-    }
-
     protected override Aura Aura()
     {
         return PriestAura.Spawn().GetComponent<Aura>();

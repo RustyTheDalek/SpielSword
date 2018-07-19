@@ -15,21 +15,14 @@ public class Warrior : Villager
     {
         get
         {
-            if (shieldStrength > 0 && (bool)animData["PlayerSpecial"])
+            if (shieldStrength > 0 && playerSpecial)
                 return true;
             else
                 return false;
         }
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-
-        specialType = SpecialType.Hold;
-    }
-
-    public override void Update()
+    protected override void Update()
     {
         base.Update();
 
@@ -39,23 +32,16 @@ public class Warrior : Villager
 
                 //If the Shield has been used too long we need to disable the Players 
                 //ability to special and renable when the shield is not in use
-                if (shieldStrength <= 0)
-                {
-                    animData["CanSpecial"]= false;
-                }
-                else if (shieldStrength > 0)
-                {
-                    animData["CanSpecial"] = true;
-                }
+                canSpecial = shieldStrength <= 0 ? false : true;
 
                 //When the player is trying to use the shield and the shield has 
                 //strength detract power  
-                if ((bool)animData["PlayerSpecial"] && shieldStrength > 0)
+                if (playerSpecial && shieldStrength > 0)
                 {
                     shieldStrength -= Time.deltaTime;
                 }
                 //otherwise if the shield is not in use and needs charging charge it up
-                else if (!(bool)animData["PlayerSpecial"] && shieldStrength < 1)
+                else if (!playerSpecial && shieldStrength < 1)
                 {
                     shieldStrength += Time.deltaTime;
                 }
@@ -73,14 +59,6 @@ public class Warrior : Villager
         if (!Shielded)
         {
             base.OnHit();
-        }
-    }
-
-    public override void OnPastHit(Collider2D collider)
-    {
-        if (!Shielded)
-        {
-            base.OnPastHit(collider);
         }
     }
 }

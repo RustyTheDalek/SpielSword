@@ -22,13 +22,13 @@ public class Basic : Villager
     {
         moveDir = new Vector2(0,0);
         transform.position = new Vector3(transform.position.x - 3, transform.position.y);
-        villagerState = VillagerState.Waiting;
+        canAct = false;
     }
 
     protected void StartControl()
     {
         moveDir = Vector2.left;
-        villagerState = VillagerState.PresentVillager;
+        canAct = true;
     }
 
     public void Unsubscribe(VillageExit villageExit, VillageAndMapManager wMapManager)

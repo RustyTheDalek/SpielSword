@@ -223,16 +223,6 @@ public class VillagerManager : MonoBehaviour {
             classToSpawn = VillagerClass.Warlock;
         }
 #endif
-        //Set remaining Villagers to Queue appropriately
-        for(int i = 0; i < remainingVillagers.Count; i++)
-        {
-            //If Villager is not moving forward and not in his correct place
-            if(!remainingVillagers[i].advancing &&
-                remainingVillagers[i].transform.localPosition.x <= i * -2)
-            {
-                remainingVillagers[i].SetTarget(i * - 2);
-            }
-        }
 	}
 
     private void LateUpdate()

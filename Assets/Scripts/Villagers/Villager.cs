@@ -5,20 +5,12 @@
 /// Created GGJ16
 /// Updated by : Ian Jones - 10/04/18
 /// </summary>
-[RequireComponent(typeof(VillagerCharacter2D))]
-public abstract class Villager : GroundCharacter
+[RequireComponent(typeof(GroundCharacter2D))]
+public abstract class Villager : Character
 {
     #region Public Variables
 
-    public VillagerState villagerState = VillagerState.Waiting;
-
-    //Target X position for Villager to aim for when they're waiting in queue
-    public float targetX;
-
-    //public VillagerAnimData vAnimData;
-
-    //Whether the Villager is advancing in the queue
-    public bool advancing;
+    public VillagerState villagerState = VillagerState.PresentVillager;
 
     //Whether it's currently in control by the player
     public bool ActivePlayer
@@ -69,10 +61,9 @@ public abstract class Villager : GroundCharacter
 
     #region Protected Variables
 
-    protected VillagerCharacter2D m_Villager;
-    protected Animator m_Animator;
+    protected GroundCharacter2D m_Ground;
 
-    protected SpecialType specialType;
+    public SpecialType specialType = SpecialType.Press;
      
     /// <summary>
     /// Temporary GameObject for tracking Ranged attack
@@ -85,6 +76,11 @@ public abstract class Villager : GroundCharacter
     protected Transform rangedTrans;
 
     protected float rangedProjectileStrength = 25;
+
+    protected readonly int m_HashMeleeParam = Animator.StringToHash("MeleeAttack");
+    protected readonly int m_HashRangedParam = Animator.StringToHash("RangedAttack");
+    protected readonly int m_HashSpecialParam = Animator.StringToHash("PlayerSpecial");
+    protected readonly int m_HashGroundPara = Animator.StringToHash("Ground");
 
     #endregion
 
@@ -112,10 +108,19 @@ public abstract class Villager : GroundCharacter
         }
     }
 
+    //Input variables
+    protected bool m_Jump;
+    protected bool meleeAttack, rangedAttack;
+    protected bool playerSpecial;
+    
+    //Control variables
+    protected bool canSpecial = true;
+
     protected override void Awake()
     {
-        m_Animator = GetComponent<Animator>();
-        m_Villager = GetComponent<VillagerCharacter2D>();
+        base.Awake();
+
+        m_Ground = GetComponent<GroundCharacter2D>();
         deathEffect = GetComponentInChildren<ParticleSystem>();
         vTO = GetComponent<VillagerTimeObject>();
 
@@ -147,141 +152,64 @@ public abstract class Villager : GroundCharacter
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
-        CreateHashtable();
-
-        animData.Add("PlayerSpecial", false);
-        animData.Add("CanSpecial", true);
-        animData.Add("PlayerSpecialIsTrigger", false);
-        animData.Add("Martyed", false);
-
-        //vAnimData = new VillagerAnimData()
-        //{
-        //    move = 0,
-
-        //    jump = false,
-        //    meleeAttack = false,
-        //    rangedAttack = false,
-        //    dead = false,
-        //    playerSpecial = false,
-        //    canSpecial = true,
-        //    playerSpecialIsTrigger = false,
-
-        //    martyed = false
-        //};
-
         hat = transform.Find("Hat");
 
     }
 
-    public virtual void Start()
+    protected override void Update()
     {
-        if (!m_Animator.runtimeAnimatorController)
+        base.Update();
+
+        if (Alive)
         {
-            Debug.LogError("No Animator set for " + gameObject.name);
-        }
-    }
+            switch (villagerState)
+            {
+                case VillagerState.PresentVillager:
 
-    public override void Update()
-    {
-        switch(villagerState)
-        {
-            case VillagerState.PresentVillager:
-
-                animData["Dead"] = !Alive;
-
-                if (canAct && Alive)
-                {
-                    //Get PlayerMovement
-                    moveDir = Vector2.zero;
-                    //xDir = ((Input.GetAxis(Horiz    ?  1 : xDir);
-                    //xDir = ((Input.GetButton("right")) ? -1 : xDir);
-                    moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
-
-                    attack = Input.GetButtonDown("Attack");
-
-                    switch (attackType)
+                    if (canAct)
                     {
-                        case AttackType.Melee:
-                            animData["MeleeAttack"] = attack;
-                            break;
+                        //Get PlayerMovement
+                        moveDir = Vector2.zero;
+                        moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
 
-                        case AttackType.Ranged:
+                        attack = Input.GetButtonDown("Attack");
 
-                            animData["RangedAttack"] = attack;
-                            break;
-                    }
+                        if (attack)
+                        {
+                            switch (attackType)
+                            {
+                                case AttackType.Melee:
+                                    m_Animator.SetTrigger(m_HashMeleeParam);
+                                    break;
 
-                    switch (specialType)
-                    {
-                        case SpecialType.Hold:
-                            OnSpecial(Input.GetButton("Special"));
-                            break;
+                                case AttackType.Ranged:
 
-                        case SpecialType.Press:
-                            OnSpecial(Input.GetButtonDown("Special"));
-                            break;
-                    }
+                                    m_Animator.SetTrigger(m_HashRangedParam);
+                                    break;
+                            }
+                        }
+                        switch (specialType)
+                        {
+                            case SpecialType.Hold:
+                                OnSpecial(Input.GetButton("Special"));
+                                break;
 
-                    if (!m_Jump)
-                    {
-                        // Read the jump input in Update so button presses aren't missed.
+                            case SpecialType.Press:
+                                OnSpecial(Input.GetButtonDown("Special"));
+                                break;
+                        }
+
                         m_Jump = Input.GetButtonDown("Jump");
                     }
-                }
 
-                m_Villager.Move(animData);
+                    m_Animator.SetBool(m_HashGroundPara, m_Ground.m_Grounded);
 
-                break;
-
-            case VillagerState.Waiting:
-
-                //Wander/AI Code
-                if (advancing)
-                {
-                    if (Mathf.Abs(transform.localPosition.x - targetX) > .5f)
-                    {
-                        moveDir = new Vector2((int)Mathf.Clamp01(targetX - transform.localPosition.x),0);
-                    }
-                    else
-                    {
-                        advancing = false;
-                        moveDir = Vector2.zero;
-                    }
-                }
-
-                break;
-
-            case VillagerState.PastVillager:
-
-                break;
+                    break;
+            }
         }
-    }
 
-    public override void FixedUpdate()
-    {
-        switch (villagerState)
-        {
-            case VillagerState.PresentVillager:
-
-                animData["Move"] = moveDir;
-                animData["Jump"] = m_Jump;
-
-                m_Jump = false;
-                break;
-
-            case VillagerState.Waiting:
-
-                animData["Move"] = moveDir;
-                animData["Dead"] = false;
-                animData["Jump"] = false;
-                animData["MeleeAttack"] = false;
-                m_Villager.Move(animData);
-                break;
-
-            case VillagerState.PastVillager:
-
-                break;
-        }
+        //Whether Villager is grounded is decided regardless of villagers state
+        m_Ground.Move(moveDir, m_Jump);
     }
     
     /// <summary>
@@ -292,16 +220,6 @@ public abstract class Villager : GroundCharacter
         health = 0;
     }
 
-    /// <summary>
-    /// Sets target for Villager to aim for in the x axis
-    /// </summary>
-    /// <param name="xPos">Target X Position</param>
-    public void SetTarget(float xPos)
-    {
-        targetX = xPos;
-        advancing = true;
-    }
-
     public void SetTrigger(bool active)
     {
         PlayerCollisions[0].isTrigger = active;
@@ -310,7 +228,24 @@ public abstract class Villager : GroundCharacter
 
     public virtual void OnSpecial(bool _PlayerSpecial)
     {
-        animData["PlayerSpecial"] = _PlayerSpecial;
+        playerSpecial = _PlayerSpecial;
+
+        switch(specialType)
+        {
+            case SpecialType.Hold:
+
+                if (canSpecial)
+                    m_Animator.SetBool(m_HashSpecialParam, _PlayerSpecial);
+                else
+                    m_Animator.SetBool(m_HashSpecialParam, false);
+                break;
+
+            case SpecialType.Press:
+
+                if (playerSpecial)
+                    m_Animator.SetTrigger(m_HashSpecialParam);
+                break;
+        }
     }
 
     public virtual void OnHit()
@@ -321,34 +256,12 @@ public abstract class Villager : GroundCharacter
         }
     }
 
-    public virtual void OnPastHit(Collider2D collider)
-    {
-        if (collider.GetComponent<BossAttack>() && !(bool)animData["Dead"] &&
-            TimeObjectManager.timeState == TimeState.Forward)
-        {
-            Debug.Log("Past Villager Hit By Boss Attack");
-            animData["Dead"] = true;
-            m_Villager.Move(animData);
-
-            GetComponentInChildren<ParticleSystem>().Play();
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Somethink hit moi");
         if(collision.gameObject.layer == (LayerMask.NameToLayer("Minion")) && !LevelManager.GodMode)
         {
             Debug.Log("It was minion");
             OnHit();
-        }
-    }
-
-    public void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (villagerState == VillagerState.PastVillager)
-        {
-            OnPastHit(collider);
         }
     }
 

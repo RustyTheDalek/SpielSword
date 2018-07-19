@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class AuraVillager : Villager
 {
 
-    #region Private
+    #region Private Variables
 
-    bool AuraActive;
+    bool AuraActive = false;
 
     Aura currentAura;
 
@@ -17,15 +17,14 @@ public abstract class AuraVillager : Villager
     {
         base.Awake();
 
-        specialType = SpecialType.Press;
-        animData["PlayerSpecialIsTrigger"] = true;
+        currentAura = Aura();
+        currentAura.gameObject.SetActive(false);
+        currentAura.creator = this;
     }
 
     public void Setup(VillagerManager vilManager)
     {
-        currentAura = Aura();
-        currentAura.gameObject.SetActive(false);
-        currentAura.creator = this;
+
         currentAura.OnEnterAuraEvent += vilManager.IncCombosUsed;
     }
 
@@ -33,7 +32,7 @@ public abstract class AuraVillager : Villager
     {
         if (!AuraActive)
         {
-            animData["PlayerSpecial"] = _PlayerSpecial;
+            base.OnSpecial(_PlayerSpecial);
         }
     }
 
@@ -44,7 +43,7 @@ public abstract class AuraVillager : Villager
             currentAura.gameObject.SetActive(true);
             currentAura.transform.position = transform.position;
             AuraActive = true;
-            animData["CanSpecial"] = false;
+            canSpecial = false;
         }
     }
 

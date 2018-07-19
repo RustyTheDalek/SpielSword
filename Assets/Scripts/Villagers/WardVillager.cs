@@ -11,7 +11,7 @@ public abstract class WardVillager : Villager
     /// </summary>
     public SpawnableSpriteTimeObject currentWard;
 
-    public bool wardActive;
+    public bool wardActive = false;
     #endregion
 
     #region Protected Fields
@@ -60,7 +60,7 @@ public abstract class WardVillager : Villager
     {
         base.Awake();
 
-        animData["PlayerSpecialIsTrigger"] = true;
+        //playerSpecialIsTrigger = true;
 
         //Spawn Ward but deactivate
         currentWard = Wards[wardName].Spawn().GetComponent<SpawnableSpriteTimeObject>();
@@ -72,29 +72,20 @@ public abstract class WardVillager : Villager
 
     #region Public Methods
 
-    public override void OnSpecial(bool _PlayerSpecial)
+    /// <summary>
+    /// Called by Animator to Spawn or use Ward at correct time
+    /// </summary>
+    public void UseWard()
     {
         if (!wardActive)
-        {
-            animData["PlayerSpecial"] = _PlayerSpecial;
-        }
-        else
-        {
-            OnWardActive(_PlayerSpecial);
-        } 
-    }
-
-    /// <summary>
-    /// Called by the Animator to spawn the ward at the correct time
-    /// </summary>
-    public void SpawnWard()
-    {
-        if (villagerState == VillagerState.PresentVillager)
         {
             currentWard.gameObject.SetActive(true);
             currentWard.transform.position = transform.position + wardOffset;
             wardActive = true;
-            animData["CanSpecial"] = false;
+        }
+        else
+        {
+            OnWardUse();
         }
     }
 
@@ -120,11 +111,9 @@ public abstract class WardVillager : Villager
     #region Protected Methods
 
     /// <summary>
-    /// What happens when Special is activated and Ward is placed
+    /// What Happens when ward is used
     /// </summary>
-    /// <param name="_PlayerSpecial"></param>
-    protected abstract void OnWardActive(bool _PlayerSpecial);
-
+    protected abstract void OnWardUse();
     #endregion
 
     #region Private Methods
