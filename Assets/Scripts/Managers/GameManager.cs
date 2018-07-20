@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour {
     public delegate void GameManagerLoadSaveEvent(SaveData saveLoaded);
     public event GameManagerLoadSaveEvent OnLoadSave;
 
+    protected string m_SaveLocation;
+
     private void Awake()
     {
         if (gManager == null)
@@ -56,20 +58,22 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        m_SaveLocation = Application.persistentDataPath + "/Saves";
+
         //First we need to see if there are save(s).
-        Debug.Log("Looking for saves in " + Application.persistentDataPath);
-        saveNames = Directory.GetFiles(Application.persistentDataPath);
+        Debug.Log("Looking for saves in " + m_SaveLocation);
+        Directory.CreateDirectory(m_SaveLocation);
+        saveNames = Directory.GetFiles(m_SaveLocation);
 
         //If so Load 'em up
         if (saveNames.Length > 0)
         {
             Debug.Log("I've found " + saveNames.Length + " saves");
 
-            foreach (string saveName in saveNames)
+            for(int i = 1; i < 4; i++)
             {
-                string formattedName = saveName.Remove(0, Application.persistentDataPath.Length + 1);
-                formattedName = formattedName.Remove(5, 4);
-                LoadIntoSaves(formattedName);
+                string saveName = "Save" + i;
+                LoadIntoSaves(saveName);
             }
 
             if (OnLoadAllSaves != null)
@@ -91,7 +95,7 @@ public class GameManager : MonoBehaviour {
         BinaryFormatter bf = new BinaryFormatter();
 
         FileStream file = File.Create(
-            Application.persistentDataPath + "/" + _SaveName + ".dat");
+            m_SaveLocation + _SaveName + ".dat");
 
         SaveData saveData;
 
@@ -140,18 +144,18 @@ public class GameManager : MonoBehaviour {
 
     SaveData Load(string saveName)
     { 
-        if (File.Exists(Application.persistentDataPath + "/" + saveName + ".dat"))
+        if (File.Exists(m_SaveLocation + saveName + ".dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(
-                Application.persistentDataPath + "/" + saveName + ".dat", FileMode.Open);
+                m_SaveLocation + saveName + ".dat", FileMode.Open);
             SaveData saveData = (SaveData)bf.Deserialize(file);
             file.Close();
             return saveData;
         }
         else
         {
-            Debug.LogWarning("Couldn't find save: " + saveName + " in " + Application.persistentDataPath);
+            Debug.LogWarning("Couldn't find save: " + saveName + " in " + m_SaveLocation);
             return null;
         }
     }
