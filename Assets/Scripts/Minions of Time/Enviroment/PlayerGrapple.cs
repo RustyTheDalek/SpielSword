@@ -18,10 +18,26 @@ public class PlayerGrapple : MonoBehaviour {
     public bool playerHere;
     public string playerInput;
     Dictionary<string, int> validCharacters = new Dictionary<string, int>();
+    Dictionary<int, Sprite> spriteCharacters = new Dictionary<int, Sprite>();
+
+    #region May need a sprite sheet or summit to handle this
+    public Sprite letterA;
+    public Sprite letterD;
+    public Sprite letterW;
+    public Sprite letterS;
+    public Sprite letterQ;
+    public Sprite letterF;
+    public Sprite letterV;
+    public Sprite letterE;
+    public Sprite letterR;
+    public Sprite letterZ;
+    public Sprite letterX;
+    #endregion
 
     // Use this for initialization
     void Start () {
         ValidCharacters();
+        SpriteCharacters();
         restricted = false;
         playerHere = false;
     }
@@ -36,13 +52,13 @@ public class PlayerGrapple : MonoBehaviour {
         }
         if (restricted)
         {
+            Display();
             if (Input.anyKeyDown)
             {
                 playerInput = Input.inputString;
             }
             restrict();
         }
-        
     }
 
     void ValidCharacters()
@@ -57,8 +73,26 @@ public class PlayerGrapple : MonoBehaviour {
         validCharacters.Add("v", 6);
         validCharacters.Add("e", 7);
         validCharacters.Add("r", 8);
-        validCharacters.Add("z",9);
+        validCharacters.Add("z", 9);
         validCharacters.Add("x", 10);
+    }
+
+    void SpriteCharacters()
+    {
+        //note change to sprite sheet or atlas
+        // Sets a sprite based on assigned number
+        spriteCharacters.Add(0, letterA);
+        spriteCharacters.Add(1, letterD);
+        spriteCharacters.Add(2, letterW);
+        spriteCharacters.Add(3, letterS);
+        spriteCharacters.Add(4, letterQ);
+        spriteCharacters.Add(5, letterF);
+        spriteCharacters.Add(6, letterV);
+        spriteCharacters.Add(7, letterE);
+        spriteCharacters.Add(8, letterR);
+        spriteCharacters.Add(9, letterZ);
+        spriteCharacters.Add(10, letterX);
+
     }
 
     void FindFoe()
@@ -79,13 +113,14 @@ public class PlayerGrapple : MonoBehaviour {
                 new Vector2(0, 0);
 
         animi.SetBool("Fire", true);
+
         switch (difficulty)
         {
             case 0:
-                amountOfCharacters = Random.Range(1, 3);
+                amountOfCharacters = Random.Range(2, 3);
                 break;
             case 1:
-                amountOfCharacters = Random.Range(1, 5);
+                amountOfCharacters = Random.Range(2, 5);
                 break;
         }
         for (int i = 0; i <= amountOfCharacters; i++)
@@ -100,11 +135,16 @@ public class PlayerGrapple : MonoBehaviour {
                     break;
             }
             characters.Add(selectedCharacters);
-            Debug.Log("" + selectedCharacters);
+            Debug.Log("" + spriteCharacters[selectedCharacters]);
 
             progression = 0;
         }
         restricted = true;
+
+    }
+
+    void Display()
+    {
 
     }
 
@@ -122,6 +162,7 @@ public class PlayerGrapple : MonoBehaviour {
         {
             actPlayer.GetComponent<Villager>().canAct = true;
             characters.Clear();
+            playerHere = false;
             restricted = false;
             animi.SetBool("Fire", false);
         }
