@@ -26,7 +26,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     protected Vector2 deltaMoveDir = Vector2.zero;
     #endregion
 
-    #region Private Variabeles
+    #region Private Variables
 
     /// <summary>
     /// Can the character control themselves when there in the air
@@ -37,7 +37,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     /// </summary>
     [SerializeField] private float m_MaxSpeed = 5f;
 
-    [SerializeField] private float m_JumpForce = 400f;  // Amount of force added when the character jumps.
+    [SerializeField] private float m_JumpForce = 15;  // Amount of force added when the character jumps.
 
     [SerializeField] private LayerMask m_WhatIsGround;  // A mask determining what is ground to the character
 

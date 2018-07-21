@@ -40,7 +40,13 @@ public class GameManager : MonoBehaviour {
     public delegate void GameManagerLoadSaveEvent(SaveData saveLoaded);
     public event GameManagerLoadSaveEvent OnLoadSave;
 
-    protected string m_SaveLocation;
+    protected string SaveLocation
+    {
+        get
+        {
+            return Application.persistentDataPath + "/Saves";
+        }
+    }
 
     private void Awake()
     {
@@ -58,12 +64,11 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        m_SaveLocation = Application.persistentDataPath + "/Saves";
 
         //First we need to see if there are save(s).
-        Debug.Log("Looking for saves in " + m_SaveLocation);
-        Directory.CreateDirectory(m_SaveLocation);
-        saveNames = Directory.GetFiles(m_SaveLocation);
+        Debug.Log("Looking for saves in " + SaveLocation);
+        Directory.CreateDirectory(SaveLocation);
+        saveNames = Directory.GetFiles(SaveLocation);
 
         //If so Load 'em up
         if (saveNames.Length > 0)
@@ -95,7 +100,7 @@ public class GameManager : MonoBehaviour {
         BinaryFormatter bf = new BinaryFormatter();
 
         FileStream file = File.Create(
-            m_SaveLocation + _SaveName + ".dat");
+            SaveLocation + _SaveName + ".dat");
 
         SaveData saveData;
 
@@ -144,18 +149,18 @@ public class GameManager : MonoBehaviour {
 
     SaveData Load(string saveName)
     { 
-        if (File.Exists(m_SaveLocation + saveName + ".dat"))
+        if (File.Exists(SaveLocation + saveName + ".dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(
-                m_SaveLocation + saveName + ".dat", FileMode.Open);
+                SaveLocation + saveName + ".dat", FileMode.Open);
             SaveData saveData = (SaveData)bf.Deserialize(file);
             file.Close();
             return saveData;
         }
         else
         {
-            Debug.LogWarning("Couldn't find save: " + saveName + " in " + m_SaveLocation);
+            Debug.LogWarning("Couldn't find save: " + saveName + " in " + SaveLocation);
             return null;
         }
     }

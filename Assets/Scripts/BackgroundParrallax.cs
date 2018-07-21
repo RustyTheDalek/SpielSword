@@ -23,20 +23,20 @@ public class BackgroundParrallax : MonoBehaviour {
     /// </summary>
     public float yDampen;
 
-	void Start ()
+    void Start()
     {
         UpdateParrallax();
     }
-	
-	void LateUpdate ()
+
+    void LateUpdate()
     {
         UpdateParrallax();
-	}
+    }
 
     void UpdateParrallax()
     {
         //Calculate difference in camera positions
-        Vector3 deltaCamPos = (Vector2)Camera.main.transform.position - prevCamPos;
+        Vector2 deltaCamPos = (Vector2)Camera.main.transform.position - prevCamPos;
 
         //Loop through backgrounds and move their position
         foreach (GameObject background in backgrounds)
