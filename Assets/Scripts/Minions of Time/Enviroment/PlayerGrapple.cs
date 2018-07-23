@@ -7,9 +7,10 @@ public class PlayerGrapple : MonoBehaviour {
     private Vector2 findPlayer;
     private int amountOfCharacters;
     private int selectedCharacters;
-    private List<int> characters = new List<int>();
     private int progression;
     private bool restricted;
+    private List<int> characters = new List<int>();
+    private List<GameObject> trapSprites = new List<GameObject>();
 
     public Animator animi;
     public int difficulty;
@@ -34,10 +35,21 @@ public class PlayerGrapple : MonoBehaviour {
     public Sprite letterX;
     #endregion
 
+    #region List of sprite objects
+    // Note only need a preset amount of these
+    // no need for each trap to have them
+    public GameObject trapSprite1;
+    public GameObject trapSprite2;
+    public GameObject trapSprite3;
+    public GameObject trapSprite4;
+    public GameObject trapSprite5;
+    #endregion
+
     // Use this for initialization
     void Start () {
         ValidCharacters();
         SpriteCharacters();
+        TrapSpritesList();
         restricted = false;
         playerHere = false;
     }
@@ -46,18 +58,19 @@ public class PlayerGrapple : MonoBehaviour {
 	void Update () {
         
         // Get a player check from PlayerCheck to see if player is present
-        if (playerHere&& !restricted)
+        if (playerHere && !restricted)
         {
             FindFoe();
+            Display();
         }
         if (restricted)
         {
-            Display();
+            
             if (Input.anyKeyDown)
             {
                 playerInput = Input.inputString;
             }
-            restrict();
+            Restrict();
         }
     }
 
@@ -92,7 +105,15 @@ public class PlayerGrapple : MonoBehaviour {
         spriteCharacters.Add(8, letterR);
         spriteCharacters.Add(9, letterZ);
         spriteCharacters.Add(10, letterX);
+    }
 
+    void TrapSpritesList()
+    {
+        trapSprites.Add(trapSprite1);
+        trapSprites.Add(trapSprite2);
+        trapSprites.Add(trapSprite3);
+        trapSprites.Add(trapSprite4);
+        trapSprites.Add(trapSprite5);
     }
 
     void FindFoe()
@@ -145,10 +166,21 @@ public class PlayerGrapple : MonoBehaviour {
 
     void Display()
     {
+        for (int i = 1; i <= characters.Count; i++)
+        {
+            // Sets the first object to the first letter and so on
+            trapSprites[i].GetComponent<SpriteRenderer>().sprite =
+                spriteCharacters[characters[i]];
 
+            // Position off set by current object count
+            trapSprites[i].transform.position =
+                new Vector2(actPlayer.transform.position.x + 1 + (i * 0.65f),
+                actPlayer.transform.position.y + 1.7f);
+
+        }
     }
 
-   void restrict()
+    void Restrict()
     {
         int intOut;
         if(validCharacters.TryGetValue(playerInput, out intOut)){ }
