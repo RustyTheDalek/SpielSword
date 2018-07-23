@@ -9,6 +9,7 @@ public class PlayerGrapple : MonoBehaviour {
     private int selectedCharacters;
     private int progression;
     private bool restricted;
+    private Vector3 playerLocation;
     private List<int> characters = new List<int>();
     private List<GameObject> trapSprites = new List<GameObject>();
 
@@ -61,6 +62,7 @@ public class PlayerGrapple : MonoBehaviour {
         // Get a player check from PlayerCheck to see if player is present
         if (playerHere && !restricted)
         {
+            playerLocation = actPlayer.transform.position;
             FindFoe();
             Display(0);
         }
@@ -74,7 +76,7 @@ public class PlayerGrapple : MonoBehaviour {
             Restrict();
         }
     }
-
+    
     void ValidCharacters()
     {
         // Lower case due to inputString
@@ -119,7 +121,8 @@ public class PlayerGrapple : MonoBehaviour {
 
     void FindFoe()
     {
-        findPlayer = new Vector2(actPlayer.transform.position.x - transform.position.x, actPlayer.transform.position.y - transform.position.y).normalized;
+        findPlayer = new Vector2(playerLocation.x - transform.position.x,
+            playerLocation.y - transform.position.y).normalized;
         bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
         if (rayResult)
         { 
@@ -139,7 +142,7 @@ public class PlayerGrapple : MonoBehaviour {
         switch (difficulty)
         {
             case 0:
-                amountOfCharacters = Random.Range(2, 3);
+                amountOfCharacters = Random.Range(1, 3);
                 break;
             case 1:
                 amountOfCharacters = Random.Range(2, 5);
@@ -175,8 +178,8 @@ public class PlayerGrapple : MonoBehaviour {
 
             // Position off set by current object count
             trapSprites[i - progression].transform.position =
-                new Vector2(actPlayer.transform.position.x + 1 + (i * 0.65f),
-                actPlayer.transform.position.y + 1.7f);
+                new Vector2(playerLocation.x + 1 + (i * 0.65f),
+                playerLocation.y + 1.7f);
 
         }
     }
