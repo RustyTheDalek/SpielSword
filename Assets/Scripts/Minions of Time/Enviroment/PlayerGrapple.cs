@@ -18,6 +18,7 @@ public class PlayerGrapple : MonoBehaviour {
     public LayerMask layerGroundOnly;
     public bool playerHere;
     public string playerInput;
+    public string playerInputPast;
     Dictionary<string, int> validCharacters = new Dictionary<string, int>();
     Dictionary<int, Sprite> spriteCharacters = new Dictionary<int, Sprite>();
 
@@ -61,7 +62,7 @@ public class PlayerGrapple : MonoBehaviour {
         if (playerHere && !restricted)
         {
             FindFoe();
-            Display();
+            Display(0);
         }
         if (restricted)
         {
@@ -164,16 +165,16 @@ public class PlayerGrapple : MonoBehaviour {
 
     }
 
-    void Display()
+    void Display(int progression)
     {
-        for (int i = 1; i <= characters.Count; i++)
+        for (int i = progression; i <= characters.Count - 1; i++)
         {
             // Sets the first object to the first letter and so on
-            trapSprites[i].GetComponent<SpriteRenderer>().sprite =
+            trapSprites[i - progression].GetComponent<SpriteRenderer>().sprite =
                 spriteCharacters[characters[i]];
 
             // Position off set by current object count
-            trapSprites[i].transform.position =
+            trapSprites[i - progression].transform.position =
                 new Vector2(actPlayer.transform.position.x + 1 + (i * 0.65f),
                 actPlayer.transform.position.y + 1.7f);
 
@@ -183,20 +184,45 @@ public class PlayerGrapple : MonoBehaviour {
     void Restrict()
     {
         int intOut;
-        if(validCharacters.TryGetValue(playerInput, out intOut)){ }
+        if (validCharacters.TryGetValue(playerInput, out intOut)) {}
+        else if (playerInput != playerInputPast)
+        {
+            progression = 0;
+            Display(progression);
+        }
 
-        if (characters[progression] == intOut)
+        if (characters[progression] == intOut &&
+            playerInput != playerInputPast)
         {
             progression++;
+            Display(progression);
         }
+        else if (characters[progression] != intOut &&
+            playerInput != playerInputPast)
+        {
+            progression = 0;
+            Display(progression);
+        }
+
+        playerInput = playerInputPast;
 
         if (progression == characters.Count)
         {
-            actPlayer.GetComponent<Villager>().canAct = true;
-            characters.Clear();
-            playerHere = false;
-            restricted = false;
-            animi.SetBool("Fire", false);
+            Reset();
+        }
+    }
+
+    void Reset()
+    {
+        actPlayer.GetComponent<Villager>().canAct = true;
+        characters.Clear();
+        playerHere = false;
+        restricted = false;
+        animi.SetBool("Fire", false);
+        for (int i = 0; i <= 4; i++)
+        {
+            // Resets the sprite
+            trapSprites[i].GetComponent<SpriteRenderer>().sprite = null;
         }
     }
 
