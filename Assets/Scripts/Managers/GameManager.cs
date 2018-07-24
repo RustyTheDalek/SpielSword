@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
@@ -44,9 +42,40 @@ public class GameManager : MonoBehaviour {
     {
         get
         {
-            return Application.persistentDataPath + "/Saves";
+            return Application.persistentDataPath + "/Saves/";
         }
     }
+
+    #region Assets
+    Dictionary<string, Sprite> _Hats;
+
+    public Dictionary<string, Sprite> Hats
+    {
+        get
+        {
+            if (_Hats == null)
+            {
+                _Hats = new Dictionary<string, Sprite>();
+
+                Object[] objs = Resources.LoadAll("Sprites/Hats");
+
+                Sprite sprite;
+
+                foreach (object obj in objs)
+                {
+                    if (obj as Sprite != null)
+                    {
+                        sprite = (Sprite)obj;
+
+                        _Hats.Add(sprite.name, sprite);
+                    }
+                }
+            }
+
+            return _Hats;
+        }
+    }
+    #endregion
 
     private void Awake()
     {
@@ -64,10 +93,12 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
         //First we need to see if there are save(s).
         Debug.Log("Looking for saves in " + SaveLocation);
-        Directory.CreateDirectory(SaveLocation);
+
+        if (!Directory.Exists(SaveLocation))
+            Directory.CreateDirectory(SaveLocation);
+
         saveNames = Directory.GetFiles(SaveLocation);
 
         //If so Load 'em up
