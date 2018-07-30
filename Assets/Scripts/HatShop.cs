@@ -10,20 +10,39 @@ public class HatShop : MonoBehaviour {
 
     public RectTransform hatContent;
 
+    public Basic villager;
+
 	// Use this for initialization
 	void Start ()
     {
-        hats = Resources.LoadAll<Hat>("Hats");
+        GameManager.gManager.OnLoadSave += LoadHats;
 
-        foreach(Hat hat in hats)
+        hats = Resources.LoadAll<Hat>("Hats");
+	}
+
+    public void LoadHats(SaveData saveLoaded)
+    {
+        foreach (Hat hat in hats)
         {
-            HatDisplay newDispaly = Instantiate(hatdisplayPrefab, hatContent, false);
-            newDispaly.LoadInfo(hat);
+            HatDisplay newDisplay = Instantiate(hatdisplayPrefab, hatContent, false);
+            newDisplay.LoadInfo(hat);
+            newDisplay.HatSelectBtn.onClick.AddListener(delegate { SetHat(hat); });
         }
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+        if(saveLoaded.Hat != null)
+            villager.hat.sprite = GameManager.gManager.Hats[saveLoaded.Hat].hatDesign;
+    }
+
+    public void SetHat(Hat newHat)
+    {
+        villager.hat.sprite = newHat.hatDesign;
+        Debug.Log(newHat.name + " Saved as new Favourite");
+        GameManager.gManager.currentSave.Hat = newHat.name;
+        GameManager.gManager.Save();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.gManager.OnLoadSave -= LoadHats;
+    }
 }

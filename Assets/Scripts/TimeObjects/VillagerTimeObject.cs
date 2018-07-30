@@ -52,7 +52,7 @@ public class VillagerTimeObject : AnimatorTimeObject
     {
         if (Tools.WithinRange(currentFrame, vFrames))
         {
-            villager.hat.localPosition = vFrames[currentFrame].hatPos;
+            villager.hat.transform.localPosition = vFrames[currentFrame].hatPos;
             transform.localScale = vFrames[currentFrame].scale;
         }
     }
@@ -61,7 +61,7 @@ public class VillagerTimeObject : AnimatorTimeObject
     {
         tempVFrame = new VillagerFrameData()
         {
-            hatPos = villager.hat.localPosition,
+            hatPos = villager.hat.transform.localPosition,
             scale = transform.localScale
         };
 
@@ -87,8 +87,8 @@ public class VillagerTimeObject : AnimatorTimeObject
                                         .5f);
 
         m_HatSprite.color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
-                                                                        villager.hat.GetComponent<SpriteRenderer>().color.g,
-                                                                        villager.hat.GetComponent<SpriteRenderer>().color.b,
+                                                                        villager.hat.color.g,
+                                                                        villager.hat.color.b,
                                                                         .5f);
     }
 

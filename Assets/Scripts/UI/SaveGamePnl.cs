@@ -32,8 +32,16 @@ public class SaveGamePnl : MonoBehaviour
             //Find Favourite hat
             if (saveInfo.Hat != null)
             {
+                Hat favHat;
                 Debug.Log("I've found me a hat");
-                hatPreview.sprite = GameManager.gManager.Hats[saveInfo.Hat];
+                if(GameManager.gManager.Hats.TryGetValue(saveInfo.Hat, out favHat))
+                {
+                    hatPreview.sprite = favHat.hatDesign;
+                }
+                else
+                {
+                    Debug.LogWarning("Cannot find :" + saveInfo.Hat + "hat in the collection");
+                }
             }
             else
             {
@@ -48,7 +56,12 @@ public class SaveGamePnl : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Save info is null");
+            if(saveInfo == null)
+                Debug.Log("Save info is null.");
+            else
+            {
+                Debug.Log("Save info isn't null");
+            }
         }
     }
 

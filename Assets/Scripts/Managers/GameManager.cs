@@ -47,27 +47,27 @@ public class GameManager : MonoBehaviour {
     }
 
     #region Assets
-    Dictionary<string, Sprite> _Hats;
+    Dictionary<string, Hat> _Hats;
 
-    public Dictionary<string, Sprite> Hats
+    public Dictionary<string, Hat> Hats
     {
         get
         {
             if (_Hats == null)
             {
-                _Hats = new Dictionary<string, Sprite>();
+                _Hats = new Dictionary<string, Hat>();
 
-                Object[] objs = Resources.LoadAll("Sprites/Hats");
+                Object[] objs = Resources.LoadAll<Hat>("Hats");
 
-                Sprite sprite;
+                Hat hat;
 
                 foreach (object obj in objs)
                 {
-                    if (obj as Sprite != null)
+                    if (obj as Hat != null)
                     {
-                        sprite = (Sprite)obj;
-
-                        _Hats.Add(sprite.name, sprite);
+                        hat = (Hat)obj;
+                        Debug.Log("Adding: " + hat.name);
+                        _Hats.Add(hat.name, hat);
                     }
                 }
             }
@@ -151,6 +151,7 @@ public class GameManager : MonoBehaviour {
             {
                 SaveName = _SaveName,
                 Hats = currentSave.Hats,
+                Hat = currentSave.Hat,
                 Levels = currentSave.Levels,
                 StoryProgress = currentSave.StoryProgress
             };

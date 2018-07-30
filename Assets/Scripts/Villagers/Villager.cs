@@ -28,7 +28,7 @@ public abstract class Villager : Character
 
     public CircleCollider2D[] PlayerCollisions;
 
-    public Transform hat;
+    public SpriteRenderer hat;
 
     public VillagerTimeObject vTO;
 
@@ -151,8 +151,6 @@ public abstract class Villager : Character
         //TODO: FIX THIS TRASH
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
-
-        hat = transform.Find("Hat");
 
     }
 

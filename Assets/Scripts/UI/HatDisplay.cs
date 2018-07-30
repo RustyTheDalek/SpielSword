@@ -8,6 +8,8 @@ public class HatDisplay : MonoBehaviour {
 
     public Hat hat;
 
+    public Button HatSelectBtn;
+
     public Text nameTxt, descrptionTxt, statsTxt;
 
     public Image hatImg;
@@ -18,10 +20,9 @@ public class HatDisplay : MonoBehaviour {
 
         nameTxt.text = hat.name;
         descrptionTxt.text = hat.description;
-        descrptionTxt.text = hat.description;
+        statsTxt.text = hat.stat;
 
         hatImg.enabled = true;
         hatImg.sprite = hat.hatDesign;
-
     }
 }
