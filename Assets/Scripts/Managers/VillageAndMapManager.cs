@@ -164,6 +164,8 @@ public class VillageAndMapManager : MonoBehaviour {
                 case "Intro0":
 
                     Debug.Log("Intro cinematic complete");
+                    //Unlocks new Hat
+                    GameManager.gManager.currentSave.Hats.Add("TownGuard");
                     GameManager.gManager.currentSave.StoryProgress++;
                     GameManager.gManager.Save();
                     playingStartup = false;

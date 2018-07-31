@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HatShop : MonoBehaviour {
 
-    public Hat[] hats;
 
     public HatDisplay hatdisplayPrefab;
 
@@ -16,17 +15,15 @@ public class HatShop : MonoBehaviour {
 	void Start ()
     {
         GameManager.gManager.OnLoadSave += LoadHats;
-
-        hats = Resources.LoadAll<Hat>("Hats");
 	}
 
     public void LoadHats(SaveData saveLoaded)
     {
-        foreach (Hat hat in hats)
+        foreach (string hat in saveLoaded.Hats)
         {
             HatDisplay newDisplay = Instantiate(hatdisplayPrefab, hatContent, false);
-            newDisplay.LoadInfo(hat);
-            newDisplay.HatSelectBtn.onClick.AddListener(delegate { SetHat(hat); });
+            newDisplay.LoadInfo(GameManager.gManager.Hats[hat]);
+            newDisplay.HatSelectBtn.onClick.AddListener(delegate { SetHat(GameManager.gManager.Hats[hat]); });
         }
 
         if(saveLoaded.Hat != null)
@@ -35,9 +32,19 @@ public class HatShop : MonoBehaviour {
 
     public void SetHat(Hat newHat)
     {
-        villager.hat.sprite = newHat.hatDesign;
-        Debug.Log(newHat.name + " Saved as new Favourite");
-        GameManager.gManager.currentSave.Hat = newHat.name;
+        if (newHat.name == GameManager.gManager.currentSave.Hat)
+        {
+            villager.hat.sprite = null;
+            GameManager.gManager.currentSave.Hat = null;
+            Debug.Log("No favourite");
+        }
+        else
+        {
+            villager.hat.sprite = newHat.hatDesign;
+            Debug.Log(newHat.name + " Saved as new Favourite");
+            GameManager.gManager.currentSave.Hat = newHat.name;
+        }
+
         GameManager.gManager.Save();
     }
 

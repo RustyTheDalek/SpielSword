@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    SaveIcon saveIcon;
+
     #region Assets
     Dictionary<string, Hat> _Hats;
 
@@ -93,6 +95,8 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        saveIcon = GetComponentInChildren<SaveIcon>();
+
         //First we need to see if there are save(s).
         Debug.Log("Looking for saves in " + SaveLocation);
 
@@ -128,6 +132,8 @@ public class GameManager : MonoBehaviour {
 
     public void Save(string _SaveName, bool newSave = false)
     {
+        StartCoroutine(saveIcon.ShowSave());
+
         BinaryFormatter bf = new BinaryFormatter();
 
         FileStream file = File.Create(
@@ -205,12 +211,5 @@ public class GameManager : MonoBehaviour {
         if (OnNewGame != null)
             OnNewGame();
     }
-
-#if UNITY_EDITOR
-    private void OnGUI()
-    {
-        GUI.Label(new Rect(10, 10, 100, 30), "Saves Found: " + 0);
-    }
-#endif
 }
  

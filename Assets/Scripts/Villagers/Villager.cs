@@ -149,6 +149,9 @@ public abstract class Villager : Character
         //villagerState = VillagerState.Waiting;
 
         //TODO: FIX THIS TRASH
+        if (hat == null)
+            hat = transform.Find("Hat").GetComponent<SpriteRenderer>();
+
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
