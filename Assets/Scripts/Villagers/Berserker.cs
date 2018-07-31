@@ -9,7 +9,7 @@ public class Berserker : Villager
 {
     public void OnBerserkerRage()
     {
-        if (villagerState == VillagerState.PresentVillager)
+        if (villagerState == VillagerState.PresentVillager && canSpecial)
         {
             Debug.Log("I'm RAGING");
             canSpecial = false;

@@ -243,7 +243,7 @@ public abstract class Villager : Character
 
             case SpecialType.Press:
 
-                if (playerSpecial)
+                if (playerSpecial && canSpecial)
                     m_Animator.SetTrigger(m_HashSpecialParam);
                 break;
         }
