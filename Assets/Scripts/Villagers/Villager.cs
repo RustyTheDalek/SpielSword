@@ -219,6 +219,11 @@ public abstract class Villager : Character
     public void Kill()
     {
         health = 0;
+
+        //Useful catch to prevent Animator from getting stuck on death;
+        m_Animator.SetBool(m_HashMeleeParam, false);
+        m_Animator.SetBool(m_HashRangedParam, false);
+        m_Animator.SetBool(m_HashSpecialParam, false);
     }
 
     public void SetTrigger(bool active)
@@ -236,7 +241,7 @@ public abstract class Villager : Character
             case SpecialType.Hold:
 
                 if (canSpecial)
-                    m_Animator.SetBool(m_HashSpecialParam, _PlayerSpecial);
+                    m_Animator.SetBool(m_HashSpecialParam, playerSpecial);
                 else
                     m_Animator.SetBool(m_HashSpecialParam, false);
                 break;

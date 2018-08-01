@@ -4,39 +4,45 @@ using UnityEngine;
 
 public class SpielSword : Villager
 {
-    //Rigidbody2D m_RigidBody;
+    public bool sacrificing = false;
 
-    public BoxCollider2D spielsword;
-
-    // Use this for initialization
-    public void Start()
+    public override void OnSpecial(bool _PlayerSpecial)
     {
-        specialType = SpecialType.Hold;
+        if (sacrificing && canSpecial)
+        {
+            playerSpecial = true;
+        }
+        else
+        {
+            base.OnSpecial(_PlayerSpecial);
+        }
     }
 
-    public void Spielcrafice()
+    public void StartSacrifice()
     {
-        Debug.Log("Spielcrafice complete");
-        this.Kill();
+        if (canSpecial)
+        {
+            Debug.Log("Sacrifice Starting");
+
+            SetBodyType(RigidbodyType2D.Kinematic);
+            sacrificing = true;
+        }
+    }
+
+    public void FinishSacrifice()
+    {
+        Debug.Log("Sacrifice Complete");
+        SetBodyType(RigidbodyType2D.Dynamic);
+        sacrificing = false;
+        canSpecial = false;
+        playerSpecial = false;
+        Kill();
     }
 
     public void SetBodyType(RigidbodyType2D type)
     {
         m_rigidbody.bodyType = type;
         m_rigidbody.velocity = Vector3.zero;
-    }
-
-    public void EnableSpiel()
-    {
-        spielsword.enabled = true;
-
-        //Debug.Break();
-    }
-
-    public void DisableSpiel()
-    {
-        //Debug.Break();
-        canSpecial = false;
-        spielsword.enabled = false;
+        moveDir = Vector2.zero;
     }
 }
