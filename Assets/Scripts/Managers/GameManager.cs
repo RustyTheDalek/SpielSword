@@ -58,6 +58,9 @@ public class GameManager : MonoBehaviour {
     public delegate void GameManagerLoadSaveEvent(SaveData saveLoaded);
     public event GameManagerLoadSaveEvent OnLoadSave;
 
+    public delegate void HatEvent(Hat hat);
+    public event HatEvent OnUnlockHat;
+
     protected string SaveLocation
     {
         get
@@ -156,6 +159,8 @@ public class GameManager : MonoBehaviour {
         {
             Debug.Log("Unlocked : " + newHat);
             gManager.CurrentSave.Hats.Add(newHat);
+
+            OnUnlockHat(gManager.Hats[newHat]);
 
             if(save)
                 gManager.Save();

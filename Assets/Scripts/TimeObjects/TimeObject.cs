@@ -30,7 +30,7 @@ public class TimeObject : MonoBehaviour
     public event TimeObjectEvent OnTrackFrame;
     #endregion
 
-    protected int TotalFrames
+    public int TotalFrames
     {
         get
         {
@@ -43,28 +43,6 @@ public class TimeObject : MonoBehaviour
             }
         }
     }
-
-#if UNITY_EDITOR
-
-    public GUIStyle DebugUI;
-
-    private void OnDrawGizmosSelected()
-    {
-        if (DebugPnl.debugText)
-        {
-            Handles.Label(transform.position, "Time State: " + tObjectState.ToString()
-                                + "\nTotal Frames: " + TotalFrames +
-                                "\nCurrent Frame: " + currentFrame +
-                                "\nStart Frame: " + startFrame +
-                                "\nFinish Frame: " + finishFrame, DebugUI);
-        }
-        //else
-        //{
-        //    debugText.gameObject.SetActive(false);
-        //}
-    }
-
-#endif
 
     protected virtual void Awake()
     {

@@ -15,6 +15,7 @@ public class HatShop : MonoBehaviour {
 	void Start ()
     {
         GameManager.gManager.OnLoadSave += LoadHats;
+        GameManager.gManager.OnUnlockHat += LoadHat;
 	}
 
     public void LoadHats(SaveData saveLoaded)
@@ -28,6 +29,17 @@ public class HatShop : MonoBehaviour {
 
         if(saveLoaded.Hat != null)
             villager.hat.sprite = GameManager.gManager.Hats[saveLoaded.Hat].hatDesign;
+    }
+
+    /// <summary>
+    /// Load Single new Hat into shop
+    /// </summary>
+    /// <param name="hat">Hat to unlock</param>
+    public void LoadHat(Hat hat)
+    {
+        HatDisplay newDisplay = Instantiate(hatdisplayPrefab, hatContent, false);
+        newDisplay.LoadInfo(hat);
+        newDisplay.HatSelectBtn.onClick.AddListener(delegate { SetHat(hat); });
     }
 
     public void SetHat(Hat newHat)
@@ -51,5 +63,6 @@ public class HatShop : MonoBehaviour {
     private void OnDestroy()
     {
         GameManager.gManager.OnLoadSave -= LoadHats;
+        GameManager.gManager.OnUnlockHat -= LoadHat;
     }
 }
