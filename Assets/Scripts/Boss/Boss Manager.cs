@@ -477,24 +477,27 @@ public abstract class BossManager : MonoBehaviour
     /// </summary>
     public virtual void Reset()
     {
-        bossState = BossState.Waking;
-
-        animator.enabled = true;
-
-        bossStage = BossStage.None;
-
-        for (int i = 0; i < numberOAttacks.Count; i++)
+        if (TimeObjectManager.startT != 0)
         {
-            numberOAttacks[i] = 0;
-        }
+            bossState = BossState.Waking;
 
-        // sets the bool to true so they run first time
-        for (int i = 0; i < stageReplaying.Count; i++)
-        {
-            stageReplaying[i] = true;
-        }
+            animator.enabled = true;
 
-        health = MAXHEALTH;
+            bossStage = BossStage.None;
+
+            for (int i = 0; i < numberOAttacks.Count; i++)
+            {
+                numberOAttacks[i] = 0;
+            }
+
+            // sets the bool to true so they run first time
+            for (int i = 0; i < stageReplaying.Count; i++)
+            {
+                stageReplaying[i] = true;
+            }
+
+            health = MAXHEALTH;
+        }
     }
 
     public void DisableAnimator()
