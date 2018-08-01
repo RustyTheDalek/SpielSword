@@ -32,17 +32,17 @@ public class HatShop : MonoBehaviour {
 
     public void SetHat(Hat newHat)
     {
-        if (newHat.name == GameManager.gManager.currentSave.Hat)
+        if (newHat.name == GameManager.gManager.CurrentSave.Hat)
         {
             villager.hat.sprite = null;
-            GameManager.gManager.currentSave.Hat = null;
+            GameManager.gManager.CurrentSave.Hat = null;
             Debug.Log("No favourite");
         }
         else
         {
             villager.hat.sprite = newHat.hatDesign;
             Debug.Log(newHat.name + " Saved as new Favourite");
-            GameManager.gManager.currentSave.Hat = newHat.name;
+            GameManager.gManager.CurrentSave.Hat = newHat.name;
         }
 
         GameManager.gManager.Save();

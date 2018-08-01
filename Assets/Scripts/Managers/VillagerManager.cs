@@ -268,7 +268,9 @@ public class VillagerManager : MonoBehaviour {
             currentVillagerLayer++;
 
             //Add a random Hat to the active Villager
-            //activeVillager.hat.GetComponent<SpriteRenderer>().sprite = GameManager.gManager.Hats;
+            if (GameManager.gManager.CurrentSave != null && GameManager.gManager.CurrentSave.Hat != null)
+                activeVillager.hat.sprite = GameManager.gManager.Hats[GameManager.gManager.CurrentSave.Hat].hatDesign;
+
             activeVillager.hat.sortingOrder = currentVillagerLayer;
 
             currentVillagerLayer++;

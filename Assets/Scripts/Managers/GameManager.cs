@@ -12,10 +12,29 @@ public class GameManager : MonoBehaviour {
 
     #region SaveVariables
 
+    private SaveData _CurrentSave;
     /// <summary>
     /// Loaded Save
     /// </summary>
-    public SaveData currentSave;
+    public SaveData CurrentSave
+    {
+        get
+        {
+            if (_CurrentSave == null)
+            {
+                Debug.LogWarning("No Save, are you debugging?");
+                return null;
+            }
+            else
+                return _CurrentSave;
+        }
+
+        set
+        {
+            _CurrentSave = value;
+        }
+    }
+
 
     /// <summary>
     /// List of available saves
@@ -125,9 +144,26 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Unlocks Hat for save
+    /// </summary>
+    /// <param name="newHat">Name of new Hat that's unlocked</param>
+    /// <param name="save"> Do we want to save as well? By default we will</param>
+    public void UnlockHat(string newHat, bool save = true)
+    {
+        if (gManager.CurrentSave != null && !gManager.CurrentSave.Hats.Contains(newHat))
+        {
+            Debug.Log("Unlocked : " + newHat);
+            gManager.CurrentSave.Hats.Add(newHat);
+
+            if(save)
+                gManager.Save();
+        }
+    }
+
     public void Save()
     {
-        Save(currentSave.SaveName);
+        Save(CurrentSave.SaveName);
     }
 
     public void Save(string _SaveName, bool newSave = false)
@@ -156,17 +192,17 @@ public class GameManager : MonoBehaviour {
             saveData = new SaveData
             {
                 SaveName = _SaveName,
-                Hats = currentSave.Hats,
-                Hat = currentSave.Hat,
-                Levels = currentSave.Levels,
-                StoryProgress = currentSave.StoryProgress
+                Hats = CurrentSave.Hats,
+                Hat = CurrentSave.Hat,
+                Levels = CurrentSave.Levels,
+                StoryProgress = CurrentSave.StoryProgress
             };
         }
 
         bf.Serialize(file, saveData);
         file.Close();
 
-        currentSave = saveData;
+        CurrentSave = saveData;
     }
 
     void LoadIntoSaves(string filename)
@@ -176,12 +212,12 @@ public class GameManager : MonoBehaviour {
 
     public void LoadChosenSave(string filename)
     {
-        currentSave = Load(filename);
+        CurrentSave = Load(filename);
 
-        if (currentSave != null)
+        if (CurrentSave != null)
         {
             if (OnLoadSave != null)
-                OnLoadSave(currentSave);
+                OnLoadSave(CurrentSave);
         }
     }
 

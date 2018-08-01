@@ -132,14 +132,9 @@ public abstract class BossManager : MonoBehaviour
 
     #region Variables for retracing the Boss' Actions
 
-    protected Animator animator;
+    public Animator animator;
 
     protected AnimatorStateInfo animatorStateInfo;
-
-    public void SetAnimator(bool _Enabled)
-    {
-        animator.enabled = _Enabled;
-    }
 
     public List<float> trackedHealth = new List<float>();
     #endregion

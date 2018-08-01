@@ -15,7 +15,6 @@ public class SaveIcon : MonoBehaviour {
     private void Start()
     {
         image = GetComponent<Image>();
-        StartCoroutine(ShowSave());
     }
 
     public IEnumerator ShowSave()

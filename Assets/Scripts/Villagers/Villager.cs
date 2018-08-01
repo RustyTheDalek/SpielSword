@@ -259,6 +259,8 @@ public abstract class Villager : Character
         if (!shielded)
         {
             health--;
+
+            GameManager.gManager.UnlockHat("Anor");
         }
     }
 

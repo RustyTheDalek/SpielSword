@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Hat", menuName = "Hat")]
 public class Hat : ScriptableObject
 {
-    public new string description, stat;
+    public string description, stat;
 
     [SerializeField]
     public Sprite hatDesign;
