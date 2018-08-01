@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour {
         {
             if (_CurrentSave == null)
             {
-                Debug.LogWarning("No Save, are you debugging?");
+                //Catch in case no save
+                Debug.LogWarning("No Save, returning Null?");
                 return null;
             }
             else
