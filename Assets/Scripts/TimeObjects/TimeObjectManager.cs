@@ -99,6 +99,7 @@ public class TimeObjectManager : MonoBehaviour
 
     void ReverseTime()
     {
+        t = startT + 50;
         timeState = TimeState.Backward;
     }
 }
