@@ -49,6 +49,11 @@ public class GroundMinions : Minion
 
     protected override void Patrol()
     {
+        if(moveDir == Vector2.zero)
+        {
+            moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
+        }
+
         #region Find the floor
 
         if(!Physics2D.Raycast(m_GroundMinion.m_Front.position, Vector2.down, distanceToFloor, layerGroundOnly))

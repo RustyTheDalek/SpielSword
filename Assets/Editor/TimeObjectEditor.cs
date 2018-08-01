@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor( typeof( TimeObject))]
+[CustomEditor( typeof( TimeObject), true)]
 class TimeObjectEditor : Editor
 {
     TimeObject m_Target;
@@ -18,14 +18,14 @@ class TimeObjectEditor : Editor
             alignment = TextAnchor.MiddleCenter
         };
 
-        textStyle.normal.textColor = Color.white;
+        textStyle.normal.background = GUI.skin.GetStyle("box").normal.background;   
+        textStyle.normal.textColor = Color.black;
 
-        Handles.Label(m_Target.transform.position, 
-            "Time State: " + m_Target.tObjectState.ToString() + 
+        Handles.Label(m_Target.transform.position + Vector3.up * 2.5f,
+            "Time State: " + m_Target.tObjectState.ToString() +
             "\nTotal Frames: " + m_Target.TotalFrames +
             "\nCurrent Frame: " + m_Target.currentFrame +
             "\nStart Frame: " + m_Target.startFrame +
             "\nFinish Frame: " + m_Target.finishFrame, textStyle);
-
     }
 }
