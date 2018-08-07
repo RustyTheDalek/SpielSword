@@ -3,27 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerGrapple : MonoBehaviour {
-
+    #region Private Variables
     private Vector2 findPlayer;
     private int amountOfCharacters;
     private int selectedCharacters;
     private int progression;
+    private float timer;
+    private bool playerHere;
     private bool restricted;
+    private bool fired;
     private Vector3 playerLocation;
     private List<int> characters = new List<int>();
     private List<GameObject> trapSprites = new List<GameObject>();
+    private SpriteRenderer fwd_SpriteRenderer;
+    private SpriteRenderer bk_SpriteRenderer;
+    #endregion
 
+    #region Public Variables
     public Animator animi;
     public int difficulty;
     public GameObject actPlayer;
     public LayerMask layerGroundOnly;
-    public bool playerHere;
     public string playerInput;
     public string playerInputPast;
-    Dictionary<string, int> validCharacters = new Dictionary<string, int>();
-    Dictionary<int, Sprite> spriteCharacters = new Dictionary<int, Sprite>();
 
-    #region May need a sprite sheet or summit to handle this
+    #region List of sprites
+    //May need a sprite sheet or summit to handle this
     public Sprite letterA;
     public Sprite letterD;
     public Sprite letterW;
@@ -47,20 +52,45 @@ public class PlayerGrapple : MonoBehaviour {
     public GameObject trapSprite5;
     #endregion
 
-    // Use this for initialization
+    #region Object to change colour
+    public GameObject fwdSprite;
+    public GameObject bkSprite;
+    #endregion
+
+    #endregion
+
+    #region Dictionary
+    Dictionary<string, int> validCharacters = new Dictionary<string, int>();
+    Dictionary<int, Sprite> spriteCharacters = new Dictionary<int, Sprite>();
+    #endregion
+    
+    
     void Start () {
         ValidCharacters();
         SpriteCharacters();
         TrapSpritesList();
+        fwd_SpriteRenderer = fwdSprite.GetComponent<SpriteRenderer>();
+        bk_SpriteRenderer = bkSprite.GetComponent<SpriteRenderer>();
         restricted = false;
         playerHere = false;
     }
 	
-	// Update is called once per frame
 	void Update () {
-        
+
+        if (timer >= 3.0f)
+        {
+            fired = false;
+            fwd_SpriteRenderer.color = Color.white;
+            bk_SpriteRenderer.color = Color.white;
+        }
+
+        if (fired)
+        {
+            timer += Time.deltaTime;
+        }
+
         // Get a player check from PlayerCheck to see if player is present
-        if (playerHere && !restricted)
+        if (playerHere && !restricted && !fired)
         {
             playerLocation = actPlayer.transform.position;
             FindFoe();
@@ -112,6 +142,7 @@ public class PlayerGrapple : MonoBehaviour {
 
     void TrapSpritesList()
     {
+        //adds the game objects to a list to set later
         trapSprites.Add(trapSprite1);
         trapSprites.Add(trapSprite2);
         trapSprites.Add(trapSprite3);
@@ -139,6 +170,7 @@ public class PlayerGrapple : MonoBehaviour {
 
         animi.SetBool("Fire", true);
 
+        //sets the amount of letters to string togetter
         switch (difficulty)
         {
             case 0:
@@ -148,8 +180,10 @@ public class PlayerGrapple : MonoBehaviour {
                 amountOfCharacters = Random.Range(2, 5);
                 break;
         }
+        //sets a character for each member of the string
         for (int i = 0; i <= amountOfCharacters; i++)
         {
+            //sets the range of letters to pick from
             switch (difficulty)
             {
                 case 0:
@@ -160,7 +194,7 @@ public class PlayerGrapple : MonoBehaviour {
                     break;
             }
             characters.Add(selectedCharacters);
-            Debug.Log("" + spriteCharacters[selectedCharacters]);
+            //Debug.Log("" + spriteCharacters[selectedCharacters]);
 
             progression = 0;
         }
@@ -221,6 +255,10 @@ public class PlayerGrapple : MonoBehaviour {
         characters.Clear();
         playerHere = false;
         restricted = false;
+        fired = true;
+        fwd_SpriteRenderer.color = Color.gray;
+        bk_SpriteRenderer.color = Color.gray;
+        timer = 0;
         animi.SetBool("Fire", false);
         for (int i = 0; i <= 4; i++)
         {
