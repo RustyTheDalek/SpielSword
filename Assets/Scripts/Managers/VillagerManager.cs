@@ -9,12 +9,11 @@ using System.Collections.Generic;
 public class VillagerManager : MonoBehaviour {
 
     //Transforms to sort the Villagers
-    Transform   activeVillagerTrans,
-                remainingVillagersTrans,
-                pastVillagersTrans,
-                deadVillagersTrans,
-                levelStart,
-                arenaStart;
+    public Transform    activeVillagerTrans,
+                        remainingVillagersTrans,
+                        pastVillagersTrans,
+                        levelStart,
+                        arenaStart;
 
     /// <summary>
     /// Where new Villagers Spawn
@@ -113,14 +112,13 @@ public class VillagerManager : MonoBehaviour {
         activeVillagerTrans = objs[1];
         remainingVillagersTrans = objs[2];
         pastVillagersTrans = objs[3];
-        deadVillagersTrans = objs[4];
         levelStart = objs[5];
         arenaStart = objs[6];
 
     }
 
     // Use this for initialization
-    public void Setup (TimeObjectManager timeManager, ArenaEntry arenaEntry)
+    public void Setup(TimeObjectManager timeManager, ArenaEntry arenaEntry)
     {
         //Setup lists
         remainingVillagers = new List<Villager>();
@@ -228,13 +226,13 @@ public class VillagerManager : MonoBehaviour {
     public void OnVillagerDeath()
     {
         //Turn active Villager into Past Villager
-        activeVillager.deathEffect.Play();
         activeVillager.villagerState = VillagerState.PastVillager;
         activeVillager.transform.parent = pastVillagersTrans;
         activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
         if (activeVillager.melee)
         {
-            activeVillager.melee.gameObject.layer = LayerMask.NameToLayer("PastVillager");
+            activeVillager.melee.gameObject.layer = 
+                LayerMask.NameToLayer("PastVillager");
         }
 
         pastVillagers.Add(activeVillager);
