@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour {
     {
         saveIcon = GetComponentInChildren<SaveIcon>();
 
+        //TODO: Make Async when needed
         hats = AssetBundle.LoadFromFile(Path.Combine(
             Application.streamingAssetsPath, "AssetBundles/hats"));
 

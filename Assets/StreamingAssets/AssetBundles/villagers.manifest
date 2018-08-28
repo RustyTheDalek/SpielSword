@@ -1,0 +1,101 @@
+ManifestFileVersion: 0
+CRC: 746601759
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 254ade72540dbabebf652adf9181b646
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: fb3f89bf3cbd420c0b3f58cded4d41f6
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 62
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 00a32f21e5ed5ea498cae3b86bc179a5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 52a4cd5176332de4788a679c3bcab42c, type: 3}
+- Class: 114
+  Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f172092243137cf4bbddab81f865d49b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6f519d244fec3ad48a5e6e034d1ee458, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7e930005ea5bea945ac4500741718fe4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 829e9f0563d2f7940ae3588e964414fd, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: da163506fd12c4c469ca20071a4044b3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2c408966f2235f74e928e8cd525291c1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe486b0801c57e74092bde35426c69c0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 95147898b0fc03c4c9ae8adb923bf68a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9359cf6963ace04448f3a8bbee8ea2d6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e0075c1bf59a5ae49aa3359b916e3b2a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fcbfa1eb3f3e4154382a2d875ac85861, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6195debe380f15549afe19c71dda7ce9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9b09571f8d9c49941969f5b1cccaf7fa, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 221
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/Villagers/PressSpecial/Berserker.prefab
+- Assets/Prefabs/Villagers/PressSpecial/Priest.prefab
+- Assets/Prefabs/Villagers/HoldSpecial/Warrior.prefab
+- Assets/Prefabs/Villagers/PressSpecial/Mage.prefab
+- Assets/Prefabs/Villagers/PressSpecial/Shaman.prefab
+- Assets/Prefabs/Villagers/PressSpecial/Warlock.prefab
+- Assets/Prefabs/Villagers/HoldSpecial/Spielsword.prefab
+- Assets/Prefabs/Villagers/PressSpecial/Rogue.prefab
+Dependencies: []

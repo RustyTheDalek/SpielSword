@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.IO;
 
 /// <summary>
 /// Manages all the Villages Alived, Past or Dead.
@@ -73,35 +74,7 @@ public class VillagerManager : MonoBehaviour {
     public event NewVillagerEvent OnNextVillager;
 
     #region Assets
-    Dictionary<string, GameObject> _Villagers;
-
-    Dictionary<string, GameObject> Villagers
-    {
-        get
-        {
-            if (_Villagers == null)
-            {
-                _Villagers = new Dictionary<string, GameObject>();
-
-                Object[] objs = Resources.LoadAll("Villagers");
-
-                GameObject gObj;
-
-                foreach (object obj in objs)
-                {
-                    if (obj as GameObject != null)
-                    {
-                        gObj = (GameObject)obj;
-
-                        _Villagers.Add(gObj.name, gObj);
-                        _Villagers[gObj.name].CreatePool(50);
-                    }
-                }
-            }
-
-            return _Villagers;
-        }
-    }
+    AssetBundle villagers;
 
     #endregion
 
@@ -115,6 +88,9 @@ public class VillagerManager : MonoBehaviour {
         levelStart = objs[5];
         arenaStart = objs[6];
 
+        //TODO: Async When needed
+        villagers = AssetBundle.LoadFromFile(Path.Combine(
+            Application.streamingAssetsPath, "AssetBundles/villagers"));
     }
 
     // Use this for initialization
@@ -133,7 +109,9 @@ public class VillagerManager : MonoBehaviour {
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
             //classToSpawn = VillagerClass.Priest;
 
-            GameObject temp = Villagers[classToSpawn.ToString()].Spawn();
+            //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is
+            villagers.LoadAsset<GameObject>(classToSpawn.ToString()).CreatePool(50);
+            GameObject temp = villagers.LoadAsset<GameObject>(classToSpawn.ToString()).Spawn();
             temp.name = classToSpawn.ToString() + i;
             SetupVillager(temp, spawnOffset);
         }

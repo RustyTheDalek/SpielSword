@@ -1,13 +1,10 @@
 ManifestFileVersion: 0
-CRC: 913215924
+CRC: 296577555
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: flyingminion
-      Dependencies: {}
-    Info_1:
       Name: hats
       Dependencies: {}
-    Info_2:
-      Name: timelines
+    Info_1:
+      Name: villagers
       Dependencies: {}
