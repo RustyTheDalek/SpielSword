@@ -71,36 +71,7 @@ public class GameManager : MonoBehaviour {
 
     SaveIcon saveIcon;
 
-    #region Assets
-    Dictionary<string, Hat> _Hats;
-
-    public Dictionary<string, Hat> Hats
-    {
-        get
-        {
-            if (_Hats == null)
-            {
-                _Hats = new Dictionary<string, Hat>();
-
-                Object[] objs = Resources.LoadAll<Hat>("Hats");
-
-                Hat hat;
-
-                foreach (object obj in objs)
-                {
-                    if (obj as Hat != null)
-                    {
-                        hat = (Hat)obj;
-                        Debug.Log("Adding: " + hat.name);
-                        _Hats.Add(hat.name, hat);
-                    }
-                }
-            }
-
-            return _Hats;
-        }
-    }
-    #endregion
+    public AssetBundle hats;
 
     private void Awake()
     {
@@ -119,6 +90,9 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         saveIcon = GetComponentInChildren<SaveIcon>();
+
+        hats = AssetBundle.LoadFromFile(Path.Combine(
+            Application.streamingAssetsPath, "AssetBundles/hats"));
 
         //First we need to see if there are save(s).
         Debug.Log("Looking for saves in " + SaveLocation);
@@ -160,7 +134,7 @@ public class GameManager : MonoBehaviour {
             Debug.Log("Unlocked : " + newHat);
             gManager.CurrentSave.Hats.Add(newHat);
 
-            OnUnlockHat(gManager.Hats[newHat]);
+            OnUnlockHat(gManager.hats.LoadAsset<Hat>(newHat));
 
             if(save)
                 gManager.Save();

@@ -15,11 +15,13 @@ class GameManagerEditor : Editor
 
         Handles.BeginGUI();
         {
-            if (GameManager.gManager.Hats != null)
+            if (GameManager.gManager.hats != null)
             {
                 GUIStyle boxStyle = new GUIStyle("box");
 
-                GUILayout.BeginArea(new Rect(10, 10, 200, 20 + 20 * GameManager.gManager.Hats.Count), boxStyle);
+                string[] hatNames = GameManager.gManager.hats.GetAllAssetNames();
+
+                GUILayout.BeginArea(new Rect(10, 10, 200, 20 + 20 * hatNames.Length), boxStyle);
                 {
                     GUILayout.Label("Unlock Hats");
 
@@ -28,11 +30,11 @@ class GameManagerEditor : Editor
                         keepUnlocks = !keepUnlocks;
                     }
 
-                    foreach (KeyValuePair<string, Hat> hat in GameManager.gManager.Hats)
+                    foreach (string hat in hatNames)
                     {
-                        if (GUILayout.Button(hat.Key))
+                        if (GUILayout.Button(GameManager.gManager.hats.LoadAsset<Hat>(hat)._Name))
                         {
-                            GameManager.gManager.UnlockHat(hat.Key, keepUnlocks);
+                            GameManager.gManager.UnlockHat(hat, keepUnlocks);
                         }
                     }
                 }

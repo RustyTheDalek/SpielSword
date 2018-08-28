@@ -267,7 +267,7 @@ public class VillagerManager : MonoBehaviour {
 
             //Add a random Hat to the active Villager
             if (GameManager.gManager.CurrentSave != null && GameManager.gManager.CurrentSave.Hat != null)
-                activeVillager.hat.sprite = GameManager.gManager.Hats[GameManager.gManager.CurrentSave.Hat].hatDesign;
+                activeVillager.hat.sprite = GameManager.gManager.hats.LoadAsset<Hat>(GameManager.gManager.CurrentSave.Hat).hatDesign;
 
             activeVillager.hat.sortingOrder = currentVillagerLayer;
 

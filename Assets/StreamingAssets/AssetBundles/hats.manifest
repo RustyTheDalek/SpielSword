@@ -1,0 +1,41 @@
+ManifestFileVersion: 0
+CRC: 1689669629
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 084d8ce7ae29a86787b2a22692ee3954
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 46c16e9b322ad74b3fbc30fa6dd9e411
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0504a21ea91fc214a872053919b21754, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/ScriptableObjects/Hats/Anor.asset
+- Assets/ScriptableObjects/Hats/Pirate.asset
+- "Assets/ScriptableObjects/Hats/Pok\xE9ball.asset"
+- Assets/ScriptableObjects/Hats/Merlin.asset
+- Assets/ScriptableObjects/Hats/Bucket.asset
+- Assets/ScriptableObjects/Hats/Horny.asset
+- Assets/ScriptableObjects/Hats/Bobo.asset
+- Assets/ScriptableObjects/Hats/SolidSnake.asset
+- Assets/ScriptableObjects/Hats/Pinky.asset
+- Assets/ScriptableObjects/Hats/Ash.asset
+- Assets/ScriptableObjects/Hats/FrakenMittens.asset
+- Assets/ScriptableObjects/Hats/SpiderMan.asset
+- Assets/ScriptableObjects/Hats/Skullcap.asset
+- Assets/ScriptableObjects/Hats/TownGuard.asset
+- Assets/ScriptableObjects/Hats/WizardHat.asset
+- Assets/ScriptableObjects/Hats/TopHat.asset
+- Assets/ScriptableObjects/Hats/Ninja.asset
+- Assets/ScriptableObjects/Hats/TrailerTrash.asset
+- Assets/ScriptableObjects/Hats/Pants.asset
+- Assets/ScriptableObjects/Hats/Showercap.asset
+Dependencies: []

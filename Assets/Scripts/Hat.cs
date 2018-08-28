@@ -5,11 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Hat", menuName = "Hat")]
 public class Hat : ScriptableObject
 {
-    public string description, stat;
+    public string _Name, description, stat;
 
     [SerializeField]
     public Sprite hatDesign;
 
 
     public virtual void OnWear(Villager wearer) {}
+
+    private void Awake()
+    {
+        _Name = name;
+    }
 }

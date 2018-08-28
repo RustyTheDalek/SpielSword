@@ -23,12 +23,13 @@ public class HatShop : MonoBehaviour {
         foreach (string hat in saveLoaded.Hats)
         {
             HatDisplay newDisplay = Instantiate(hatdisplayPrefab, hatContent, false);
-            newDisplay.LoadInfo(GameManager.gManager.Hats[hat]);
-            newDisplay.HatSelectBtn.onClick.AddListener(delegate { SetHat(GameManager.gManager.Hats[hat]); });
+            newDisplay.LoadInfo(GameManager.gManager.hats.LoadAsset<Hat>(hat));
+            newDisplay.HatSelectBtn.onClick.AddListener(
+                delegate { SetHat(GameManager.gManager.hats.LoadAsset<Hat>(hat)); });
         }
 
         if(saveLoaded.Hat != null)
-            villager.hat.sprite = GameManager.gManager.Hats[saveLoaded.Hat].hatDesign;
+            villager.hat.sprite = GameManager.gManager.hats.LoadAsset<Hat>(saveLoaded.Hat).hatDesign;
     }
 
     /// <summary>

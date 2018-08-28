@@ -32,9 +32,10 @@ public class SaveGamePnl : MonoBehaviour
             //Find Favourite hat
             if (saveInfo.Hat != null)
             {
-                Hat favHat;
+                Hat favHat = GameManager.gManager.hats.LoadAsset<Hat>(saveInfo.Hat);
                 Debug.Log("I've found me a hat");
-                if(GameManager.gManager.Hats.TryGetValue(saveInfo.Hat, out favHat))
+
+                if (favHat != null)
                 {
                     hatPreview.sprite = favHat.hatDesign;
                 }
