@@ -34,6 +34,7 @@ public class HookRope : MonoBehaviour
 
     static GameObject _RopeNode;
 
+    //TODO:Change to assetBundle need to change
     static GameObject RopeNode
     {
         get

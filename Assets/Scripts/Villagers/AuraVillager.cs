@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AuraVillager : Villager
+public class AuraVillager : Villager
 {
+
+    public string auraName;
 
     #region Private Variables
 
@@ -47,7 +49,10 @@ public abstract class AuraVillager : Villager
         }
     }
 
-    protected abstract Aura Aura();
+    protected Aura Aura()
+    {
+        return abilities.LoadAsset<GameObject>(auraName + "Aura").Spawn().GetComponent<Aura>();
+    }
 
     public void Unsubscribe(VillagerManager villagerManager)
     {

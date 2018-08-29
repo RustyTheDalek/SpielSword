@@ -13,8 +13,7 @@ public class Warlock : WardVillager
 
     #region Protected Variables
 
-    protected GameObject teleportObj;
-    protected ParticleSystem teleport;
+    protected ParticleSystem teleportFX;
 
     #endregion
 
@@ -26,28 +25,26 @@ public class Warlock : WardVillager
     {
         specialType = SpecialType.Press;
 
-        teleportObj = Instantiate(Resources.Load("Particles/TeleportFX") as GameObject, transform, false);
-        teleport = teleportObj.GetComponent<ParticleSystem>();
-
-        wardName = "WarlockWard";
-
         base.Awake();
+
+        teleportFX = currentWard.GetComponentInChildren<ParticleSystem>();
     }
 
     protected override void OnWardUse()
     {
         Debug.Log("Teleporting");
         transform.position = currentWard.transform.position;
-        teleport.Play();
+        teleportFX.Play();
     }
 
+    //TODO:Ref Ward Villager
     public override void FireProjectile()
     {
         if (villagerState == VillagerState.PresentVillager)
         {
             Debug.Log("Warlock Ranged Attack");
 
-            rangedAtk = Projectile.Spawn(rangedTrans.position);
+            rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
 
             float direction = rangedTrans.position.x - transform.position.x;
 

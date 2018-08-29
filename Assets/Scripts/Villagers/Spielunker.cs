@@ -20,6 +20,7 @@ public class Spielunker : Villager
 
     static GameObject _Hook;
 
+    //TODO:Fix this as currently broken just an not used at present
     static GameObject Hook
     {
         get

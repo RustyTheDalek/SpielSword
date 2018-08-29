@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 /// <summary>
 /// Class for controlling Villager
@@ -20,8 +21,6 @@ public abstract class Villager : Character
             return villagerState == VillagerState.PresentVillager;
         }
     }
-
-    public ParticleSystem deathEffect;
 
     //TODO: bring this up a level when attacks for minions are sorted
     public CircleCollider2D melee;
@@ -89,24 +88,7 @@ public abstract class Villager : Character
     bool attack = false;
     #endregion
 
-    static GameObject _Projectile;
-
-    protected static GameObject Projectile
-    {
-        get
-        {
-            if (_Projectile == null)
-            {
-                _Projectile = new GameObject();
-
-                _Projectile = (GameObject)Resources.Load("Range");
-
-                _Projectile.CreatePool(100);
-            }
-
-            return _Projectile;
-        }
-    }
+    protected static AssetBundle abilities;
 
     //Input variables
     protected bool m_Jump;
@@ -121,10 +103,13 @@ public abstract class Villager : Character
         base.Awake();
 
         m_Ground = GetComponent<GroundCharacter2D>();
-        deathEffect = GetComponentInChildren<ParticleSystem>();
         vTO = GetComponent<VillagerTimeObject>();
 
-        switch(attackType)
+        if(abilities == null)
+            abilities = AssetBundle.LoadFromFile(Path.Combine(
+                Application.streamingAssetsPath, "AssetBundles/abilities"));
+
+        switch (attackType)
         {
             case AttackType.Ranged:
 
@@ -260,7 +245,8 @@ public abstract class Villager : Character
         {
             health--;
 
-            GameManager.gManager.UnlockHat("Anor");
+            if(GameManager.gManager)
+                GameManager.gManager.UnlockHat("Anor");
         }
     }
 
@@ -278,7 +264,7 @@ public abstract class Villager : Character
         if (villagerState == VillagerState.PresentVillager)
         {
 
-            rangedAtk = Projectile.Spawn(rangedTrans.position);
+            rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
             rangedAtk.GetComponent<VillagerAttack>().damageMult = damageMult;
 
             float direction = rangedTrans.position.x - transform.position.x;

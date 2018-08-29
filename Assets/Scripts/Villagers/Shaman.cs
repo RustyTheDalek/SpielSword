@@ -18,8 +18,6 @@ public class Shaman : WardVillager
     { 
         wardOffset = new Vector3(-2, 2, 0);
 
-        wardName = "ShamanTotem";
-
         base.Awake();
     }
 

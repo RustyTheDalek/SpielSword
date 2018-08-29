@@ -1,0 +1,64 @@
+ManifestFileVersion: 0
+CRC: 91729660
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b2bf3872b658f2e7293ef7fc30b0e7df
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: bf8e4b3d593848b1ebf3f56221d6bee6
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fdc15ff0ad2a50f46bc82fcef778c7ef, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4b420f032312b8d49ab476971f53f173, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6f519d244fec3ad48a5e6e034d1ee458, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fc0a3fd4ee590624fbb60a2ba8638147, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 624599198eb0e8f49a17b3d1fcc6a193, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c89d956c4b64a0c47a8e1179150c0f06, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 251
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/Abilities/Wards/ShamanWard.prefab
+- Assets/Prefabs/Abilities/Wards/WarlockWard.prefab
+- Assets/Prefabs/Abilities/Range.prefab
+- Assets/Prefabs/Abilities/Auras/PriestAura.prefab
+- Assets/Prefabs/Abilities/Auras/MageAura.prefab
+Dependencies: []

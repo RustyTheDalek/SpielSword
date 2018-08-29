@@ -6,6 +6,8 @@ public abstract class WardVillager : Villager
 {
     #region Public Fields
 
+    public string wardName;
+
     /// <summary>
     /// Reference to current ward in use by the Villager
     /// </summary>
@@ -16,44 +18,12 @@ public abstract class WardVillager : Villager
 
     #region Protected Fields
 
-    protected string wardName;
-
     protected Vector3 wardOffset = Vector3.zero;
 
     #endregion
 
     #region Private Fields
     #endregion
-
-    static Dictionary<string, GameObject> _Wards;
-
-    static Dictionary<string, GameObject> Wards
-    {
-        get
-        {
-            if (_Wards == null)
-            {
-                _Wards = new Dictionary<string, GameObject>();
-
-                Object[] objs = Resources.LoadAll("Wards");
-
-                GameObject gObj;
-
-                foreach (object obj in objs)
-                {
-                    if (obj as GameObject != null)
-                    {
-                        gObj = (GameObject)obj;
-
-                        _Wards.Add(gObj.name, gObj);
-                        _Wards[gObj.name].CreatePool(50);
-                    }
-                }
-            }
-
-            return _Wards;
-        }
-    }
 
     #region Unity Methods
     protected override void Awake()
@@ -63,7 +33,8 @@ public abstract class WardVillager : Villager
         //playerSpecialIsTrigger = true;
 
         //Spawn Ward but deactivate
-        currentWard = Wards[wardName].Spawn().GetComponent<SpawnableSpriteTimeObject>();
+        GameObject temp  = abilities.LoadAsset<GameObject>(wardName + "Ward").Spawn();
+        currentWard = temp.GetComponent<SpawnableSpriteTimeObject>();
         currentWard.creator = this;
         currentWard.gameObject.SetActive(false);
     }
@@ -89,13 +60,15 @@ public abstract class WardVillager : Villager
         }
     }
 
+    //TODO:Remove this naughtyness should have one fire function and the variable be 
+    //on the Villager or maybe spawn different range projeticle prefabs
     public override void FireProjectile()
     {
         if (villagerState == VillagerState.PresentVillager)
         {
             Debug.Log("Warlock Ranged Attack");
 
-            rangedAtk = Projectile.Spawn(rangedTrans.position);
+            rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
 
             float direction = rangedTrans.position.x - transform.position.x;
 
