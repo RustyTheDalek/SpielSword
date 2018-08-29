@@ -13,28 +13,6 @@ public class SpriteTimeObject : TimeObject
     protected SpriteFrameData tempSFrame;
     protected List<SpriteFrameData> sFrames = new List<SpriteFrameData>();
 
-    static Dictionary<string, Material> _SpriteMaterials;
-
-    protected static Dictionary<string, Material> SpriteMaterials
-    {
-        get
-        {
-            if (_SpriteMaterials == null)
-            {
-                _SpriteMaterials = new Dictionary<string, Material>();
-
-                Object[] objs = Resources.LoadAll("Materials");
-
-                foreach (object obj in objs)
-                {
-                    _SpriteMaterials.Add(((Material)obj).name, (Material)obj);
-                }
-            }
-
-            return _SpriteMaterials;
-        }
-    }
-
     protected override void Awake()
     {
         base.Awake();
