@@ -244,6 +244,7 @@ public abstract class Villager : Character
         if (!shielded)
         {
             health--;
+            OnDeath();
 
             if(GameManager.gManager)
                 GameManager.gManager.UnlockHat("Anor");
@@ -252,9 +253,9 @@ public abstract class Villager : Character
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.layer == (LayerMask.NameToLayer("Minion")) && !LevelManager.GodMode)
+        if(collision.gameObject.tag == "Minion" && !LevelManager.GodMode)
         {
-            Debug.Log("It was minion");
+            Debug.Log("It was " + collision.gameObject.name);
             OnHit();
         }
     }

@@ -26,14 +26,15 @@ public class MinionTimeObject : AnimatorTimeObject {
 
         m_Sprite.color = new Color(m_Sprite.color.r, m_Sprite.color.g, m_Sprite.color.b, 1f);
 
-        if (GetComponent<FlightMinions>())
+        //TODO: Improve this trash - Just use Minion base class instead?
+        if (GetComponent<FlightMinion>())
         {
-            GetComponent<FlightMinions>().enabled = true;
+            GetComponent<FlightMinion>().enabled = true;
         }
 
-        if (GetComponent<GroundMinions>())
+        if (GetComponent<GroundMinion>())
         {
-            GetComponent<GroundMinions>().enabled = true;
+            GetComponent<GroundMinion>().enabled = true;
         }
 
         m_Anim.enabled = true;
@@ -41,14 +42,15 @@ public class MinionTimeObject : AnimatorTimeObject {
 
     private void DisableMinion()
     {
-        if(GetComponent<FlightMinions>())
+        //TODO: Improve this trash
+        if(GetComponent<FlightMinion>())
         {
-            GetComponent<FlightMinions>().enabled = false;
+            GetComponent<FlightMinion>().enabled = false;
         }
 
-        if(GetComponent<GroundMinions>())
+        if(GetComponent<GroundMinion>())
         {
-            GetComponent<GroundMinions>().enabled = false;
+            GetComponent<GroundMinion>().enabled = false;
         }
     }
 

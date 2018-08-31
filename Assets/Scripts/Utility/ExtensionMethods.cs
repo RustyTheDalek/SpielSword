@@ -39,4 +39,9 @@ public static class ExtensionMethods
 
         return new Vector3(x, y, z);
     }
+
+    public static void NamedLog(this MonoBehaviour gO, string message)
+    {
+        Debug.Log(gO.name + ": " + message);
+    }
 }

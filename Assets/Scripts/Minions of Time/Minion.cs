@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Base Class for enemy minions
 /// </summary>
-public class Minion : Character
+public abstract class Minion : Character
 {
     #region Public Variables
 
@@ -20,15 +20,29 @@ public class Minion : Character
     public List<GameObject> villagerInSight = new List<GameObject>(5);
     public GameObject closestVillager = null;
 
+    [Range(0, 100)]
     public float attackRange = 5;
+
+    /// <summary>
+    /// After a Rest/Celebrate how long does it for Minion to go back to fighting
+    /// </summary>
+    public int attackCooldownTime = 3;
 
     #endregion
 
     #region Protected Variables
 
-    protected Timer restTimer;
+    protected MinionState startingState;
+
+    protected RigidbodyConstraints2D startingConstraints;
+
+    protected bool canAttack = true;
 
     protected Vector2 prevDir = Vector2.zero;
+
+    //For when Minions suceeds in killing a villager (In case we want a celebration
+    //If not it can enforce the Minion goes back to patrolling
+    protected readonly int m_HashCelebrateParam = Animator.StringToHash("Celebrate");
 
     #endregion
 
@@ -38,117 +52,182 @@ public class Minion : Character
 
     protected virtual void Start()
     {
-        restTimer = gameObject.AddComponent<Timer>();
-        restTimer.Setup("Rest", 5f);
-
         contactFilter.layerMask = layerGroundOnly;
+
+        startingState = state;
+        startingConstraints = m_rigidbody.constraints;
+
+        SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
     }
 
-    protected override void Update()
+    public abstract void Patrol();
+
+    public virtual void MoveToClosest() { }
+
+    protected virtual void StartAttack()
     {
-        base.Update();
-
-        if(Alive)
-        {
-            MinionUpdate();
-        }
+        //Close enough to attack
+        state = MinionState.Attacking;
     }
 
-    protected virtual void MinionUpdate()
+    public virtual void Attack() { }
+
+    public virtual void CelebrateAttack()
+    { 
+        state = MinionState.Celebrating;
+        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        m_Animator.SetTrigger(m_HashCelebrateParam);
+    }
+
+    public virtual void Migrate() { }
+
+    public virtual void StartRest()
     {
-        switch(state)
-        {
-            case MinionState.Patrolling:
-
-                Patrol();
-                break;
-
-            case MinionState.ClosingIn:
-
-                FindClosest();
-                MoveToClosest();
-                break;
-
-            case MinionState.Attacking:
-
-                Attack();
-                break;
-
-            case MinionState.Resting:
-
-                if(restTimer.complete)
-                {
-                    state = MinionState.Patrolling;
-                    moveDir = prevDir;
-                    restTimer.Reset();
-                }
-                break;
-
-            case MinionState.Migrating:
-
-                Migrate();
-                break;
-        }
+        state = MinionState.Resting;
+        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
-    protected virtual void Patrol() { }
-    protected virtual void MoveToClosest() { }
-    protected virtual void Attack() { }
-    protected virtual void Migrate() { }
+    public virtual void Rest()
+    {
+        m_rigidbody.velocity = Vector2.zero;
+    }
 
-    protected void FindClosest()
+    public virtual void StopRest()
+    {
+        m_rigidbody.constraints = startingConstraints;
+        state = startingState;
+        moveDir = prevDir;
+        prevDir = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Find closest Villager
+    /// </summary>
+    public void FindClosest()
     {
         //Reset closest to max
         float closest = Mathf.Infinity;
         //Find the closest
         foreach (GameObject villager in villagerInSight)
         {
-            float villagerDist = Vector2.Distance(transform.position, villager.transform.position);
 
-            if (villagerDist < attackRange)
-            {
-                //Close enough to attack
-                state = MinionState.Attacking;
-                closestVillager = villager;
-                break;
-            }
-            else if (villagerDist < closest)
+            float sqrDist = (villager.transform.position - transform.position).sqrMagnitude;
+
+            if ( sqrDist < (closest * closest))
             {
                 closestVillager = villager;
-                closest = villagerDist;
+                closest = sqrDist;
             }
         }
     }
 
-    protected virtual void StartRest()
+    /// <summary>
+    /// See if closest villager is in attack range
+    /// </summary>
+    public void CheckAttackRange()
     {
-        state = MinionState.Resting;
-        restTimer.StartTimer();
+        if ((closestVillager.transform.position - transform.position).sqrMagnitude < (attackRange *attackRange))
+        {
+            StartAttack();
+        }
     }
 
     protected virtual void OnNoMoreTargets()
     {
-        state = MinionState.Patrolling;
+        state = startingState;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public IEnumerator AttackCooldown()
     {
-        if(collision.gameObject.layer == (LayerMask.NameToLayer("Weapon")))
+        //In future have something more elegant than changing colour?
+        if(GetComponent<SpriteRenderer>())
+            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0, 1, .5f);
+        canAttack = false;
+
+        yield return new WaitForSeconds(attackCooldownTime);
+
+        if (GetComponent<SpriteRenderer>())
+            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0, 1, 1);
+        canAttack = true;
+    }
+
+    public override void OnDeath()
+    {
+        base.OnDeath();
+        StopAllCoroutines();
+    }
+
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        this.NamedLog("Hit: " + LayerMask.LayerToName(collision.gameObject.layer));
+
+        switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
-            health--;
+            case "Weapon":
+
+                if (Alive)
+                {
+                    health--;
+                    OnDeath();
+                }
+                break;
+
+            case "Villager":
+
+                if (state == MinionState.Attacking && 
+                    collision.gameObject == closestVillager)
+                {
+                    //Attack successful start resting
+                    this.NamedLog("Hit my target Villager");
+                    villagerInSight.Remove(collision.gameObject);
+                    CelebrateAttack();
+                }
+                break;
+        }
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (LayerMask.LayerToName(collision.gameObject.layer))
+        {
+            case "Villager":
+
+                if (villagerInSight.Count < villagerInSight.Capacity &&
+                !villagerInSight.Contains(collision.gameObject) &&
+                collision.gameObject.GetComponent<Character>().Alive) // don't want them to attack dead villagers
+                {
+                    villagerInSight.Add(collision.gameObject);
+
+                    if (canAttack &&
+                        state == MinionState.Patrolling || state == MinionState.Migrating)
+                    {
+                        state = MinionState.ClosingIn;
+                    }
+                }
+                break;
+
+            case "Weapon":
+
+                if (Alive)
+                {
+                    health--;
+                    OnDeath();
+                }
+                break;
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.layer == (LayerMask.NameToLayer("Villager")))
         {
-            if (villagerInSight.Count < villagerInSight.Capacity &&
-                !villagerInSight.Contains(collision.gameObject))
+            if (villagerInSight.Contains(collision.gameObject))
             {
-                villagerInSight.Add(collision.gameObject);
-
-                state = MinionState.ClosingIn;
+                if (canAttack &&
+                    state == MinionState.Patrolling || state == MinionState.Migrating)
+                {
+                    state = MinionState.ClosingIn;
+                }
             }
         }
     }

@@ -17,7 +17,7 @@ public class FlyingEnemySpawner : TimeObjectLite
     private GameObject spawnToUse;
     private List<SpawnList> spawnOrder = new List<SpawnList>();
     private List<GameObject> spawns = new List<GameObject>();
-    private FlightMinions script;
+    private FlightMinion script;
 
     public float maxY;
     public float minY;
@@ -122,7 +122,7 @@ public class FlyingEnemySpawner : TimeObjectLite
                                                     spawnOrder[currentSpawn].spawnHeight,
                                                     transform.position.z));
 
-                script = spawnToUse.GetComponent<FlightMinions>();
+                script = spawnToUse.GetComponent<FlightMinion>();
                 script.state = MinionState.Migrating;
                 script.killZone = despawnZoneX;
                 spawns.Add(spawnToUse);

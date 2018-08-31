@@ -7,7 +7,7 @@ using UnityEngine;
 /// Script to control the Ground based minions
 /// </summary>
 [RequireComponent(typeof(GroundMinionCharacter))]
-public class GroundMinions : Minion
+public class GroundMinion : Minion
 {
     #region Public Variables
 
@@ -47,7 +47,16 @@ public class GroundMinions : Minion
         moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
     }
 
-    protected override void Patrol()
+    protected override void FixedUpdate()
+    {
+        m_Animator.SetFloat("xSpeed", m_rigidbody.velocity.x);
+        m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
+        m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
+
+        m_GroundMinion.Move(moveDir);
+    }
+
+    public override void Patrol()
     {
         if(moveDir == Vector2.zero)
         {
@@ -75,14 +84,20 @@ public class GroundMinions : Minion
         }
 
         #endregion
-
-        m_GroundMinion.Move(moveDir);
     }
 
-    protected override void Attack()
+    public override void OnDeath()
     {
+        base.OnDeath();
+
+        gameObject.layer = LayerMask.NameToLayer("Bits");
+    }
+
+    protected override void StartAttack()
+    {
+        base.StartAttack();
+
         prevDir = moveDir;
-        moveDir = Vector2.zero;
 
         if (moveDir.x > 1)
         {
@@ -92,12 +107,11 @@ public class GroundMinions : Minion
         {
             m_Animator.SetTrigger(m_HashAttackRight);
         }
-
-        StartRest();
     }
 
-    protected override void StartRest()
+    public override void Attack()
     {
-        base.StartRest();
+        moveDir = Vector2.zero;
     }
+
 }

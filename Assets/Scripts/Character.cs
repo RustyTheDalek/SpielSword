@@ -5,6 +5,8 @@ using UnityEngine;
 /// <summary>
 /// Base class for player character and NPCS
 /// </summary>
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class Character : MonoBehaviour {
 
     #region Public Variables
@@ -38,7 +40,7 @@ public class Character : MonoBehaviour {
     protected Animator m_Animator;
     protected Rigidbody2D m_rigidbody;
 
-    protected readonly int m_HashDeadPara = Animator.StringToHash("Dead");
+    protected readonly int m_HashDeadParam = Animator.StringToHash("Dead");
 
     #endregion
 
@@ -55,18 +57,21 @@ public class Character : MonoBehaviour {
 
     protected virtual void Update()
     {
-        m_Animator.SetBool(m_HashDeadPara, !Alive);
-
         if (!Alive)
             return;
     }
 
     public virtual void OnDeath()
     {
-        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
+        if(GetComponent<TimeObject>())
+            GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
+
+        moveDir = Vector2.zero;
+        m_rigidbody.velocity = Vector2.zero;
+        m_Animator.SetTrigger(m_HashDeadParam);
     }
 
-    public virtual void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (!Alive)
             return;
@@ -74,6 +79,7 @@ public class Character : MonoBehaviour {
         m_Animator.SetFloat("xSpeed", m_rigidbody.velocity.x);
         m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
+
         m_Character.Move(moveDir);
     }
 }

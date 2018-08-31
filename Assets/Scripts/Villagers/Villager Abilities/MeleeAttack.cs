@@ -18,7 +18,7 @@ public class MeleeAttack : MonoBehaviour
     {
         if (TimeObjectManager.timeState == TimeState.Forward)
         {
-            if (collision.name == "Head")
+            if (collision.name == "Head" && collision.GetComponent<Head>())
             {
                 collision.GetComponent<Head>().OnHit(Damage);
             }
