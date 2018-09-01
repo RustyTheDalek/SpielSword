@@ -61,7 +61,11 @@ public class Character : MonoBehaviour {
             return;
     }
 
-    public virtual void OnDeath()
+    /// <summary>
+    /// What happens when character dies
+    /// </summary>
+    /// <param name="attackDirection"> What direction character was attacked from</param>
+    public virtual void OnDeath(Vector2 attackDirection)
     {
         if(GetComponent<TimeObject>())
             GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;

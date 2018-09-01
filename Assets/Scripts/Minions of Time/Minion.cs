@@ -151,9 +151,9 @@ public abstract class Minion : Character
         canAttack = true;
     }
 
-    public override void OnDeath()
+    public override void OnDeath(Vector2 attackDirection)
     {
-        base.OnDeath();
+        base.OnDeath(attackDirection);
         StopAllCoroutines();
     }
 
@@ -168,7 +168,7 @@ public abstract class Minion : Character
                 if (Alive)
                 {
                     health--;
-                    OnDeath();
+                    OnDeath(collision.transform.position.PointTo(transform.position));
                 }
                 break;
 
@@ -211,7 +211,7 @@ public abstract class Minion : Character
                 if (Alive)
                 {
                     health--;
-                    OnDeath();
+                    OnDeath(collision.transform.position.PointTo(transform.position));
                 }
                 break;
         }

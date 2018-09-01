@@ -16,7 +16,7 @@ public class MinionHitAttack : MonoBehaviour
         //obvious reasons
         if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && !LevelManager.GodMode)
         {
-            coll.gameObject.GetComponent<Villager>().OnHit();
+            coll.gameObject.GetComponent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
         }
     }
 }

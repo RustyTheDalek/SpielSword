@@ -86,9 +86,9 @@ public class GroundMinion : Minion
         #endregion
     }
 
-    public override void OnDeath()
+    public override void OnDeath(Vector2 attackDirection)
     {
-        base.OnDeath();
+        base.OnDeath(attackDirection);
 
         gameObject.layer = LayerMask.NameToLayer("Bits");
     }

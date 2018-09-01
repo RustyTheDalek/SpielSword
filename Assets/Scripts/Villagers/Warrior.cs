@@ -54,11 +54,11 @@ public class Warrior : Villager
         }
     }
 
-    public override void OnHit()
+    public override void OnHit(Vector2 attackDirection)
     {
         if (!Shielded)
         {
-            base.OnHit();
+            base.OnHit(attackDirection);
         }
     }
 }

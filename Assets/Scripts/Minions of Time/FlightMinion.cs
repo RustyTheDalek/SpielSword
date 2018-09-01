@@ -159,17 +159,30 @@ public class FlightMinion : Minion
         moveDir = transform.position.PointTo(orginalPosition);
     }
 
-    public override void OnDeath()
+    public override void OnDeath(Vector2 attackDirection)
     {
-        base.OnDeath();
+        this.NamedLog("Getting Yeeted in " + attackDirection);
+
+        base.OnDeath(attackDirection);
 
         m_Animator.enabled = false;
 
+        Rigidbody2D rb;
+
         foreach(PolygonCollider2D part in parts)
         {
-            part.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            part.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-10, 10), Random.Range(10, 25) * part.GetComponent<Rigidbody2D>().mass));
+            rb = part.GetComponent<Rigidbody2D>();
+            rb.bodyType = RigidbodyType2D.Dynamic;
+
+            Vector2 throwforce = (new Vector2(
+                attackDirection.x * Random.Range(2f, 10f),
+                attackDirection.y * Random.Range(1f, 5f)) * (rb.mass * rb.mass));
+
+            Debug.DrawRay(part.transform.position, throwforce, Color.red, 5f);
+
+            rb.AddForce(throwforce, ForceMode2D.Impulse);
             part.enabled = true;
+
             if (part.name == "Head")
             {
                 part.transform.GetChild(1).SetParent(null);

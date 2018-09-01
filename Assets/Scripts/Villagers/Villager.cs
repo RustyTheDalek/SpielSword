@@ -239,12 +239,12 @@ public abstract class Villager : Character
         }
     }
 
-    public virtual void OnHit()
+    public virtual void OnHit(Vector2 attackDirection)
     {
         if (!shielded)
         {
             health--;
-            OnDeath();
+            OnDeath(attackDirection);
 
             if(GameManager.gManager)
                 GameManager.gManager.UnlockHat("Anor");
@@ -256,7 +256,7 @@ public abstract class Villager : Character
         if(collision.gameObject.tag == "Minion" && !LevelManager.GodMode)
         {
             Debug.Log("It was " + collision.gameObject.name);
-            OnHit();
+            OnHit(collision.transform.position.PointTo(transform.position));
         }
     }
 
