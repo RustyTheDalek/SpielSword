@@ -99,7 +99,7 @@ public class VillageAndMapManager : MonoBehaviour {
         {
             if (Input.GetButtonDown("Jump") && currentNode.name.Contains("Level"))
             {
-                SceneManager.LoadScene(currentNode.name);
+                SceneManager.LoadScene(currentNode.LevelName);
             }
 
             //Directional moving
