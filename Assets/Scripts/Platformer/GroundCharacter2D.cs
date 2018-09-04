@@ -20,6 +20,15 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     /// </summary>
     protected Vector2 moveVector = Vector2.right;
 
+    protected bool FacingRight
+    {
+        get
+        {
+            return transform.localScale.x > 0;
+        }
+    }
+
+
     /// <summary>
     /// Previous move
     /// </summary>
@@ -50,7 +59,6 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     private Collider2D[] colliders;
 
     private bool jump;
-    private bool m_FacingRight = true;  // For determining which way the character is currently facing.
 
     private Vector2 directionForce;
     #endregion
@@ -187,14 +195,14 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     protected void DirectionLogic(int desiredDirection)
     {
-        // If the input is moving the player right and the player is facing left...
-        if (desiredDirection > 0 && !m_FacingRight)
+        // If the input is moving the character right and the character is facing left...
+        if (desiredDirection > 0 && !FacingRight)
         {
             // ... flip the player.
             Flip();
         }
-        // Otherwise if the input is moving the player left and the player is facing right...
-        else if (desiredDirection < 0 && m_FacingRight)
+        // Otherwise if the input is moving the character left and the character is facing right...
+        else if (desiredDirection < 0 && FacingRight)
         {
             // ... flip the player.
             Flip();
@@ -203,9 +211,6 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     private void Flip()
     {
-        // Switch the way the player is labelled as facing.
-        m_FacingRight = !m_FacingRight;
-
         // Multiply the player's x local scale by -1.
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
