@@ -48,17 +48,17 @@ public class DebugPnl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.BackQuote))
         {
             active = !active;
+        }
 
-            if (active)
-            {
-                transform.localScale = Vector3.one;
-                DebugPnl.debugText = true;
-            }
-            else
-            { 
-                transform.localScale = Vector3.zero;
-                DebugPnl.debugText = false;
-            }
+        if (active)
+        {
+            transform.localScale = Vector3.one;
+            DebugPnl.debugText = true;
+        }
+        else
+        {
+            transform.localScale = Vector3.zero;
+            DebugPnl.debugText = false;
         }
     }
 
