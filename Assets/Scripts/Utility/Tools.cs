@@ -9,17 +9,4 @@ public static class Tools
         float y = -Mathf.Pow(x, 2) + (4 * x) + 1;
         return y;
     }
-
-
-    public static bool WithinRange<T>(int index, List<T> list)
-    {
-        if (index < list.Count && index >= 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }

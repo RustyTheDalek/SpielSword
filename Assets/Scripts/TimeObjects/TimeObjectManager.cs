@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Manages Objects that are affected by Time
@@ -10,7 +11,23 @@ public class TimeObjectManager : MonoBehaviour
     /// <summary>
     /// current game time, 0 = start of level.
     /// </summary>
-    public static int t = 0;
+    public static float t = 0;
+
+    /// <summary>
+    /// Time on previous frame
+    /// </summary>
+    public static float prevT;
+
+    /// <summary>
+    /// Difference in time between frames
+    /// </summary>
+    public static float DeltaT
+    {
+        get
+        {
+            return t - prevT;
+        }
+    }
 
     /// <summary>
     /// When does 'Time' start. changes when player reaches boss fight
@@ -26,16 +43,11 @@ public class TimeObjectManager : MonoBehaviour
 
     public static TimeState timeState = TimeState.Forward;
 
-    /// <summary>
-    /// Scaling for fastforward of boss and past objects
-    /// </summary>
-    public static float pastTimeScale = 1;
-
-    public static int GameScale
+    public static float GameScale
     {
         get
         {
-            return (int)timeState * (int)Time.timeScale * (int)pastTimeScale;
+            return (int)timeState * Time.timeScale;
         }
     }
 
@@ -62,14 +74,21 @@ public class TimeObjectManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        prevT = t;
         //Increment Game time
-        t += (int)Time.timeScale * (int)timeState * (int)pastTimeScale;
+        t += Time.timeScale * (int)timeState;
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            ReverseTime();
+        }
     }
 
     private void LateUpdate()
     {
         if (t < startT)
         {
+            Debug.Log("Beginning again");
             //Skips time ahead to when fight starts
             t = startT;
 
@@ -78,6 +97,7 @@ public class TimeObjectManager : MonoBehaviour
 
             if (OnRestartLevel != null)
                 OnRestartLevel();
+
         }
 
         if (timeState == TimeState.Forward)
@@ -87,19 +107,36 @@ public class TimeObjectManager : MonoBehaviour
         }
         else
         {
-            newTimeScale = rewindCurve.Evaluate((float)t - startT / (float)longestTime);
-            Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
+            //newTimeScale = rewindCurve.Evaluate((float)t - startT / (float)longestTime);
+            //Time.timeScale = Mathf.Clamp(newTimeScale, .25f, 100);   
         }
     }
 
     public void SetStartOfFight()
     {
-        startT = t;
+        startT = (int)t;
+    }
+
+    IEnumerator JumpTime()
+    {
+        yield return new WaitForSecondsRealtime(5);
+
+        t = startT + Mathf.Clamp(longestTime, longestTime, 120);
     }
 
     void ReverseTime()
     {
-        t = startT + 50;
+        //if (longestTime < 120)
+        //{
+        //    t = startT + longestTime;
+        //}
+        //else
+        //{
+        //    t = startT + 120;
+        //}
+        StartCoroutine(JumpTime());
+        //Debug.Break();
+        Time.timeScale = .25f;
         timeState = TimeState.Backward;
     }
 }

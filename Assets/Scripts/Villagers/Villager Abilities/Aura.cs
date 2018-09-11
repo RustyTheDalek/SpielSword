@@ -50,7 +50,7 @@ public class Aura : SpawnableSpriteTimeObject
 
             if (finishFrame == 0)
             {
-                finishFrame = TimeObjectManager.t;
+                finishFrame = (int)TimeObjectManager.t;
             }
 
             auraActive = false;
@@ -61,15 +61,15 @@ public class Aura : SpawnableSpriteTimeObject
 
     protected void PlayAuraFrame()
     {
-        if (Tools.WithinRange(currentFrame, sSFrames))
+        if (sSFrames.WithinRange(currentFrame))
         {
             if (GetComponent<Collider2D>())
-                GetComponent<Collider2D>().enabled = sSFrames[currentFrame].active;
+                GetComponent<Collider2D>().enabled = sSFrames[(int)currentFrame].active;
 
             if (GetComponent<Rigidbody2D>())
-                GetComponent<Rigidbody2D>().simulated = sSFrames[currentFrame].active;
+                GetComponent<Rigidbody2D>().simulated = sSFrames[(int)currentFrame].active;
 
-            auraActive = sSFrames[currentFrame].active;
+            auraActive = sSFrames[(int)currentFrame].active;
         }
     }
 

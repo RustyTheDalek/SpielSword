@@ -18,7 +18,7 @@ public class TimeObject : MonoBehaviour
 
     public TimeObjectState tObjectState = TimeObjectState.Void;
 
-    public int currentFrame;
+    public float currentFrame;
 
     #region Events
     public delegate void TimeObjectEvent();
@@ -46,7 +46,7 @@ public class TimeObject : MonoBehaviour
 
     protected virtual void Awake()
     {
-        startFrame = TimeObjectManager.t;
+        startFrame = (int)TimeObjectManager.t;
 
         OnTrackFrame += TrackTransform;
         OnPlayFrame += PlayTransormFrame;
@@ -75,7 +75,7 @@ public class TimeObject : MonoBehaviour
                             {
                                 //Debug.Log("Game time (" + TimeObjectManager.t + ") + greater than " +
                                 //    "start frame (" + startFrame + ") + skipping ahead");
-                                currentFrame = TimeObjectManager.t - startFrame;
+                                currentFrame = (int)TimeObjectManager.t - startFrame;
                             }
                             tObjectState = TimeObjectState.PastPlaying;
 
@@ -164,18 +164,6 @@ public class TimeObject : MonoBehaviour
                             tObjectState = TimeObjectState.PastPlaying;
                             if (OnStartReverse != null)
                                 OnStartReverse();
-
-                            //Just in case a frame or to is skipped we will attempt to 
-                            //keep object in sync by subtracting the difference between their finish frame and current game time
-                            //- (finishFrame - TimeObjectManager.t)
-                            if (finishFrame != 0)
-                            {
-                                currentFrame = (bFrames.Count - Mathf.Abs(finishFrame - TimeObjectManager.t) - 1);
-                            }
-                            else //With no finish frame we just start from the end of the list
-                            {
-                                currentFrame = bFrames.Count - 1;
-                            }
                         }
                         break;
                 }
@@ -191,7 +179,7 @@ public class TimeObject : MonoBehaviour
             m_Position = transform.position,
             m_Rotation = transform.rotation,
             m_Scale = transform.localScale,
-            timeStamp = TimeObjectManager.t,
+            timeStamp = (int)TimeObjectManager.t,
 
             enabled = gameObject.activeSelf
         };
@@ -200,15 +188,15 @@ public class TimeObject : MonoBehaviour
 
     protected void PlayTransormFrame()
     {
-        if (Tools.WithinRange(currentFrame, bFrames))
+        if (bFrames.WithinRange(currentFrame))
         {
-            transform.position = bFrames[currentFrame].m_Position;
-            transform.rotation = bFrames[currentFrame].m_Rotation;
-            transform.localScale = bFrames[currentFrame].m_Scale;
+            transform.position = bFrames[(int)currentFrame].m_Position;
+            transform.rotation = bFrames[(int)currentFrame].m_Rotation;
+            transform.localScale = bFrames[(int)currentFrame].m_Scale;
 
-            gameObject.SetActive(bFrames[currentFrame].enabled);
+            gameObject.SetActive(bFrames[(int)currentFrame].enabled);
 
-            currentFrame += TimeObjectManager.GameScale;
+            currentFrame += TimeObjectManager.DeltaT;
         }
     }
 
@@ -221,8 +209,21 @@ public class TimeObject : MonoBehaviour
 
         if (finishFrame == 0)
         {
-            finishFrame = TimeObjectManager.t;
+            finishFrame = (int)TimeObjectManager.t;
         }
+
+        currentFrame = bFrames.Count + TimeObjectManager.DeltaT;
+
+        //Just in case a frame or to is skipped we will attempt to 
+        //keep object in sync by subtracting the difference between their finish frame and current game time
+        //- (finishFrame - TimeObjectManager.t)
+        //if (finishFrame != 0)
+        //{
+        //    currentFrame = (int)(bFrames.Count - Mathf.Abs(finishFrame - TimeObjectManager.t) + TimeObjectManager.DeltaT);
+        //}
+        //else //With no finish frame we just start from the end of the list
+        //{
+        //}
     }
 
     private void OnDestroy()

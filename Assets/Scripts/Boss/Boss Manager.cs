@@ -386,7 +386,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage())
                                 {
-                                    TimeEnteredCurrentStage = TimeObjectManager.t;
+                                    TimeEnteredCurrentStage = (int)TimeObjectManager.t;
                                     bossStage = BossStage.Two;
                                     OnStageTwo();
                                 }
@@ -398,7 +398,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage())
                                 {
-                                    TimeEnteredCurrentStage = TimeObjectManager.t;
+                                    TimeEnteredCurrentStage = (int)TimeObjectManager.t;
                                     bossStage = BossStage.Three;
                                     OnStageThree();
                                 }
@@ -411,7 +411,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage())
                                 {
-                                    TimeEnteredCurrentStage = TimeObjectManager.t;
+                                    TimeEnteredCurrentStage = (int)TimeObjectManager.t;
                                     bossStage = BossStage.Four;
                                     OnStageFour();
                                 }
@@ -424,7 +424,7 @@ public abstract class BossManager : MonoBehaviour
 
                                 if (ReqsForNextStage(false))
                                 {
-                                    TimeEnteredCurrentStage = TimeObjectManager.t;
+                                    TimeEnteredCurrentStage = (int)TimeObjectManager.t;
                                     bossStage = BossStage.Five;
                                     OnStageFive();
                                 }

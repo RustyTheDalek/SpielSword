@@ -209,6 +209,8 @@ public abstract class Villager : Character
         m_Animator.SetBool(m_HashMeleeParam, false);
         m_Animator.SetBool(m_HashRangedParam, false);
         m_Animator.SetBool(m_HashSpecialParam, false);
+
+        OnDeath(Vector2.zero);
     }
 
     public void SetTrigger(bool active)

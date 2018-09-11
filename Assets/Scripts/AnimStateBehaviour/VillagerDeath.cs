@@ -15,6 +15,7 @@ public class VillagerDeath : StateMachineBehaviour {
             && animator.GetComponent<Villager>().deathEnd == false)
         {
             //Debug.Log("Death recorded");
+            animator.GetComponent<VillagerTimeObject>().finishFrame = (int)TimeObjectManager.t;
             animator.GetComponent<Villager>().deathEnd = true;
         }
     }

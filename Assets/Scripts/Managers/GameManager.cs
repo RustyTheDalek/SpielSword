@@ -135,7 +135,28 @@ public class GameManager : MonoBehaviour {
             Debug.Log("Unlocked : " + newHat);
             gManager.CurrentSave.Hats.Add(newHat);
 
-            OnUnlockHat(gManager.hats.LoadAsset<Hat>(newHat));
+            if (OnUnlockHat != null)
+            {
+                try
+                {
+                    OnUnlockHat(gManager.hats.LoadAsset<Hat>(newHat));
+                }
+                catch
+                {
+                    if(gManager == null)
+                    {
+                        Debug.LogError("I'm null somehow");
+                    }
+                    else if(hats == null)
+                    {
+                        Debug.LogError("Hats are null somehow");
+                    }
+                    else if(newHat == null)
+                    {
+                        Debug.LogError("New hat is null somehow");
+                    }
+                }
+            }
 
             if(save)
                 gManager.Save();

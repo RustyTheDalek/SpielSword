@@ -157,10 +157,15 @@ public abstract class Minion : Character
         StopAllCoroutines();
     }
 
+    public virtual void Reset()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Default");
+        m_Animator.Play("Move");
+        health = 1;
+    }
+
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        this.NamedLog("Hit: " + LayerMask.LayerToName(collision.gameObject.layer));
-
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
             case "Weapon":

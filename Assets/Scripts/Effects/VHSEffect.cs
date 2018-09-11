@@ -59,7 +59,7 @@ public class VHSEffect : MonoBehaviour {
             {
                 xScanLines[i] -= Time.deltaTime * xScanSpeed * (int)TimeObjectManager.timeState * Random.Range(1, i+1);
                 xScanLines[i] = XScanLineLogic(xScanLines[i]);
-                mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * (int)Time.timeScale * TimeObjectManager.pastTimeScale);
+                mpb.SetFloat("_xScanLine" + i,  xScanLines[i] * (int)Time.timeScale);
             }
 
             //Clamps the smudge effect
@@ -68,7 +68,7 @@ public class VHSEffect : MonoBehaviour {
                 yScanSpeed *= -1 * Random.Range(0.1f, 1);
             }
 
-            mpb.SetFloat("_yScanLine", yScanLine * (int)Time.timeScale * TimeObjectManager.pastTimeScale);
+            mpb.SetFloat("_yScanLine", yScanLine * (int)Time.timeScale);
             mpb.SetFloat("_noiseStrength", noiseStrength);
             mpb.SetFloat("_ScanJitter", scanJitter);
             sRenderer.SetPropertyBlock(mpb);

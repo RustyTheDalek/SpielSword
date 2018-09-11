@@ -52,10 +52,10 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
     }
 
-    protected override void OnPast()
-    {
-        tObjectState = TimeObjectState.PastFinished;
-    }
+    //protected override void OnPast()
+    //{
+    //    tObjectState = TimeObjectState.PastFinished;
+    //}
 
     protected virtual void Start()
     {
@@ -82,9 +82,9 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
     protected void PlayPlatformerFrame()
     {
-        if (Tools.WithinRange(currentFrame, pFrames))
+        if (pFrames.WithinRange(currentFrame))
         {
-            m_Sprite.sprite = sprites[pFrames[currentFrame].sprite];
+            m_Sprite.sprite = sprites[pFrames[(int)currentFrame].sprite];
         }
     }
 

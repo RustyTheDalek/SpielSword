@@ -29,11 +29,11 @@ public class SpriteTimeObject : TimeObject
 
     protected void PlaySpriteFrame()
     {
-        if (Tools.WithinRange(currentFrame, sFrames))
+        if (sFrames.WithinRange(currentFrame))
         {
-            m_Sprite.color = new Color( sFrames[currentFrame].color.r,
-                                        sFrames[currentFrame].color.g,
-                                        sFrames[currentFrame].color.b,
+            m_Sprite.color = new Color( sFrames[(int)currentFrame].color.r,
+                                        sFrames[(int)currentFrame].color.g,
+                                        sFrames[(int)currentFrame].color.b,
                                         .75f);
         }
     }
@@ -66,11 +66,6 @@ public class SpriteTimeObject : TimeObject
     {
         if (!m_Sprite.enabled && startFrame != 0)
             m_Sprite.enabled = true;
-    }
-
-    protected override void OnPast()
-    {
-        base.OnPast();
     }
 
     private void OnDestroy()

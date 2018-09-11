@@ -37,6 +37,7 @@ public class MinionTimeObject : AnimatorTimeObject {
             GetComponent<GroundMinion>().enabled = true;
         }
 
+        GetComponent<Minion>().Reset();
         m_Anim.enabled = true;
     }
 

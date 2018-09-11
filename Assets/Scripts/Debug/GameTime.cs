@@ -24,9 +24,10 @@ public class GameTime : MonoBehaviour {
 
         text.text = "Time: " + TimeObjectManager.t +
             "\nTimeState: " + TimeObjectManager.timeState +
-            "\nTimeScale: " + Time.timeScale + 
-            "\nPastTimeScale: " + TimeObjectManager.pastTimeScale +
-            "\nStart T: " + TimeObjectManager.startT;
+            "\nTimeScale: " + Time.timeScale +
+            "\nStart T: " + TimeObjectManager.startT +
+            "\nPrev T: " + TimeObjectManager.prevT +
+            "\nDelta T : " + TimeObjectManager.DeltaT;
 
         text.enabled = DebugPnl.debugText;
     }

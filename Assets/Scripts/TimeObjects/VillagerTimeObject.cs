@@ -50,10 +50,10 @@ public class VillagerTimeObject : AnimatorTimeObject
 
     protected void OnVillagerPlayFrame()
     {
-        if (Tools.WithinRange(currentFrame, vFrames))
+        if (vFrames.WithinRange(currentFrame))
         {
-            villager.hat.transform.localPosition = vFrames[currentFrame].hatPos;
-            transform.localScale = vFrames[currentFrame].scale;
+            villager.hat.transform.localPosition = vFrames[(int)currentFrame].hatPos;
+            transform.localScale = vFrames[(int)currentFrame].scale;
         }
     }
 

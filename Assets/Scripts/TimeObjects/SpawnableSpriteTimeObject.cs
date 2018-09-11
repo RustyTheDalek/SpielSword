@@ -34,7 +34,7 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
     {
         if(TimeObjectManager.t > 0 && startFrame == 0)
         {
-            startFrame = TimeObjectManager.t;
+            startFrame = (int)TimeObjectManager.t;
         }
     }
 
@@ -59,22 +59,22 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         if(!m_Sprite.enabled)
         {
             tObjectState = TimeObjectState.PresentDead;
-            finishFrame = TimeObjectManager.t;
+            finishFrame = (int)TimeObjectManager.t;
         }
     }
 
     protected void PlaySpawnableSpriteFrame()
     {
-        if (Tools.WithinRange(currentFrame, sSFrames))
+        if (sSFrames.WithinRange(currentFrame))
         {
-            gameObject.SetActive(sSFrames[currentFrame].active);
-            m_Sprite.enabled = sSFrames[currentFrame].active;
+            gameObject.SetActive(sSFrames[(int)currentFrame].active);
+            m_Sprite.enabled = sSFrames[(int)currentFrame].active;
 
             switch (TimeObjectManager.timeState)
             {
                 case TimeState.Forward:
 
-                    if (sSFrames[currentFrame].marty)
+                    if (sSFrames[(int)currentFrame].marty)
                     {
                         Debug.Log(this.name + " Martyed");
                         m_anim.SetTrigger("Marty");
@@ -83,7 +83,7 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
 
                 case TimeState.Backward:
 
-                    if (sSFrames[currentFrame].marty)
+                    if (sSFrames[(int)currentFrame].marty)
                     {
                         Debug.Log(this.name + " UnMartyed");
                         m_anim.SetTrigger("UnMarty");
@@ -130,14 +130,14 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         //deathOrMarty = false;
         try
         {
-            tempSSFrame = sSFrames[currentFrame];
+            tempSSFrame = sSFrames[(int)currentFrame];
             tempSSFrame.marty = true;
             m_anim.SetTrigger("Marty");
-            sSFrames[currentFrame] = tempSSFrame;
+            sSFrames[(int)currentFrame] = tempSSFrame;
 
-            finishFrame = bFrames[currentFrame].timeStamp;
+            finishFrame = bFrames[(int)currentFrame].timeStamp;
 
-            for (int i = currentFrame + 1; i < bFrames.Count; i++)
+            for (int i = (int)currentFrame + 1; i < bFrames.Count; i++)
             {
                 bFrames.RemoveAt(i);
                 sSFrames.RemoveAt(i);

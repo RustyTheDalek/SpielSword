@@ -44,4 +44,22 @@ public static class ExtensionMethods
     {
         Debug.Log(gO.name + ": " + message);
     }
+
+    public static bool WithinRange<T>(this List<T> list, float index)
+    {
+        return list.WithinRange((int)index);
+    }
+
+    public static bool WithinRange<T>(this List<T> list, int index)
+    {
+        if (index < list.Count && index >= 0)
+        {
+            return true;
+        }
+        else
+        {
+            Debug.Log(index + " Is not within Lists max of : " + list.Count);
+            return false;
+        }
+    }
 }
