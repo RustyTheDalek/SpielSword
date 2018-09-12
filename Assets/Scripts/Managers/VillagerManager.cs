@@ -89,10 +89,6 @@ public class VillagerManager : MonoBehaviour {
         pastVillagersTrans = objs[3];
         levelStart = objs[5];
         arenaStart = objs[6];
-
-        //TODO: Async When needed
-        //villagers = AssetBundle.LoadFromFile(Path.Combine(
-        //    Application.streamingAssetsPath, "AssetBundles/villagers"));
     }
 
     // Use this for initialization
