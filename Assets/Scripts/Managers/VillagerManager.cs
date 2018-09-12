@@ -74,7 +74,9 @@ public class VillagerManager : MonoBehaviour {
     public event NewVillagerEvent OnNextVillager;
 
     #region Assets
-    AssetBundle villagers;
+    public List<Villager> villagerPrefabs;
+
+    //AssetBundle villagers;
 
     #endregion
 
@@ -89,8 +91,8 @@ public class VillagerManager : MonoBehaviour {
         arenaStart = objs[6];
 
         //TODO: Async When needed
-        villagers = AssetBundle.LoadFromFile(Path.Combine(
-            Application.streamingAssetsPath, "AssetBundles/villagers"));
+        //villagers = AssetBundle.LoadFromFile(Path.Combine(
+        //    Application.streamingAssetsPath, "AssetBundles/villagers"));
     }
 
     // Use this for initialization
@@ -107,13 +109,13 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            //classToSpawn = VillagerClass.Priest;
+            //classToSpawn = VillagerClass.Warrior;
 
             //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is
-            villagers.LoadAsset<GameObject>(classToSpawn.ToString()).CreatePool(50);
-            GameObject temp = villagers.LoadAsset<GameObject>(classToSpawn.ToString()).Spawn();
+            villagerPrefabs[(int)classToSpawn].CreatePool(50);
+            Villager temp = villagerPrefabs[(int)classToSpawn].Spawn();
             temp.name = classToSpawn.ToString() + i;
-            SetupVillager(temp, spawnOffset);
+            SetupVillager(temp.gameObject, spawnOffset);
         }
 
         //Spawn a new villager and teleport them to the Arena

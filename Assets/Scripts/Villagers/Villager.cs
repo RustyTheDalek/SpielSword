@@ -60,6 +60,7 @@ public abstract class Villager : Character
 
     #region Protected Variables
 
+    protected SpriteRenderer m_Sprite;
     protected GroundCharacter2D m_Ground;
 
     public SpecialType specialType = SpecialType.Press;
@@ -79,7 +80,7 @@ public abstract class Villager : Character
     protected readonly int m_HashMeleeParam = Animator.StringToHash("MeleeAttack");
     protected readonly int m_HashRangedParam = Animator.StringToHash("RangedAttack");
     protected readonly int m_HashSpecialParam = Animator.StringToHash("PlayerSpecial");
-    protected readonly int m_HashGroundPara = Animator.StringToHash("Ground");
+    protected readonly int m_HashGroundParam = Animator.StringToHash("Ground");
 
     #endregion
 
@@ -102,6 +103,7 @@ public abstract class Villager : Character
     {
         base.Awake();
 
+        m_Sprite = GetComponent<SpriteRenderer>();
         m_Ground = GetComponent<GroundCharacter2D>();
         vTO = GetComponent<VillagerTimeObject>();
 
@@ -144,6 +146,8 @@ public abstract class Villager : Character
 
     protected override void Update()
     {
+        m_Animator.SetBool(m_HashGroundParam, m_Ground.m_Grounded);
+
         base.Update();
 
         if (Alive)
@@ -187,9 +191,6 @@ public abstract class Villager : Character
 
                         m_Jump = Input.GetButtonDown("Jump");
                     }
-
-                    m_Animator.SetBool(m_HashGroundPara, m_Ground.m_Grounded);
-
                     break;
             }
         }
@@ -289,6 +290,16 @@ public abstract class Villager : Character
     public void OnDeathEnd()
     {
         deathEnd = true;
+    }
+
+    public void EnableInsideMask()
+    {
+        m_Sprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+    }
+
+    public void DisableMaskInteraction()
+    {
+        m_Sprite.maskInteraction = SpriteMaskInteraction.None;
     }
 }
 
