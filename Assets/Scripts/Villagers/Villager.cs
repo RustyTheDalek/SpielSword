@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -70,6 +71,8 @@ public abstract class Villager : Character
     /// </summary>
     protected GameObject rangedAtk;
 
+    public SpriteMask portal;
+
     /// <summary>
     /// Spawn position for Ranged projectiles
     /// </summary>
@@ -103,11 +106,13 @@ public abstract class Villager : Character
     {
         base.Awake();
 
+        portal = GetComponentInChildren<SpriteMask>();
+
         m_Sprite = GetComponent<SpriteRenderer>();
         m_Ground = GetComponent<GroundCharacter2D>();
         vTO = GetComponent<VillagerTimeObject>();
 
-        if(abilities == null)
+        if (abilities == null)
             abilities = AssetBundle.LoadFromFile(Path.Combine(
                 Application.streamingAssetsPath, "AssetBundles/abilities"));
 
@@ -142,6 +147,11 @@ public abstract class Villager : Character
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
 
+    }
+
+    protected void Start()
+    {
+        SceneLinkedSMB<Villager>.Initialise(m_Animator, this);
     }
 
     protected override void Update()
@@ -247,11 +257,35 @@ public abstract class Villager : Character
         if (!shielded)
         {
             health--;
-            OnDeath(attackDirection);
 
-            if(GameManager.gManager)
-                GameManager.gManager.UnlockHat("Anor");
+            if (health < 0)
+            {
+                OnDeath(attackDirection);
+            }
         }
+    }
+
+    public override void OnDeath(Vector2 attackDirection)
+    {
+        this.NamedLog("Dead");
+
+        moveDir = Vector2.zero;
+        m_rigidbody.velocity = Vector2.zero;
+
+        m_Animator.SetFloat("xSpeed", 0);
+        m_Animator.SetFloat("ySpeed", 0);
+        m_Animator.SetFloat("xSpeedAbs", 0);
+        m_Animator.SetBool(m_HashDeadParam, true);
+
+        //if (villagerState == VillagerState.PresentVillager)
+        //{
+        //    StartCoroutine(SlowTime());
+        //}
+
+        Debug.Break();
+
+        if (GameManager.gManager)
+            GameManager.gManager.UnlockHat("Anor");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -287,19 +321,37 @@ public abstract class Villager : Character
         }
     }
 
-    public void OnDeathEnd()
-    {
-        deathEnd = true;
-    }
-
     public void EnableInsideMask()
     {
         m_Sprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
     }
 
-    public void DisableMaskInteraction()
+    public void EnableOutsidMask()
+    {
+        m_Sprite.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+    }
+
+    public void NoMask()
     {
         m_Sprite.maskInteraction = SpriteMaskInteraction.None;
+    }
+
+    public void DisableAnimator()
+    {
+        m_Animator.enabled = false;
+    }
+
+    public IEnumerator SlowTime()
+    {
+        float startTime = Time.time;
+
+        while (Time.timeScale > .5f)
+        {
+            Time.timeScale = Mathf.Lerp(1, 0, Time.time - startTime);
+
+            yield return null;
+
+        }
     }
 }
 

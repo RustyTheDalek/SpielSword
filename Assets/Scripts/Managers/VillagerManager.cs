@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System.Collections;
 
 /// <summary>
 /// Manages all the Villages Alived, Past or Dead.
@@ -29,6 +30,8 @@ public class VillagerManager : MonoBehaviour {
     public int villagersToSpawn;
 
     public Villager activeVillager;
+
+    public Animator portal;
 
     [SerializeField] List<Villager> remainingVillagers;
     List<Villager> pastVillagers;
@@ -89,6 +92,8 @@ public class VillagerManager : MonoBehaviour {
         pastVillagersTrans = objs[3];
         levelStart = objs[5];
         arenaStart = objs[6];
+
+        portal = GetComponentInChildren<Animator>();
     }
 
     // Use this for initialization
@@ -177,6 +182,7 @@ public class VillagerManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
+                //When the active Villager has died and the animation is finished
                 if (!activeVillager.Alive && activeVillager.deathEnd)
                 {
                     //Game over if no lives
@@ -201,6 +207,11 @@ public class VillagerManager : MonoBehaviour {
 
     public void OnVillagerDeath()
     {
+        portal.transform.position = activeVillager.portal.transform.position;
+        portal.SetTrigger("Grow");
+
+        StartCoroutine(Wait());
+
         //Turn active Villager into Past Villager
         activeVillager.villagerState = VillagerState.PastVillager;
         activeVillager.transform.parent = pastVillagersTrans;
@@ -212,6 +223,17 @@ public class VillagerManager : MonoBehaviour {
         }
 
         pastVillagers.Add(activeVillager);
+    }
+
+    public IEnumerator Wait()
+    {
+        yield return new WaitForSecondsRealtime(3);
+
+        TimeObjectManager.t = 5;
+
+        portal.transform.position = levelStart.position;
+        portal.SetTrigger("Shrink");
+
     }
 
     public void StartFightWNewVillager()
@@ -229,6 +251,13 @@ public class VillagerManager : MonoBehaviour {
 
         if (remainingVillagers.Count > 0)
         {
+            if (activeVillager)
+            {
+                activeVillager.vTO.tObjectState = TimeObjectState.PastStart;
+                activeVillager.DisableAnimator();
+                activeVillager.EnableOutsidMask();
+            }
+
 
             //Get the next Villager
             activeVillager = remainingVillagers[0];
