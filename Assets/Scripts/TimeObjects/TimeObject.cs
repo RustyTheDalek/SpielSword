@@ -54,6 +54,10 @@ public class TimeObject : MonoBehaviour
 
     protected virtual void Update()
     {
+        currentFrame = Mathf.Clamp(TimeObjectManager.t - startFrame, 0, finishFrame);
+
+
+
         switch (TimeObjectManager.timeState)
         {
             case TimeState.Forward:
@@ -139,7 +143,8 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastPlaying:
 
-                        if (TimeObjectManager.t <= startFrame || TimeObjectManager.t <= TimeObjectManager.startT)
+                        if (TimeObjectManager.t <= startFrame || 
+                            TimeObjectManager.t <= TimeObjectManager.startT)
                         {
                             tObjectState = TimeObjectState.PastStart;
 
@@ -195,8 +200,6 @@ public class TimeObject : MonoBehaviour
             transform.localScale = bFrames[(int)currentFrame].m_Scale;
 
             gameObject.SetActive(bFrames[(int)currentFrame].enabled);
-
-            currentFrame += TimeObjectManager.DeltaT;
         }
     }
 
@@ -212,7 +215,7 @@ public class TimeObject : MonoBehaviour
             finishFrame = (int)TimeObjectManager.t;
         }
 
-        currentFrame = bFrames.Count + TimeObjectManager.DeltaT;
+        currentFrame = bFrames.Count + TimeObjectManager.DeltaT - 1;
 
         //Just in case a frame or to is skipped we will attempt to 
         //keep object in sync by subtracting the difference between their finish frame and current game time

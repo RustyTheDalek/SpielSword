@@ -210,7 +210,7 @@ public class VillagerManager : MonoBehaviour {
         portal.transform.position = activeVillager.portal.transform.position;
         portal.SetTrigger("Grow");
 
-        StartCoroutine(Wait());
+        StartCoroutine(DelayedJump(3));
 
         //Turn active Villager into Past Villager
         activeVillager.villagerState = VillagerState.PastVillager;
@@ -225,11 +225,16 @@ public class VillagerManager : MonoBehaviour {
         pastVillagers.Add(activeVillager);
     }
 
-    public IEnumerator Wait()
+    /// <summary>
+    /// Waits a given time then jumps time back
+    /// </summary>
+    /// <param name="secondsToWait"></param>
+    /// <returns></returns>
+    public IEnumerator DelayedJump(int secondsToWait)
     {
-        yield return new WaitForSecondsRealtime(3);
+        yield return new WaitForSecondsRealtime(secondsToWait);
 
-        TimeObjectManager.t = 5;
+        TimeObjectManager.t = TimeObjectManager.startT + 5;
 
         portal.transform.position = levelStart.position;
         portal.SetTrigger("Shrink");

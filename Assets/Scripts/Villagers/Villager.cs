@@ -277,12 +277,6 @@ public abstract class Villager : Character
         m_Animator.SetFloat("xSpeedAbs", 0);
         m_Animator.SetBool(m_HashDeadParam, true);
 
-        //if (villagerState == VillagerState.PresentVillager)
-        //{
-        //    StartCoroutine(SlowTime());
-        //}
-
-        Debug.Break();
 
         if (GameManager.gManager)
             GameManager.gManager.UnlockHat("Anor");
