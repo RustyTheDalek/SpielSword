@@ -34,8 +34,12 @@ public class ArenaGate : MonoBehaviour {
     //close. Bit defensive but best to be sure
     void ForceCloseGate()
     {
-        transform.localPosition = closePos;
-        closing = false;
+        //Don't want gate closing if player hasn't reached arena
+        if (TimeObjectManager.startT != 0)
+        {
+            transform.localPosition = closePos;
+            closing = false;
+        }
     }
 
     private void Update()
