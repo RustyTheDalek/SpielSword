@@ -255,7 +255,7 @@ public abstract class Villager : Character
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Minion" && !LevelManager.GodMode)
+        if (collision.gameObject.name.Contains("Flying") && !LevelManager.GodMode)
         {
             Debug.Log("It was " + collision.gameObject.name);
             OnHit(collision.transform.position.PointTo(transform.position));
