@@ -58,7 +58,7 @@ public static class ExtensionMethods
         }
         else
         {
-            Debug.Log(index + " Is not within Lists max of : " + list.Count);
+            //Debug.Log(index + " Is not within Lists max of : " + list.Count);
             return false;
         }
     }

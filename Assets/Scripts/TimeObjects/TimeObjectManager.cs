@@ -119,9 +119,9 @@ public class TimeObjectManager : MonoBehaviour
 
     IEnumerator JumpTime()
     {
-        yield return new WaitForSecondsRealtime(5);
+        yield return new WaitForSecondsRealtime(3);
 
-        t = startT + Mathf.Clamp(longestTime, longestTime, 120);
+        t = startT + Mathf.Clamp(longestTime, longestTime, 30);
     }
 
     void ReverseTime()
@@ -134,6 +134,7 @@ public class TimeObjectManager : MonoBehaviour
         //{
         //    t = startT + 120;
         //}
+
         StartCoroutine(JumpTime());
         //Debug.Break();
         timeState = TimeState.Backward;
