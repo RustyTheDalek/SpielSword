@@ -136,7 +136,6 @@ public class TimeObjectManager : MonoBehaviour
         //}
         StartCoroutine(JumpTime());
         //Debug.Break();
-        Time.timeScale = .25f;
         timeState = TimeState.Backward;
     }
 }
