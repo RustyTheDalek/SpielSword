@@ -60,6 +60,14 @@ public abstract class Minion : Character
         SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
     }
 
+    private void OnEnable()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Minion");
+        m_Animator.SetBool(m_HashDeadParam, false);
+        m_Animator.Play("Move");
+        health = 1;
+    }
+
     public abstract void Patrol();
 
     public virtual void MoveToClosest() { }
@@ -157,12 +165,6 @@ public abstract class Minion : Character
         StopAllCoroutines();
     }
 
-    public virtual void Reset()
-    {
-        gameObject.layer = LayerMask.NameToLayer("Default");
-        m_Animator.Play("Move");
-        health = 1;
-    }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
