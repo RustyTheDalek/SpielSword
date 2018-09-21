@@ -66,6 +66,9 @@ public abstract class Minion : Character
         m_Animator.SetBool(m_HashDeadParam, false);
         m_Animator.Play("Move");
         health = 1;
+        m_rigidbody.velocity = Vector2.zero;
+        m_rigidbody.constraints = RigidbodyConstraints2D.None;
+        m_rigidbody.simulated = true;
     }
 
     public abstract void Patrol();
@@ -164,7 +167,6 @@ public abstract class Minion : Character
         base.OnDeath(attackDirection);
         StopAllCoroutines();
     }
-
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {

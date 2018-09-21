@@ -32,7 +32,7 @@ public class FlightMinion : Minion
 
     #region Protected Variables
 
-    protected PolygonCollider2D[] parts;
+    protected MinionPartTimeObject[] parts;
 
     protected int moveSpeed;
 
@@ -60,7 +60,7 @@ public class FlightMinion : Minion
     {
         base.Start();
 
-        parts = GetComponentsInChildren<PolygonCollider2D>();
+        parts = GetComponentsInChildren<MinionPartTimeObject>();
 
         moveSpeed = patrolSpeed;
 
@@ -161,39 +161,16 @@ public class FlightMinion : Minion
 
     public override void OnDeath(Vector2 attackDirection)
     {
-        this.NamedLog("Getting Yeeted in " + attackDirection);
-
         base.OnDeath(attackDirection);
 
         m_Animator.enabled = false;
+        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        m_rigidbody.simulated = false;
 
-        Rigidbody2D rb;
-
-        foreach(PolygonCollider2D part in parts)
+        foreach(MinionPartTimeObject part in parts)
         {
-            rb = part.GetComponent<Rigidbody2D>();
-            rb.bodyType = RigidbodyType2D.Dynamic;
-
-            Vector2 throwforce = (new Vector2(
-                attackDirection.x * Random.Range(2f, 10f),
-                attackDirection.y * Random.Range(1f, 5f)) * (rb.mass * rb.mass));
-
-            Debug.DrawRay(part.transform.position, throwforce, Color.red, 5f);
-
-            rb.AddForce(throwforce, ForceMode2D.Impulse);
             part.enabled = true;
-
-            if (part.name == "Head")
-            {
-                part.transform.GetChild(1).SetParent(null);
-                part.transform.GetChild(1).SetParent(null);
-            }
-            else
-            {
-                part.gameObject.transform.DetachChildren();
-            }
-
-            part.transform.SetParent(null);
+            part.Throw(attackDirection);
         }
     }
 

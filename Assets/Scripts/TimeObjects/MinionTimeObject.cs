@@ -28,8 +28,6 @@ public class MinionTimeObject : AnimatorTimeObject {
 
         finishFrame = 0;
 
-        m_Sprite.color = new Color(m_Sprite.color.r, m_Sprite.color.g, m_Sprite.color.b, 1f);
-
         minion.enabled = true;
 
         m_Anim.enabled = true;
