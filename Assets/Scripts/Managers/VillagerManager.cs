@@ -216,11 +216,11 @@ public class VillagerManager : MonoBehaviour {
         activeVillager.villagerState = VillagerState.PastVillager;
         activeVillager.transform.parent = pastVillagersTrans;
         activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-        if (activeVillager.melee)
-        {
-            activeVillager.melee.gameObject.layer = 
-                LayerMask.NameToLayer("PastVillager");
-        }
+        //if (activeVillager.melee)
+        //{
+        //    activeVillager.melee.gameObject.layer = 
+        //        LayerMask.NameToLayer("PastVillager");
+        //}
 
         pastVillagers.Add(activeVillager);
     }

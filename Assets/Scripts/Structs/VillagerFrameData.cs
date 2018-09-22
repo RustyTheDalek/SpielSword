@@ -11,4 +11,6 @@ public struct VillagerFrameData
                     scale,
                     portalPos,
                     portalScale;
+
+    public bool meleeColliderEnabled;
 }

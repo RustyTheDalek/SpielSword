@@ -50,13 +50,18 @@ public abstract class Minion : Character
 
     #endregion
 
-    protected virtual void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         contactFilter.layerMask = layerGroundOnly;
 
         startingState = state;
         startingConstraints = m_rigidbody.constraints;
+    }
 
+    protected virtual void Start()
+    {
         SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
     }
 
@@ -67,7 +72,7 @@ public abstract class Minion : Character
         m_Animator.Play("Move");
         health = 1;
         m_rigidbody.velocity = Vector2.zero;
-        m_rigidbody.constraints = RigidbodyConstraints2D.None;
+        m_rigidbody.constraints = startingConstraints;
         m_rigidbody.simulated = true;
     }
 
@@ -215,14 +220,15 @@ public abstract class Minion : Character
                 }
                 break;
 
-            case "Weapon":
+            //TODO:Figure out why this was here and removed if not needed
+            //case "Weapon":
 
-                if (Alive)
-                {
-                    health--;
-                    OnDeath(collision.transform.position.PointTo(transform.position));
-                }
-                break;
+            //    if (Alive)
+            //    {
+            //        health--;
+            //        OnDeath(collision.transform.position.PointTo(transform.position));
+            //    }
+            //    break;
         }
     }
 

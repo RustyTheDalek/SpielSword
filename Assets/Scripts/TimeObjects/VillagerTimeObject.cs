@@ -58,6 +58,9 @@ public class VillagerTimeObject : AnimatorTimeObject
             transform.localScale = vFrames[(int)currentFrame].scale;
             villager.portal.transform.localPosition = vFrames[(int)currentFrame].portalPos;
             villager.portal.transform.localScale = vFrames[(int)currentFrame].portalScale;
+
+            if(villager.melee)
+                villager.melee.enabled = vFrames[(int)currentFrame].meleeColliderEnabled;
         }
     }
 
@@ -69,6 +72,7 @@ public class VillagerTimeObject : AnimatorTimeObject
             scale = transform.localScale,
             portalPos = villager.portal.transform.localPosition,
             portalScale = villager.portal.transform.localScale,
+            meleeColliderEnabled = villager.melee ? villager.melee.enabled : false
         };
 
         vFrames.Add(tempVFrame);
