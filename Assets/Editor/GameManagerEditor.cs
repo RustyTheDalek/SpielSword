@@ -11,36 +11,39 @@ class GameManagerEditor : Editor
 
     private void OnSceneGUI()
     {
-        m_target = (GameManager)target;
-
-        Handles.BeginGUI();
+        if (Application.isPlaying)
         {
-            if (GameManager.gManager.hats != null)
+            m_target = (GameManager)target;
+
+            Handles.BeginGUI();
             {
-                GUIStyle boxStyle = new GUIStyle("box");
-
-                string[] hatNames = GameManager.gManager.hats.GetAllAssetNames();
-
-                GUILayout.BeginArea(new Rect(10, 10, 200, 20 + 20 * hatNames.Length), boxStyle);
+                if (GameManager.gManager.hats != null)
                 {
-                    GUILayout.Label("Unlock Hats");
+                    GUIStyle boxStyle = new GUIStyle("box");
 
-                    if (GUILayout.Button(keepUnlocks == true ? "Save Unlocks" : "Don't Save Unlock"))
-                    {
-                        keepUnlocks = !keepUnlocks;
-                    }
+                    string[] hatNames = GameManager.gManager.hats.GetAllAssetNames();
 
-                    foreach (string hat in hatNames)
+                    GUILayout.BeginArea(new Rect(10, 10, 200, 20 + 20 * hatNames.Length), boxStyle);
                     {
-                        if (GUILayout.Button(GameManager.gManager.hats.LoadAsset<Hat>(hat)._Name))
+                        GUILayout.Label("Unlock Hats");
+
+                        if (GUILayout.Button(keepUnlocks == true ? "Save Unlocks" : "Don't Save Unlock"))
                         {
-                            GameManager.gManager.UnlockHat(hat, keepUnlocks);
+                            keepUnlocks = !keepUnlocks;
+                        }
+
+                        foreach (string hat in hatNames)
+                        {
+                            if (GUILayout.Button(GameManager.gManager.hats.LoadAsset<Hat>(hat)._Name))
+                            {
+                                GameManager.gManager.UnlockHat(hat, keepUnlocks);
+                            }
                         }
                     }
                 }
-            }
                 GUILayout.EndArea();
+            }
+            Handles.EndGUI();
         }
-        Handles.EndGUI();
     }
 }
