@@ -45,7 +45,9 @@ public class VillagerTimeObject : AnimatorTimeObject
 
         OnPlayFrame += OnVillagerPlayFrame;
         OnTrackFrame += OnVillagerTrackFrame;
-        OnFinishReverse += OnVillagerFinishReverse;
+        OnStartPlayback += OnVillagerStartPlayback;
+        OnFinishPlayback += OnVillagerFinishPlayback;
+        OnStartReverse += OnVillagerStartReverse;
     }
 
     protected void OnVillagerPlayFrame()
@@ -54,6 +56,11 @@ public class VillagerTimeObject : AnimatorTimeObject
         {
             villager.hat.transform.localPosition = vFrames[(int)currentFrame].hatPos;
             transform.localScale = vFrames[(int)currentFrame].scale;
+            villager.portal.transform.localPosition = vFrames[(int)currentFrame].portalPos;
+            villager.portal.transform.localScale = vFrames[(int)currentFrame].portalScale;
+
+            if(villager.melee)
+                villager.melee.enabled = vFrames[(int)currentFrame].meleeColliderEnabled;
         }
     }
 
@@ -62,7 +69,10 @@ public class VillagerTimeObject : AnimatorTimeObject
         tempVFrame = new VillagerFrameData()
         {
             hatPos = villager.hat.transform.localPosition,
-            scale = transform.localScale
+            scale = transform.localScale,
+            portalPos = villager.portal.transform.localPosition,
+            portalScale = villager.portal.transform.localScale,
+            meleeColliderEnabled = villager.melee ? villager.melee.enabled : false
         };
 
         vFrames.Add(tempVFrame);
@@ -72,24 +82,26 @@ public class VillagerTimeObject : AnimatorTimeObject
     /// </summary>
     protected override void OnPast()
     {
-        base.OnPast();
+        //base.OnPast();
         villager.villagerState = VillagerState.PastVillager;
         //villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
 
-    protected void OnVillagerFinishReverse()
+    protected void OnVillagerStartPlayback()
     {
+        m_Character.RestoreHealth();
+    }
 
+    protected void OnVillagerStartReverse()
+    {
+        m_HatSprite.enabled = true;
+        m_Sprite.enabled = true;
+    }
 
-        m_Sprite.color = new Color(m_Sprite.color.r,
-                                        m_Sprite.color.g,
-                                        m_Sprite.color.b,
-                                        .5f);
-
-        m_HatSprite.color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
-                                                                        villager.hat.color.g,
-                                                                        villager.hat.color.b,
-                                                                        .5f);
+    protected void OnVillagerFinishPlayback()
+    {
+        m_Sprite.enabled = false;
+        m_HatSprite.enabled = false;
     }
 
     //public void SetMartyPoint()
@@ -111,9 +123,11 @@ public class VillagerTimeObject : AnimatorTimeObject
 
     private void OnDestroy()
     {
-        OnFinishReverse -= OnVillagerFinishReverse;
+        OnStartPlayback -= OnVillagerStartPlayback;
 
         OnPlayFrame -= OnVillagerPlayFrame;
         OnTrackFrame -= OnVillagerTrackFrame;
+        OnFinishPlayback -= OnVillagerFinishPlayback;
+        OnStartReverse -= OnVillagerStartReverse;
     }
 }

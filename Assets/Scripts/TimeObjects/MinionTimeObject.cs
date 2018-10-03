@@ -5,10 +5,18 @@
 /// </summary>
 public class MinionTimeObject : AnimatorTimeObject {
 
+    Minion minion;
+
+    Transform origin;
+
     // Use this for initialization
     protected override void Awake()
     {
         base.Awake();
+
+        origin = transform;
+
+        minion = GetComponent<Minion>();
 
         OnStartPlayback += ResetTracking;
         OnStartReverse += DisableMinion;
@@ -16,6 +24,8 @@ public class MinionTimeObject : AnimatorTimeObject {
 
     private void ResetTracking()
     {
+        transform.SetPositionAndRotation(origin.position, origin.rotation);
+
         bFrames.Clear();
         pFrames.Clear();
         sFrames.Clear();
@@ -24,35 +34,14 @@ public class MinionTimeObject : AnimatorTimeObject {
 
         finishFrame = 0;
 
-        m_Sprite.color = new Color(m_Sprite.color.r, m_Sprite.color.g, m_Sprite.color.b, 1f);
-
-        //TODO: Improve this trash - Just use Minion base class instead?
-        if (GetComponent<FlightMinion>())
-        {
-            GetComponent<FlightMinion>().enabled = true;
-        }
-
-        if (GetComponent<GroundMinion>())
-        {
-            GetComponent<GroundMinion>().enabled = true;
-        }
-
-        GetComponent<Minion>().Reset();
+        minion.enabled = true;
+        minion.OnEnable();
         m_Anim.enabled = true;
     }
 
     private void DisableMinion()
     {
-        //TODO: Improve this trash
-        if(GetComponent<FlightMinion>())
-        {
-            GetComponent<FlightMinion>().enabled = false;
-        }
-
-        if(GetComponent<GroundMinion>())
-        {
-            GetComponent<GroundMinion>().enabled = false;
-        }
+        minion.enabled = false;
     }
 
     private void OnDestroy()

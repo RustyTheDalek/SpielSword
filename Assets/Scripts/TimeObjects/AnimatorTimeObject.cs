@@ -23,8 +23,6 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
     protected PlatformerAnimData pAnimData;
 
-    protected Rigidbody2D m_Rigidbody;
-
     protected Animator m_Anim;
 
     #endregion
@@ -39,14 +37,13 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
         m_Character = GetComponent<Character>();
         m_Platformer = GetComponent<PlatformerCharacter2D>();
-        m_Rigidbody = GetComponent<Rigidbody2D>();
         m_Anim = GetComponent<Animator>();
 
-        OnTrackFrame += TrackPlatformerFrame;
-        OnPlayFrame += PlayPlatformerFrame;
-        OnFinishPlayback += OnFinishPlatformerPlayback;
-        OnStartPlayback += OnPlatformerStartPlayback;
-        OnStartReverse += OnPlatformerStartReverse;
+        OnTrackFrame += TrackSpriteSheetFrame;
+        OnPlayFrame += PlaySpriteSheetFrame;
+        OnFinishPlayback += OnFinishSpriteSheetPlayback;
+        OnStartPlayback += OnSpriteSheetStartPlayback;
+        OnStartReverse += OnSpriteSheetStartReverse;
 
         sprites = new Dictionary<string, Sprite>();
 
@@ -63,7 +60,7 @@ public class AnimatorTimeObject : RigidbodyTimeObject
         tObjectState = TimeObjectState.Present;
     }
 
-    protected void TrackPlatformerFrame()
+    protected void TrackSpriteSheetFrame()
     {
         //Adds new sprite to List
         if(!sprites.ContainsKey(m_Sprite.sprite.name))
@@ -80,7 +77,7 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
     }
 
-    protected void PlayPlatformerFrame()
+    protected void PlaySpriteSheetFrame()
     {
         if (pFrames.WithinRange(currentFrame))
         {
@@ -88,7 +85,7 @@ public class AnimatorTimeObject : RigidbodyTimeObject
         }
     }
 
-    protected void OnFinishPlatformerPlayback()
+    protected void OnFinishSpriteSheetPlayback()
     {
         if (finishFrame == 0)
         {
@@ -97,24 +94,24 @@ public class AnimatorTimeObject : RigidbodyTimeObject
         }
     }
 
-    protected void OnPlatformerStartReverse()
+    protected void OnSpriteSheetStartReverse()
     { 
         m_Platformer.enabled = false;
         m_Anim.enabled = false;
     }
 
-    protected void OnPlatformerStartPlayback()
+    protected void OnSpriteSheetStartPlayback()
     {
         m_Platformer.enabled = true;
     }
 
     private void OnDestroy()
     {
-        OnTrackFrame -= TrackPlatformerFrame;
-        OnPlayFrame -= PlayPlatformerFrame;
-        OnFinishPlayback -= OnFinishPlatformerPlayback;
-        OnStartPlayback -= OnPlatformerStartPlayback;
-        OnStartReverse -= OnPlatformerStartReverse;
+        OnTrackFrame -= TrackSpriteSheetFrame;
+        OnPlayFrame -= PlaySpriteSheetFrame;
+        OnFinishPlayback -= OnFinishSpriteSheetPlayback;
+        OnStartPlayback -= OnSpriteSheetStartPlayback;
+        OnStartReverse -= OnSpriteSheetStartReverse;
     }
 
 }

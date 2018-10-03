@@ -24,17 +24,11 @@ public class VillagerAttack : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if (this.name.Contains("Range") || this.name.Contains("Imp"))
+        if (name.Contains("Range") || name.Contains("Imp"))
         {
             if (coll.gameObject.GetComponent<Head>())
             {
                 coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
-            }
-
-            //TODO: add logic so projectile does not collide with self 
-            //(Could be done with Tags)
-            if (coll.tag != "Ethereal")
-            {
                 SetActive(false);
             }
         }
@@ -42,7 +36,7 @@ public class VillagerAttack : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (this.name.Contains("Range"))
+        if (name.Contains("Range"))
         {
             SetActive(false);
         }
@@ -60,7 +54,7 @@ public class VillagerAttack : MonoBehaviour
 
         if (!active)
         {
-            this.enabled = false;
+            enabled = false;
         }
     }
 }

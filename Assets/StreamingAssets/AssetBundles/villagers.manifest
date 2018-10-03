@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 348171557
+CRC: 3008597566
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e7298ccf6804f46465d4f7bcb4d8829e
+    Hash: 7ed6f5f8adc80babd15b6402ede7d11d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0c289ea10d907bbc23fa30aeed24324a
+    Hash: 6b61ba8c81b5d46a05e29f7119efd127
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -46,6 +46,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 6f519d244fec3ad48a5e6e034d1ee458, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 0a27ff84ed168ea4f80755f592fee877, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 7e930005ea5bea945ac4500741718fe4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 829e9f0563d2f7940ae3588e964414fd, type: 3}
@@ -55,8 +57,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 2c408966f2235f74e928e8cd525291c1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 290a0d47b52ce0e4093136af19d04192, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: fe486b0801c57e74092bde35426c69c0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 95147898b0fc03c4c9ae8adb923bf68a, type: 3}
 - Class: 114
@@ -86,6 +86,8 @@ ClassTypes:
 - Class: 223
   Script: {instanceID: 0}
 - Class: 224
+  Script: {instanceID: 0}
+- Class: 331
   Script: {instanceID: 0}
 Assets:
 - Assets/Prefabs/Villagers/PressSpecial/Berserker.prefab

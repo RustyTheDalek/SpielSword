@@ -59,6 +59,11 @@ public class TimeObjectManager : MonoBehaviour
     /// </summary>
     public event TimeManagerEvent OnRestartLevel;
 
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     public void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager)
     {
         arenaEntry.OnPlayerEnterArena += SetStartOfFight;
@@ -77,18 +82,12 @@ public class TimeObjectManager : MonoBehaviour
         prevT = t;
         //Increment Game time
         t += Time.timeScale * (int)timeState;
-
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            ReverseTime();
-        }
     }
 
     private void LateUpdate()
     {
-        if (t < startT)
+        if (t < startT && TimeObjectManager.timeState == TimeState.Backward)
         {
-            Debug.Log("Beginning again");
             //Skips time ahead to when fight starts
             t = startT;
 
@@ -97,7 +96,6 @@ public class TimeObjectManager : MonoBehaviour
 
             if (OnRestartLevel != null)
                 OnRestartLevel();
-
         }
 
         if (timeState == TimeState.Forward)
@@ -124,19 +122,8 @@ public class TimeObjectManager : MonoBehaviour
         t = startT + Mathf.Clamp(longestTime, longestTime, 30);
     }
 
-    void ReverseTime()
+    public static void ReverseTime()
     {
-        //if (longestTime < 120)
-        //{
-        //    t = startT + longestTime;
-        //}
-        //else
-        //{
-        //    t = startT + 120;
-        //}
-
-        StartCoroutine(JumpTime());
-        //Debug.Break();
         timeState = TimeState.Backward;
     }
 }

@@ -14,10 +14,9 @@ public class FlyingEnemySpawner : TimeObjectLite
     private int prepareSpawn;
     private int currentSpawn;
     private GameObject spawn;
-    private GameObject spawnToUse;
+    private FlightMinion spawnToUse;
     private List<SpawnList> spawnOrder = new List<SpawnList>();
-    private List<GameObject> spawns = new List<GameObject>();
-    private FlightMinion script;
+    private List<FlightMinion> spawns = new List<FlightMinion>();
 
     public float maxY;
     public float minY;
@@ -29,7 +28,7 @@ public class FlyingEnemySpawner : TimeObjectLite
     public float maxSpawnInterval;
     public float minSpawnInterval;
     public int noToSpawn;
-    public GameObject enemyToSpawn;
+    public FlightMinion enemyToSpawn;
 
     // initialize all 
     public void Awake()
@@ -85,50 +84,23 @@ public class FlyingEnemySpawner : TimeObjectLite
             // uses the time set to decided when to spawn the enemys
             if (timePassed > spawnOrder[currentSpawn].spawnTime)
             {
-                //#region searches for a clone that isn't active
-                //for (int i = 0; i < spawns.Count; i++)
-                //{
-                //    if (!spawns[i].activeSelf)
-                //    {
-                //        spawnToUse = spawns[i];
-                //        break;
-                //    }
-                //}
-                //#endregion
+                //If a minion has already been spawned at this time then renable
+                if (spawns.Count > currentSpawn)
+                {
+                    spawns[currentSpawn].gameObject.SetActive(true);
+                }
+                else //Otherwise spawn them 
+                {
+                    spawnToUse = enemyToSpawn.Spawn(transform, new Vector3(
+                                                        0,
+                                                        spawnOrder[currentSpawn].spawnHeight,
+                                                        transform.position.z));
 
-                //#region if no clones are avaliable to use incress the time on remaining spawns
-                //if (spawnToUse == null)
-                //{
-                //    for (int i = currentSpawn; i <= spawnOrder.Count; i++)
-                //    {
-                //        if (i == spawns.Count)
-                //        {
-                //            spawnOrder[i].spawnTime += Random.Range(minSpawnInterval, maxSpawnInterval);
-                //        }
-                //        else
-                //        {
-                //            spawnOrder[i].spawnTime += spawnOrder[i + 1].spawnTime -
-                //            spawnOrder[i].spawnTime;
-                //        }
-                //    }
-                //}
-                //#endregion
-
-                //#region move the clone to the spawner based on height and enable
-                //else
-                //{
-                spawnToUse = enemyToSpawn.Spawn(transform, new Vector3(
-                                                    0,
-                                                    spawnOrder[currentSpawn].spawnHeight,
-                                                    transform.position.z));
-
-                script = spawnToUse.GetComponent<FlightMinion>();
-                script.state = MinionState.Migrating;
-                script.killZone = despawnZoneX;
-                spawns.Add(spawnToUse);
+                    spawnToUse.SetState(MinionState.Migrating, true);
+                    spawnToUse.killZone = despawnZoneX;
+                    spawns.Add(spawnToUse);
+                }
                 currentSpawn += 1;
-                //}
-                //#endregion
             }
         }
     }
@@ -140,6 +112,12 @@ public class FlyingEnemySpawner : TimeObjectLite
 
     private void ResetTime()
     {
+        foreach(FlightMinion spawn in spawns)
+        {
+            spawn.gameObject.SetActive(false);
+        }
+
         timePassed = 0;
+        currentSpawn = 0;
     }
 }

@@ -8,5 +8,9 @@
 public struct VillagerFrameData
 {
     public Vector3 hatPos,
-                    scale;
+                    scale,
+                    portalPos,
+                    portalScale;
+
+    public bool meleeColliderEnabled;
 }

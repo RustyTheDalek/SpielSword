@@ -53,7 +53,8 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        vilManager.OnNextVillager += TrackNewVillager;
+        if(vilManager)
+            vilManager.OnNextVillager += TrackNewVillager;
     }
 
     // Use this for initialization
@@ -90,7 +91,8 @@ public class LevelManager : MonoBehaviour {
 
     void Update()
     {
-        livesTxt.text = "x" + vilManager.totalLives;
+        if (vilManager)
+            livesTxt.text = "x" + vilManager.totalLives;
     }
 
     void EnableBossUI()

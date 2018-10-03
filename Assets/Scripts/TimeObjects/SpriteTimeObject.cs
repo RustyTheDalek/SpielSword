@@ -21,7 +21,6 @@ public class SpriteTimeObject : TimeObject
         OnPlayFrame += PlaySpriteFrame;
         OnTrackFrame += TrackSpriteFrame;
 
-        OnStartReverse += OnSpriteStartReverse;
         OnFinishReverse += OnSpriteFinishReverse;
 
         OnStartPlayback += OnSpriteStartPlayback;
@@ -34,7 +33,7 @@ public class SpriteTimeObject : TimeObject
             m_Sprite.color = new Color( sFrames[(int)currentFrame].color.r,
                                         sFrames[(int)currentFrame].color.g,
                                         sFrames[(int)currentFrame].color.b,
-                                        .75f);
+                                        sFrames[(int)currentFrame].color.a);
         }
     }
 
@@ -58,10 +57,6 @@ public class SpriteTimeObject : TimeObject
         }
     }
 
-    protected void OnSpriteStartReverse()
-    {
-    }
-
     protected void OnSpriteStartPlayback()
     {
         if (!m_Sprite.enabled && startFrame != 0)
@@ -73,7 +68,6 @@ public class SpriteTimeObject : TimeObject
         OnPlayFrame -= PlaySpriteFrame;
         OnTrackFrame -= TrackSpriteFrame;
 
-        OnStartReverse -= OnSpriteStartReverse;
         OnFinishReverse -= OnSpriteFinishReverse;
     }
 }

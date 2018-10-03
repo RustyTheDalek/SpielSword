@@ -11,6 +11,9 @@ public class GroundMinion : Minion
 {
     #region Public Variables
 
+    public bool randomStartDir;
+
+    public Direction startDir;
     #endregion
 
     #region Protected Variables
@@ -37,14 +40,19 @@ public class GroundMinion : Minion
         base.Awake();
 
         m_GroundMinion = GetComponent<GroundMinionCharacter>();
+
+        //Set a random start direction
+        if(randomStartDir)
+            startDir = (Random.Range(0, 2) > 0) ? Direction.Right : Direction.Left;
+
+        moveDir = startDir.ToVector2();
     }
 
-    // Use this for initialization
-    protected override void Start ()
+    public override void OnEnable()
     {
-        base.Start();
-        //Set a random start direction
-        moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
+        base.OnEnable();
+
+        moveDir = startDir.ToVector2();
     }
 
     protected override void FixedUpdate()

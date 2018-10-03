@@ -9,17 +9,20 @@ class NewEditorScript : Editor
  
     private void OnSceneGUI()
     {
-        m_Target = (Minion)target;
-
-        GUIStyle textStyle = new GUIStyle()
+        if (Application.isPlaying)
         {
-            fontSize = 14,
-            alignment = TextAnchor.MiddleCenter
-        };
+            m_Target = (Minion)target;
 
-        textStyle.normal.background = GUI.skin.GetStyle("box").normal.background;
-        textStyle.normal.textColor = Color.black;
+            GUIStyle textStyle = new GUIStyle()
+            {
+                fontSize = 14,
+                alignment = TextAnchor.MiddleCenter
+            };
 
-        Handles.Label(m_Target.transform.position + Vector3.up * 1.5f, m_Target.state.ToString(), textStyle);
+            textStyle.normal.background = GUI.skin.GetStyle("box").normal.background;
+            textStyle.normal.textColor = Color.black;
+
+            Handles.Label(m_Target.transform.position + Vector3.up * 1.5f, m_Target.state.ToString(), textStyle);
+        }
     }
 }

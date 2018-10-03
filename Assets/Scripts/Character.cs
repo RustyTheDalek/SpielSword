@@ -70,9 +70,15 @@ public class Character : MonoBehaviour {
         if(GetComponent<TimeObject>())
             GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
 
+        this.NamedLog("Dead");
+
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
-        m_Animator.SetTrigger(m_HashDeadParam);
+
+        m_Animator.SetFloat("xSpeed", 0);
+        m_Animator.SetFloat("ySpeed", 0);
+        m_Animator.SetFloat("xSpeedAbs", 0);
+        m_Animator.SetBool(m_HashDeadParam, true);
     }
 
     protected virtual void FixedUpdate()
@@ -85,5 +91,10 @@ public class Character : MonoBehaviour {
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
         m_Character.Move(moveDir);
+    }
+
+    public void RestoreHealth(float newHealth = 1)
+    {
+        health = newHealth;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System.Collections;
 
 /// <summary>
 /// Manages all the Villages Alived, Past or Dead.
@@ -29,6 +30,8 @@ public class VillagerManager : MonoBehaviour {
     public int villagersToSpawn;
 
     public Villager activeVillager;
+
+    public Animator portal;
 
     [SerializeField] List<Villager> remainingVillagers;
     List<Villager> pastVillagers;
@@ -74,7 +77,9 @@ public class VillagerManager : MonoBehaviour {
     public event NewVillagerEvent OnNextVillager;
 
     #region Assets
-    AssetBundle villagers;
+    public List<Villager> villagerPrefabs;
+
+    //AssetBundle villagers;
 
     #endregion
 
@@ -88,9 +93,7 @@ public class VillagerManager : MonoBehaviour {
         levelStart = objs[5];
         arenaStart = objs[6];
 
-        //TODO: Async When needed
-        villagers = AssetBundle.LoadFromFile(Path.Combine(
-            Application.streamingAssetsPath, "AssetBundles/villagers"));
+        portal = GetComponentInChildren<Animator>();
     }
 
     // Use this for initialization
@@ -107,13 +110,13 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
-            //classToSpawn = VillagerClass.Priest;
+            //classToSpawn = VillagerClass.Warrior;
 
             //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is
-            villagers.LoadAsset<GameObject>(classToSpawn.ToString()).CreatePool(50);
-            GameObject temp = villagers.LoadAsset<GameObject>(classToSpawn.ToString()).Spawn();
+            villagerPrefabs[(int)classToSpawn].CreatePool(50);
+            Villager temp = villagerPrefabs[(int)classToSpawn].Spawn();
             temp.name = classToSpawn.ToString() + i;
-            SetupVillager(temp, spawnOffset);
+            SetupVillager(temp.gameObject, spawnOffset);
         }
 
         //Spawn a new villager and teleport them to the Arena
@@ -149,9 +152,9 @@ public class VillagerManager : MonoBehaviour {
         totalCombos++;
         Debug.Log("Combo has been used");
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
 
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
@@ -171,7 +174,7 @@ public class VillagerManager : MonoBehaviour {
             classToSpawn = VillagerClass.Warlock;
         }
 #endif
-	}
+    }
 
     private void LateUpdate()
     {
@@ -179,6 +182,7 @@ public class VillagerManager : MonoBehaviour {
         {
             case TimeState.Forward:
 
+                //When the active Villager has died and the animation is finished
                 if (!activeVillager.Alive && activeVillager.deathEnd)
                 {
                     //Game over if no lives
@@ -203,17 +207,38 @@ public class VillagerManager : MonoBehaviour {
 
     public void OnVillagerDeath()
     {
+        portal.transform.position = activeVillager.portal.transform.position;
+        portal.SetTrigger("Grow");
+
+        StartCoroutine(DelayedJump(1.5f));
+
         //Turn active Villager into Past Villager
         activeVillager.villagerState = VillagerState.PastVillager;
         activeVillager.transform.parent = pastVillagersTrans;
         activeVillager.gameObject.layer = LayerMask.NameToLayer("PastVillager");
-        if (activeVillager.melee)
-        {
-            activeVillager.melee.gameObject.layer = 
-                LayerMask.NameToLayer("PastVillager");
-        }
+        //if (activeVillager.melee)
+        //{
+        //    activeVillager.melee.gameObject.layer = 
+        //        LayerMask.NameToLayer("PastVillager");
+        //}
 
         pastVillagers.Add(activeVillager);
+    }
+
+    /// <summary>
+    /// Waits a given time then jumps time back
+    /// </summary>
+    /// <param name="secondsToWait"></param>
+    /// <returns></returns>
+    public IEnumerator DelayedJump(float secondsToWait)
+    {
+        yield return new WaitForSecondsRealtime(secondsToWait);
+
+        TimeObjectManager.t = TimeObjectManager.startT + 5;
+
+        portal.transform.position = levelStart.position;
+        portal.SetTrigger("Shrink");
+
     }
 
     public void StartFightWNewVillager()
@@ -231,6 +256,13 @@ public class VillagerManager : MonoBehaviour {
 
         if (remainingVillagers.Count > 0)
         {
+            if (activeVillager)
+            {
+                activeVillager.vTO.tObjectState = TimeObjectState.PastStart;
+                activeVillager.DisableAnimator();
+                activeVillager.EnableOutsidMask();
+            }
+
 
             //Get the next Villager
             activeVillager = remainingVillagers[0];

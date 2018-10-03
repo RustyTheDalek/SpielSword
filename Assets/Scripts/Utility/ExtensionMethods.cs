@@ -62,4 +62,16 @@ public static class ExtensionMethods
             return false;
         }
     }
+
+    public static Vector2 ToVector2(this Direction dir)
+    {
+        if(dir == global::Direction.Left)
+        {
+            return Vector2.left;
+        }
+        else
+        {
+            return Vector2.right;
+        }
+    }
 }
