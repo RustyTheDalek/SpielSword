@@ -258,7 +258,7 @@ public abstract class Villager : Character
         {
             health--;
 
-            if (health < 0)
+            if (health <= 0)
             {
                 OnDeath(attackDirection);
             }
@@ -284,9 +284,9 @@ public abstract class Villager : Character
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Minion" && !LevelManager.GodMode)
+        if(collision.gameObject.name.Contains("Flying") && !LevelManager.GodMode)
         {
-            Debug.Log("It was " + collision.gameObject.name);
+            Debug.Log("Killed by Flying enemy");
             OnHit(collision.transform.position.PointTo(transform.position));
         }
     }

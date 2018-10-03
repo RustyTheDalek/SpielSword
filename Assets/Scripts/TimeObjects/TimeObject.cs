@@ -54,9 +54,7 @@ public class TimeObject : MonoBehaviour
 
     protected virtual void Update()
     {
-        currentFrame = Mathf.Clamp(TimeObjectManager.t - startFrame, 0, finishFrame);
-
-
+        currentFrame = Mathf.Clamp(TimeObjectManager.t - startFrame - 1, 0, finishFrame);
 
         switch (TimeObjectManager.timeState)
         {
@@ -66,7 +64,8 @@ public class TimeObject : MonoBehaviour
                 {
                     case TimeObjectState.Present:
 
-                        OnTrackFrame();
+                        if(OnTrackFrame != null)
+                            OnTrackFrame();
                         break;
 
                     case TimeObjectState.PastStart:
@@ -115,7 +114,8 @@ public class TimeObject : MonoBehaviour
                             break;
                         }
 
-                        OnPlayFrame();
+                        if(OnPlayFrame != null)
+                            OnPlayFrame();
 
                         break;
 
@@ -155,7 +155,8 @@ public class TimeObject : MonoBehaviour
                             break;
                         }
 
-                        OnPlayFrame();
+                        if(OnPlayFrame != null)
+                            OnPlayFrame();
 
                         break;
 

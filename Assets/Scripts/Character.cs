@@ -92,4 +92,9 @@ public class Character : MonoBehaviour {
 
         m_Character.Move(moveDir);
     }
+
+    public void RestoreHealth(float newHealth = 1)
+    {
+        health = newHealth;
+    }
 }

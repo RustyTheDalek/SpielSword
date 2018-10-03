@@ -7,10 +7,10 @@ public class FlightMinion : Minion
 {
     #region Public Variables
 
-    [Range(0, 100)]
+    [Range(1, 100)]
     public int patrolSpeed = 7;
 
-    [Range(0, 100)]
+    [Range(1, 100)]
     public int attackMoveSpeed = 15;
 
     /// <summary>
@@ -53,33 +53,42 @@ public class FlightMinion : Minion
     {
         base.Awake();
 
-        m_Flying = GetComponent<FlyingCharacter2D>();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        parts = GetComponentsInChildren<MinionPartTimeObject>();
-
-        moveSpeed = patrolSpeed;
-
         orginalPosition = transform.position;
-
         //Move the Minion by the distance we want him to Orbit
         transform.position = transform.position + Vector3.right * orbitDistance;
 
-        SceneLinkedSMB<FlightMinion>.Initialise(m_Animator, this);
+        m_Flying = GetComponent<FlyingCharacter2D>();
+        m_Flying.SetMaxVelocity(patrolSpeed);
+        moveSpeed = patrolSpeed;
 
+        parts = GetComponentsInChildren<MinionPartTimeObject>();
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+
+        moveSpeed = patrolSpeed;
+        moveDir = Vector2.zero;
+
+        transform.position = orginalPosition + Vector3.right * orbitDistance;
+
+        SceneLinkedSMB<FlightMinion>.Initialise(m_Animator, this);
     }
 
     protected override void FixedUpdate()
     {
-        m_Animator.SetFloat("xSpeed", m_rigidbody.velocity.x);
-        m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
+        m_Animator.SetFloat("xSpeed", moveDir.x * 7);
+        m_Animator.SetFloat("ySpeed", moveDir.y * 7);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
         m_Flying.Move(moveDir, moveSpeed);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(orginalPosition, .1f);
     }
 
     public override void Migrate()
@@ -93,8 +102,6 @@ public class FlightMinion : Minion
 
         //TODO: improve this, sort of works but it takes them a while to get back
         moveDir = new Vector2(-1, transform.position.PointTo(orginalPosition).y);
-
-        m_Flying.Move(moveDir, moveSpeed);
     }
 
     public override void Patrol()
@@ -109,6 +116,8 @@ public class FlightMinion : Minion
         //adjust the move direction to keep them the right distance away
         moveDir = forwardPoint.normalized + (toOriginal.normalized *
             (orbitDistance - toOriginal.magnitude) * distanceAmp);
+
+        //moveDir = moveDir.normalized;
     }
 
     protected override void StartAttack()
@@ -122,7 +131,6 @@ public class FlightMinion : Minion
     public override void MoveToClosest()
     {
         moveDir = transform.position.PointTo(closestVillager.transform.position);
-        m_Flying.Move(moveDir);
     }
 
     protected override void OnNoMoreTargets()

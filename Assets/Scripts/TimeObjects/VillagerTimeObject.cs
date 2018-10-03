@@ -45,7 +45,7 @@ public class VillagerTimeObject : AnimatorTimeObject
 
         OnPlayFrame += OnVillagerPlayFrame;
         OnTrackFrame += OnVillagerTrackFrame;
-        OnFinishReverse += OnVillagerFinishReverse;
+        OnStartPlayback += OnVillagerStartPlayback;
         OnFinishPlayback += OnVillagerFinishPlayback;
         OnStartReverse += OnVillagerStartReverse;
     }
@@ -87,19 +87,9 @@ public class VillagerTimeObject : AnimatorTimeObject
         //villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
 
-    protected void OnVillagerFinishReverse()
+    protected void OnVillagerStartPlayback()
     {
-
-
-        m_Sprite.color = new Color(m_Sprite.color.r,
-                                        m_Sprite.color.g,
-                                        m_Sprite.color.b,
-                                        .5f);
-
-        m_HatSprite.color = new Color(  villager.hat.GetComponent<SpriteRenderer>().color.r,
-                                                                        villager.hat.color.g,
-                                                                        villager.hat.color.b,
-                                                                        .5f);
+        m_Character.RestoreHealth();
     }
 
     protected void OnVillagerStartReverse()
@@ -133,7 +123,7 @@ public class VillagerTimeObject : AnimatorTimeObject
 
     private void OnDestroy()
     {
-        OnFinishReverse -= OnVillagerFinishReverse;
+        OnStartPlayback -= OnVillagerStartPlayback;
 
         OnPlayFrame -= OnVillagerPlayFrame;
         OnTrackFrame -= OnVillagerTrackFrame;

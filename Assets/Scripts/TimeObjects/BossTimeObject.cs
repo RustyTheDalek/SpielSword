@@ -27,6 +27,9 @@ public class BossTimeObject : RigidbodyTimeObject
         tObjectState = TimeObjectState.Present;
         finishFrame = 0;
         m_Sprite.color = new Color(m_Sprite.color.r, m_Sprite.color.g, m_Sprite.color.b, 1f);
+
+        if(m_Rigidbody2D)
+            m_Rigidbody2D.simulated = true;
     }
 
     private void OnDestroy()

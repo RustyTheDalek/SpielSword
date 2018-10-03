@@ -152,9 +152,9 @@ public class VillagerManager : MonoBehaviour {
         totalCombos++;
         Debug.Log("Combo has been used");
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
 
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
@@ -174,7 +174,7 @@ public class VillagerManager : MonoBehaviour {
             classToSpawn = VillagerClass.Warlock;
         }
 #endif
-	}
+    }
 
     private void LateUpdate()
     {
@@ -210,7 +210,7 @@ public class VillagerManager : MonoBehaviour {
         portal.transform.position = activeVillager.portal.transform.position;
         portal.SetTrigger("Grow");
 
-        StartCoroutine(DelayedJump(3));
+        StartCoroutine(DelayedJump(1.5f));
 
         //Turn active Villager into Past Villager
         activeVillager.villagerState = VillagerState.PastVillager;
@@ -230,7 +230,7 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     /// <param name="secondsToWait"></param>
     /// <returns></returns>
-    public IEnumerator DelayedJump(int secondsToWait)
+    public IEnumerator DelayedJump(float secondsToWait)
     {
         yield return new WaitForSecondsRealtime(secondsToWait);
 

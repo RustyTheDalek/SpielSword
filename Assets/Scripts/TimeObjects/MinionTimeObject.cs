@@ -7,10 +7,14 @@ public class MinionTimeObject : AnimatorTimeObject {
 
     Minion minion;
 
+    Transform origin;
+
     // Use this for initialization
     protected override void Awake()
     {
         base.Awake();
+
+        origin = transform;
 
         minion = GetComponent<Minion>();
 
@@ -20,6 +24,8 @@ public class MinionTimeObject : AnimatorTimeObject {
 
     private void ResetTracking()
     {
+        transform.SetPositionAndRotation(origin.position, origin.rotation);
+
         bFrames.Clear();
         pFrames.Clear();
         sFrames.Clear();
@@ -29,7 +35,7 @@ public class MinionTimeObject : AnimatorTimeObject {
         finishFrame = 0;
 
         minion.enabled = true;
-
+        minion.OnEnable();
         m_Anim.enabled = true;
     }
 

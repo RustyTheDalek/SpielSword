@@ -23,8 +23,6 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
     protected PlatformerAnimData pAnimData;
 
-    protected Rigidbody2D m_Rigidbody;
-
     protected Animator m_Anim;
 
     #endregion
@@ -39,7 +37,6 @@ public class AnimatorTimeObject : RigidbodyTimeObject
 
         m_Character = GetComponent<Character>();
         m_Platformer = GetComponent<PlatformerCharacter2D>();
-        m_Rigidbody = GetComponent<Rigidbody2D>();
         m_Anim = GetComponent<Animator>();
 
         OnTrackFrame += TrackSpriteSheetFrame;

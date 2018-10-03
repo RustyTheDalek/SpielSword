@@ -21,6 +21,7 @@ public class MinionPartTimeObject : RigidbodyTimeObject
         startPos = transform.localPosition;
 
         OnStartPlayback += ResetObject;
+        OnStartReverse += OnPartStartReverse;
 
         tObjectState = TimeObjectState.Present;
     }
@@ -34,11 +35,15 @@ public class MinionPartTimeObject : RigidbodyTimeObject
 
         finishFrame = 0;
 
-        m_Collider.enabled = false;
         m_Rigidbody2D.bodyType = RigidbodyType2D.Static;
 
+        m_Collider.enabled = false;
         transform.SetParent(parent);
         transform.localPosition = startPos;
+
+        gameObject.layer = LayerMask.NameToLayer("Minion");
+
+        m_Sprite.enabled = true;
     }
 
     public void Throw(Vector2 direction)
@@ -54,5 +59,17 @@ public class MinionPartTimeObject : RigidbodyTimeObject
         m_Rigidbody2D.AddForce(throwforce, ForceMode2D.Impulse);
         m_Collider.enabled = true;
         transform.SetParent(null);
+
+        gameObject.layer = LayerMask.NameToLayer("Bits");
+    }
+
+    protected void OnPartStartReverse()
+    {
+        transform.SetParent(null);
+    }
+
+    private void OnDestroy()
+    {
+        OnStartPlayback -= ResetObject;
     }
 }

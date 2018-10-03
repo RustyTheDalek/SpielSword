@@ -60,13 +60,10 @@ public abstract class Minion : Character
         startingConstraints = m_rigidbody.constraints;
     }
 
-    protected virtual void Start()
-    {
-        SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
-    }
+    public virtual void OnEnable()
+    { 
+        StopAllCoroutines();
 
-    private void OnEnable()
-    {
         gameObject.layer = LayerMask.NameToLayer("Minion");
         m_Animator.SetBool(m_HashDeadParam, false);
         m_Animator.Play("Move");
@@ -74,6 +71,16 @@ public abstract class Minion : Character
         m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.constraints = startingConstraints;
         m_rigidbody.simulated = true;
+        state = startingState;
+
+        if (GetComponent<SpriteRenderer>())
+            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0, 1, 1);
+
+        canAttack = true;
+
+        villagerInSight.Clear();
+
+        SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
     }
 
     public abstract void Patrol();
@@ -187,6 +194,7 @@ public abstract class Minion : Character
                 break;
 
             case "Villager":
+            case "PastVillager":
 
                 if (state == MinionState.Attacking && 
                     collision.gameObject == closestVillager)
@@ -205,6 +213,7 @@ public abstract class Minion : Character
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
             case "Villager":
+            case "PastVillager":
 
                 if (villagerInSight.Count < villagerInSight.Capacity &&
                 !villagerInSight.Contains(collision.gameObject) &&
@@ -234,32 +243,56 @@ public abstract class Minion : Character
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == (LayerMask.NameToLayer("Villager")))
+        switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
-            if (villagerInSight.Contains(collision.gameObject))
-            {
-                if (canAttack &&
-                    state == MinionState.Patrolling || state == MinionState.Migrating)
+            case "Villager":
+            case "PastVillager":
+
+                if (villagerInSight.Contains(collision.gameObject))
                 {
-                    state = MinionState.ClosingIn;
+                    if (canAttack &&
+                        state == MinionState.Patrolling || state == MinionState.Migrating)
+                    {
+                        state = MinionState.ClosingIn;
+                    }
                 }
-            }
+                break;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == (LayerMask.NameToLayer("Villager")))
+        switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
-            if (villagerInSight.Contains(collision.gameObject))
-            {
-                villagerInSight.Remove(collision.gameObject);
+            case "Villager":
+            case "PastVillager":
 
-                if (villagerInSight.Count == 0)
+                if (villagerInSight.Contains(collision.gameObject))
                 {
-                    OnNoMoreTargets();
+                    villagerInSight.Remove(collision.gameObject);
+
+                    if (villagerInSight.Count == 0)
+                    {
+                        OnNoMoreTargets();
+                    }
                 }
-            }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Sets the state of the Minion
+    /// </summary>
+    /// <param name="_State"> What state to set.</param>
+    /// <param name="setStartState"> Whether this adjust default state.</param>
+    public void SetState(MinionState _State, bool setStartState = false)
+    {
+        state = _State;
+
+        if(setStartState)
+        {
+            startingState = _State;
         }
     }
 }

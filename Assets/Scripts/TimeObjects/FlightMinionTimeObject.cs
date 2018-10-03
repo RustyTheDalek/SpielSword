@@ -8,24 +8,20 @@ public class FlightMinionTimeObject : MinionTimeObject
     {
         base.Awake();
 
-        OnPlayFrame -= PlaySpriteSheetFrame;
-        OnTrackFrame -= TrackSpriteSheetFrame;
+        //TimeObject
+        OnTrackFrame -= TrackTransform;
+        OnPlayFrame -= PlayTransormFrame;
 
+        //SpriteObject
+        OnPlayFrame -= PlaySpriteFrame;
+        OnTrackFrame -= TrackSpriteFrame;
         OnFinishReverse -= OnSpriteFinishReverse;
-
         OnStartPlayback -= OnSpriteStartPlayback;
 
+        //AnimatorObject
         OnTrackFrame -= TrackSpriteSheetFrame;
         OnPlayFrame -= PlaySpriteSheetFrame;
         OnFinishPlayback -= OnFinishSpriteSheetPlayback;
         OnStartPlayback -= OnSpriteSheetStartPlayback;
-        OnStartReverse -= OnSpriteSheetStartReverse;
-
-        OnPlayFrame -= PlaySpriteFrame;
-        OnTrackFrame -= TrackSpriteFrame;
-
-        OnFinishReverse -= OnSpriteFinishReverse;
-
-        OnStartPlayback -= OnSpriteStartPlayback;
     }
 }
