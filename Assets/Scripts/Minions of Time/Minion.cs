@@ -230,14 +230,14 @@ public abstract class Minion : Character
                 break;
 
             //TODO:Figure out why this was here and removed if not needed
-            //case "Weapon":
+            case "Weapon":
 
-            //    if (Alive)
-            //    {
-            //        health--;
-            //        OnDeath(collision.transform.position.PointTo(transform.position));
-            //    }
-            //    break;
+                if (Alive)
+                {
+                    health--;
+                    OnDeath(collision.transform.position.PointTo(transform.position));
+                }
+                break;
         }
     }
 
