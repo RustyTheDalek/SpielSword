@@ -76,6 +76,10 @@ public class VillagerManager : MonoBehaviour {
 
     public event NewVillagerEvent OnNextVillager;
 
+    public MusicManager musicManager;
+
+    public AudioClip bossMusic;
+
     #region Assets
     public List<Villager> villagerPrefabs;
 
@@ -92,6 +96,9 @@ public class VillagerManager : MonoBehaviour {
         pastVillagersTrans = objs[3];
         levelStart = objs[5];
         arenaStart = objs[6];
+
+        musicManager = FindObjectOfType<MusicManager>();
+
 
         portal = GetComponentInChildren<Animator>();
     }
@@ -308,6 +315,7 @@ public class VillagerManager : MonoBehaviour {
     {
         Debug.Log("Reached Checkpoint, now spawning in Arena");
         spawnPos = arenaStart.transform.position;
+        musicManager.ChangeLM(bossMusic);
     }
 
     #region DebugFunctions
