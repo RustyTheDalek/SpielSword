@@ -42,6 +42,11 @@ public abstract class Villager : Character
     /// </summary>
     public bool canAct = true;
 
+    /// <summary>
+    /// Whether a Villager can move
+    /// </summary>
+    protected bool canMove = true;
+
     public float damageMult = 1;
 
     public bool deathEnd = false;
@@ -169,8 +174,11 @@ public abstract class Villager : Character
                     if (canAct)
                     {
                         //Get PlayerMovement
-                        moveDir = Vector2.zero;
-                        moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
+                        if (canMove)
+                        {
+                            moveDir = Vector2.zero;
+                            moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
+                        }
 
                         attack = Input.GetButtonDown("Attack");
 

@@ -25,6 +25,7 @@ public class SpielSword : Villager
             Debug.Log("Sacrifice Starting");
 
             SetBodyType(RigidbodyType2D.Kinematic);
+            canMove = false;
             sacrificing = true;
         }
     }
@@ -36,6 +37,7 @@ public class SpielSword : Villager
         sacrificing = false;
         canSpecial = false;
         playerSpecial = false;
+        canMove = true;
         Kill();
     }
 
