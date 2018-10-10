@@ -39,6 +39,12 @@ public class VillagerTimeObject : AnimatorTimeObject
         m_HatSprite = transform.Find("Hat").GetComponent<SpriteRenderer>();
     }
 
+    private void OnEnable()
+    {
+        tObjectState = TimeObjectState.Present;
+        startFrame = (int)TimeObjectManager.t;
+    }
+
     protected override void Start()
     {
         base.Start();

@@ -290,15 +290,6 @@ public abstract class Villager : Character
             GameManager.gManager.UnlockHat("Anor");
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.name.Contains("Flying") && !LevelManager.GodMode)
-        {
-            Debug.Log("Killed by Flying enemy");
-            OnHit(collision.transform.position.PointTo(transform.position));
-        }
-    }
-
     public virtual void FireProjectile()
     {
         if (villagerState == VillagerState.PresentVillager)
