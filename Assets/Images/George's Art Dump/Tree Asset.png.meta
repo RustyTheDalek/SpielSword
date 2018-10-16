@@ -2,42 +2,42 @@ fileFormatVersion: 2
 guid: df66dbb1ec7f1454cbe8dbe8d21c1e69
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Tree Asset8K_0
-    21300002: Tree Asset8K_1
-    21300004: Tree Asset8K_2
-    21300006: Tree Asset8K_3
-    21300008: Tree Asset8K_4
-    21300010: Tree Asset8K_5
-    21300012: Tree Asset8K_6
-    21300014: Tree Asset8K_7
-    21300016: Tree Asset8K_8
-    21300018: Tree Asset8K_9
-    21300020: Tree Asset8K_10
-    21300022: Tree Asset8K_11
+    21300000: Foliage_1
+    21300002: Foliage_2
+    21300004: Foliage_3
+    21300006: Foliage_4
+    21300008: Foliage_5
+    21300010: Foliage_6
+    21300012: Foliage_7
+    21300014: Foliage_8
+    21300016: Foliage_9
+    21300018: Foliage_10
+    21300020: Foliage_11
+    21300022: Foliage_12
     21300024: Tree Asset8K_12
     21300026: Tree Asset8K_13
-    21300028: Tree Asset8K_14
-    21300030: Tree Asset8K_15
-    21300032: Tree Asset8K_16
-    21300034: Tree Asset8K_17
-    21300036: Tree Asset8K_18
-    21300038: Tree Asset8K_19
-    21300040: Tree Asset8K_20
-    21300042: Tree Asset8K_21
-    21300044: Tree Asset8K_22
-    21300046: Tree Asset8K_23
-    21300048: Tree Asset8K_24
-    21300050: Tree Asset8K_25
-    21300052: Tree Asset8K_26
-    21300054: Tree Asset8K_27
-    21300056: Tree Asset8K_28
-    21300058: Tree Asset8K_29
-    21300060: Tree Asset8K_30
-    21300062: Tree Asset8K_31
-    21300064: Tree Asset8K_32
-    21300066: Tree Asset8K_33
-    21300068: Tree Asset8K_34
-    21300070: Tree Asset8K_35
+    21300028: Foliage_14
+    21300030: Foliage_15
+    21300032: Foliage__16
+    21300034: Foliage_17
+    21300036: Foliage_18
+    21300038: Foliage_19
+    21300040: Foliage_20
+    21300042: Foliage_21
+    21300044: TreeTrunk_1
+    21300046: TreeTrunk_2
+    21300048: TreeTrunk_3
+    21300050: TreeTrunk_4
+    21300052: TreeTrunk_5
+    21300054: TreeTrunk_6
+    21300056: TreeTrunk_7
+    21300058: TreeTrunk_8
+    21300060: TreeTrunk_9
+    21300062: TreeTrunk_10
+    21300064: TreeTrunk_11
+    21300066: TreeTrunk_12
+    21300068: TreeTrunk_13
+    21300070: TreeTrunk_14
   externalObjects: {}
   serializedVersion: 6
   mipmaps:
@@ -120,7 +120,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tree Asset8K_0
+      name: Foliage_1
       rect:
         serializedVersion: 2
         x: 128
@@ -140,7 +140,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_1
+      name: Foliage_2
       rect:
         serializedVersion: 2
         x: 1242
@@ -160,7 +160,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_2
+      name: Foliage_3
       rect:
         serializedVersion: 2
         x: 1998
@@ -180,7 +180,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_3
+      name: Foliage_4
       rect:
         serializedVersion: 2
         x: 2706
@@ -200,7 +200,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_4
+      name: Foliage_5
       rect:
         serializedVersion: 2
         x: 3664
@@ -220,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_5
+      name: Foliage_6
       rect:
         serializedVersion: 2
         x: 5514
@@ -240,7 +240,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_6
+      name: Foliage_7
       rect:
         serializedVersion: 2
         x: 6290
@@ -260,7 +260,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_7
+      name: Foliage_8
       rect:
         serializedVersion: 2
         x: 218
@@ -280,7 +280,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_8
+      name: Foliage_9
       rect:
         serializedVersion: 2
         x: 1151
@@ -300,7 +300,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_9
+      name: Foliage_10
       rect:
         serializedVersion: 2
         x: 1802
@@ -320,7 +320,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_10
+      name: Foliage_11
       rect:
         serializedVersion: 2
         x: 2415
@@ -340,7 +340,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_11
+      name: Foliage_12
       rect:
         serializedVersion: 2
         x: 3438
@@ -400,7 +400,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_14
+      name: Foliage_14
       rect:
         serializedVersion: 2
         x: 250
@@ -420,7 +420,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_15
+      name: Foliage_15
       rect:
         serializedVersion: 2
         x: 1106
@@ -440,7 +440,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_16
+      name: Foliage__16
       rect:
         serializedVersion: 2
         x: 1982
@@ -460,7 +460,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_17
+      name: Foliage_17
       rect:
         serializedVersion: 2
         x: 3056
@@ -480,7 +480,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_18
+      name: Foliage_18
       rect:
         serializedVersion: 2
         x: 4014
@@ -500,7 +500,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_19
+      name: Foliage_19
       rect:
         serializedVersion: 2
         x: 4750
@@ -520,7 +520,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_20
+      name: Foliage_20
       rect:
         serializedVersion: 2
         x: 5502
@@ -540,7 +540,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_21
+      name: Foliage_21
       rect:
         serializedVersion: 2
         x: 6222
@@ -560,7 +560,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_22
+      name: TreeTrunk_1
       rect:
         serializedVersion: 2
         x: 178
@@ -580,7 +580,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_23
+      name: TreeTrunk_2
       rect:
         serializedVersion: 2
         x: 607
@@ -600,7 +600,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_24
+      name: TreeTrunk_3
       rect:
         serializedVersion: 2
         x: 1135
@@ -620,13 +620,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_25
+      name: TreeTrunk_4
       rect:
         serializedVersion: 2
         x: 1406
-        y: 368
+        y: 374
         width: 408
-        height: 838
+        height: 832
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -640,7 +640,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_26
+      name: TreeTrunk_5
       rect:
         serializedVersion: 2
         x: 1910
@@ -660,7 +660,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_27
+      name: TreeTrunk_6
       rect:
         serializedVersion: 2
         x: 2352
@@ -680,7 +680,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_28
+      name: TreeTrunk_7
       rect:
         serializedVersion: 2
         x: 2718
@@ -700,7 +700,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_29
+      name: TreeTrunk_8
       rect:
         serializedVersion: 2
         x: 3214
@@ -720,7 +720,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_30
+      name: TreeTrunk_9
       rect:
         serializedVersion: 2
         x: 3775
@@ -740,7 +740,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_31
+      name: TreeTrunk_10
       rect:
         serializedVersion: 2
         x: 4320
@@ -760,7 +760,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_32
+      name: TreeTrunk_11
       rect:
         serializedVersion: 2
         x: 4790
@@ -780,13 +780,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_33
+      name: TreeTrunk_12
       rect:
         serializedVersion: 2
         x: 5552
-        y: 334
+        y: 337
         width: 496
-        height: 1364
+        height: 1361
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -800,15 +800,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_34
+      name: TreeTrunk_13
       rect:
         serializedVersion: 2
         x: 6250
-        y: 331
+        y: 348
         width: 620
-        height: 1323
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 1306
+      alignment: 9
+      pivot: {x: 0.53430176, y: 0.002159481}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -820,15 +820,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tree Asset8K_35
+      name: TreeTrunk_14
       rect:
         serializedVersion: 2
         x: 7038
-        y: 335
+        y: 342
         width: 850
-        height: 1303
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 1296
+      alignment: 9
+      pivot: {x: 0.31361845, y: 0.00318101}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
