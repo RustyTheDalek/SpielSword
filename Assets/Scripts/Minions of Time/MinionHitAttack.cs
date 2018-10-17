@@ -9,6 +9,7 @@ using UnityEngine;
 public class MinionHitAttack : MonoBehaviour
 {
     //public bool attacking = false;
+    public AudioSource EN;
 
     void OnCollisionEnter2D(Collision2D coll)
     {
@@ -18,5 +19,11 @@ public class MinionHitAttack : MonoBehaviour
         {
             coll.gameObject.GetComponent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
         }
+    }
+
+    public void PlayEffect()
+    {
+        EN.Stop();
+        EN.Play();
     }
 }

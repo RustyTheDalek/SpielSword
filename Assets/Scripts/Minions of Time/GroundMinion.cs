@@ -33,6 +33,8 @@ public class GroundMinion : Minion
     bool attackLeft = false,
         attackRight = false;
 
+    private MinionHitAttack minionAttack;
+
     #endregion
 
     protected override void Awake()
@@ -40,6 +42,7 @@ public class GroundMinion : Minion
         base.Awake();
 
         m_GroundMinion = GetComponent<GroundMinionCharacter>();
+        minionAttack = GetComponentInChildren<MinionHitAttack>();
 
         //Set a random start direction
         if(randomStartDir)
@@ -120,6 +123,11 @@ public class GroundMinion : Minion
     public override void Attack()
     {
         moveDir = Vector2.zero;
+    }
+
+    public void PlayEffect ()
+    {
+        minionAttack.PlayEffect();
     }
 
 }
