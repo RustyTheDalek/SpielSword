@@ -116,7 +116,7 @@ public class VillagerManager : MonoBehaviour {
         {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
-            classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last -1);
+            classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last);
             //classToSpawn = VillagerClass.Warrior;
 
             //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is

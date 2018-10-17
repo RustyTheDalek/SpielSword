@@ -144,10 +144,10 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             //TODO:See why altering the parent objects scale affects this
             //Fire ray behind player and in front
             RaycastHit2D backHit = Physics2D.Raycast(m_Back.position,
-                -transform.up, 1, m_WhatIsGround);
+                -transform.up, transform.localScale.y, m_WhatIsGround);
 
             RaycastHit2D frontHit = Physics2D.Raycast(m_Front.position,
-                -transform.up, 1, m_WhatIsGround);
+                -transform.up, transform.localScale.y, m_WhatIsGround);
 
             if (backHit)
                 Debug.DrawRay(m_Back.position, backHit.normal, Color.cyan);
