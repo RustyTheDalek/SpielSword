@@ -17,4 +17,15 @@ public class BossAttack : MonoBehaviour
             coll.gameObject.GetComponent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D coll)
+    {
+        //BossAttack can only damage Villagers, has to be enabled and God mode off for 
+        //obvious reasons
+        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
+            && !LevelManager.GodMode)
+        {
+            coll.gameObject.GetComponent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
+        }
+    }
 }
