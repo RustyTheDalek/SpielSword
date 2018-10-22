@@ -21,16 +21,6 @@ public class Shaman : WardVillager
         base.Awake();
     }
 
-    public void Setup(VillagerManager villagerManager)
-    {
-        currentWard.GetComponent<ShamanTotem>().OnUsedTotem += villagerManager.IncCombosUsed;
-    }
-
-    public void Unsubscribe(VillagerManager villagerManager)
-    {
-        currentWard.GetComponent<ShamanTotem>().OnUsedTotem -= villagerManager.IncCombosUsed;
-    }
-
     #endregion
 
     #region Protected Methods

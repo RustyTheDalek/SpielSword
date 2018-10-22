@@ -9,6 +9,16 @@ public class ShamanTotem : SpawnableSpriteTimeObject
 
     public event TimeObjectEvent OnUsedTotem;
 
+    public void Setup(VillagerManager villagerManager)
+    {
+        OnUsedTotem += villagerManager.IncCombosUsed;
+    }
+
+    public void Unsubscribe(VillagerManager villagerManager)
+    {
+        OnUsedTotem -= villagerManager.IncCombosUsed;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(creator.gameObject != collision.gameObject)

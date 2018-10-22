@@ -26,7 +26,6 @@ public class AuraVillager : Villager
 
     public void Setup(VillagerManager vilManager)
     {
-
         currentAura.OnEnterAuraEvent += vilManager.IncCombosUsed;
     }
 

@@ -140,7 +140,7 @@ public class LevelManager : MonoBehaviour {
         trackCam.target = newVillager.transform;
     }
 
-    private void OnDestroy()
+    private void OnApplicationQuit()
     {
         if (arenaEntryPoint)
         {
@@ -157,7 +157,7 @@ public class LevelManager : MonoBehaviour {
         if (currentBoss && arenaEntryPoint && vilManager && timeManager)
         {
             currentBoss.Unsubscribe(arenaEntryPoint, vilManager, timeManager);
-            currentBoss.OnBossDeath -= CalculateScore; 
+            currentBoss.OnBossDeath -= CalculateScore;
         }
 
         if (arenaGate && arenaEntryPoint && timeManager)
@@ -170,7 +170,7 @@ public class LevelManager : MonoBehaviour {
             timeManager.Unsubscribe(arenaEntryPoint, vilManager);
         }
 
-        if(flyingEnemySpawner && timeManager)
+        if (flyingEnemySpawner && timeManager)
         {
             flyingEnemySpawner.Unsubscribe(timeManager);
         }

@@ -146,12 +146,11 @@ public class VillagerManager : MonoBehaviour {
 
         villager.SetActive(false);
 
-        if (villager.GetComponent<AuraVillager>())
+        if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Priest)
             villager.GetComponent<AuraVillager>().Setup(this);
 
-        if (villager.GetComponent<Shaman>())
-            villager.GetComponent<Shaman>().Setup(this);
-
+        if (classToSpawn == VillagerClass.Shaman)
+            villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Setup(this);
     }
 
     public void IncCombosUsed()
@@ -341,12 +340,12 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in remainingVillagers)
             {
-                if (villager.GetComponent<AuraVillager>())
+                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Priest)
                     villager.GetComponent<AuraVillager>().Unsubscribe(this);
 
-                if (villager.GetComponent<Shaman>())
-                    villager.GetComponent<Shaman>().Unsubscribe(this);
-            } 
+                if (classToSpawn == VillagerClass.Shaman)
+                    villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Unsubscribe(this);
+            }
         }
 
 
@@ -354,11 +353,11 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in pastVillagers)
             {
-                if (villager.GetComponent<AuraVillager>())
+                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Priest)
                     villager.GetComponent<AuraVillager>().Unsubscribe(this);
 
-                if (villager.GetComponent<Shaman>())
-                    villager.GetComponent<Shaman>().Unsubscribe(this);
+                if (classToSpawn == VillagerClass.Shaman)
+                    villager.GetComponent<Shaman>().GetComponent<ShamanTotem>().Unsubscribe(this);
             }
         }
     }
