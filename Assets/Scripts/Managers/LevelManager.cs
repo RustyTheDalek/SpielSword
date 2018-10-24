@@ -63,7 +63,8 @@ public class LevelManager : MonoBehaviour {
 
         livesTxt = GameObject.Find("livesUsedTxt").GetComponent<Text>();
 
-        bossHealth = GetComponentInChildren<BossHealthBar>(true).GetComponent<RectTransform>();
+        bossHealth = GetComponentInChildren<BossHealthBar>(true).
+            GetComponent<RectTransform>();
 
         currentBoss = GetComponentInChildren<BossManager>();
 
@@ -82,7 +83,7 @@ public class LevelManager : MonoBehaviour {
         timeManager.Setup(arenaEntryPoint, vilManager);
 
         currentBoss.OnBossDeath += CalculateScore;
-        vilManager.OnOutOfLives += LoadVillage;
+        vilManager.OnOutOfLives += CalculateScore;
 
         flyingEnemySpawner = GetComponentInChildren<FlyingEnemySpawner>(true);
         flyingEnemySpawner.Setup(timeManager);
@@ -106,9 +107,11 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void CalculateScore()
-    {
-        //Starts at 1 as Boss has obviously died
-        score = 1;
+    { 
+        if(!currentBoss.Alive)
+        {
+            score++;
+        }
 
         //Check to see if combo was used
         if(vilManager.totalCombos > 0)
@@ -132,7 +135,8 @@ public class LevelManager : MonoBehaviour {
             }
         }
 
-        endGamePnl.OpenSlate(currentBoss.highestStageReached, vilManager.totalCombos, vilManager.totalLives);
+        endGamePnl.OpenSlate(!currentBoss.Alive, currentBoss.highestStageReached, 
+            vilManager.totalCombos, vilManager.totalLives);
     }
 
     void TrackNewVillager(Villager newVillager)
@@ -150,7 +154,7 @@ public class LevelManager : MonoBehaviour {
         if (vilManager && timeManager & arenaEntryPoint)
         {
             vilManager.OnNextVillager -= TrackNewVillager;
-            vilManager.OnOutOfLives -= LoadVillage;
+            vilManager.OnOutOfLives -= CalculateScore;
             vilManager.Unsubscribe(timeManager, arenaEntryPoint);
         }
 

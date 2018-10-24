@@ -60,6 +60,8 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     int currentVillagerLayer = 6;
 
+    bool endSlateActive = false;
+
     public VillagerClass classToSpawn = VillagerClass.Warlock;
 
     public delegate void VillagerManagerEvent();
@@ -189,14 +191,15 @@ public class VillagerManager : MonoBehaviour {
             case TimeState.Forward:
 
                 //When the active Villager has died and the animation is finished
-                if (!activeVillager.Alive && activeVillager.deathEnd)
+                if (!activeVillager.Alive && activeVillager.deathEnd && !endSlateActive)
                 {
                     //Game over if no lives
                     if (RemainingVillagers <= 0)
                     {
                         Debug.Log("Game Over");
 
-                        //TODO:On game over probably have Golem keep going and character just dies
+                        //TODO:On game over probably have Golem keep going and character 
+                        //just dies
                         if (OnOutOfLives != null)
                             OnOutOfLives();
                     }
@@ -205,6 +208,8 @@ public class VillagerManager : MonoBehaviour {
                         if (OnActiveDeath != null)
                             OnActiveDeath();
                     }
+
+                    endSlateActive = true;
                 }
 
                 break;

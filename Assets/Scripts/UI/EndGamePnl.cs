@@ -10,7 +10,8 @@ using UnityEngine.UI;
 /// </summary>
 public class EndGamePnl : MonoBehaviour {
 
-    public Text StageReached, 
+    public Text Victory,
+                StageReached, 
                 CombosUsed, 
                 TimeTaken, 
                 VillagersUsed;
@@ -23,13 +24,15 @@ public class EndGamePnl : MonoBehaviour {
         anim = GetComponent<Animator>();
 	}
 
-    public void OpenSlate(int stageReached, int combosUsed, int totalLives)
+    public void OpenSlate(bool victory, int stageReached, int combosUsed, int totalLives)
     {
+
+        Victory.text = victory == true ? "Victory!" : "Failure...";
 
         StageReached.text += stageReached;  Debug.Log("Stage Reached : " + stageReached);
         CombosUsed.text += combosUsed;      Debug.Log("Combos Used: " + combosUsed);
         //TODO: Change this to convert to appropriate time
-        TimeTaken.text += TimeObjectManager.t / 60 + "s";   Debug.Log("Time Taken: " + (TimeObjectManager.t / 6) + "s");
+        TimeTaken.text += (TimeObjectManager.t / 60).ToString("#.##") + "s";   Debug.Log("Time Taken: " + (TimeObjectManager.t / 6) + "s");
         VillagersUsed.text += totalLives;                   Debug.Log("Villagers Used: " + totalLives);
 
         if (anim)
