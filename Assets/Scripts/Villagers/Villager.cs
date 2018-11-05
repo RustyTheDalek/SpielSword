@@ -51,6 +51,8 @@ public abstract class Villager : Character
 
     public bool deathEnd = false;
 
+    public AudioSource EN;
+
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
     /// </summary>
@@ -277,6 +279,8 @@ public abstract class Villager : Character
     {
         this.NamedLog("Dead");
 
+        PlayEffect();
+
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
 
@@ -285,6 +289,7 @@ public abstract class Villager : Character
         m_Animator.SetFloat("xSpeedAbs", 0);
         m_Animator.SetBool(m_HashDeadParam, true);
 
+        
 
         if (GameManager.gManager)
             GameManager.gManager.UnlockHat("Anor");
@@ -345,6 +350,12 @@ public abstract class Villager : Character
             yield return null;
 
         }
+    }
+
+    private void PlayEffect()
+    {
+        EN.Stop();
+        EN.Play();
     }
 }
 

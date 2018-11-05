@@ -33,6 +33,8 @@ public class VillagerManager : MonoBehaviour {
 
     public Animator portal;
 
+    public AudioSource EN;
+
     [SerializeField] List<Villager> remainingVillagers;
     List<Villager> pastVillagers;
 
@@ -220,6 +222,7 @@ public class VillagerManager : MonoBehaviour {
     {
         portal.transform.position = activeVillager.portal.transform.position;
         portal.SetTrigger("Grow");
+        PlayEffect();
 
         StartCoroutine(DelayedJump(1.5f));
 
@@ -365,6 +368,12 @@ public class VillagerManager : MonoBehaviour {
                     villager.GetComponent<Shaman>().GetComponent<ShamanTotem>().Unsubscribe(this);
             }
         }
+    }
+
+    private void PlayEffect()
+    {
+        EN.Stop();
+        EN.Play();
     }
 
     private void OnDestroy()
