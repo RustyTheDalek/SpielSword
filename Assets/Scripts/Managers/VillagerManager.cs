@@ -193,10 +193,10 @@ public class VillagerManager : MonoBehaviour {
             case TimeState.Forward:
 
                 //When the active Villager has died and the animation is finished
-                if (!activeVillager.Alive && activeVillager.deathEnd && !endSlateActive)
+                if (!activeVillager.Alive && activeVillager.deathEnd)
                 {
                     //Game over if no lives
-                    if (RemainingVillagers <= 0)
+                    if (RemainingVillagers <= 0 && !endSlateActive)
                     {
                         Debug.Log("Game Over");
 
@@ -204,14 +204,14 @@ public class VillagerManager : MonoBehaviour {
                         //just dies
                         if (OnOutOfLives != null)
                             OnOutOfLives();
+
+                        endSlateActive = true;
                     }
                     else
                     {
                         if (OnActiveDeath != null)
                             OnActiveDeath();
                     }
-
-                    endSlateActive = true;
                 }
 
                 break;
