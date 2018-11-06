@@ -1,13 +1,13 @@
 ManifestFileVersion: 0
-CRC: 3996841062
+CRC: 2201323847
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: hats
-      Dependencies: {}
-    Info_1:
       Name: villagers
       Dependencies: {}
-    Info_2:
+    Info_1:
       Name: abilities
+      Dependencies: {}
+    Info_2:
+      Name: hats
       Dependencies: {}

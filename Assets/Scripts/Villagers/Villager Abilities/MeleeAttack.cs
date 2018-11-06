@@ -5,6 +5,7 @@ public class MeleeAttack : MonoBehaviour
 {
     int _Damage = 3;
     public int damageMult = 1;
+    public AudioSource EffectNoise;
 
     public int Damage
     {
@@ -23,5 +24,11 @@ public class MeleeAttack : MonoBehaviour
                 collision.GetComponent<Head>().OnHit(Damage);
             }
         }
+    }
+
+    public void PlayEffect()
+    {
+        EffectNoise.Stop();
+        EffectNoise.Play();
     }
 }
