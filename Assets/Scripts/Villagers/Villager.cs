@@ -51,7 +51,9 @@ public abstract class Villager : Character
 
     public bool deathEnd = false;
 
-    public AudioSource EN;
+    public AudioSource EffectNoise;
+
+    public MeleeAttack classMeleeAttack;
 
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
@@ -135,7 +137,8 @@ public abstract class Villager : Character
 
                 try
                 {
-                    melee = GetComponentInChildren<MeleeAttack>().GetComponentInChildren<CircleCollider2D>();
+                    classMeleeAttack = GetComponentInChildren<MeleeAttack>();
+                    melee = classMeleeAttack.GetComponentInChildren<CircleCollider2D>();
                 }
                 catch
                 {
@@ -354,8 +357,13 @@ public abstract class Villager : Character
 
     private void PlayEffect()
     {
-        EN.Stop();
-        EN.Play();
+        EffectNoise.Stop();
+        EffectNoise.Play();
+    }
+
+    public void PlayMeleeEffect()
+    {
+        classMeleeAttack.PlayEffect();
     }
 }
 

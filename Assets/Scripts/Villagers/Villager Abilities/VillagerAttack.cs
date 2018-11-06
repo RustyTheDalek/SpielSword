@@ -11,6 +11,8 @@ public class VillagerAttack : MonoBehaviour
 
     public float lifeTime = 1;
 
+    public AudioSource EffectNoise;
+
     protected void Update()
     {
         if (lifeTime < 0)
@@ -56,5 +58,10 @@ public class VillagerAttack : MonoBehaviour
         {
             enabled = false;
         }
+    }
+
+    private void OnEnable()
+    {
+        EffectNoise.Play();
     }
 }

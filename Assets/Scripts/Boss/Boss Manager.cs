@@ -611,6 +611,9 @@ public abstract class BossManager : MonoBehaviour
         timeManager.OnRestartLevel -= Reset;
     }
 
+    public virtual void PlayEffect() { }
+    
+
     #region Debug Functions
 
     public void ToStage(int stage)
