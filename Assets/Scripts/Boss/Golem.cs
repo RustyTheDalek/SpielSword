@@ -11,7 +11,9 @@ public class Golem : BossManager {
     [HideInInspector]
 	public List<Sprite> headStages, bodyStages, lArmStages, rArmStages,
 						utilityA, utilityB, utilityC;
-    
+
+    public AudioSource EffectNoise;
+
     /// <summary>
     /// Causes next stage of Boss Damage
     /// TODO:Make this much more elegant
@@ -248,5 +250,11 @@ public class Golem : BossManager {
         base.Reset();
 
 		animator.Play("WakeUp", 0);
+    }
+
+    public override void PlayEffect()
+    {
+        EffectNoise.Stop();
+        EffectNoise.Play();
     }
 }
