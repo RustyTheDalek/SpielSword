@@ -128,11 +128,6 @@ public class FlightMinion : Minion
         moveSpeed = attackMoveSpeed;
     }
 
-    public override void MoveToClosest()
-    {
-        moveDir = transform.position.PointTo(closestVillager.transform.position);
-    }
-
     protected override void OnNoMoreTargets()
     {
         base.OnNoMoreTargets();

@@ -10,7 +10,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     #region public Variables
 
     public bool m_Grounded;            // Whether or not the character is grounded.
-
+    public bool m_Sliding;
     #endregion
 
     #region Protected Variables
@@ -115,21 +115,22 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl)
         {
-            //moveVector = Vector2.right;
             directionForce = moveVector * moveDir.x * m_MoveForce * Time.deltaTime;
 
             m_Rigidbody2D.AddForce(directionForce, ForceMode2D.Impulse);
 
             //If the player stops moving or changes direction then we reduce xVelocity to zero
-            if ((deltaMoveDir.x != moveDir.x && m_Grounded))
+            if ((Mathf.Abs(deltaMoveDir.x - moveDir.x) > .75f && m_Grounded) && !m_Sliding)
+            {
                 m_Rigidbody2D.velocity = new Vector2(0, m_Rigidbody2D.velocity.y);
+            }
 
             m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(
                     m_Rigidbody2D.velocity.x, -m_MaxSpeed, m_MaxSpeed),
                     m_Rigidbody2D.velocity.y);
         }
 
-        DirectionLogic((int)moveDir.x);
+        DirectionLogic(moveDir.x);
 
         deltaMoveDir = moveDir;
     }
@@ -193,7 +194,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         }
     }
 
-    protected void DirectionLogic(int desiredDirection)
+    protected void DirectionLogic(float desiredDirection)
     {
         // If the input is moving the character right and the character is facing left...
         if (desiredDirection > 0 && !FacingRight)

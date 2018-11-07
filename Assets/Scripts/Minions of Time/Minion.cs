@@ -44,6 +44,8 @@ public abstract class Minion : Character
     //If not it can enforce the Minion goes back to patrolling
     protected readonly int m_HashCelebrateParam = Animator.StringToHash("Celebrate");
 
+    protected Color startingColor;
+
     #endregion
 
     #region Private Variables
@@ -58,6 +60,9 @@ public abstract class Minion : Character
 
         startingState = state;
         startingConstraints = m_rigidbody.constraints;
+
+        if (GetComponent<SpriteRenderer>())
+            startingColor = GetComponent<SpriteRenderer>().color;
     }
 
     public virtual void OnEnable()
@@ -74,7 +79,7 @@ public abstract class Minion : Character
         state = startingState;
 
         if (GetComponent<SpriteRenderer>())
-            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0, 1, 1);
+            GetComponent<SpriteRenderer>().color = startingColor;
 
         canAttack = true;
 
@@ -83,9 +88,18 @@ public abstract class Minion : Character
         SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
     public abstract void Patrol();
 
-    public virtual void MoveToClosest() { }
+    public virtual void MoveToClosest()
+    {
+        moveDir = transform.position.PointTo(closestVillager.transform.position);
+    }
 
     protected virtual void StartAttack()
     {
@@ -133,7 +147,6 @@ public abstract class Minion : Character
         //Find the closest
         foreach (GameObject villager in villagerInSight)
         {
-
             float sqrDist = (villager.transform.position - transform.position).sqrMagnitude;
 
             if ( sqrDist < (closest * closest))
@@ -149,7 +162,7 @@ public abstract class Minion : Character
     /// </summary>
     public void CheckAttackRange()
     {
-        if ((closestVillager.transform.position - transform.position).sqrMagnitude < (attackRange *attackRange))
+        if ((closestVillager.transform.position - transform.position).sqrMagnitude < (attackRange * attackRange))
         {
             StartAttack();
         }
@@ -162,15 +175,19 @@ public abstract class Minion : Character
 
     public IEnumerator AttackCooldown()
     {
+        float _h, _s, _v;
         //In future have something more elegant than changing colour?
-        if(GetComponent<SpriteRenderer>())
-            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0, 1, .5f);
+        if (GetComponent<SpriteRenderer>())
+        {
+            Color.RGBToHSV(startingColor, out _h, out _s, out _v);
+            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(_h, _s, _v * .5f);
+        }
         canAttack = false;
 
         yield return new WaitForSeconds(attackCooldownTime);
 
         if (GetComponent<SpriteRenderer>())
-            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0, 1, 1);
+            GetComponent<SpriteRenderer>().color = startingColor;
         canAttack = true;
     }
 

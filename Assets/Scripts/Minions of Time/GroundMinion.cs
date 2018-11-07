@@ -20,9 +20,6 @@ public class GroundMinion : Minion
 
     protected GroundMinionCharacter m_GroundMinion;
 
-    protected readonly int m_HashAttackLeft = Animator.StringToHash("AttackLeft");
-    protected readonly int m_HashAttackRight = Animator.StringToHash("AttackRight");
-
     #endregion
 
     #region Private Variables
@@ -60,9 +57,9 @@ public class GroundMinion : Minion
 
     protected override void FixedUpdate()
     {
-        m_Animator.SetFloat("xSpeed", m_rigidbody.velocity.x);
-        m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
-        m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
+        m_Animator.SetFloat("xSpeed", moveDir.x);
+        m_Animator.SetFloat("ySpeed", moveDir.y);
+        m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(moveDir.x));
 
         m_GroundMinion.Move(moveDir);
     }
@@ -104,22 +101,6 @@ public class GroundMinion : Minion
         gameObject.layer = LayerMask.NameToLayer("Bits");
     }
 
-    protected override void StartAttack()
-    {
-        base.StartAttack();
-
-        prevDir = moveDir;
-
-        if (moveDir.x > 1)
-        {
-            m_Animator.SetTrigger(m_HashAttackLeft);
-        }
-        else
-        {
-            m_Animator.SetTrigger(m_HashAttackRight);
-        }
-    }
-
     public override void Attack()
     {
         moveDir = Vector2.zero;
@@ -129,5 +110,4 @@ public class GroundMinion : Minion
     {
         minionAttack.PlayEffect();
     }
-
 }
