@@ -28,6 +28,7 @@ public class Shaman : WardVillager
     protected override void OnWardUse()
     {
         currentWard.transform.position = transform.position + wardOffset;
+        currentWard.spawnableTimer = currentWard.spawnableLife;
     }
 
     #endregion

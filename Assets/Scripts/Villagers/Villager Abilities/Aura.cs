@@ -6,11 +6,6 @@ public class Aura : SpawnableSpriteTimeObject
 {
     public float health = 4;
 
-    protected bool auraActive = false;
-
-    public float auraLife  = 5,
-                    auraTimer = 0;
-
     public bool comboUsed = false;
 
     public event TimeObjectEvent OnEnterAuraEvent;
@@ -28,35 +23,9 @@ public class Aura : SpawnableSpriteTimeObject
     {
         base.Start();
 
-        auraActive = true;
-        auraTimer = auraLife;
-
         OnPlayFrame += PlayAuraFrame;
 
         OnStartPlayback += DecreaseStrength;
-    }
-
-    // Update is called once per frame
-    protected override void Update()
-    {
-        if (auraTimer > 0 && (tObjectState == TimeObjectState.Present || 
-            tObjectState == TimeObjectState.PastPlaying))
-        {
-            auraTimer -= Time.deltaTime;
-        }
-        else if (auraTimer <= 0 && auraActive)
-        {
-            SetActive(false);
-
-            if (finishFrame == 0)
-            {
-                finishFrame = (int)TimeObjectManager.t;
-            }
-
-            auraActive = false;
-        }
-
-        base.Update();
     }
 
     protected void PlayAuraFrame()
@@ -69,7 +38,7 @@ public class Aura : SpawnableSpriteTimeObject
             if (GetComponent<Rigidbody2D>())
                 GetComponent<Rigidbody2D>().simulated = sSFrames[(int)currentFrame].active;
 
-            auraActive = sSFrames[(int)currentFrame].active;
+            spawnableActive = sSFrames[(int)currentFrame].active;
         }
     }
 
@@ -112,7 +81,7 @@ public class Aura : SpawnableSpriteTimeObject
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if (auraActive && coll.GetComponent<Villager>())
+        if (spawnableActive && coll.GetComponent<Villager>())
         {
             Villager temp = coll.GetComponent<Villager>();
 
@@ -129,7 +98,7 @@ public class Aura : SpawnableSpriteTimeObject
         {
             Villager temp = coll.GetComponent<Villager>();
 
-            if (temp.CurrentVillager && auraActive)
+            if (temp.CurrentVillager && spawnableActive)
             {
                 OnEnterAura(coll);
             }

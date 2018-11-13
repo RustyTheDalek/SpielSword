@@ -18,6 +18,14 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
     /// </summary>
     public Villager creator;
 
+    protected bool spawnableActive = false;
+    /// <summary>
+    /// Lifetime of spawnable object, 0=doesn't expire to time
+    /// </summary>
+    public float    spawnableLife = 5,
+                    spawnableTimer = 0;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -43,7 +51,36 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         //TODO: Remove this if not needed
         tObjectState = TimeObjectState.Present;
 
-        //TimeObjectManager.vSpawnable.Add(this);
+        spawnableActive = true;
+        spawnableTimer = spawnableLife;
+
+        if (spawnableTimer == 0)
+        {
+            spawnableLife = Mathf.Infinity;
+            spawnableTimer = Mathf.Infinity;
+        }
+    }
+
+    protected override void Update()
+    {
+        if (spawnableTimer > 0 && ( tObjectState == TimeObjectState.Present ||
+                                    tObjectState == TimeObjectState.PastPlaying))
+        {
+            spawnableTimer -= Time.deltaTime;
+        }
+        else if (spawnableTimer <= 0 && spawnableActive)
+        {
+            SetActive(false);
+
+            if (finishFrame == 0)
+            {
+                finishFrame = (int)TimeObjectManager.t;
+            }
+
+            spawnableActive = false;
+        }
+
+        base.Update();
     }
 
     protected void TrackSpawnableSpriteFrame()

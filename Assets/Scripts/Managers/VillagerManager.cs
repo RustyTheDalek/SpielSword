@@ -365,7 +365,7 @@ public class VillagerManager : MonoBehaviour {
                     villager.GetComponent<AuraVillager>().Unsubscribe(this);
 
                 if (classToSpawn == VillagerClass.Shaman)
-                    villager.GetComponent<Shaman>().GetComponent<ShamanTotem>().Unsubscribe(this);
+                    villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Unsubscribe(this);
             }
         }
     }

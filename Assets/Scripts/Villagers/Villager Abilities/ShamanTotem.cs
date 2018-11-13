@@ -9,6 +9,14 @@ public class ShamanTotem : SpawnableSpriteTimeObject
 
     public event TimeObjectEvent OnUsedTotem;
 
+    protected override void Start()
+    {
+        base.Start();
+
+        OnStartPlayback += EnableCollider;
+        OnFinishPlayback+= DisableCollider;
+    }
+
     public void Setup(VillagerManager villagerManager)
     {
         OnUsedTotem += villagerManager.IncCombosUsed;
@@ -17,6 +25,22 @@ public class ShamanTotem : SpawnableSpriteTimeObject
     public void Unsubscribe(VillagerManager villagerManager)
     {
         OnUsedTotem -= villagerManager.IncCombosUsed;
+    }
+
+    protected void EnableCollider()
+    {
+        GetComponent<Collider2D>().enabled = true;
+    }
+
+    protected void DisableCollider()
+    {
+        GetComponent<Collider2D>().enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        OnStartPlayback -= EnableCollider;
+        OnFinishPlayback-= DisableCollider;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
