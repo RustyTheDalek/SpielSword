@@ -73,7 +73,10 @@ public class GroundMinion : Minion
 
         #region Find the floor
 
-        if(!Physics2D.Raycast(m_GroundMinion.m_Front.position, Vector2.down, distanceToFloor, layerGroundOnly))
+        if(m_GroundMinion.m_Grounded && 
+            !Physics2D.Raycast( m_GroundMinion.m_Front.position, 
+                                Vector2.down, distanceToFloor, 
+                                LayerMask.GetMask("Ground")))
         {
             moveDir.x *= -1;
         }

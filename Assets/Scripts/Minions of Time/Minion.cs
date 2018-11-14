@@ -12,10 +12,6 @@ public abstract class Minion : Character
     public MinionState state = MinionState.Patrolling;
 
     public LayerMask layerGround;
-    public LayerMask layerGroundOnly;
-    public LayerMask layerVillagerOnly;
-
-    public ContactFilter2D contactFilter;
 
     public List<GameObject> villagerInSight = new List<GameObject>(5);
     public GameObject closestVillager = null;
@@ -55,8 +51,6 @@ public abstract class Minion : Character
     protected override void Awake()
     {
         base.Awake();
-
-        contactFilter.layerMask = layerGroundOnly;
 
         startingState = state;
         startingConstraints = m_rigidbody.constraints;
