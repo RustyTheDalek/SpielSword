@@ -82,11 +82,6 @@ public abstract class Villager : Character
 
     public SpriteMask portal;
 
-    /// <summary>
-    /// Spawn position for Ranged projectiles
-    /// </summary>
-    protected Transform rangedTrans;
-
     protected float rangedProjectileStrength = 25;
 
     protected readonly int m_HashMeleeParam = Animator.StringToHash("MeleeAttack");

@@ -29,6 +29,11 @@ public class Character : MonoBehaviour {
     /// </summary>
     public Vector2 moveDir;
 
+    /// <summary>
+    /// Spawn position for Ranged projectiles
+    /// </summary>
+    public Transform rangedTrans;
+
     #endregion
 
     #region Protected Variables

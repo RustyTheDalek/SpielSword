@@ -13,7 +13,7 @@ public class RockMinion : GroundMinion {
 
     protected override void StartAttack()
     {
-        base.StartAttack();
+        state = MinionState.Attacking;
 
         prevDir = moveDir;
 

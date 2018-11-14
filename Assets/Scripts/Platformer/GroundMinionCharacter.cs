@@ -9,18 +9,13 @@ public class GroundMinionCharacter : GroundCharacter2D
     /// </summary>
     public bool bManualFaceDirection = false;
 
-    public override void Move(Vector2 moveDir, bool jump = false)
+    public void Move(Vector2 moveDir, bool jump = false, int manualDirection = 1)
     {
         base.Move(moveDir, jump);
+
+        if (!bManualFaceDirection)
+            DirectionLogic((int)moveVector.x);
+        else
+            DirectionLogic(manualDirection);
     }
-
-    //public void Move(Vector2 moveDir, bool jump = false, int manualDirection = 1)
-    //{
-    //    base.Move(moveDir, jump);
-
-    //    if (!bManualFaceDirection)
-    //        DirectionLogic((int)moveVector.x);
-    //    else
-    //        DirectionLogic(manualDirection);
-    //}
 }

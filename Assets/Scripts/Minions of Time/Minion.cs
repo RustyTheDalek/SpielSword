@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,13 +17,28 @@ public abstract class Minion : Character
     public List<GameObject> villagerInSight = new List<GameObject>(5);
     public GameObject closestVillager = null;
 
+    float closetVillageDist = Mathf.Infinity;
+
     [Range(0, 100)]
-    public float attackRange = 5;
+    public float meleeAttackRange = 5;
+
+    [Range(0, 100)]
+    public float rangedAttackRange = 5;
+
+    /// <summary>
+    /// How much above or below attack range still constitutes an attack
+    /// </summary>
+    float rAVariance = 1f;
+
+    public GameObject projectile;
 
     /// <summary>
     /// After a Rest/Celebrate how long does it for Minion to go back to fighting
     /// </summary>
     public int attackCooldownTime = 3;
+
+    public string RangedAttackAnimName = "RangedAttack",
+                  MeleeAttackAnimName  = "MeleeAttack";
 
     #endregion
 
@@ -38,8 +54,9 @@ public abstract class Minion : Character
 
     //For when Minions suceeds in killing a villager (In case we want a celebration
     //If not it can enforce the Minion goes back to patrolling
-    protected readonly int m_HashCelebrateParam = Animator.StringToHash("Celebrate");
-
+    protected readonly int  m_HashCelebrateParam = Animator.StringToHash("Celebrate"),
+                            m_HashMeleeAttackParam,
+                            m_HashRangedAttackParam;
     protected Color startingColor;
 
     #endregion
@@ -57,6 +74,15 @@ public abstract class Minion : Character
 
         if (GetComponent<SpriteRenderer>())
             startingColor = GetComponent<SpriteRenderer>().color;
+
+        if (projectile)
+            projectile.CreatePool(10);
+    }
+
+    protected Minion()
+    {
+        m_HashMeleeAttackParam = Animator.StringToHash(MeleeAttackAnimName);
+        m_HashRangedAttackParam = Animator.StringToHash(RangedAttackAnimName);
     }
 
     public virtual void OnEnable()
@@ -85,7 +111,9 @@ public abstract class Minion : Character
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, rangedAttackRange);
     }
 
     public abstract void Patrol();
@@ -95,13 +123,35 @@ public abstract class Minion : Character
         moveDir = transform.position.PointTo(closestVillager.transform.position);
     }
 
-    protected virtual void StartAttack()
+    /// <summary>
+    /// Calculates the movement to the ideal Attack range for ranged minions
+    /// </summary>
+    public virtual void MoveToEngage()
     {
-        //Close enough to attack
-        state = MinionState.Attacking;
+        moveDir = transform.position.PointTo(closestVillager.transform.position + Vector3.right * rangedAttackRange * Mathf.Sign(transform.position.sqrMagnitude - closestVillager.transform.position.sqrMagnitude));
     }
 
-    public virtual void Attack() { }
+    protected virtual void StartAttack()
+    {
+        Debug.Log("Starting Attack");
+        //Close enough to attack
+        state = MinionState.Attacking;
+
+        switch (attackType)
+        {
+            case AttackType.Melee:
+                m_Animator.SetTrigger(m_HashMeleeAttackParam);
+                break;
+            case AttackType.Ranged:
+                m_Animator.SetTrigger(m_HashRangedAttackParam);
+                break;
+        }
+    }
+
+    public virtual void Attack()
+    {
+        moveDir = Vector2.zero;
+    }
 
     public virtual void CelebrateAttack()
     { 
@@ -137,16 +187,16 @@ public abstract class Minion : Character
     public void FindClosest()
     {
         //Reset closest to max
-        float closest = Mathf.Infinity;
+        closetVillageDist = Mathf.Infinity;
         //Find the closest
         foreach (GameObject villager in villagerInSight)
         {
             float sqrDist = (villager.transform.position - transform.position).sqrMagnitude;
 
-            if ( sqrDist < (closest * closest))
+            if ( sqrDist < (closetVillageDist * closetVillageDist))
             {
                 closestVillager = villager;
-                closest = sqrDist;
+                closetVillageDist = sqrDist;
             }
         }
     }
@@ -154,12 +204,29 @@ public abstract class Minion : Character
     /// <summary>
     /// See if closest villager is in attack range
     /// </summary>
-    public void CheckAttackRange()
+    public void CheckMeleeAttackRange()
     {
-        if ((closestVillager.transform.position - transform.position).sqrMagnitude < (attackRange * attackRange))
+        if ((closestVillager.transform.position - transform.position).sqrMagnitude < (meleeAttackRange * meleeAttackRange))
         {
             StartAttack();
         }
+    }
+
+    public void CheckRangedAttackRange()
+    {
+        if ((closestVillager.transform.position - transform.position).sqrMagnitude < 
+            ((rangedAttackRange + rAVariance) * (rangedAttackRange + rAVariance)) &&
+            (closestVillager.transform.position - transform.position).sqrMagnitude > 
+            ((rangedAttackRange - rAVariance) * (rangedAttackRange - rAVariance)))
+        {
+            Debug.Log("Withing Engagement Range");
+            StartAttack();
+        }
+    }
+
+    public void FireProjectile()
+    {
+        projectile.Spawn(null, rangedTrans.position, projectile.transform.rotation);
     }
 
     protected virtual void OnNoMoreTargets()

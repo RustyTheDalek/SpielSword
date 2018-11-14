@@ -7,7 +7,8 @@ using UnityEngine;
 /// </summary>
 public class MinionPatrolSMB : SceneLinkedSMB<Minion>
 {
-    public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnSLStateNoTransitionUpdate(Animator animator, 
+        AnimatorStateInfo stateInfo, int layerIndex)
     {
         switch (m_MonoBehaviour.state)
         {
@@ -19,8 +20,18 @@ public class MinionPatrolSMB : SceneLinkedSMB<Minion>
             case MinionState.ClosingIn:
 
                 m_MonoBehaviour.FindClosest();
-                m_MonoBehaviour.MoveToClosest();
-                m_MonoBehaviour.CheckAttackRange();
+                switch(m_MonoBehaviour.attackType)
+                {
+                    case AttackType.Melee:
+                        m_MonoBehaviour.MoveToClosest();
+                        m_MonoBehaviour.CheckMeleeAttackRange();
+                        break;
+
+                    case AttackType.Ranged:
+                        m_MonoBehaviour.MoveToEngage();
+                        m_MonoBehaviour.CheckRangedAttackRange();
+                        break;
+                }
                 break;
 
             case MinionState.Migrating:

@@ -19,6 +19,16 @@ public class Camera2DFollow : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
+        if(minPos == Vector2.zero)
+        {
+            minPos = new Vector2(-Mathf.Infinity, -Mathf.Infinity);
+        }
+
+        if (maxPos == Vector2.zero)
+        {
+            maxPos = new Vector2(Mathf.Infinity, Mathf.Infinity);
+        }
+
         if (target)
         {
             m_LastTargetPosition = target.position;

@@ -128,6 +128,8 @@ public class FlightMinion : Minion
         moveSpeed = attackMoveSpeed;
     }
 
+    public override void Attack() { }
+
     protected override void OnNoMoreTargets()
     {
         base.OnNoMoreTargets();
