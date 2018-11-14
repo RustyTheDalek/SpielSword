@@ -1,0 +1,248 @@
+fileFormatVersion: 2
+guid: c1937335de8fdfa47ab94ffa75fa4708
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Storm_Boss_Seperated_0
+    21300002: Storm_Boss_Seperated_1
+    21300004: Storm_Boss_Seperated_2
+    21300006: Storm_Boss_Seperated_3
+  externalObjects: {}
+  serializedVersion: 6
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: 0.06
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Storm_Boss_Seperated_0
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 656
+        width: 239
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05312de849cae614ea0faee2ae28e3e8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Storm_Boss_Seperated_1
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 268
+        width: 173
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e796524dee87f343b178e84619b4eb6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Storm_Boss_Seperated_2
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 23
+        width: 307
+        height: 613
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf80fb2aeb3bfda4eb0c4f71c8edcb90
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Storm_Boss_Seperated_3
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 264
+        width: 173
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7052924d89fbe84090ff8890a15f492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape:
+    - - {x: 152.5, y: -396}
+      - {x: 125.5, y: -393}
+      - {x: 73.5, y: -208}
+      - {x: 98.5, y: -31}
+      - {x: 92.5, y: 65}
+      - {x: 67.5, y: 127}
+      - {x: 33.5, y: 171}
+      - {x: 14.5, y: 177}
+      - {x: -30.5, y: 177}
+      - {x: -72.5, y: 128}
+      - {x: -99.5, y: 32}
+      - {x: -95.5, y: -31}
+      - {x: -76.5, y: -213}
+      - {x: -111.5, y: -370}
+      - {x: -155.5, y: -397}
+      - {x: -155.5, y: -409}
+      - {x: -130.5, y: -429}
+      - {x: -113.5, y: -438}
+      - {x: -95.5, y: -440}
+      - {x: 112.5, y: -440}
+      - {x: 153.5, y: -410}
+      - {x: 153.5, y: -398}
+    - - {x: 269.5, y: -49}
+      - {x: 241.5, y: 68}
+      - {x: 230.5, y: 126}
+      - {x: 199.5, y: 146}
+      - {x: 163.5, y: 146}
+      - {x: 163.5, y: 54}
+      - {x: 209.5, y: -24}
+      - {x: 247.5, y: -104}
+      - {x: 322.5, y: -198}
+      - {x: 338.5, y: -198}
+      - {x: 338.5, y: -135}
+      - {x: 327.5, y: -96}
+    - - {x: -165.5, y: 145}
+      - {x: -170.5, y: 150}
+      - {x: -192.5, y: 150}
+      - {x: -231.5, y: 131}
+      - {x: -333.5, y: -122}
+      - {x: -339.5, y: -140}
+      - {x: -339.5, y: -174}
+      - {x: -337.5, y: -190}
+      - {x: -329.5, y: -194}
+      - {x: -324.5, y: -194}
+      - {x: -240.5, y: -104}
+      - {x: -164.5, y: 62}
+      - {x: -164.5, y: 143}
+    - - {x: 68.5, y: 254}
+      - {x: 118.5, y: 192}
+      - {x: 120.5, y: 192}
+      - {x: 120.5, y: 315}
+      - {x: 104.5, y: 395}
+      - {x: 17.5, y: 442}
+      - {x: -12.5, y: 442}
+      - {x: -74.5, y: 412}
+      - {x: -109.5, y: 379}
+      - {x: -120.5, y: 311}
+      - {x: -120.5, y: 210}
+      - {x: -118.5, y: 200}
+      - {x: -111.5, y: 205}
+      - {x: -107.5, y: 212}
+      - {x: -53.5, y: 204}
+      - {x: -42.5, y: 192}
+      - {x: -34.5, y: 192}
+      - {x: -7.5, y: 258}
+      - {x: 30.5, y: 192}
+      - {x: 51.5, y: 192}
+    bones: []
+    spriteID: 4e7f1dd045d1cf04e897d568add6f726
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
