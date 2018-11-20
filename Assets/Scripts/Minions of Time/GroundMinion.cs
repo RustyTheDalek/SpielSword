@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Script to control the Ground based minions
 /// </summary>
-[RequireComponent(typeof(GroundMinionCharacter))]
+[RequireComponent(typeof(GroundCharacter2D))]
 public class GroundMinion : Minion
 {
     #region Public Variables
@@ -18,7 +18,7 @@ public class GroundMinion : Minion
 
     #region Protected Variables
 
-    protected GroundMinionCharacter m_GroundMinion;
+    protected GroundCharacter2D m_GroundCharacter;
 
     #endregion
 
@@ -38,7 +38,7 @@ public class GroundMinion : Minion
     {
         base.Awake();
 
-        m_GroundMinion = GetComponent<GroundMinionCharacter>();
+        m_GroundCharacter = GetComponent<GroundCharacter2D>();
         minionAttack = GetComponentInChildren<MinionHitAttack>();
 
         //Set a random start direction
@@ -61,7 +61,17 @@ public class GroundMinion : Minion
         m_Animator.SetFloat("ySpeed", moveDir.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(moveDir.x));
 
-        m_GroundMinion.Move(moveDir);
+        if (m_GroundCharacter.m_ManualFaceDirection && closestVillager)
+        {
+            var vilDir = (int)Mathf.Sign((closestVillager.transform.position - transform.position).x);
+            m_GroundCharacter.Move(moveDir, false, vilDir);
+            m_Animator.SetFloat("Direction", vilDir);
+        }
+        else
+        {
+            Debug.Log("Move based");
+            m_GroundCharacter.Move(moveDir);
+        }
     }
 
     public override void Patrol()
@@ -73,23 +83,23 @@ public class GroundMinion : Minion
 
         #region Find the floor
 
-        if(m_GroundMinion.m_Grounded && 
-            !Physics2D.Raycast( m_GroundMinion.m_Front.position, 
+        if(m_GroundCharacter.m_Grounded && 
+            !Physics2D.Raycast( m_GroundCharacter.m_Front.position, 
                                 Vector2.down, distanceToFloor, 
                                 LayerMask.GetMask("Ground")))
         {
             moveDir.x *= -1;
         }
 
-        Debug.DrawRay(m_GroundMinion.m_Front.position, Vector2.down * distanceToFloor, Color.green);
+        Debug.DrawRay(m_GroundCharacter.m_Front.position, Vector2.down * distanceToFloor, Color.green);
 
         #endregion
 
         #region Find the wall
 
-        Debug.DrawRay(m_GroundMinion.m_Front.position, moveDir * distanceFromWall, Color.red);
+        Debug.DrawRay(m_GroundCharacter.m_Front.position, moveDir * distanceFromWall, Color.red);
 
-        if (Physics2D.Raycast(m_GroundMinion.m_Front.position, moveDir, distanceFromWall, layerGround))
+        if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, moveDir, distanceFromWall, layerGround))
         {
             moveDir.x *= -1;
         }
@@ -102,6 +112,21 @@ public class GroundMinion : Minion
         base.OnDeath(attackDirection);
 
         gameObject.layer = LayerMask.NameToLayer("Bits");
+    }
+
+    protected override void OnFoundTarget()
+    {
+        base.OnFoundTarget();
+
+        m_GroundCharacter.m_ManualFaceDirection = true;
+    }
+
+    protected override void OnNoMoreTargets()
+    {
+        base.OnNoMoreTargets();
+
+        m_GroundCharacter.m_ManualFaceDirection = false;
+        m_Animator.SetFloat("Direction", 1);
     }
 
     public override void Attack()

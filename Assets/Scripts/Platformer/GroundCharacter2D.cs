@@ -11,6 +11,11 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     public bool m_Grounded;            // Whether or not the character is grounded.
     public bool m_Sliding;
+
+    /// <summary>
+    /// to enable/disable the faced direction based on movemment
+    /// </summary>
+    public bool m_ManualFaceDirection = false;
     #endregion
 
     #region Protected Variables
@@ -100,7 +105,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         Gizmos.DrawRay(transform.position, directionForce.normalized);
     }
 
-    public virtual void Move(Vector2 moveDir, bool jump)
+    public virtual void Move(Vector2 moveDir, bool jump = false, int manualDirection = 1)
     {
         // If the player should jump...
         if (m_Grounded && jump)
@@ -130,7 +135,14 @@ public class GroundCharacter2D : PlatformerCharacter2D {
                     m_Rigidbody2D.velocity.y);
         }
 
-        DirectionLogic(moveDir.x);
+        if (m_ManualFaceDirection)
+        {
+            DirectionLogic(manualDirection);
+        }
+        else
+        {
+            DirectionLogic((int)moveDir.x);
+        }
 
         deltaMoveDir = moveDir;
     }
@@ -194,17 +206,20 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         }
     }
 
-    protected void DirectionLogic(float desiredDirection)
+    protected virtual void DirectionLogic(float desiredDirection)
     {
+        Debug.Log("Being called: " + desiredDirection);
         // If the input is moving the character right and the character is facing left...
         if (desiredDirection > 0 && !FacingRight)
         {
+            Debug.Log("Flipping to right");
             // ... flip the player.
             Flip();
         }
         // Otherwise if the input is moving the character left and the character is facing right...
         else if (desiredDirection < 0 && FacingRight)
         {
+            Debug.Log("Flipping to left");
             // ... flip the player.
             Flip();
         }

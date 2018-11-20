@@ -21,11 +21,13 @@ public class Camera2DFollow : MonoBehaviour
     {
         if(minPos == Vector2.zero)
         {
+            Debug.LogWarning("No Min Pos set, reverting to -Infinity");
             minPos = new Vector2(-Mathf.Infinity, -Mathf.Infinity);
         }
 
         if (maxPos == Vector2.zero)
         {
+            Debug.LogWarning("No Max Pos set, reverting to Infinity");
             maxPos = new Vector2(Mathf.Infinity, Mathf.Infinity);
         }
 

@@ -30,7 +30,7 @@ public abstract class Minion : Character
     /// </summary>
     float rAVariance = 1f;
 
-    public GameObject projectile;
+    public Projectile projectile;
 
     /// <summary>
     /// After a Rest/Celebrate how long does it for Minion to go back to fighting
@@ -226,7 +226,20 @@ public abstract class Minion : Character
 
     public void FireProjectile()
     {
-        projectile.Spawn(null, rangedTrans.position, projectile.transform.rotation);
+        Projectile proj;
+        if (transform.localScale.x > 0)
+            proj = projectile.Spawn(null, rangedTrans.position, projectile.transform.rotation);
+        else
+        {
+            proj = projectile.Spawn(null, rangedTrans.position, Quaternion.Euler(0, 0, 242.478f));
+        }
+
+        proj.Throw();
+    }
+
+    protected virtual void OnFoundTarget()
+    {
+        state = MinionState.ClosingIn;
     }
 
     protected virtual void OnNoMoreTargets()
@@ -302,7 +315,7 @@ public abstract class Minion : Character
                     if (canAttack &&
                         state == MinionState.Patrolling || state == MinionState.Migrating)
                     {
-                        state = MinionState.ClosingIn;
+                        OnFoundTarget();
                     }
                 }
                 break;

@@ -2,24 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trident : MonoBehaviour {
+public class Projectile : MonoBehaviour {
 
     Rigidbody2D rb;
 
-    public Vector2 direction;
-
     public float throwForce;
-	// Use this for initialization
-	void Start ()
+
+    /// <summary>
+    /// Angle which object is thrown at right
+    /// </summary>
+    public float rightAngle;
+
+    public float leftAngle
     {
-        rb = GetComponent<Rigidbody2D>();
-        ThrowTrident();
+        get
+        {
+            return 360 - rightAngle;
+        }
     }
 
-    public void ThrowTrident()
+    protected void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
 
-        rb.AddForce(direction * throwForce * Time.deltaTime, ForceMode2D.Impulse);
+        rightAngle = transform.rotation.eulerAngles.z;
+    }
+
+    protected void Start()
+    {
+        Throw();
+    }
+
+    public void Throw()
+    {
+        rb.AddForce(-transform.up * throwForce * Time.deltaTime, ForceMode2D.Impulse);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
