@@ -226,15 +226,9 @@ public abstract class Minion : Character
 
     public void FireProjectile()
     {
-        Projectile proj;
-        if (transform.localScale.x > 0)
-            proj = projectile.Spawn(null, rangedTrans.position, projectile.transform.rotation);
-        else
-        {
-            proj = projectile.Spawn(null, rangedTrans.position, Quaternion.Euler(0, 0, 242.478f));
-        }
+        Projectile proj = projectile.Spawn(null, rangedTrans.position);
 
-        proj.Throw();
+        proj.Throw(new Vector2(transform.localScale.x, 1));
     }
 
     protected virtual void OnFoundTarget()

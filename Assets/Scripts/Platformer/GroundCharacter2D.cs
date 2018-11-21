@@ -208,18 +208,15 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     protected virtual void DirectionLogic(float desiredDirection)
     {
-        Debug.Log("Being called: " + desiredDirection);
         // If the input is moving the character right and the character is facing left...
         if (desiredDirection > 0 && !FacingRight)
         {
-            Debug.Log("Flipping to right");
             // ... flip the player.
             Flip();
         }
         // Otherwise if the input is moving the character left and the character is facing right...
         else if (desiredDirection < 0 && FacingRight)
-        {
-            Debug.Log("Flipping to left");
+        { 
             // ... flip the player.
             Flip();
         }

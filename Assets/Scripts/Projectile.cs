@@ -4,28 +4,15 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour {
 
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
+
+    public Vector2 throwDirection;
 
     public float throwForce;
-
-    /// <summary>
-    /// Angle which object is thrown at right
-    /// </summary>
-    public float rightAngle;
-
-    public float leftAngle
-    {
-        get
-        {
-            return 360 - rightAngle;
-        }
-    }
 
     protected void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        rightAngle = transform.rotation.eulerAngles.z;
     }
 
     protected void Start()
@@ -33,9 +20,22 @@ public class Projectile : MonoBehaviour {
         Throw();
     }
 
+    protected void Update()
+    {
+        transform.right = Vector3.Slerp(transform.right, rb.velocity.normalized, Time.deltaTime * 15);
+    }
+
+    public void Throw(Vector2 dirOveride)
+    {
+        throwDirection *= dirOveride;
+
+        Throw();
+    }
+
     public void Throw()
     {
-        rb.AddForce(-transform.up * throwForce * Time.deltaTime, ForceMode2D.Impulse);
+        transform.right = throwDirection;
+        rb.AddForce(throwDirection * throwForce * Time.deltaTime, ForceMode2D.Impulse);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -44,7 +44,6 @@ public class Projectile : MonoBehaviour {
         {
             rb.bodyType = RigidbodyType2D.Static;
             rb.simulated = false;
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
             GetComponent<Collider2D>().enabled = false;
         }
     }
