@@ -85,8 +85,10 @@ public class FlightMinion : Minion
         m_Flying.Move(moveDir, moveSpeed);
     }
 
-    private void OnDrawGizmosSelected()
+    protected override void OnDrawGizmosSelected()
     {
+        base.OnDrawGizmosSelected();
+
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(orginalPosition, .1f);
     }

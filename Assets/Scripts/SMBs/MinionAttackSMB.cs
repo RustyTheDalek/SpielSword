@@ -7,7 +7,8 @@ using UnityEngine;
 /// </summary>
 public class MinionAttackSMB : SceneLinkedSMB<Minion> 
 {
-    public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnSLStateNoTransitionUpdate(Animator animator, 
+        AnimatorStateInfo stateInfo, int layerIndex)
     {
         base.OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex);
 

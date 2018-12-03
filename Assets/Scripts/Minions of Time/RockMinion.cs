@@ -26,4 +26,31 @@ public class RockMinion : GroundMinion {
             m_Animator.SetTrigger(m_HashAttackRight);
         }
     }
+
+    protected override void StartAttack(AttackType attackType)
+    {
+        state = MinionState.Attacking;
+
+        prevDir = moveDir;
+
+        switch (attackType)
+        {
+            case AttackType.Melee:
+
+                if (moveDir.x > 1)
+                {
+                    m_Animator.SetTrigger(m_HashAttackLeft);
+                }
+                else
+                {
+                    m_Animator.SetTrigger(m_HashAttackRight);
+                }
+                break;
+
+            case AttackType.Ranged:
+
+                //TODO: add ranged logic for Rock minion 'yeeting' rocks
+                break;
+        }
+    }
 }

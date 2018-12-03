@@ -103,6 +103,8 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     {
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, directionForce.normalized);
+
+
     }
 
     public virtual void Move(Vector2 moveDir, bool jump = false, int manualDirection = 1)
@@ -162,22 +164,22 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             RaycastHit2D frontHit = Physics2D.Raycast(m_Front.position,
                 -transform.up, transform.localScale.y, m_WhatIsGround);
 
-            if (backHit)
-                Debug.DrawRay(m_Back.position, backHit.normal, Color.cyan);
+            //if (backHit)
+            //    Debug.DrawRay(m_Back.position, backHit.normal, Color.cyan);
 
-            if(frontHit)
-                Debug.DrawRay(m_Front.position, frontHit.normal, Color.cyan);
+            //if(frontHit)
+            //    Debug.DrawRay(m_Front.position, frontHit.normal, Color.cyan);
 
             //Finding the average between the two
             Vector2 avgNormal = (backHit.normal + frontHit.normal) / 2;
 
-            Debug.DrawRay(m_Ceiling.position, avgNormal, Color.blue);
+            //Debug.DrawRay(m_Ceiling.position, avgNormal, Color.blue);
 
             //Then we find the perpendicular Vector of the two to give us a nice 
             //direction along platform we're running across
             moveVector = new Vector2(avgNormal.y, -avgNormal.x);
 
-            Debug.DrawRay(transform.position, moveVector, Color.magenta);
+            //Debug.DrawRay(transform.position, moveVector, Color.magenta);
 
         }
         else

@@ -23,6 +23,13 @@ public static class ExtensionMethods
         return val.normalized;
     }
 
+    public static Vector3 PointTo(this Transform val, Transform point)
+    {
+        Vector3 dir = point.position - val.position;
+
+        return dir.normalized;
+    }
+
     public static Vector2 Direction(this Vector2 val, Vector2 point)
     {
         float x = val.x > point.x ? -1 : 1;

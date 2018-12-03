@@ -69,7 +69,6 @@ public class GroundMinion : Minion
         }
         else
         {
-            Debug.Log("Move based");
             m_GroundCharacter.Move(moveDir);
         }
     }

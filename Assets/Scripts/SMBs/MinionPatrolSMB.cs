@@ -30,6 +30,11 @@ public class MinionPatrolSMB : SceneLinkedSMB<Minion>
                     case AttackType.Ranged:
                         m_MonoBehaviour.MoveToEngage();
                         m_MonoBehaviour.CheckRangedAttackRange();
+
+                        if (m_MonoBehaviour.meleePanic)
+                        {
+                            m_MonoBehaviour.CheckMeleeAttackRange();
+                        }
                         break;
                 }
                 break;

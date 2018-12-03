@@ -2,30 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGrapple : MonoBehaviour {
+public class PlayerGrapple : MonoBehaviour
+{
     #region Private Variables
     private Vector2 findPlayer;
     private int amountOfCharacters;
     private int selectedCharacters;
     private int progression;
-    private float timer;
-    private bool playerHere;
-    private bool restricted;
+    private float timer = 0;
+
+    private bool playerHere = false;
+    /// <summary>
+    /// If the Trap has fired and is resetting
+    /// </summary>
     private bool fired;
     private Vector3 playerLocation;
     private List<int> characters = new List<int>();
     private List<GameObject> trapSprites = new List<GameObject>();
-    private SpriteRenderer fwd_SpriteRenderer;
-    private SpriteRenderer bk_SpriteRenderer;
+    #endregion
+
+    #region Protected Variables
+    protected bool restricted = false;
     #endregion
 
     #region Public Variables
     public Animator animi;
     public int difficulty;
-    public GameObject actPlayer;
-    public LayerMask layerGroundOnly;
+    public Villager target;
     public string playerInput;
     public string playerInputPast;
+
+    //Whether the trap actually stops the player
+    public bool stopsTarget;
 
     #region List of sprites
     //May need a sprite sheet or summit to handle this
@@ -52,11 +60,6 @@ public class PlayerGrapple : MonoBehaviour {
     public GameObject trapSprite5;
     #endregion
 
-    #region Object to change colour
-    public GameObject fwdSprite;
-    public GameObject bkSprite;
-    #endregion
-
     #endregion
 
     #region Dictionary
@@ -65,14 +68,11 @@ public class PlayerGrapple : MonoBehaviour {
     #endregion
     
     
-    void Start () {
+    protected virtual void Start ()
+    {
         ValidCharacters();
         SpriteCharacters();
         TrapSpritesList();
-        fwd_SpriteRenderer = fwdSprite.GetComponent<SpriteRenderer>();
-        bk_SpriteRenderer = bkSprite.GetComponent<SpriteRenderer>();
-        restricted = false;
-        playerHere = false;
     }
 	
 	void Update () {
@@ -80,8 +80,6 @@ public class PlayerGrapple : MonoBehaviour {
         if (timer >= 3.0f)
         {
             fired = false;
-            fwd_SpriteRenderer.color = Color.white;
-            bk_SpriteRenderer.color = Color.white;
         }
 
         if (fired)
@@ -92,13 +90,11 @@ public class PlayerGrapple : MonoBehaviour {
         // Get a player check from PlayerCheck to see if player is present
         if (playerHere && !restricted && !fired)
         {
-            playerLocation = actPlayer.transform.position;
+            playerLocation = target.transform.position;
             FindFoe();
-            Display(0);
         }
         if (restricted)
         {
-            
             if (Input.anyKeyDown)
             {
                 playerInput = Input.inputString;
@@ -106,7 +102,18 @@ public class PlayerGrapple : MonoBehaviour {
             Restrict();
         }
     }
-    
+
+    protected virtual void LateUpdate()
+    {
+        if (restricted && target)
+        {
+            Display(progression);
+        }
+    }
+
+    /// <summary>
+    /// Adds list of valid input choices
+    /// </summary>
     void ValidCharacters()
     {
         // Lower case due to inputString
@@ -151,22 +158,27 @@ public class PlayerGrapple : MonoBehaviour {
     }
 
     void FindFoe()
-    {
+    { 
         findPlayer = new Vector2(playerLocation.x - transform.position.x,
             playerLocation.y - transform.position.y).normalized;
-        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, layerGroundOnly);
+
+        bool rayResult = Physics2D.Raycast(transform.position, findPlayer, 3.5f, LayerMask.GetMask("Ground"));
         if (rayResult)
-        { 
+        {
             Attack();
         }
     }
 
-    void Attack()
+    /// <summary>
+    /// Traps player and sets up the Key combination for escaping
+    /// </summary>
+    protected virtual void Attack()
     {
         //disable player movment
-        actPlayer.GetComponent<Villager>().canAct = false;
-        actPlayer.GetComponent<Villager>().moveDir =
-                new Vector2(0, 0);
+        target.canAct = false;
+
+        if(stopsTarget)
+            target.moveDir = new Vector2(0, 0);
 
         animi.SetBool("Fire", true);
 
@@ -212,9 +224,17 @@ public class PlayerGrapple : MonoBehaviour {
 
             // Position off set by current object count
             trapSprites[i - progression].transform.position =
-                new Vector2(playerLocation.x + 1 + (i * 0.65f),
-                playerLocation.y + 1.7f);
+                new Vector2(target.transform.position.x + 1 + (i * 0.65f),
+                target.transform.position.y + 1.7f);
+        }
+    }
 
+    void Clear()
+    {
+        for (int i = 0; i <= characters.Count - 1; i++)
+        {
+            // Sets the first object to the first letter and so on
+            trapSprites[i - progression].GetComponent<SpriteRenderer>().enabled = false;
         }
     }
 
@@ -225,39 +245,34 @@ public class PlayerGrapple : MonoBehaviour {
         else if (playerInput != playerInputPast)
         {
             progression = 0;
-            Display(progression);
         }
 
         if (characters[progression] == intOut &&
             playerInput != playerInputPast)
         {
             progression++;
-            Display(progression);
         }
         else if (characters[progression] != intOut &&
             playerInput != playerInputPast)
         {
             progression = 0;
-            Display(progression);
         }
 
         playerInput = playerInputPast;
 
         if (progression == characters.Count)
         {
-            Reset();
+            OnPlayerEscape();
         }
     }
 
-    void Reset()
+    protected virtual void OnPlayerEscape()
     {
-        actPlayer.GetComponent<Villager>().canAct = true;
+        target.GetComponent<Villager>().canAct = true;
         characters.Clear();
         playerHere = false;
         restricted = false;
         fired = true;
-        fwd_SpriteRenderer.color = Color.gray;
-        bk_SpriteRenderer.color = Color.gray;
         timer = 0;
         animi.SetBool("Fire", false);
         for (int i = 0; i <= 4; i++)
@@ -269,19 +284,21 @@ public class PlayerGrapple : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == (LayerMask.NameToLayer("Villager")))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Villager") && !playerHere)
         {
-            actPlayer = collision.gameObject;
+            target = collision.GetComponent<Villager>();
             playerHere = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == (LayerMask.NameToLayer("Villager")))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Villager"))
         {
-            actPlayer = null;
             playerHere = false;
+            target = null;
+            animi.SetBool("Fire", false);
+            Clear();
         }
     }
 }
