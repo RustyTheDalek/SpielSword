@@ -30,8 +30,6 @@ public abstract class Minion : Character
     /// </summary>
     float rAVariance = 1f;
 
-    public Projectile projectile;
-
     /// <summary>
     /// After a Rest/Celebrate how long does it for Minion to go back to fighting
     /// </summary>
@@ -86,8 +84,6 @@ public abstract class Minion : Character
         if (GetComponent<SpriteRenderer>())
             startingColor = GetComponent<SpriteRenderer>().color;
 
-        if (projectile)
-            projectile.CreatePool(10);
     }
 
     protected Minion()
