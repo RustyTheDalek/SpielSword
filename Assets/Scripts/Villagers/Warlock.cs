@@ -4,11 +4,6 @@ using System.Collections;
 public class Warlock : WardVillager
 {
     #region Public Variables
-
-    //public GameObject currentWard;
-
-    //public bool wardActive;
-
     #endregion
 
     #region Protected Variables

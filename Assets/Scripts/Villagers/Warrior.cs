@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class Warrior : Villager
 {
-    public float shieldStrength = 1;
+    float shieldStrength = 1;
 
     /// <summary>
     /// Whether the Villager is shielded from damage

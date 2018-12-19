@@ -9,12 +9,12 @@ using UnityEngine;
 public class AnimatorTimeObject : RigidbodyTimeObject
 {
     #region Public Variables
+
     #endregion
 
     #region Protected Variables
 
     protected Character m_Character;
-    protected PlatformerCharacter2D m_Platformer;
 
     protected AnimatorFrameData tempFrame;
     protected List<AnimatorFrameData> pFrames = new List<AnimatorFrameData>();
@@ -35,18 +35,15 @@ public class AnimatorTimeObject : RigidbodyTimeObject
     {
         base.Awake();
 
+        sprites = new Dictionary<string, Sprite>();
+
         m_Character = GetComponent<Character>();
-        m_Platformer = GetComponent<PlatformerCharacter2D>();
         m_Anim = GetComponent<Animator>();
 
         OnTrackFrame += TrackSpriteSheetFrame;
         OnPlayFrame += PlaySpriteSheetFrame;
         OnFinishPlayback += OnFinishSpriteSheetPlayback;
-        OnStartPlayback += OnSpriteSheetStartPlayback;
         OnStartReverse += OnSpriteSheetStartReverse;
-
-        sprites = new Dictionary<string, Sprite>();
-
     }
 
     //protected override void OnPast()
@@ -95,14 +92,8 @@ public class AnimatorTimeObject : RigidbodyTimeObject
     }
 
     protected void OnSpriteSheetStartReverse()
-    { 
-        m_Platformer.enabled = false;
-        m_Anim.enabled = false;
-    }
-
-    protected void OnSpriteSheetStartPlayback()
     {
-        m_Platformer.enabled = true;
+        m_Anim.enabled = false;
     }
 
     private void OnDestroy()

@@ -24,7 +24,7 @@ public class VillagerDeathSMB : SceneLinkedSMB<Villager>
             m_MonoBehaviour.villagerState == VillagerState.PresentVillager &&
             m_MonoBehaviour.deathEnd == false)
         {
-            m_MonoBehaviour.vTO.finishFrame = (int)TimeObjectManager.t;
+            m_MonoBehaviour.m_VTimeObject.finishFrame = (int)TimeObjectManager.t;
             m_MonoBehaviour.deathEnd = true;
 
             animator.updateMode = AnimatorUpdateMode.Normal;

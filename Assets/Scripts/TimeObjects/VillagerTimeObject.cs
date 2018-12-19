@@ -88,9 +88,9 @@ public class VillagerTimeObject : AnimatorTimeObject
     /// </summary>
     protected override void OnPast()
     {
-        //base.OnPast();
+        base.OnPast();
+
         villager.villagerState = VillagerState.PastVillager;
-        //villager.hat.GetComponentInChildren<SpriteRenderer>().material = AssetManager.SpriteMaterials["VHSSprite"];
     }
 
     protected void OnVillagerStartPlayback()

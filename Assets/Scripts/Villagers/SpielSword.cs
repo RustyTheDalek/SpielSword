@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpielSword : Villager
 {
-    public bool sacrificing = false;
+    bool sacrificing = false;
 
     public override void OnSpecial(bool _PlayerSpecial)
     {

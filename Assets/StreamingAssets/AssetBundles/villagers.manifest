@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 344891184
+CRC: 1999906266
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 05ea3f868bc791f8a8cefec38af427a1
+    Hash: ece94cebcdc924f086f86e85805381fb
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3f4d4858e5b4e95c460c74a89dc8dd0f
+    Hash: 9a0ad043bb50c7c2d8a40b2deeec0e33
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -22,8 +22,6 @@ ClassTypes:
 - Class: 50
   Script: {instanceID: 0}
 - Class: 58
-  Script: {instanceID: 0}
-- Class: 61
   Script: {instanceID: 0}
 - Class: 62
   Script: {instanceID: 0}
@@ -52,8 +50,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 0a27ff84ed168ea4f80755f592fee877, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 7e930005ea5bea945ac4500741718fe4, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 829e9f0563d2f7940ae3588e964414fd, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: da163506fd12c4c469ca20071a4044b3, type: 3}
@@ -65,8 +61,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 95147898b0fc03c4c9ae8adb923bf68a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9359cf6963ace04448f3a8bbee8ea2d6, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: e0075c1bf59a5ae49aa3359b916e3b2a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fcbfa1eb3f3e4154382a2d875ac85861, type: 3}
 - Class: 114
@@ -96,10 +90,9 @@ ClassTypes:
 Assets:
 - Assets/Prefabs/Villagers/PressSpecial/Berserker.prefab
 - Assets/Prefabs/Villagers/PressSpecial/Priest.prefab
-- Assets/Prefabs/Villagers/HoldSpecial/Warrior.prefab
 - Assets/Prefabs/Villagers/PressSpecial/Mage.prefab
 - Assets/Prefabs/Villagers/PressSpecial/Shaman.prefab
 - Assets/Prefabs/Villagers/PressSpecial/Warlock.prefab
-- Assets/Prefabs/Villagers/HoldSpecial/Spielsword.prefab
 - Assets/Prefabs/Villagers/PressSpecial/Rogue.prefab
+- Assets/Prefabs/Villagers/PressSpecial/Villager.prefab
 Dependencies: []

@@ -20,6 +20,13 @@ public class TimeObject : MonoBehaviour
 
     public float currentFrame;
 
+    [Tooltip("Script relating to logic that object uses in present so that it " +
+    "can be disabled during runtime")]
+    public MonoBehaviour m_Behaviour;
+
+    [Tooltip("If enabled timeObject will recycle itself after rewinding")]
+    public bool oneLife = false;
+
     #region Events
     public delegate void TimeObjectEvent();
     public event TimeObjectEvent OnPlayFrame;
@@ -50,6 +57,8 @@ public class TimeObject : MonoBehaviour
 
         OnTrackFrame += TrackTransform;
         OnPlayFrame += PlayTransormFrame;
+
+        OnFinishReverse += FinishReverse;
     }
 
     protected virtual void Update()
@@ -201,6 +210,34 @@ public class TimeObject : MonoBehaviour
             transform.localScale = bFrames[(int)currentFrame].m_Scale;
 
             gameObject.SetActive(bFrames[(int)currentFrame].enabled);
+        }
+    }
+
+    protected void StartReverse()
+    {
+        if (m_Behaviour)
+        {
+            m_Behaviour.enabled = false;
+        }
+    }
+
+    protected void StartPlayback()
+    {
+        if (m_Behaviour)
+        {
+            m_Behaviour.enabled = true;
+        }
+    }
+
+    protected void FinishReverse()
+    {
+        if (m_Behaviour)
+        {
+        }
+
+        if (oneLife)
+        {
+            this.Recycle();
         }
     }
 

@@ -19,12 +19,12 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
     public Villager creator;
 
     protected bool spawnableActive = false;
+
     /// <summary>
     /// Lifetime of spawnable object, 0=doesn't expire to time
     /// </summary>
     public float    spawnableLife = 5,
                     spawnableTimer = 0;
-
 
     protected override void Awake()
     {
@@ -147,7 +147,7 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
 
     protected void SetActive(bool active)
     {
-        GetComponent<SpriteRenderer>().enabled = active;
+        m_Sprite.enabled = active;
 
         if (GetComponent<Collider2D>())
             GetComponent<Collider2D>().enabled = active;

@@ -12,6 +12,8 @@ public abstract class Villager : Character
 {
     #region Public Variables
 
+    public SpecialType specialType = SpecialType.Press;
+
     public VillagerState villagerState = VillagerState.PresentVillager;
 
     //Whether it's currently in control by the player
@@ -29,8 +31,6 @@ public abstract class Villager : Character
     public CircleCollider2D[] PlayerCollisions;
 
     public SpriteRenderer hat;
-
-    public VillagerTimeObject vTO;
 
     /// <summary>
     /// If a Villager is shielded they are unable to take damage from attacks
@@ -51,10 +51,6 @@ public abstract class Villager : Character
 
     public bool deathEnd = false;
 
-    public AudioSource EffectNoise;
-
-    public MeleeAttack classMeleeAttack;
-
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
     /// </summary>
@@ -66,23 +62,27 @@ public abstract class Villager : Character
         }
     }
 
+    public VillagerTimeObject m_VTimeObject;
+
+    public SpriteMask portal;
+
     #endregion
 
     #region Protected Variables
 
     protected SpriteRenderer m_Sprite;
     protected GroundCharacter2D m_Ground;
-
-    public SpecialType specialType = SpecialType.Press;
      
     /// <summary>
     /// Temporary GameObject for tracking Ranged attack
     /// </summary>
     protected GameObject rangedAtk;
 
-    public SpriteMask portal;
-
     protected float rangedProjectileStrength = 25;
+
+    protected AudioSource EffectNoise;
+
+    protected MeleeAttack classMeleeAttack;
 
     protected readonly int m_HashMeleeParam = Animator.StringToHash("MeleeAttack");
     protected readonly int m_HashRangedParam = Animator.StringToHash("RangedAttack");
@@ -114,7 +114,9 @@ public abstract class Villager : Character
 
         m_Sprite = GetComponent<SpriteRenderer>();
         m_Ground = GetComponent<GroundCharacter2D>();
-        vTO = GetComponent<VillagerTimeObject>();
+        m_VTimeObject = GetComponent<VillagerTimeObject>();
+
+        EffectNoise = GetComponent<AudioSource>();
 
         if (abilities == null)
             abilities = AssetBundle.LoadFromFile(Path.Combine(
@@ -346,14 +348,20 @@ public abstract class Villager : Character
             Time.timeScale = Mathf.Lerp(1, 0, Time.time - startTime);
 
             yield return null;
-
         }
     }
 
     private void PlayEffect()
     {
-        EffectNoise.Stop();
-        EffectNoise.Play();
+        if (EffectNoise)
+        {
+            EffectNoise.Stop();
+            EffectNoise.Play();
+        }
+        else
+        {
+            Debug.LogWarning("No effect assigned, is this intended");
+        }
     }
 
     public void PlayMeleeEffect()

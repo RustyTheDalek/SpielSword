@@ -7,7 +7,8 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Character : MonoBehaviour {
+public class Character : MonoBehaviour
+{
 
     #region Public Variables
 
@@ -29,14 +30,14 @@ public class Character : MonoBehaviour {
     /// </summary>
     public Vector2 moveDir;
 
+    #endregion
+
+    #region Protected Variables
+
     /// <summary>
     /// Spawn position for Ranged projectiles
     /// </summary>
     public Transform rangedTrans;
-
-    #endregion
-
-    #region Protected Variables
 
     private PlatformerCharacter2D m_Character;
 

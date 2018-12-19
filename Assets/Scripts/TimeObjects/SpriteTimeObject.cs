@@ -16,7 +16,8 @@ public class SpriteTimeObject : TimeObject
     protected override void Awake()
     {
         base.Awake();
-        m_Sprite = GetComponent<SpriteRenderer>();
+
+        m_Sprite = GetComponentInChildren<SpriteRenderer>();
 
         OnPlayFrame += PlaySpriteFrame;
         OnTrackFrame += TrackSpriteFrame;

@@ -272,7 +272,7 @@ public class VillagerManager : MonoBehaviour {
         {
             if (activeVillager)
             {
-                activeVillager.vTO.tObjectState = TimeObjectState.PastStart;
+                activeVillager.m_VTimeObject.tObjectState = TimeObjectState.PastStart;
                 activeVillager.DisableAnimator();
                 activeVillager.EnableOutsidMask();
             }
