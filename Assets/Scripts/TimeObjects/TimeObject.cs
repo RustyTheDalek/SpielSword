@@ -271,6 +271,8 @@ public class TimeObject : MonoBehaviour
     {
         OnTrackFrame -= TrackTransform;
         OnPlayFrame -= PlayTransormFrame;
+
+        OnFinishReverse -= FinishReverse;
     }
 }
                                                           

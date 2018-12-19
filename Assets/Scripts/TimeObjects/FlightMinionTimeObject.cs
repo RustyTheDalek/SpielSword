@@ -22,6 +22,5 @@ public class FlightMinionTimeObject : MinionTimeObject
         OnTrackFrame -= TrackSpriteSheetFrame;
         OnPlayFrame -= PlaySpriteSheetFrame;
         OnFinishPlayback -= OnFinishSpriteSheetPlayback;
-        OnStartPlayback -= OnSpriteSheetStartPlayback;
     }
 }

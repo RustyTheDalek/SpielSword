@@ -101,7 +101,6 @@ public class AnimatorTimeObject : RigidbodyTimeObject
         OnTrackFrame -= TrackSpriteSheetFrame;
         OnPlayFrame -= PlaySpriteSheetFrame;
         OnFinishPlayback -= OnFinishSpriteSheetPlayback;
-        OnStartPlayback -= OnSpriteSheetStartPlayback;
         OnStartReverse -= OnSpriteSheetStartReverse;
     }
 
