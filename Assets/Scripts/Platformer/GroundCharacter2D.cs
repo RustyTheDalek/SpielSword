@@ -16,6 +16,11 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     /// to enable/disable the faced direction based on movemment
     /// </summary>
     public bool m_ManualFaceDirection = false;
+
+    public bool m_AlignToGround;
+
+    public float alignSpeed = 5;
+
     #endregion
 
     #region Protected Variables
@@ -103,7 +108,8 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     {
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, directionForce.normalized);
-
+        Gizmos.color = Color.black;
+        Gizmos.DrawRay(transform.position, moveVector);
 
     }
 
@@ -167,11 +173,17 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             //if (backHit)
             //    Debug.DrawRay(m_Back.position, backHit.normal, Color.cyan);
 
-            //if(frontHit)
+            //if (frontHit)
             //    Debug.DrawRay(m_Front.position, frontHit.normal, Color.cyan);
 
             //Finding the average between the two
             Vector2 avgNormal = (backHit.normal + frontHit.normal) / 2;
+
+            if (m_AlignToGround)
+            {
+                //transform.up = avgNormal;
+                transform.up = Vector3.Slerp(transform.up, avgNormal, Time.deltaTime * alignSpeed);
+            }
 
             //Debug.DrawRay(m_Ceiling.position, avgNormal, Color.blue);
 
@@ -186,6 +198,8 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         {
             //If in air we don't want odd move Vectors
             moveVector = transform.right;
+            transform.up = Vector3.Slerp(transform.up, Vector2.up, Time.deltaTime * alignSpeed);
+
         }
     }
 

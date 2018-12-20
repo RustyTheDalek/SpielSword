@@ -24,7 +24,7 @@ public class GroundMinion : Minion
 
     #region Private Variables
 
-    private float distanceToFloor = .8f;
+    private float distanceToFloor = 1.2f;
     private float distanceFromWall = .4f;
 
     bool attackLeft = false,
@@ -75,35 +75,40 @@ public class GroundMinion : Minion
 
     public override void Patrol()
     {
-        if(moveDir == Vector2.zero)
-        {
-            moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
-        }
+        //if(moveDir == Vector2.zero)
+        //{
+        //    moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
+        //}
 
         #region Find the floor
 
         if(m_GroundCharacter.m_Grounded && 
             !Physics2D.Raycast( m_GroundCharacter.m_Front.position, 
-                                Vector2.down, distanceToFloor, 
+                                -transform.up, distanceToFloor, 
                                 LayerMask.GetMask("Ground")))
         {
-            moveDir.x *= -1;
+            moveDir = -moveDir;
+
+            Debug.Log("No floor swapping");
+            Debug.Break();
         }
 
-        Debug.DrawRay(m_GroundCharacter.m_Front.position, Vector2.down * distanceToFloor, Color.green);
+        Debug.DrawRay(m_GroundCharacter.m_Front.position, -transform.up * distanceToFloor, Color.green);
 
         #endregion
 
-        #region Find the wall
+        //#region Find the wall
 
-        Debug.DrawRay(m_GroundCharacter.m_Front.position, moveDir * distanceFromWall, Color.red);
+        //Debug.DrawRay(m_GroundCharacter.m_Front.position, transform.right * moveDir * distanceFromWall, Color.red);
 
-        if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, moveDir, distanceFromWall, layerGround))
-        {
-            moveDir.x *= -1;
-        }
+        //if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, transform.right * moveDir, distanceFromWall, layerGround))
+        //{
+        //    moveDir = -moveDir;
 
-        #endregion
+        //    Debug.Log("At a wall swapping");
+        //}
+
+        //#endregion
     }
 
     public override void OnDeath(Vector2 attackDirection)
