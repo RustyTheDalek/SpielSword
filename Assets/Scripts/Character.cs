@@ -6,7 +6,6 @@ using UnityEngine;
 /// Base class for player character and NPCS
 /// </summary>
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Rigidbody2D))]
 public class Character : MonoBehaviour
 {
 
@@ -57,8 +56,8 @@ public class Character : MonoBehaviour
     protected virtual void Awake()
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
-        m_Animator = GetComponent<Animator>();
-        m_rigidbody = GetComponent<Rigidbody2D>();
+        m_Animator = GetComponentInChildren<Animator>();
+        m_rigidbody = GetComponentInChildren<Rigidbody2D>();
     }
 
     protected virtual void Update()

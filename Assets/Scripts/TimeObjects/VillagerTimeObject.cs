@@ -34,9 +34,9 @@ public class VillagerTimeObject : AnimatorTimeObject
     {
         base.Awake();
 
-        villager = GetComponent<Villager>();
+        villager = GetComponentInChildren<Villager>();
         m_Ground = GetComponent<GroundCharacter2D>();
-        m_HatSprite = transform.Find("Hat").GetComponent<SpriteRenderer>();
+        m_HatSprite = villager.hat;
     }
 
     private void OnEnable()

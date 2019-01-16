@@ -51,7 +51,7 @@ public abstract class WardVillager : Villager
         if (!wardActive)
         {
             currentWard.gameObject.SetActive(true);
-            currentWard.transform.position = transform.position + wardOffset;
+            currentWard.transform.position = Sprite.transform.position + wardOffset;
             wardActive = true;
         }
         else
@@ -70,7 +70,7 @@ public abstract class WardVillager : Villager
 
             rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
 
-            float direction = rangedTrans.position.x - transform.position.x;
+            float direction = rangedTrans.position.x - m_rigidbody.transform.position.x;
 
             rangedAtk.GetComponent<VillagerAttack>().lifeTime = 2;
             rangedAtk.GetComponent<VillagerAttack>().damage = 1;

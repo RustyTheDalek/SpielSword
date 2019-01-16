@@ -28,7 +28,7 @@ public class Warlock : WardVillager
     protected override void OnWardUse()
     {
         Debug.Log("Teleporting");
-        transform.position = currentWard.transform.position;
+        m_rigidbody.position = currentWard.transform.position;
         teleportFX.Play();
     }
 
@@ -41,7 +41,7 @@ public class Warlock : WardVillager
 
             rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
 
-            float direction = rangedTrans.position.x - transform.position.x;
+            float direction = rangedTrans.position.x - m_rigidbody.transform.position.x;
 
             rangedAtk.GetComponent<VillagerAttack>().lifeTime = .25f;
             rangedAtk.GetComponent<VillagerAttack>().damage = damageMult;

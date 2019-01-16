@@ -28,7 +28,7 @@ public class HatShop : MonoBehaviour {
                 delegate { SetHat(GameManager.gManager.hats.LoadAsset<Hat>(hat)); });
         }
 
-        if(saveLoaded.Hat != null)
+        if(saveLoaded.Hat != null && villager.hat)
             villager.hat.sprite = GameManager.gManager.hats.LoadAsset<Hat>(saveLoaded.Hat).hatDesign;
     }
 
@@ -45,6 +45,12 @@ public class HatShop : MonoBehaviour {
 
     public void SetHat(Hat newHat)
     {
+        if (villager.hat == null)
+        {
+            Debug.LogWarning("No hat to change");
+            return;
+        }
+
         if (newHat.name == GameManager.gManager.CurrentSave.Hat)
         {
             villager.hat.sprite = null;

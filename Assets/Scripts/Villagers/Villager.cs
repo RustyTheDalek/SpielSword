@@ -12,6 +12,17 @@ public abstract class Villager : Character
 {
     #region Public Variables
 
+    /// <summary>
+    /// The Transform of the mtion of the character
+    /// </summary>
+    public new Transform MotionTransform
+    {
+        get
+        {
+            return m_rigidbody.transform;
+        }
+    }
+
     public SpecialType specialType = SpecialType.Press;
 
     public VillagerState villagerState = VillagerState.PresentVillager;
@@ -22,6 +33,22 @@ public abstract class Villager : Character
         get
         {
             return villagerState == VillagerState.PresentVillager;
+        }
+    }
+
+    public SpriteRenderer Sprite
+    {
+        get
+        {
+            return m_Sprite;
+        }
+    }
+
+    public GroundCharacter2D GroundController2D
+    {
+        get
+        {
+            return m_Ground;
         }
     }
 
@@ -112,8 +139,8 @@ public abstract class Villager : Character
 
         portal = GetComponentInChildren<SpriteMask>();
 
-        m_Sprite = GetComponent<SpriteRenderer>();
-        m_Ground = GetComponent<GroundCharacter2D>();
+        m_Sprite = GetComponentInChildren<SpriteRenderer>();
+        m_Ground = GetComponentInChildren<GroundCharacter2D>();
         m_VTimeObject = GetComponent<VillagerTimeObject>();
 
         EffectNoise = GetComponent<AudioSource>();
@@ -126,7 +153,7 @@ public abstract class Villager : Character
         {
             case AttackType.Ranged:
 
-                rangedTrans = GameObject.Find(this.name + "/RangedTransform").transform;
+                rangedTrans = GameObject.Find(this.name + "/Character/RangedTransform").transform;
 
                 break;
 
@@ -149,7 +176,7 @@ public abstract class Villager : Character
 
         //TODO: FIX THIS TRASH
         if (hat == null)
-            hat = transform.Find("Hat").GetComponent<SpriteRenderer>();
+            Debug.LogWarning("No hat set");
 
 
         PlayerCollisions = GetComponents<CircleCollider2D>();
@@ -209,19 +236,35 @@ public abstract class Villager : Character
                                 break;
                         }
 
-                        m_Jump = Input.GetButtonDown("Jump");
+                        if (!m_Jump)
+                        {
+                            m_Jump = Input.GetButtonDown("Jump");
+                        }
                     }
                     break;
             }
         }
 
-        //Whether Villager is grounded is decided regardless of villagers state
-        m_Ground.Move(moveDir, m_Jump);
     }
-    
+
+    protected override void FixedUpdate()
+    {
+        if (!Alive)
+            return;
+
+        m_Animator.SetFloat("xSpeed", m_rigidbody.velocity.x);
+        m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
+        m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
+
+        m_Ground.Move(moveDir, m_Jump);
+
+        m_Jump = false;
+    }
+
     /// <summary>
     /// Kills player
     /// </summary>
+    [ContextMenu("Kill")]
     public void Kill()
     {
         health = 0;
@@ -303,7 +346,7 @@ public abstract class Villager : Character
             rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
             rangedAtk.GetComponent<VillagerAttack>().damageMult = damageMult;
 
-            float direction = rangedTrans.position.x - transform.position.x;
+            float direction = rangedTrans.position.x - m_rigidbody.transform.position.x;
 
             rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
                 , 0) * rangedProjectileStrength, ForceMode2D.Impulse);

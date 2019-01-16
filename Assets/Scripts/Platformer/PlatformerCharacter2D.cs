@@ -22,7 +22,7 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     protected virtual void Awake()
     {
-        m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        m_Rigidbody2D = GetComponentInChildren<Rigidbody2D>();
     }
 
     public virtual void Move(Vector2 moveVector) { }

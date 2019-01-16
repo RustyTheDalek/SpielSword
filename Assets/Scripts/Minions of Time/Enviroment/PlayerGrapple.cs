@@ -224,8 +224,8 @@ public class PlayerGrapple : MonoBehaviour
 
             // Position off set by current object count
             trapSprites[i - progression].transform.position =
-                new Vector2(target.transform.position.x + 1 + (i * 0.65f),
-                target.transform.position.y + 1.7f);
+                new Vector2(target.MotionTransform.position.x + 1 + (i * 0.65f),
+                target.MotionTransform.position.y + 1.7f);
         }
     }
 
@@ -268,7 +268,7 @@ public class PlayerGrapple : MonoBehaviour
 
     protected virtual void OnPlayerEscape()
     {
-        target.GetComponent<Villager>().canAct = true;
+        target.canAct = true;
         characters.Clear();
         playerHere = false;
         restricted = false;
@@ -286,7 +286,7 @@ public class PlayerGrapple : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Villager") && !playerHere)
         {
-            target = collision.GetComponent<Villager>();
+            target = collision.GetComponentInParent<Villager>();
             playerHere = true;
         }
     }

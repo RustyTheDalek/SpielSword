@@ -14,7 +14,7 @@ public class BossAttack : MonoBehaviour
         if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
             && !LevelManager.GodMode)
         {
-            coll.gameObject.GetComponent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
+            coll.gameObject.GetComponentInParent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
         }
     }
 
@@ -25,7 +25,7 @@ public class BossAttack : MonoBehaviour
         if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
             && !LevelManager.GodMode)
         {
-            coll.gameObject.GetComponent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
+            coll.gameObject.GetComponentInParent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
         }
     }
 }

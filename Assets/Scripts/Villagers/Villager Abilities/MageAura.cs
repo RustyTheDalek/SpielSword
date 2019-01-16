@@ -4,19 +4,16 @@ using UnityEngine;
 
 public class MageAura : Aura
 {
-    protected override void OnEnterAura(Collider2D coll)
+    protected override void OnEnterAura(Villager villager)
     {
-        base.OnEnterAura(coll);
+        base.OnEnterAura(villager);
 
-        Debug.Log("Entered Buff aura");
-        coll.GetComponent<Villager>().SetDamageMult(((int)health + 1) / 2);
+        villager.SetDamageMult(((int)health + 1) / 2);
     }
 
-    protected override void OnExitAura(Collider2D coll)
+    protected override void OnExitAura(Villager villager)
     {
-        base.OnExitAura(coll);
-
-        Debug.Log("No Buff aura");
-        coll.GetComponent<Villager>().SetDamageMult(1);
+        base.OnExitAura(villager);
+        villager.SetDamageMult(1);
     }
 }

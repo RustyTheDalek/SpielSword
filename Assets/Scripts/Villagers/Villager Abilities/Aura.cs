@@ -57,9 +57,11 @@ public class Aura : SpawnableSpriteTimeObject
         }
     }
 
-    protected virtual void OnEnterAura(Collider2D coll)
+    protected virtual void OnEnterAura(Villager villager)
     {
-        if (coll.gameObject != creator.gameObject)
+        Debug.Log("Entered " + name);
+
+        if (villager.gameObject != creator.gameObject)
         {
             if (!comboUsed)
             {
@@ -77,7 +79,10 @@ public class Aura : SpawnableSpriteTimeObject
         }
     }
 
-    protected virtual void OnExitAura(Collider2D coll) { }
+    protected virtual void OnExitAura(Villager villager)
+    {
+        Debug.Log("Left " + name);
+    }
 
     void OnTriggerEnter2D(Collider2D coll)
     {
@@ -87,37 +92,37 @@ public class Aura : SpawnableSpriteTimeObject
 
             if (temp.CurrentVillager)
             {
-                OnEnterAura(coll);
+                OnEnterAura(temp);
             }
         }
     }
 
     void OnTriggerStay2D(Collider2D coll)
     {
-        if (coll.GetComponent<Villager>())
+        if (coll.GetComponentInParent<Villager>())
         {
-            Villager temp = coll.GetComponent<Villager>();
+            Villager temp = coll.GetComponentInParent<Villager>();
 
             if (temp.CurrentVillager && spawnableActive)
             {
-                OnEnterAura(coll);
+                OnEnterAura(temp);
             }
             else
             {
-                OnExitAura(coll);
+                OnExitAura(temp);
             }
         }
     }
 
     void OnTriggerExit2D(Collider2D coll)
     {
-        if (coll.GetComponent<Villager>())
+        if (coll.GetComponentInParent<Villager>())
         {
-            Villager temp = coll.GetComponent<Villager>();
+            Villager temp = coll.GetComponentInParent<Villager>();
 
             if (temp.CurrentVillager)
             {
-                OnExitAura(coll);
+                OnExitAura(temp);
             }
         }
     }

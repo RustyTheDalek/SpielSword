@@ -283,7 +283,7 @@ public class VillagerManager : MonoBehaviour {
             activeVillager.gameObject.SetActive(true);
             activeVillager.villagerState = VillagerState.PresentVillager;
             activeVillager.transform.parent = activeVillagerTrans;
-            activeVillager.GetComponent<SpriteRenderer>().sortingOrder = currentVillagerLayer;
+            activeVillager.Sprite.sortingOrder = currentVillagerLayer;
             remainingVillagers.RemoveAt(0);
 
             currentVillagerLayer++;
@@ -307,11 +307,7 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     void EnterLevel()
     {
-        activeVillager.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-        activeVillager.GetComponent<Rigidbody2D>().angularVelocity = 0;
-        activeVillager.GetComponent<Rigidbody2D>().isKinematic = true;
-        activeVillager.transform.position = spawnPos;
-        activeVillager.GetComponent<Rigidbody2D>().isKinematic = false;
+        activeVillager.MotionTransform.position = spawnPos;
     }
 
     /// <summary>

@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class PriestAura : Aura
 {
-    protected override void OnEnterAura(Collider2D coll)
+    protected override void OnEnterAura(Villager villager)
     {
-        base.OnEnterAura(coll);
+        base.OnEnterAura(villager);
 
-        //Debug.Log("Entered Protection aura");
-        coll.GetComponent<Villager>().shielded = true;
+        villager.shielded = true;
     }
 
-    protected override void OnExitAura(Collider2D coll)
+    protected override void OnExitAura(Villager villager)
     {
-        base.OnExitAura(coll);
+        base.OnExitAura(villager);
 
-        //Debug.Log("Exited Protection aura");
-        coll.GetComponent<Villager>().shielded = false;
+        villager.shielded = false;
     }
 }

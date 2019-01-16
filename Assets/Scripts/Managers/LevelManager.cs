@@ -141,7 +141,7 @@ public class LevelManager : MonoBehaviour {
 
     void TrackNewVillager(Villager newVillager)
     {
-        trackCam.target = newVillager.transform;
+        trackCam.target = newVillager.GroundController2D.m_Character;
     }
 
     private void OnApplicationQuit()
