@@ -24,7 +24,7 @@ public class GroundMinion : Minion
 
     #region Private Variables
 
-    private float distanceToFloor = 1.2f;
+    private float distanceToFloor = 2;
     private float distanceFromWall = .4f;
 
     bool attackLeft = false,
@@ -40,9 +40,10 @@ public class GroundMinion : Minion
 
         m_GroundCharacter = GetComponent<GroundCharacter2D>();
         minionAttack = GetComponentInChildren<MinionHitAttack>();
+        m_rigidbody = transform.Find("Motion").GetComponentInChildren<Rigidbody2D>();
 
         //Set a random start direction
-        if(randomStartDir)
+        if (randomStartDir)
             startDir = (Random.Range(0, 2) > 0) ? Direction.Right : Direction.Left;
 
         moveDir = startDir.ToVector2();
@@ -57,13 +58,14 @@ public class GroundMinion : Minion
 
     protected override void FixedUpdate()
     {
-        m_Animator.SetFloat("xSpeed", moveDir.x);
-        m_Animator.SetFloat("ySpeed", moveDir.y);
+        m_Animator.SetFloat("xDir", moveDir.x);
+        m_Animator.SetFloat("yDir", moveDir.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(moveDir.x));
+        m_Animator.SetFloat("xVel", m_rigidbody.velocity.x);
 
         if (m_GroundCharacter.m_ManualFaceDirection && closestVillager)
         {
-            var vilDir = (int)Mathf.Sign((closestVillager.transform.position - transform.position).x);
+            var vilDir = (int)Mathf.Sign((closestVillager.transform.position.XY() - m_rigidbody.position).x);
             m_GroundCharacter.Move(moveDir, false, vilDir);
             m_Animator.SetFloat("Direction", vilDir);
         }
@@ -88,27 +90,25 @@ public class GroundMinion : Minion
                                 LayerMask.GetMask("Ground")))
         {
             moveDir = -moveDir;
-
             Debug.Log("No floor swapping");
-            Debug.Break();
         }
 
-        Debug.DrawRay(m_GroundCharacter.m_Front.position, -transform.up * distanceToFloor, Color.green);
+        //Debug.DrawRay(m_GroundCharacter.m_Front.position, -transform.up * distanceToFloor, Color.green);
 
         #endregion
 
-        //#region Find the wall
+        #region Find the wall
 
-        //Debug.DrawRay(m_GroundCharacter.m_Front.position, transform.right * moveDir * distanceFromWall, Color.red);
+        Debug.DrawRay(m_GroundCharacter.m_Front.position, transform.right * moveDir * distanceFromWall, Color.red);
 
-        //if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, transform.right * moveDir, distanceFromWall, layerGround))
-        //{
-        //    moveDir = -moveDir;
+        if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, transform.right * moveDir, distanceFromWall, layerGround))
+        {
+            moveDir = -moveDir;
 
-        //    Debug.Log("At a wall swapping");
-        //}
+            Debug.Log("At a wall swapping");
+        }
 
-        //#endregion
+        #endregion
     }
 
     public override void OnDeath(Vector2 attackDirection)
@@ -122,15 +122,19 @@ public class GroundMinion : Minion
     {
         base.OnFoundTarget();
 
-        m_GroundCharacter.m_ManualFaceDirection = true;
+        if(!m_GroundCharacter.m_AbsoluteMoveDirection)
+            m_GroundCharacter.m_ManualFaceDirection = true;
     }
 
     protected override void OnNoMoreTargets()
     {
         base.OnNoMoreTargets();
 
-        m_GroundCharacter.m_ManualFaceDirection = false;
-        m_Animator.SetFloat("Direction", 1);
+        if (!m_GroundCharacter.m_AbsoluteMoveDirection)
+        {
+            m_GroundCharacter.m_ManualFaceDirection = false;
+            m_Animator.SetFloat("Direction", 1);
+        }
     }
 
     public override void Attack()

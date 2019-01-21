@@ -27,6 +27,10 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     [Range(0,1)]
     public float m_dragFactor;
 
+    [Tooltip("How much is the character Sprite offset from the motion wheel")]
+    [Range(0, 10)] 
+    public float sprite_Offset;
+
     #endregion
 
     #region Protected Variables
@@ -142,10 +146,10 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     protected void LateUpdate()
     {
-
         m_Character.transform.position = new Vector3(m_Rigidbody2D.transform.position.x,
-                        m_Rigidbody2D.GetComponent<CircleCollider2D>().bounds.min.y,
+                        m_Rigidbody2D.GetComponent<CircleCollider2D>().bounds.min.y + sprite_Offset,
                         m_Rigidbody2D.transform.position.z);
+
     }
 
     //private void OnDrawGizmosSelected()
@@ -212,7 +216,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         }
         else
         {
-            DirectionLogic((int)moveDir.x);
+            DirectionLogic(moveDir.x);
         }
 
         deltaMoveDir = moveDir;
@@ -376,5 +380,10 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             m_Rigidbody2D.velocity = Vector2.zero;
             m_Rigidbody2D.angularVelocity = 0;
         }
+    }
+
+    public void SetCharacterCollisions(bool active)
+    {
+        m_Character.GetComponent<Rigidbody2D>().simulated = active;
     }
 }

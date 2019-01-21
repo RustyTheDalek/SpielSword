@@ -96,6 +96,7 @@ public class VillagerTimeObject : AnimatorTimeObject
     protected void OnVillagerStartPlayback()
     {
         m_Character.RestoreHealth();
+        m_Ground.SetCharacterCollisions(true);
     }
 
     protected void OnVillagerStartReverse()

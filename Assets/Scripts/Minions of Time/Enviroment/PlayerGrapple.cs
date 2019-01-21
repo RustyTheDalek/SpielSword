@@ -224,8 +224,8 @@ public class PlayerGrapple : MonoBehaviour
 
             // Position off set by current object count
             trapSprites[i - progression].transform.position =
-                new Vector2(target.MotionTransform.position.x + 1 + (i * 0.65f),
-                target.MotionTransform.position.y + 1.7f);
+                new Vector2(target.Rigidbody.position.x + 1 + (i * 0.65f),
+                target.Rigidbody.position.y + 1.7f);
         }
     }
 

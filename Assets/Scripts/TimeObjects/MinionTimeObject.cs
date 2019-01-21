@@ -37,6 +37,7 @@ public class MinionTimeObject : AnimatorTimeObject {
         minion.enabled = true;
         minion.OnEnable();
         m_Anim.enabled = true;
+        m_Rigidbody2D.simulated = true;
     }
 
     private void DisableMinion()

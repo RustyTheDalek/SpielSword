@@ -11,7 +11,7 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     #region Protected Variables
 
-    protected Rigidbody2D m_Rigidbody2D;
+    public Rigidbody2D m_Rigidbody2D;
 
     [SerializeField] protected float m_MoveForce = 10f;                  // Strength of force that moves Character
 
@@ -22,7 +22,7 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     protected virtual void Awake()
     {
-        m_Rigidbody2D = GetComponentInChildren<Rigidbody2D>();
+        //m_Rigidbody2D = GetComponentInChildren<Rigidbody2D>();
     }
 
     public virtual void Move(Vector2 moveVector) { }

@@ -19,6 +19,14 @@ public class Character : MonoBehaviour
         }
     }
 
+    public Transform Rigidbody
+    {
+        get
+        {
+            return m_rigidbody.transform;
+        }
+    }
+
     public AttackType attackType;
 
     /// <summary>
@@ -43,6 +51,7 @@ public class Character : MonoBehaviour
     protected float health = 1;
 
     protected Animator m_Animator;
+
     protected Rigidbody2D m_rigidbody;
 
     protected readonly int m_HashDeadParam = Animator.StringToHash("Dead");
@@ -57,7 +66,7 @@ public class Character : MonoBehaviour
     {
         m_Character = GetComponent<PlatformerCharacter2D>();
         m_Animator = GetComponentInChildren<Animator>();
-        m_rigidbody = GetComponentInChildren<Rigidbody2D>();
+        m_rigidbody = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void Update()
@@ -79,6 +88,7 @@ public class Character : MonoBehaviour
 
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
+
 
         m_Animator.SetFloat("xSpeed", 0);
         m_Animator.SetFloat("ySpeed", 0);

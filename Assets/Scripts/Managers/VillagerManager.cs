@@ -307,7 +307,7 @@ public class VillagerManager : MonoBehaviour {
     /// </summary>
     void EnterLevel()
     {
-        activeVillager.MotionTransform.position = spawnPos;
+        activeVillager.Rigidbody.position = spawnPos;
     }
 
     /// <summary>

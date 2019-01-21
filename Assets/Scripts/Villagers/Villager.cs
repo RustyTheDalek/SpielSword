@@ -12,17 +12,6 @@ public abstract class Villager : Character
 {
     #region Public Variables
 
-    /// <summary>
-    /// The Transform of the mtion of the character
-    /// </summary>
-    public new Transform MotionTransform
-    {
-        get
-        {
-            return m_rigidbody.transform;
-        }
-    }
-
     public SpecialType specialType = SpecialType.Press;
 
     public VillagerState villagerState = VillagerState.PresentVillager;
@@ -142,6 +131,7 @@ public abstract class Villager : Character
         m_Sprite = GetComponentInChildren<SpriteRenderer>();
         m_Ground = GetComponentInChildren<GroundCharacter2D>();
         m_VTimeObject = GetComponent<VillagerTimeObject>();
+        m_rigidbody = transform.Find("Motion").GetComponent<Rigidbody2D>();
 
         EffectNoise = GetComponent<AudioSource>();
 
@@ -327,11 +317,12 @@ public abstract class Villager : Character
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
 
+
         m_Animator.SetFloat("xSpeed", 0);
         m_Animator.SetFloat("ySpeed", 0);
         m_Animator.SetFloat("xSpeedAbs", 0);
         m_Animator.SetBool(m_HashDeadParam, true);
-
+        m_Ground.SetCharacterCollisions(false);
         
 
         if (GameManager.gManager)
