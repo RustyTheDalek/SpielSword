@@ -30,14 +30,6 @@ public abstract class Minion : Character
     /// </summary>
     float rAVariance = 1f;
 
-    /// <summary>
-    /// After a Rest/Celebrate how long does it for Minion to go back to fighting
-    /// </summary>
-    public int attackCooldownTime = 3;
-
-    public string RangedAttackAnimName = "RangedAttack",
-                  MeleeAttackAnimName  = "MeleeAttack";
-
     [Tooltip("If the player enters within Melee Range of a Ranged minion will they do a Melee attack?")]
     public bool meleePanic;
 
@@ -51,16 +43,13 @@ public abstract class Minion : Character
 
     protected int startingLayer;
 
-    protected bool canAttack = true;
-
     protected Vector2 prevDir = Vector2.zero;
 
     //For when Minions suceeds in killing a villager (In case we want a celebration
     //If not it can enforce the Minion goes back to patrolling
     protected readonly int  m_HashCelebrateParam = Animator.StringToHash("Celebrate"),
-                            m_HashMeleeAttackParam,
-                            m_HashRangedAttackParam;
-    protected Color startingColor;
+                            m_HashMeleeAttackParam = Animator.StringToHash("Melee"),
+                            m_HashRangedAttackParam = Animator.StringToHash("Ranged");
 
     /// <summary>
     /// How the minion moves during attacks
@@ -81,15 +70,6 @@ public abstract class Minion : Character
         startingConstraints = m_rigidbody.constraints;
         startingLayer = gameObject.layer;
 
-        if (GetComponent<SpriteRenderer>())
-            startingColor = GetComponent<SpriteRenderer>().color;
-
-    }
-
-    protected Minion()
-    {
-        m_HashMeleeAttackParam = Animator.StringToHash(MeleeAttackAnimName);
-        m_HashRangedAttackParam = Animator.StringToHash(RangedAttackAnimName);
     }
 
     public virtual void OnEnable()
@@ -104,11 +84,6 @@ public abstract class Minion : Character
         m_rigidbody.constraints = startingConstraints;
         m_rigidbody.simulated = true;
         state = startingState;
-
-        if (GetComponent<SpriteRenderer>())
-            GetComponent<SpriteRenderer>().color = startingColor;
-
-        canAttack = true;
 
         villagerInSight.Clear();
 
@@ -136,7 +111,7 @@ public abstract class Minion : Character
 
     public virtual void MoveToClosest()
     {
-        moveDir = m_rigidbody.position.PointTo(closestVillager.transform.position);
+        moveDir = m_rigidbody.position.PointTo(closestVillager.CharacterPosition.position);
     }
 
     /// <summary>
@@ -144,7 +119,9 @@ public abstract class Minion : Character
     /// </summary>
     public virtual void MoveToEngage()
     {
-        moveDir = m_rigidbody.position.PointTo(closestVillager.transform.position + Vector3.right * rangedAttackRange * Mathf.Sign(transform.position.sqrMagnitude - closestVillager.transform.position.sqrMagnitude));
+        moveDir = m_rigidbody.position.PointTo(closestVillager.CharacterPosition.position
+            + Vector3.right * rangedAttackRange * Mathf.Sign(transform.position.magnitude
+            - closestVillager.CharacterPosition.position.magnitude));
     }
 
     protected virtual void StartAttack()
@@ -152,7 +129,7 @@ public abstract class Minion : Character
         Debug.Log("Starting Attack");
         //Close enough to attack
         state = MinionState.Attacking;
-
+        prevDir = moveDir;
         StartAttack(attackType);
     }
 
@@ -161,7 +138,7 @@ public abstract class Minion : Character
         Debug.Log("Starting Attack");
         //Close enough to attack
         state = MinionState.Attacking;
-
+        prevDir = moveDir;
         switch (attackToDo)
         {
             case AttackType.Melee:
@@ -178,11 +155,21 @@ public abstract class Minion : Character
         moveDir = desiredAttackMoveDirection;
     }
 
-    public virtual void CelebrateAttack()
-    { 
+    public virtual void StartCelebrate()
+    {
+        prevDir = moveDir;
         state = MinionState.Celebrating;
         m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         m_Animator.SetTrigger(m_HashCelebrateParam);
+    }
+
+    public virtual void StopCelebrate()
+    {
+        Debug.Break();
+        m_rigidbody.constraints = startingConstraints;
+        state = startingState;
+        moveDir = prevDir;
+        prevDir = Vector2.zero;
     }
 
     public virtual void Migrate() { }
@@ -216,12 +203,12 @@ public abstract class Minion : Character
         //Find the closest
         foreach (Villager villager in villagerInSight)
         {
-            float sqrDist = (villager.transform.position.XY() - m_rigidbody.position).sqrMagnitude;
+            float dist = (villager.CharacterPosition.position.XY() - m_rigidbody.position).magnitude;
 
-            if ( sqrDist < (closetVillageDist * closetVillageDist))
+            if (dist < closetVillageDist)
             {
                 closestVillager = villager;
-                closetVillageDist = sqrDist;
+                closetVillageDist = dist;
             }
         }
     }
@@ -231,7 +218,10 @@ public abstract class Minion : Character
     /// </summary>
     public void CheckMeleeAttackRange()
     {
-        if ((closestVillager.transform.position.XY() - m_rigidbody.position).sqrMagnitude < (meleeAttackRange * meleeAttackRange))
+        float distToClosest = (closestVillager.CharacterPosition.position.XY() - 
+            m_rigidbody.position).magnitude;
+
+        if (distToClosest < meleeAttackRange)
         {
             StartAttack(AttackType.Melee);
         }
@@ -239,10 +229,10 @@ public abstract class Minion : Character
 
     public void CheckRangedAttackRange()
     {
-        if ((closestVillager.transform.position - m_rigidbody.transform.position).sqrMagnitude < 
-            ((rangedAttackRange + rAVariance) * (rangedAttackRange + rAVariance)) &&
-            (closestVillager.transform.position - m_rigidbody.transform.position).sqrMagnitude > 
-            ((rangedAttackRange - rAVariance) * (rangedAttackRange - rAVariance)))
+        if ((closestVillager.CharacterPosition.position.XY() - 
+            m_rigidbody.position).magnitude < rangedAttackRange + rAVariance &&
+            (closestVillager.CharacterPosition.position.XY() - 
+            m_rigidbody.position).magnitude > rangedAttackRange - rAVariance)
         {
             //Debug.Break();
             Debug.Log("Within Engagement Range");
@@ -310,24 +300,6 @@ public abstract class Minion : Character
         state = startingState;
     }
 
-    public IEnumerator AttackCooldown()
-    {
-        float _h, _s, _v;
-        //In future have something more elegant than changing colour?
-        if (GetComponent<SpriteRenderer>())
-        {
-            Color.RGBToHSV(startingColor, out _h, out _s, out _v);
-            GetComponent<SpriteRenderer>().color = Color.HSVToRGB(_h, _s, _v * .5f);
-        }
-        canAttack = false;
-
-        yield return new WaitForSeconds(attackCooldownTime);
-
-        if (GetComponent<SpriteRenderer>())
-            GetComponent<SpriteRenderer>().color = startingColor;
-        canAttack = true;
-    }
-
     public override void OnDeath(Vector2 attackDirection)
     {
         base.OnDeath(attackDirection);
@@ -363,7 +335,7 @@ public abstract class Minion : Character
                     //Attack successful start resting
                     this.NamedLog("Hit my target Villager");
                     villagerInSight.Remove(collision.gameObject.GetComponentInParent<Villager>());
-                    CelebrateAttack();
+                    StartCelebrate();
                 }
                 break;
         }
@@ -384,8 +356,7 @@ public abstract class Minion : Character
                 {
                     villagerInSight.Add(villager);
 
-                    if (canAttack &&
-                        state == MinionState.Patrolling || state == MinionState.Migrating)
+                    if (state == MinionState.Patrolling || state == MinionState.Migrating)
                     {
                         OnFoundTarget();
                     }
@@ -413,10 +384,9 @@ public abstract class Minion : Character
 
                 if (villagerInSight.Contains(collision.gameObject.GetComponentInParent<Villager>()))
                 {
-                    if (canAttack &&
-                        state == MinionState.Patrolling || state == MinionState.Migrating)
+                    if (state == MinionState.Patrolling || state == MinionState.Migrating)
                     {
-                        state = MinionState.ClosingIn;
+                        OnFoundTarget();
                     }
                 }
                 break;
@@ -430,7 +400,7 @@ public abstract class Minion : Character
             case "Villager":
             case "PastVillager":
 
-                Villager villager = collision.GetComponentInChildren<Villager>();
+                Villager villager = collision.GetComponentInParent<Villager>();
 
                 if (villagerInSight.Contains(villager))
                 {

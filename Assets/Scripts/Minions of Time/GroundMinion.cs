@@ -11,14 +11,16 @@ public class GroundMinion : Minion
 {
     #region Public Variables
 
+    public GroundCharacter2D m_GroundCharacter;
+
     public bool randomStartDir;
 
     public Direction startDir;
+
     #endregion
 
     #region Protected Variables
 
-    protected GroundCharacter2D m_GroundCharacter;
 
     #endregion
 
@@ -56,6 +58,23 @@ public class GroundMinion : Minion
         moveDir = startDir.ToVector2();
     }
 
+    protected override void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        if (m_GroundCharacter)
+            Gizmos.DrawWireSphere(m_GroundCharacter.m_Rigidbody2D.position, meleeAttackRange);
+
+        if (attackType == AttackType.Ranged)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(m_GroundCharacter.m_Rigidbody2D.position, rangedAttackRange);
+        }
+
+        Gizmos.color = Color.green;
+        if (m_GroundCharacter)
+            Gizmos.DrawRay(m_GroundCharacter.m_Rigidbody2D.position, moveDir);
+    }
+
     protected override void FixedUpdate()
     {
         m_Animator.SetFloat("xDir", moveDir.x);
@@ -65,9 +84,9 @@ public class GroundMinion : Minion
 
         if (m_GroundCharacter.m_ManualFaceDirection && closestVillager)
         {
-            var vilDir = (int)Mathf.Sign((closestVillager.transform.position.XY() - m_rigidbody.position).x);
+            var vilDir = (int)Mathf.Sign((closestVillager.Rigidbody.position.XY() - m_rigidbody.position).x);
             m_GroundCharacter.Move(moveDir, false, vilDir);
-            m_Animator.SetFloat("Direction", vilDir);
+            //m_Animator.SetFloat("Direction", vilDir);
         }
         else
         {
@@ -133,13 +152,23 @@ public class GroundMinion : Minion
         if (!m_GroundCharacter.m_AbsoluteMoveDirection)
         {
             m_GroundCharacter.m_ManualFaceDirection = false;
-            m_Animator.SetFloat("Direction", 1);
+            //m_Animator.SetFloat("Direction", 1);
         }
     }
 
     public override void Attack()
     {
         moveDir = Vector2.zero;
+    }
+
+    public override void StartCelebrate()
+    {
+        base.StartCelebrate();
+
+        moveDir = Vector2.zero;
+
+        if (!m_GroundCharacter.m_AbsoluteMoveDirection)
+            m_GroundCharacter.m_ManualFaceDirection = false;
     }
 
     public void PlayEffect ()

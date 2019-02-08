@@ -24,36 +24,24 @@ public class SlimeTrail : MonoBehaviour {
         }
     }
 
+    //TODO:Set animator to be sliding animation
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.sharedMaterial = slimeMaterial;
-        collision.GetComponent<GroundCharacter2D>().m_Sliding = true;
-
-        Debug.Log(collision.name + ": In the Slime");
-        collision.GetComponent<SpriteRenderer>().color = new Color(
-            collision.GetComponent<SpriteRenderer>().color.r, 
-            collision.GetComponent<SpriteRenderer>().color.g, 
-            collision.GetComponent<SpriteRenderer>().color.b, .75f);
+        if(collision.tag == "Player")
+            collision.GetComponentInParent<GroundCharacter2D>().SetSliding(true, slimeMaterial);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        collision.sharedMaterial = stickyMaterial;
-        collision.GetComponent<GroundCharacter2D>().m_Sliding = false;
-
-        Debug.Log(collision.name + ": Out the slime");
-
-        collision.GetComponent<SpriteRenderer>().color = new Color(
-            collision.GetComponent<SpriteRenderer>().color.r,
-            collision.GetComponent<SpriteRenderer>().color.g,
-            collision.GetComponent<SpriteRenderer>().color.b, 1f);
+        if(collision.tag == "Player")
+            collision.GetComponentInParent<GroundCharacter2D>().SetSliding(false, stickyMaterial);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        collision.sharedMaterial = slimeMaterial;
-        collision.GetComponent<GroundCharacter2D>().m_Sliding = true;
-        Debug.Log(collision.name + ": In the Slime");
+        if (collision.tag == "Player")
+            collision.GetComponentInParent<GroundCharacter2D>().SetSliding(true, slimeMaterial);
+
     }
 
 }

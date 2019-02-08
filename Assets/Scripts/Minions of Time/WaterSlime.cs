@@ -10,20 +10,19 @@ public class WaterSlime : GroundMinion
     public GameObject trailVolume;
 
     #endregion
-    #region Protected variables
 
-    protected readonly int m_HashBiteAttack = Animator.StringToHash("Bite");
+    #region Protected variables
 
     protected float distanceTravelled = 0;
     protected float distanceThreshold = 1;
 
-    protected Vector3 lastPos;
+    protected Vector2 lastPos;
 
-    protected Vector3 DeltaPos
+    protected Vector2 DeltaPos
     {
         get
         {
-            return transform.position - lastPos;
+            return m_rigidbody.position - lastPos;
         }
     }
 
@@ -31,30 +30,22 @@ public class WaterSlime : GroundMinion
 
     private void Start()
     {
-        lastPos = transform.position;
+        lastPos = m_rigidbody.position;
     }
 
     protected override void Update()
     {
         base.Update();
 
-        if(distanceTravelled >= 1)
+        if(distanceTravelled >= distanceThreshold)
         {
             distanceTravelled = 0;
-            trailVolume.Spawn(transform.position);
+            GameObject gO = trailVolume.Spawn(m_rigidbody.transform.position, 
+                m_GroundCharacter.m_Character.rotation);
         }
 
         distanceTravelled += DeltaPos.magnitude;
 
-        lastPos = transform.position;
+        lastPos = m_rigidbody.position;
     }
-
-    protected override void StartAttack()
-    {
-        base.StartAttack();
-
-        m_Animator.SetTrigger(m_HashBiteAttack);
-    }
-
-    public override void Attack() {}
 }

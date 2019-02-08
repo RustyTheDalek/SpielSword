@@ -162,7 +162,6 @@ public class FlightMinion : Minion
         this.NamedLog("I'm unstuck now");
         m_rigidbody.constraints = RigidbodyConstraints2D.None;
         state = startingState;
-        StartCoroutine(AttackCooldown());
         moveDir = transform.position.PointTo(orginalPosition);
     }
 

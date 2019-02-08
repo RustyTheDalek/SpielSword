@@ -28,17 +28,17 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     public float m_dragFactor;
 
     [Tooltip("How much is the character Sprite offset from the motion wheel")]
-    [Range(0, 10)] 
+    [Range(-10, 10)] 
     public float sprite_Offset;
-
-    #endregion
-
-    #region Protected Variables
 
     /// <summary>
     /// The Transform of the Character object and visual representation of the player
     /// </summary>
     public Transform m_Character;
+
+    #endregion
+
+    #region Protected Variables
 
     /// <summary>
     /// Which direction the walking force should be applied in
@@ -162,7 +162,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     //    Gizmos.DrawRay(transform.position, -transform.up);
     //}
 
-    public virtual void Move(Vector2 moveDir, bool jump = false, int manualDirection = 1)
+    public virtual void Move(Vector2 moveDir, bool jump = false, float manualDirection = 1)
     {
         // If the player should jump...
         if (m_Grounded && jump)
@@ -199,6 +199,10 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             if(!m_Sliding && moveDir.x == 0)
             {
                 m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            }
+            else if(!m_Sliding)
+            {
+                m_Rigidbody2D.constraints = RigidbodyConstraints2D.None;
             }
 
             //directionForce = moveVector * moveDir.x * m_MoveForce;
@@ -385,5 +389,15 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     public void SetCharacterCollisions(bool active)
     {
         m_Character.GetComponent<Rigidbody2D>().simulated = active;
+    }
+
+    public void SetSliding(bool active, PhysicsMaterial2D physMat)
+    {
+        m_Sliding = active;
+
+        if (active)
+            m_Rigidbody2D.sharedMaterial = physMat;
+        else
+            m_Rigidbody2D.sharedMaterial = physMat;
     }
 }

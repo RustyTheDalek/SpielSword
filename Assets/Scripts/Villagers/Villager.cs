@@ -33,11 +33,11 @@ public abstract class Villager : Character
         }
     }
 
-    public GroundCharacter2D GroundController2D
+    public Transform CharacterPosition
     {
         get
         {
-            return m_Ground;
+            return m_Ground.m_Character;
         }
     }
 

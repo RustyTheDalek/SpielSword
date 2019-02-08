@@ -22,7 +22,7 @@ class NewEditorScript : Editor
             textStyle.normal.background = GUI.skin.GetStyle("box").normal.background;
             textStyle.normal.textColor = Color.black;
 
-            Handles.Label(m_Target.transform.position + Vector3.up * 1.5f, m_Target.state.ToString(), textStyle);
+            Handles.Label(m_Target.Rigidbody.transform.position + Vector3.up * 1.5f, m_Target.state.ToString(), textStyle);
         }
     }
 }
