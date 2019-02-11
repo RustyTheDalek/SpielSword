@@ -10,7 +10,7 @@ public class VillagerDeathSMB : SceneLinkedSMB<Villager>
 
         if (m_MonoBehaviour.villagerState == VillagerState.PresentVillager)
         {
-            m_MonoBehaviour.NamedLog("Dying, adjusting animator");
+            //m_MonoBehaviour.NamedLog("Dying, adjusting animator");
 
             animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         }

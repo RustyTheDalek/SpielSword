@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Base class for player character and NPCS
@@ -44,9 +42,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Spawn position for Ranged projectiles
     /// </summary>
-    public Transform rangedTrans;
-
-    private PlatformerCharacter2D m_Character;
+    public Transform rangedSpawn;
 
     protected float health = 1;
 
@@ -59,6 +55,8 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Private Variables
+
+    private PlatformerCharacter2D m_Character;
 
     #endregion
 
@@ -89,7 +87,6 @@ public class Character : MonoBehaviour
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
 
-
         m_Animator.SetFloat("xSpeed", 0);
         m_Animator.SetFloat("ySpeed", 0);
         m_Animator.SetFloat("xSpeedAbs", 0);
@@ -108,8 +105,19 @@ public class Character : MonoBehaviour
         m_Character.Move(moveDir);
     }
 
-    public void RestoreHealth(float newHealth = 1)
+    [ContextMenu("RestoreHelth")]
+    public void RestoreHealth()
     {
-        health = newHealth;
+        health = 1;
+    }
+
+    /// <summary>
+    /// Kills player
+    /// </summary>
+    [ContextMenu("Kill")]
+    public virtual void Kill()
+    {
+        health = 0;
+        OnDeath(Vector2.zero);
     }
 }

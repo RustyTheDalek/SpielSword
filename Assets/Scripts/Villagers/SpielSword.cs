@@ -6,17 +6,17 @@ public class SpielSword : Villager
 {
     bool sacrificing = false;
 
-    public override void OnSpecial(bool _PlayerSpecial)
-    {
-        if (sacrificing && canSpecial)
-        {
-            playerSpecial = true;
-        }
-        else
-        {
-            base.OnSpecial(_PlayerSpecial);
-        }
-    }
+    //public override void OnSpecial(bool _PlayerSpecial)
+    //{
+    //    if (sacrificing && canSpecial)
+    //    {
+    //        playerSpecial = true;
+    //    }
+    //    else
+    //    {
+    //        base.OnSpecial(_PlayerSpecial);
+    //    }
+    //}
 
     public void StartSacrifice()
     {
@@ -36,7 +36,8 @@ public class SpielSword : Villager
         SetBodyType(RigidbodyType2D.Dynamic);
         sacrificing = false;
         canSpecial = false;
-        playerSpecial = false;
+        special1 = false;
+        special2 = false;
         canMove = true;
         Kill();
     }

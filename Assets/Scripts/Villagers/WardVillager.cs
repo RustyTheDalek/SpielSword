@@ -60,25 +60,6 @@ public abstract class WardVillager : Villager
         }
     }
 
-    //TODO:Remove this naughtyness should have one fire function and the variable be 
-    //on the Villager or maybe spawn different range projeticle prefabs
-    public override void FireProjectile()
-    {
-        if (villagerState == VillagerState.PresentVillager)
-        {
-            Debug.Log("Warlock Ranged Attack");
-
-            rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
-
-            float direction = rangedTrans.position.x - m_rigidbody.transform.position.x;
-
-            rangedAtk.GetComponent<VillagerAttack>().lifeTime = 2;
-            rangedAtk.GetComponent<VillagerAttack>().damage = 1;
-            rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
-                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
-        }
-    }
-
     #endregion
 
     #region Protected Methods

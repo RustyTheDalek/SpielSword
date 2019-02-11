@@ -165,7 +165,6 @@ public abstract class Minion : Character
 
     public virtual void StopCelebrate()
     {
-        Debug.Break();
         m_rigidbody.constraints = startingConstraints;
         state = startingState;
         moveDir = prevDir;
@@ -244,7 +243,7 @@ public abstract class Minion : Character
     {
         //Change this to not use hat in future
         Vector3 targetPos = closestVillager.hat.transform.position;
-        Vector3 diff = targetPos - rangedTrans.position;
+        Vector3 diff = targetPos - rangedSpawn.position;
         Vector3 diffGround = new Vector3(diff.x, 0f, diff.z);
 
         Vector3[] solutions = new Vector3[2];
@@ -258,7 +257,7 @@ public abstract class Minion : Character
         //}
         //else
         //{
-            numSolutions = fts.solve_ballistic_arc(rangedTrans.position, 15f,
+            numSolutions = fts.solve_ballistic_arc(rangedSpawn.position, 15f,
                 targetPos, 9.81f, out solutions[0], out solutions[1]);
         //}
 
@@ -267,9 +266,9 @@ public abstract class Minion : Character
         if (numSolutions > 0)
         {
 
-            proj = objToSpawn.Spawn(null, rangedTrans.position);
+            proj = objToSpawn.Spawn(null, rangedSpawn.position);
 
-            proj.Initialize(rangedTrans.position, 9.81f);
+            proj.Initialize(rangedSpawn.position, 9.81f);
 
             var impulse = solutions[0];
 
@@ -287,7 +286,7 @@ public abstract class Minion : Character
 
     public void SpawnObject(GameObject objToSpawn)
     {
-        objToSpawn.Spawn(rangedTrans.transform.position);
+        objToSpawn.Spawn(rangedSpawn.transform.position);
     }
 
     protected virtual void OnFoundTarget()
@@ -327,14 +326,16 @@ public abstract class Minion : Character
             case "Villager":
             case "PastVillager":
 
+                Villager villager = collision.gameObject.GetComponentInParent<Villager>();
+
                 if (state == MinionState.Attacking && 
                     collision.gameObject.transform.root.gameObject == closestVillager.gameObject &&
-                    collision.otherCollider.gameObject.layer != LayerMask.NameToLayer("Minion"))
+                    collision.otherCollider.gameObject.layer != LayerMask.NameToLayer("Minion") &&
+                    !villager.shielded)
                 {
                     Debug.Log(collision.otherCollider.gameObject.name);
-                    //Attack successful start resting
                     this.NamedLog("Hit my target Villager");
-                    villagerInSight.Remove(collision.gameObject.GetComponentInParent<Villager>());
+                    villagerInSight.Remove(villager);
                     StartCelebrate();
                 }
                 break;

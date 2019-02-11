@@ -13,6 +13,17 @@ public class VillagerAttack : MonoBehaviour
 
     public AudioSource EffectNoise;
 
+    protected SpriteRenderer m_Sprite;
+    protected Rigidbody2D m_Rigidbody;
+    protected Collider2D m_Collider;
+
+    protected void Start()
+    {
+        m_Sprite = GetComponent<SpriteRenderer>();
+        m_Rigidbody = GetComponent<Rigidbody2D>();
+        m_Collider = GetComponent<Collider2D>();
+    }
+
     protected void Update()
     {
         if (lifeTime < 0)
@@ -21,7 +32,11 @@ public class VillagerAttack : MonoBehaviour
         }
 
         lifeTime -= Time.deltaTime;
+    }
 
+    public void Fire(Vector2 dir)
+    {
+        m_Rigidbody.AddForce(dir, ForceMode2D.Impulse);
     }
 
     void OnTriggerEnter2D(Collider2D coll)
@@ -46,18 +61,16 @@ public class VillagerAttack : MonoBehaviour
 
     protected void SetActive(bool active)
     {
-        GetComponent<SpriteRenderer>().enabled = active;
+        m_Sprite.enabled = active;
 
-        if (GetComponent<Collider2D>())
-            GetComponent<Collider2D>().enabled = active;
+        if (m_Collider)
+            m_Collider.enabled = active;
 
-        if (GetComponent<Rigidbody2D>())
-            GetComponent<Rigidbody2D>().simulated = active;
+        if (m_Rigidbody)
+            m_Rigidbody.simulated = active;
 
         if (!active)
-        {
             enabled = false;
-        }
     }
 
     private void OnEnable()

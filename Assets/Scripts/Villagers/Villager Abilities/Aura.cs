@@ -2,59 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aura : SpawnableSpriteTimeObject
+public class Aura : MonoBehaviour
 {
     public float health = 4;
 
     public bool comboUsed = false;
 
-    public event TimeObjectEvent OnEnterAuraEvent;
+    public delegate void AuraEvent();
+    public event AuraEvent OnEnterAuraEvent;
 
-    protected override void Awake()
+    GameObject creator;
+
+    public AuraTimeObject m_ATimeObject;
+    public SpriteRenderer m_Sprite;
+    public Collider2D m_Coll;
+
+    protected virtual void Awake()
     {
-        base.Awake();
-
-        OnPlayFrame -= PlaySpriteFrame;
-        OnTrackFrame -= TrackSpriteFrame;
+        creator = GetComponentInParent<Villager>().gameObject;
     }
 
-    // Use this for initialization
-    protected override void Start()
+    public void SetAura(bool active)
     {
-        base.Start();
-
-        OnPlayFrame += PlayAuraFrame;
-
-        OnStartPlayback += DecreaseStrength;
-    }
-
-    protected void PlayAuraFrame()
-    {
-        if (sSFrames.WithinRange(currentFrame))
+        if (m_Coll.enabled != active)
         {
-            if (GetComponent<Collider2D>())
-                GetComponent<Collider2D>().enabled = sSFrames[(int)currentFrame].active;
-
-            if (GetComponent<Rigidbody2D>())
-                GetComponent<Rigidbody2D>().simulated = sSFrames[(int)currentFrame].active;
-
-            spawnableActive = sSFrames[(int)currentFrame].active;
+            m_Coll.enabled = active;
+            m_Sprite.enabled = active;
         }
     }
 
-    public void DecreaseStrength()
+    public void Detach()
     {
-        if (health > 0)
-        {
-            health--;
-
-            Color col = m_Sprite.color;
-            m_Sprite.color = new Color(col.r, col.g, col.b, health / 4);
-        }
-        else
-        {
-            OnStartPlayback -= DecreaseStrength;
-        }
+        transform.SetParent(null);
+        m_ATimeObject.enabled = true;
     }
 
     protected virtual void OnEnterAura(Villager villager)
@@ -81,14 +61,14 @@ public class Aura : SpawnableSpriteTimeObject
 
     protected virtual void OnExitAura(Villager villager)
     {
-        Debug.Log("Left " + name);
+        Debug.Log(villager.name + ": Left " + name);
     }
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if (spawnableActive && coll.GetComponent<Villager>())
+        if (health > 0 && coll.GetComponentInParent<Villager>())
         {
-            Villager temp = coll.GetComponent<Villager>();
+            Villager temp = coll.GetComponentInParent<Villager>();
 
             if (temp.CurrentVillager)
             {
@@ -103,7 +83,7 @@ public class Aura : SpawnableSpriteTimeObject
         {
             Villager temp = coll.GetComponentInParent<Villager>();
 
-            if (temp.CurrentVillager && spawnableActive)
+            if (temp.CurrentVillager && health >= 0)
             {
                 OnEnterAura(temp);
             }

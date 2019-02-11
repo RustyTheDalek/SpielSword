@@ -86,4 +86,9 @@ public static class ExtensionMethods
             return Vector2.right;
         }
     }
+
+    public static Color SetAlpha(this Color col, float alpha)
+    {
+        return new Color(col.r, col.g, col.b, alpha);
+    }
 }

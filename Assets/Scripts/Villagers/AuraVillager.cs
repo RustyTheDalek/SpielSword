@@ -19,9 +19,9 @@ public class AuraVillager : Villager
     {
         base.Awake();
 
-        currentAura = Aura();
-        currentAura.gameObject.SetActive(false);
-        currentAura.creator = this;
+        //currentAura = Aura();
+        //currentAura.gameObject.SetActive(false);
+        //currentAura.creator = this;
     }
 
     public void Setup(VillagerManager vilManager)
@@ -29,13 +29,13 @@ public class AuraVillager : Villager
         currentAura.OnEnterAuraEvent += vilManager.IncCombosUsed;
     }
 
-    public override void OnSpecial(bool _PlayerSpecial)
-    {
-        if (!AuraActive)
-        {
-            base.OnSpecial(_PlayerSpecial);
-        }
-    }
+    //public override void OnSpecial(bool _PlayerSpecial)
+    //{
+    //    if (!AuraActive)
+    //    {
+    //        base.OnSpecial(_PlayerSpecial);
+    //    }
+    //}
 
     public void SpawnAura()
     {

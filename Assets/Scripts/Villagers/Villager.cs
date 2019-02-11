@@ -12,7 +12,8 @@ public abstract class Villager : Character
 {
     #region Public Variables
 
-    public SpecialType specialType = SpecialType.Press;
+    public SpecialType special1Type = SpecialType.Press,
+                       special2Type = SpecialType.Press;
 
     public VillagerState villagerState = VillagerState.PresentVillager;
 
@@ -41,7 +42,6 @@ public abstract class Villager : Character
         }
     }
 
-    //TODO: bring this up a level when attacks for minions are sorted
     public CircleCollider2D melee;
 
     public CircleCollider2D[] PlayerCollisions;
@@ -57,13 +57,6 @@ public abstract class Villager : Character
     /// If a Villager is able to carry out actions
     /// </summary>
     public bool canAct = true;
-
-    /// <summary>
-    /// Whether a Villager can move
-    /// </summary>
-    protected bool canMove = true;
-
-    public float damageMult = 1;
 
     public bool deathEnd = false;
 
@@ -86,54 +79,62 @@ public abstract class Villager : Character
 
     #region Protected Variables
 
+    /// <summary>
+    /// Whether a Villager can move
+    /// </summary>
+    protected bool canMove = true;
+
+    protected float damageMult = 1;
+
+    protected float     maxSpeed = 15f,
+                        moveSpeed;
+
     protected SpriteRenderer m_Sprite;
     protected GroundCharacter2D m_Ground;
      
     /// <summary>
     /// Temporary GameObject for tracking Ranged attack
     /// </summary>
-    protected GameObject rangedAtk;
+    protected VillagerAttack rangedAtk;
 
-    protected float rangedProjectileStrength = 25;
-
-    protected AudioSource EffectNoise;
+    protected AudioSource DeathSound;
 
     protected MeleeAttack classMeleeAttack;
-
-    protected readonly int m_HashMeleeParam = Animator.StringToHash("MeleeAttack");
-    protected readonly int m_HashRangedParam = Animator.StringToHash("RangedAttack");
-    protected readonly int m_HashSpecialParam = Animator.StringToHash("PlayerSpecial");
-    protected readonly int m_HashGroundParam = Animator.StringToHash("Ground");
-
-    #endregion
-
-    #region Private Variables
-
-    bool attack = false;
-    #endregion
 
     protected static AssetBundle abilities;
 
     //Input variables
     protected bool m_Jump;
+    protected bool attack = false;
     protected bool meleeAttack, rangedAttack;
-    protected bool playerSpecial;
-    
-    //Control variables
+    protected bool special1, special2;
+
     protected bool canSpecial = true;
+    protected float rangedProjectileStrength = 25;
+
+    protected readonly int m_HashMeleeParam = Animator.StringToHash("MeleeAttack");
+    protected readonly int m_HashRangedParam = Animator.StringToHash("RangedAttack");
+    protected readonly int m_HashSpecial1Param = Animator.StringToHash("Special1");
+    protected readonly int m_HashSpecial2Param = Animator.StringToHash("Special2");
+    protected readonly int m_HashGroundParam = Animator.StringToHash("Ground");
+
+    protected string rangeName = "Range";
+
+    #endregion
 
     protected override void Awake()
     {
         base.Awake();
 
-        portal = GetComponentInChildren<SpriteMask>();
+        moveSpeed = maxSpeed;
 
+        portal = GetComponentInChildren<SpriteMask>();
         m_Sprite = GetComponentInChildren<SpriteRenderer>();
         m_Ground = GetComponentInChildren<GroundCharacter2D>();
         m_VTimeObject = GetComponent<VillagerTimeObject>();
         m_rigidbody = transform.Find("Motion").GetComponent<Rigidbody2D>();
 
-        EffectNoise = GetComponent<AudioSource>();
+        DeathSound = GetComponent<AudioSource>();
 
         if (abilities == null)
             abilities = AssetBundle.LoadFromFile(Path.Combine(
@@ -143,7 +144,7 @@ public abstract class Villager : Character
         {
             case AttackType.Ranged:
 
-                rangedTrans = GameObject.Find(this.name + "/Character/RangedTransform").transform;
+                rangedSpawn = GameObject.Find(this.name + "/Character/RangedTransform").transform;
 
                 break;
 
@@ -152,7 +153,8 @@ public abstract class Villager : Character
                 try
                 {
                     classMeleeAttack = GetComponentInChildren<MeleeAttack>();
-                    melee = classMeleeAttack.GetComponentInChildren<CircleCollider2D>();
+                    if(melee = null)
+                        melee = classMeleeAttack.GetComponentInChildren<CircleCollider2D>();
                 }
                 catch
                 {
@@ -162,14 +164,10 @@ public abstract class Villager : Character
                 break;
         }
 
-        //villagerState = VillagerState.Waiting;
-
-        //TODO: FIX THIS TRASH
         if (hat == null)
             Debug.LogWarning("No hat set");
 
-
-        PlayerCollisions = GetComponents<CircleCollider2D>();
+        PlayerCollisions = Sprite.GetComponents<CircleCollider2D>();
 
     }
 
@@ -215,14 +213,26 @@ public abstract class Villager : Character
                                     break;
                             }
                         }
-                        switch (specialType)
+
+                        switch (special1Type)
                         {
                             case SpecialType.Hold:
-                                OnSpecial(Input.GetButton("Special"));
+                                special1 = OnSpecial(Input.GetButton("Special1"), special1Type, m_HashSpecial1Param);
                                 break;
 
                             case SpecialType.Press:
-                                OnSpecial(Input.GetButtonDown("Special"));
+                                special1 = OnSpecial(Input.GetButtonDown("Special1"), special1Type, m_HashSpecial1Param);
+                                break;
+                        }
+
+                        switch (special2Type)
+                        {
+                            case SpecialType.Hold:
+                                special2 = OnSpecial(Input.GetButton("Special2"), special2Type, m_HashSpecial2Param);
+                                break;
+
+                            case SpecialType.Press:
+                                special2 = OnSpecial(Input.GetButtonDown("Special2"), special2Type, m_HashSpecial2Param);
                                 break;
                         }
 
@@ -246,53 +256,40 @@ public abstract class Villager : Character
         m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
-        m_Ground.Move(moveDir, m_Jump);
+        m_Ground.Move(moveDir, moveSpeed, m_Jump);
 
         m_Jump = false;
     }
 
-    /// <summary>
-    /// Kills player
-    /// </summary>
-    [ContextMenu("Kill")]
-    public void Kill()
-    {
-        health = 0;
-
-        //Useful catch to prevent Animator from getting stuck on death;
-        m_Animator.SetBool(m_HashMeleeParam, false);
-        m_Animator.SetBool(m_HashRangedParam, false);
-        m_Animator.SetBool(m_HashSpecialParam, false);
-
-        OnDeath(Vector2.zero);
-    }
-
     public void SetTrigger(bool active)
     {
-        PlayerCollisions[0].isTrigger = active;
-        PlayerCollisions[1].isTrigger = active;
+        foreach(Collider2D collider in PlayerCollisions)
+        {
+            collider.isTrigger = active;
+        }
     }
 
-    public virtual void OnSpecial(bool _PlayerSpecial)
+    public virtual bool OnSpecial(bool playerSpecial, SpecialType _SpecialType, int specialHash)
     {
-        playerSpecial = _PlayerSpecial;
 
-        switch(specialType)
+        switch(_SpecialType)
         {
             case SpecialType.Hold:
 
                 if (canSpecial)
-                    m_Animator.SetBool(m_HashSpecialParam, playerSpecial);
+                    m_Animator.SetBool(specialHash, playerSpecial);
                 else
-                    m_Animator.SetBool(m_HashSpecialParam, false);
+                    m_Animator.SetBool(specialHash, false);
                 break;
 
             case SpecialType.Press:
 
                 if (playerSpecial && canSpecial)
-                    m_Animator.SetTrigger(m_HashSpecialParam);
+                    m_Animator.SetTrigger(specialHash);
                 break;
         }
+
+        return playerSpecial;
     }
 
     public virtual void OnHit(Vector2 attackDirection)
@@ -312,7 +309,7 @@ public abstract class Villager : Character
     {
         this.NamedLog("Dead");
 
-        PlayEffect();
+        PlayDeathEffect();
 
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
@@ -321,6 +318,8 @@ public abstract class Villager : Character
         m_Animator.SetFloat("xSpeed", 0);
         m_Animator.SetFloat("ySpeed", 0);
         m_Animator.SetFloat("xSpeedAbs", 0);
+        m_Animator.SetBool("Special1", false);
+        m_Animator.SetBool("Special2", false);
         m_Animator.SetBool(m_HashDeadParam, true);
         m_Ground.SetCharacterCollisions(false);
         
@@ -333,24 +332,22 @@ public abstract class Villager : Character
     {
         if (villagerState == VillagerState.PresentVillager)
         {
+            rangedAtk = abilities.LoadAsset<VillagerAttack>(rangeName).Spawn(rangedSpawn.position);
+            rangedAtk.damageMult = damageMult;
 
-            rangedAtk = abilities.LoadAsset<GameObject>("Range").Spawn(rangedTrans.position);
-            rangedAtk.GetComponent<VillagerAttack>().damageMult = damageMult;
+            float direction = rangedSpawn.position.x - m_rigidbody.transform.position.x;
 
-            float direction = rangedTrans.position.x - m_rigidbody.transform.position.x;
-
-            rangedAtk.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(direction)
-                , 0) * rangedProjectileStrength, ForceMode2D.Impulse);
+            rangedAtk.Fire(new Vector2(Mathf.Sign(direction)
+                , 0) * rangedProjectileStrength);
         }
     }
 
     public void SetDamageMult(int val)
     {
         damageMult = val;
+
         if (melee)
-        {
-            melee.GetComponent<MeleeAttack>().damageMult = val;
-        }
+            classMeleeAttack.damageMult = val;
     }
 
     public void EnableInsideMask()
@@ -385,22 +382,34 @@ public abstract class Villager : Character
         }
     }
 
-    private void PlayEffect()
+    private void PlayDeathEffect()
     {
-        if (EffectNoise)
+        if (DeathSound)
         {
-            EffectNoise.Stop();
-            EffectNoise.Play();
+            DeathSound.Stop();
+            DeathSound.Play();
         }
         else
         {
-            Debug.LogWarning("No effect assigned, is this intended");
+            Debug.LogWarning("No effect assigned, is this intended?");
         }
     }
 
     public void PlayMeleeEffect()
     {
         classMeleeAttack.PlayEffect();
+    }
+
+    public override void Kill()
+    {
+        //Useful catch to prevent Animator from getting stuck on death;
+        m_Animator.SetBool(m_HashMeleeParam, false);
+        m_Animator.SetBool(m_HashRangedParam, false);
+        m_Animator.SetBool(m_HashSpecial1Param, false);
+        m_Animator.SetBool(m_HashSpecial2Param, false);
+
+
+        base.Kill();
     }
 }
 

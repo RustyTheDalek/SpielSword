@@ -51,20 +51,20 @@ public class Spielunker : Villager
 
     #region Public Methods
 
-    public override void OnSpecial(bool _PlayerSpecial)
-    {
-        base.OnSpecial(_PlayerSpecial);
+    //public override void OnSpecial(bool _PlayerSpecial)
+    //{
+    //    base.OnSpecial(_PlayerSpecial);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 hookPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //    if (Input.GetMouseButtonDown(0))
+    //    {
+    //        Vector2 hookPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            curHook = Hook.Spawn(hookTrans.transform.position);
+    //        curHook = Hook.Spawn(hookTrans.transform.position);
 
-            curHook.GetComponent<HookRope>().destination = hookPoint;
-            curHook.GetComponent<HookRope>().player = gameObject;
-        }
-    }
+    //        curHook.GetComponent<HookRope>().destination = hookPoint;
+    //        curHook.GetComponent<HookRope>().player = gameObject;
+    //    }
+    //}
 
     #endregion
 

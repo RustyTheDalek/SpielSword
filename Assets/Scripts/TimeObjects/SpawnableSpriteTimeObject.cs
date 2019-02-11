@@ -44,6 +44,8 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         {
             startFrame = (int)TimeObjectManager.t;
         }
+
+        spawnableActive = true;
     }
 
     protected virtual void Start()
@@ -51,8 +53,8 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         //TODO: Remove this if not needed
         tObjectState = TimeObjectState.Present;
 
-        spawnableActive = true;
         spawnableTimer = spawnableLife;
+
 
         if (spawnableTimer == 0)
         {
@@ -75,6 +77,7 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
             if (finishFrame == 0)
             {
                 finishFrame = (int)TimeObjectManager.t;
+                tObjectState = TimeObjectState.PresentDead;
             }
 
             spawnableActive = false;
@@ -93,11 +96,14 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         sSFrames.Add(tempSSFrame);
         
         //When the sprite is disabled that means the spawnable sprite has finished and needs to stop
-        if(!m_Sprite.enabled)
-        {
-            tObjectState = TimeObjectState.PresentDead;
-            finishFrame = (int)TimeObjectManager.t;
-        }
+        //TODO:Find a better way to stop tracking spawnable sprite objects
+        //if(!m_Sprite.enabled)
+        //{
+        //    Debug.Log(m_Sprite.name + ": Sprite dead, done now");
+        //    Debug.Break();
+        //    tObjectState = TimeObjectState.PresentDead;
+        //    finishFrame = (int)TimeObjectManager.t;
+        //}
     }
 
     protected void PlaySpawnableSpriteFrame()

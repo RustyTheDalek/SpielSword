@@ -15,9 +15,9 @@ public class Warrior : Villager
     {
         get
         {
-            if (shieldStrength > 0 && playerSpecial)
-                return true;
-            else
+            //if (shieldStrength > 0 && playerSpecial)
+            //    return true;
+            //else
                 return false;
         }
     }
@@ -30,25 +30,25 @@ public class Warrior : Villager
         {
             case VillagerState.PresentVillager:
 
-                //If the Shield has been used too long we need to disable the Players 
-                //ability to special and renable when the shield is not in use
-                canSpecial = shieldStrength <= 0 ? false : true;
+                ////If the Shield has been used too long we need to disable the Players 
+                ////ability to special and renable when the shield is not in use
+                //canSpecial = shieldStrength <= 0 ? false : true;
 
-                //When the player is trying to use the shield and the shield has 
-                //strength detract power  
-                if (playerSpecial && shieldStrength > 0)
-                {
-                    shieldStrength -= Time.deltaTime;
-                }
-                //otherwise if the shield is not in use and needs charging charge it up
-                else if (!playerSpecial && shieldStrength < 1)
-                {
-                    shieldStrength += Time.deltaTime;
-                }
-                else if (shieldStrength > 1)
-                {
-                    shieldStrength = 1;
-                }
+                ////When the player is trying to use the shield and the shield has 
+                ////strength detract power  
+                //if (playerSpecial && shieldStrength > 0)
+                //{
+                //    shieldStrength -= Time.deltaTime;
+                //}
+                ////otherwise if the shield is not in use and needs charging charge it up
+                //else if (!playerSpecial && shieldStrength < 1)
+                //{
+                //    shieldStrength += Time.deltaTime;
+                //}
+                //else if (shieldStrength > 1)
+                //{
+                //    shieldStrength = 1;
+                //}
                 
                 break;
         }

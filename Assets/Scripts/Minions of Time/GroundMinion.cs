@@ -90,7 +90,7 @@ public class GroundMinion : Minion
         }
         else
         {
-            m_GroundCharacter.Move(moveDir);
+            m_GroundCharacter.Move(moveDir, false);
         }
     }
 

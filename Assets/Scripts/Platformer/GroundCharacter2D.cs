@@ -162,6 +162,13 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     //    Gizmos.DrawRay(transform.position, -transform.up);
     //}
 
+    public virtual void Move(Vector2 moveDir, float _MaxSpeed = 15f, bool jump = false, float manualDirection = 1)
+    {
+        m_MaxSpeed = _MaxSpeed;
+
+        Move(moveDir, jump, manualDirection);
+    }
+
     public virtual void Move(Vector2 moveDir, bool jump = false, float manualDirection = 1)
     {
         // If the player should jump...
