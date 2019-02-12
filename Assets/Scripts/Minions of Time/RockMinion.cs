@@ -17,7 +17,7 @@ public class RockMinion : GroundMinion {
 
         prevDir = moveDir;
 
-        if (moveDir.x > 1)
+        if (moveDir.x < 1)
         {
             m_Animator.SetTrigger(m_HashAttackLeft);
         }
@@ -37,7 +37,7 @@ public class RockMinion : GroundMinion {
         {
             case AttackType.Melee:
 
-                if (moveDir.x > 1)
+                if (moveDir.x < 1)
                 {
                     m_Animator.SetTrigger(m_HashAttackLeft);
                 }

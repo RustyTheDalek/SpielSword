@@ -15,9 +15,18 @@ public class MinionHitAttack : MonoBehaviour
     {
         //Attack can only damage Villagers, has to be enabled and God mode off for 
         //obvious reasons
-        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && !LevelManager.GodMode)
+        switch(LayerMask.LayerToName(coll.gameObject.layer))
         {
-            coll.gameObject.GetComponentInParent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
+            case "Villager":
+
+                Character character = coll.gameObject.GetComponent<Character>();
+
+                if(!LevelManager.GodMode)
+                {
+                    character.OnHit(coll.transform.position.PointTo(transform.position));
+                }
+
+                break;
         }
     }
 

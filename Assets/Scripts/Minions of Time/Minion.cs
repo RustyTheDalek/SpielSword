@@ -14,8 +14,8 @@ public abstract class Minion : Character
 
     public LayerMask layerGround;
 
-    public List<Villager> villagerInSight = new List<Villager>(5);
-    public Villager closestVillager = null;
+    public List<Character> villagerInSight = new List<Character>(5);
+    public Character closestVillager = null;
 
     float closetVillageDist = Mathf.Infinity;
 
@@ -111,7 +111,7 @@ public abstract class Minion : Character
 
     public virtual void MoveToClosest()
     {
-        moveDir = m_rigidbody.position.PointTo(closestVillager.CharacterPosition.position);
+        moveDir = m_rigidbody.position.PointTo(closestVillager.Rigidbody.position);
     }
 
     /// <summary>
@@ -119,9 +119,9 @@ public abstract class Minion : Character
     /// </summary>
     public virtual void MoveToEngage()
     {
-        moveDir = m_rigidbody.position.PointTo(closestVillager.CharacterPosition.position
+        moveDir = m_rigidbody.position.PointTo(closestVillager.Rigidbody.position
             + Vector3.right * rangedAttackRange * Mathf.Sign(transform.position.magnitude
-            - closestVillager.CharacterPosition.position.magnitude));
+            - closestVillager.Rigidbody.position.magnitude));
     }
 
     protected virtual void StartAttack()
@@ -200,9 +200,9 @@ public abstract class Minion : Character
         //Reset closest to max
         closetVillageDist = Mathf.Infinity;
         //Find the closest
-        foreach (Villager villager in villagerInSight)
+        foreach (Character villager in villagerInSight)
         {
-            float dist = (villager.CharacterPosition.position.XY() - m_rigidbody.position).magnitude;
+            float dist = (villager.Rigidbody.position.XY() - m_rigidbody.position).magnitude;
 
             if (dist < closetVillageDist)
             {
@@ -217,7 +217,7 @@ public abstract class Minion : Character
     /// </summary>
     public void CheckMeleeAttackRange()
     {
-        float distToClosest = (closestVillager.CharacterPosition.position.XY() - 
+        float distToClosest = (closestVillager.Rigidbody.position.XY() - 
             m_rigidbody.position).magnitude;
 
         if (distToClosest < meleeAttackRange)
@@ -228,9 +228,9 @@ public abstract class Minion : Character
 
     public void CheckRangedAttackRange()
     {
-        if ((closestVillager.CharacterPosition.position.XY() - 
+        if ((closestVillager.Rigidbody.position.XY() - 
             m_rigidbody.position).magnitude < rangedAttackRange + rAVariance &&
-            (closestVillager.CharacterPosition.position.XY() - 
+            (closestVillager.Rigidbody.position.XY() - 
             m_rigidbody.position).magnitude > rangedAttackRange - rAVariance)
         {
             //Debug.Break();
@@ -242,7 +242,7 @@ public abstract class Minion : Character
     public void FireProjectile(BallisticMotion objToSpawn)
     {
         //Change this to not use hat in future
-        Vector3 targetPos = closestVillager.hat.transform.position;
+        Vector3 targetPos = closestVillager.Rigidbody.transform.position;
         Vector3 diff = targetPos - rangedSpawn.position;
         Vector3 diffGround = new Vector3(diff.x, 0f, diff.z);
 
@@ -326,7 +326,7 @@ public abstract class Minion : Character
             case "Villager":
             case "PastVillager":
 
-                Villager villager = collision.gameObject.GetComponentInParent<Villager>();
+                Character villager = collision.gameObject.GetComponentInParent<Character>();
 
                 if (state == MinionState.Attacking && 
                     collision.gameObject.transform.root.gameObject == closestVillager.gameObject &&
@@ -349,13 +349,13 @@ public abstract class Minion : Character
             case "Villager":
             case "PastVillager":
 
-                Villager villager = collision.GetComponentInParent<Villager>();
+                Character character = collision.GetComponentInParent<Character>();
 
                 if (villagerInSight.Count < villagerInSight.Capacity &&
-                !villagerInSight.Contains(villager) &&
-                villager.Alive) // don't want them to attack dead villagers
+                !villagerInSight.Contains(character) &&
+                character.Alive) // don't want them to attack dead villagers
                 {
-                    villagerInSight.Add(villager);
+                    villagerInSight.Add(character);
 
                     if (state == MinionState.Patrolling || state == MinionState.Migrating)
                     {
@@ -401,11 +401,11 @@ public abstract class Minion : Character
             case "Villager":
             case "PastVillager":
 
-                Villager villager = collision.GetComponentInParent<Villager>();
+                Character character = collision.GetComponentInParent<Character>();
 
-                if (villagerInSight.Contains(villager))
+                if (villagerInSight.Contains(character))
                 {
-                    villagerInSight.Remove(villager);
+                    villagerInSight.Remove(character);
 
                     if (villagerInSight.Count == 0)
                     {

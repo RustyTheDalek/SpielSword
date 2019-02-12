@@ -35,6 +35,11 @@ public class Character : MonoBehaviour
     /// </summary>
     public Vector2 moveDir;
 
+    /// <summary>
+    /// If a Villager is shielded they are unable to take damage from attacks
+    /// </summary>
+    public bool shielded = false;
+
     #endregion
 
     #region Protected Variables
@@ -52,6 +57,8 @@ public class Character : MonoBehaviour
 
     protected readonly int m_HashDeadParam = Animator.StringToHash("Dead");
 
+    protected MeleeAttack classMeleeAttack;
+
     #endregion
 
     #region Private Variables
@@ -65,12 +72,47 @@ public class Character : MonoBehaviour
         m_Character = GetComponent<PlatformerCharacter2D>();
         m_Animator = GetComponentInChildren<Animator>();
         m_rigidbody = GetComponent<Rigidbody2D>();
+
+        switch (attackType)
+        {
+            case AttackType.Ranged:
+
+                rangedSpawn = GameObject.Find(this.name + "/Character/RangedTransform").transform;
+
+                break;
+
+            case AttackType.Melee:
+
+                try
+                {
+                    classMeleeAttack = GetComponentInChildren<MeleeAttack>();
+                }
+                catch
+                {
+                    Debug.LogWarning("No Melee component on " + name);
+                }
+
+                break;
+        }
     }
 
     protected virtual void Update()
     {
         if (!Alive)
             return;
+    }
+
+    public virtual void OnHit(Vector2 attackDirection)
+    {
+        if (!shielded)
+        {
+            health--;
+
+            if (health <= 0)
+            {
+                OnDeath(attackDirection);
+            }
+        }
     }
 
     /// <summary>
@@ -86,6 +128,8 @@ public class Character : MonoBehaviour
 
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
+        m_rigidbody.simulated = false;
+        //gameObject.layer = LayerMask.NameToLayer("PastVillager");
 
         m_Animator.SetFloat("xSpeed", 0);
         m_Animator.SetFloat("ySpeed", 0);
@@ -118,6 +162,13 @@ public class Character : MonoBehaviour
     public virtual void Kill()
     {
         health = 0;
+        m_rigidbody.velocity = Vector2.zero;
+        m_rigidbody.angularVelocity = 0;
         OnDeath(Vector2.zero);
+    }
+
+    public void PlayMeleeEffect()
+    {
+        classMeleeAttack.PlayEffect();
     }
 }

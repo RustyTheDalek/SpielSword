@@ -45,7 +45,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     /// </summary>
     protected Vector2 moveVector = Vector2.right;
 
-    protected bool FacingRight
+    public bool FacingRight
     {
         get
         {
@@ -395,7 +395,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     public void SetCharacterCollisions(bool active)
     {
-        m_Character.GetComponent<Rigidbody2D>().simulated = active;
+        m_Rigidbody2D.simulated = active;
     }
 
     public void SetSliding(bool active, PhysicsMaterial2D physMat)

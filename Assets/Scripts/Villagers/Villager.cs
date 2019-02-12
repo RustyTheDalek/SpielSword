@@ -49,11 +49,6 @@ public abstract class Villager : Character
     public SpriteRenderer hat;
 
     /// <summary>
-    /// If a Villager is shielded they are unable to take damage from attacks
-    /// </summary>
-    public bool shielded = false;
-
-    /// <summary>
     /// If a Villager is able to carry out actions
     /// </summary>
     public bool canAct = true;
@@ -99,8 +94,6 @@ public abstract class Villager : Character
 
     protected AudioSource DeathSound;
 
-    protected MeleeAttack classMeleeAttack;
-
     protected static AssetBundle abilities;
 
     //Input variables
@@ -139,30 +132,6 @@ public abstract class Villager : Character
         if (abilities == null)
             abilities = AssetBundle.LoadFromFile(Path.Combine(
                 Application.streamingAssetsPath, "AssetBundles/abilities"));
-
-        switch (attackType)
-        {
-            case AttackType.Ranged:
-
-                rangedSpawn = GameObject.Find(this.name + "/Character/RangedTransform").transform;
-
-                break;
-
-            case AttackType.Melee:
-
-                try
-                {
-                    classMeleeAttack = GetComponentInChildren<MeleeAttack>();
-                    if(melee = null)
-                        melee = classMeleeAttack.GetComponentInChildren<CircleCollider2D>();
-                }
-                catch
-                {
-                    Debug.LogWarning("No Melee component on " + name);
-                }
-
-                break;
-        }
 
         if (hat == null)
             Debug.LogWarning("No hat set");
@@ -292,19 +261,6 @@ public abstract class Villager : Character
         return playerSpecial;
     }
 
-    public virtual void OnHit(Vector2 attackDirection)
-    {
-        if (!shielded)
-        {
-            health--;
-
-            if (health <= 0)
-            {
-                OnDeath(attackDirection);
-            }
-        }
-    }
-
     public override void OnDeath(Vector2 attackDirection)
     {
         this.NamedLog("Dead");
@@ -393,11 +349,6 @@ public abstract class Villager : Character
         {
             Debug.LogWarning("No effect assigned, is this intended?");
         }
-    }
-
-    public void PlayMeleeEffect()
-    {
-        classMeleeAttack.PlayEffect();
     }
 
     public override void Kill()

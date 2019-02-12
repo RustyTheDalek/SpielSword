@@ -7,6 +7,15 @@ public class MeleeAttack : MonoBehaviour
     public int damageMult = 1;
     public AudioSource EffectNoise;
 
+    private void Awake()
+    {
+        if(EffectNoise == null)
+        {
+            Debug.LogWarning("EffectNoise not set, attempting to find it");
+            EffectNoise = GetComponent<AudioSource>();
+        }
+    }
+
     public int Damage
     {
         get
@@ -28,7 +37,14 @@ public class MeleeAttack : MonoBehaviour
 
     public void PlayEffect()
     {
-        EffectNoise.Stop();
-        EffectNoise.Play();
+        if (EffectNoise)
+        {
+            EffectNoise.Stop();
+            EffectNoise.Play();
+        }
+        else
+        {
+            Debug.LogWarning("No Noise assigned");
+        }
     }
 }
