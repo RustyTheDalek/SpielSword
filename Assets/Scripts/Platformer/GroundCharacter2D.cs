@@ -395,7 +395,9 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     public void SetCharacterCollisions(bool active)
     {
-        m_Rigidbody2D.simulated = active;
+        //m_Rigidbody2D.simulated = active;
+        m_Rigidbody2D.velocity = Vector2.zero;
+        m_Rigidbody2D.angularVelocity = 0;
     }
 
     public void SetSliding(bool active, PhysicsMaterial2D physMat)

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1999906266
+CRC: 588632078
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ece94cebcdc924f086f86e85805381fb
+    Hash: 224bd38350b00aa36c7cbf4e41ef4f27
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9a0ad043bb50c7c2d8a40b2deeec0e33
+    Hash: f41b40f65a85bc79305867f121d1f8ef
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,74 +25,29 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 62
   Script: {instanceID: 0}
-- Class: 74
-  Script: {instanceID: 0}
 - Class: 82
   Script: {instanceID: 0}
 - Class: 83
   Script: {instanceID: 0}
-- Class: 91
-  Script: {instanceID: 0}
 - Class: 95
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 52a4cd5176332de4788a679c3bcab42c, type: 3}
-- Class: 114
-  Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-- Class: 114
-  Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-- Class: 114
-  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: f172092243137cf4bbddab81f865d49b, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 6f519d244fec3ad48a5e6e034d1ee458, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 0a27ff84ed168ea4f80755f592fee877, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 829e9f0563d2f7940ae3588e964414fd, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: da163506fd12c4c469ca20071a4044b3, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 2c408966f2235f74e928e8cd525291c1, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 290a0d47b52ce0e4093136af19d04192, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 95147898b0fc03c4c9ae8adb923bf68a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9359cf6963ace04448f3a8bbee8ea2d6, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: fcbfa1eb3f3e4154382a2d875ac85861, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 6195debe380f15549afe19c71dda7ce9, type: 3}
+  Script: {fileID: 11500000, guid: 65b1e1cd07721804b8f0705034ff22e7, type: 3}
 - Class: 115
-  Script: {instanceID: 0}
-- Class: 128
-  Script: {instanceID: 0}
-- Class: 198
-  Script: {instanceID: 0}
-- Class: 199
   Script: {instanceID: 0}
 - Class: 212
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
-- Class: 221
-  Script: {instanceID: 0}
-- Class: 222
-  Script: {instanceID: 0}
-- Class: 223
-  Script: {instanceID: 0}
-- Class: 224
-  Script: {instanceID: 0}
 - Class: 331
   Script: {instanceID: 0}
 Assets:
-- Assets/Prefabs/Villagers/PressSpecial/Berserker.prefab
-- Assets/Prefabs/Villagers/PressSpecial/Priest.prefab
-- Assets/Prefabs/Villagers/PressSpecial/Mage.prefab
-- Assets/Prefabs/Villagers/PressSpecial/Shaman.prefab
-- Assets/Prefabs/Villagers/PressSpecial/Warlock.prefab
-- Assets/Prefabs/Villagers/PressSpecial/Rogue.prefab
-- Assets/Prefabs/Villagers/PressSpecial/Villager.prefab
+- Assets/Prefabs/Villagers/Villager.prefab
+- Assets/Prefabs/GroundCharacterBase.prefab
 Dependencies: []

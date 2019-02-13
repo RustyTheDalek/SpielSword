@@ -19,6 +19,8 @@ public class Summon : Character
     [Range(0f, 10f)]
     public float floorReactDistance = 2;
 
+    public Shaman creator;
+
     #endregion
 
     #region Protected Variables 
@@ -37,12 +39,13 @@ public class Summon : Character
     {
         base.Awake();
 
-        SceneLinkedSMB<Summon>.Initialise(m_Animator, this);
     }
 
     private void OnEnable()
     {
         lifeTimer = lifeSpan;
+
+        SceneLinkedSMB<Summon>.Initialise(m_Animator, this);
     }
 
     protected override void Update()
@@ -115,6 +118,9 @@ public class Summon : Character
     public override void OnDeath(Vector2 attackDirection)
     {
         base.OnDeath(attackDirection);
+
+        if(creator)
+            creator.summonActive = false;
 
         m_GroundCharacter.SetCharacterCollisions(false);
     }

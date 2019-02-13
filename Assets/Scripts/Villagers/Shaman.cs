@@ -32,7 +32,7 @@ public class Shaman : WardVillager
         base.Awake();
 
         //Spawn Ward but deactivate
-        currentSummon = abilities.LoadAsset<Summon>(summonName).Spawn();
+        Summon();
         currentSummon.gameObject.SetActive(false);
     }
 
@@ -44,8 +44,15 @@ public class Shaman : WardVillager
     {
         if(!summonActive)
         {
+            Debug.Log("Summon inactive, spawning");
+
+            if(!currentSummon.Alive)
+                Summon();
+
+            currentSummon.transform.position = Sprite.transform.position + summonOffset * 
+                (m_Ground.FacingRight ? 1 : -1);
+
             currentSummon.gameObject.SetActive(true);
-            currentSummon.transform.position = Sprite.transform.position + summonOffset;
 
             //We want the Summon to go in the direction the player is moving or looking
             if (moveDir != Vector2.zero)
@@ -57,9 +64,25 @@ public class Shaman : WardVillager
         }
         else
         {
-            currentSummon.Kill();
-            currentSummon = abilities.LoadAsset<Summon>(summonName).Spawn();
+            Debug.Log("Summon active creating new");
+
+            if(currentSummon.Alive)
+                currentSummon.Kill();
+
+            summonActive = false;
+
+            Summon();
+
+            UseSummon();
+
         }
+    }
+
+    protected void Summon()
+    {
+        GameObject temp = abilities.LoadAsset<GameObject>(summonName).Spawn();
+        currentSummon = temp.GetComponent<Summon>();
+        currentSummon.creator = this;
     }
 
     #endregion

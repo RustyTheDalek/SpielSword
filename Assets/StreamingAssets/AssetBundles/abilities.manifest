@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2445686282
+CRC: 3880440460
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: eb47aeaf41d1a0540bb388eee7cc54b9
+    Hash: fcd6f09d166cdf89482c760ceab6c080
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c0fd31efeb7a19a793f3c7267abe2cef
+    Hash: 495a6e6c4c5c0a4bb4ff7b847e74ae98
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,6 +25,10 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 61
   Script: {instanceID: 0}
+- Class: 62
+  Script: {instanceID: 0}
+- Class: 70
+  Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
 - Class: 82
@@ -38,17 +42,33 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fdc15ff0ad2a50f46bc82fcef778c7ef, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 0edde5318d4bb004cbd1a7a880293012, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4b420f032312b8d49ab476971f53f173, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 6f519d244fec3ad48a5e6e034d1ee458, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fc0a3fd4ee590624fbb60a2ba8638147, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 281b6bf5b5c639942aedb7729a7363e9, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 157fe497bd8774749819919d76ac7518, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 95147898b0fc03c4c9ae8adb923bf68a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7b161de84368c2f4784050b6a9b96848, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 624599198eb0e8f49a17b3d1fcc6a193, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 9359cf6963ace04448f3a8bbee8ea2d6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 91c0e29bebb7b2f418077e61e40c0cbd, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: c89d956c4b64a0c47a8e1179150c0f06, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d4e7ad2da5a098b4b8046709a1c00b8b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 65b1e1cd07721804b8f0705034ff22e7, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 198
@@ -65,6 +85,8 @@ Assets:
 - Assets/Prefabs/Abilities/Wards/ShamanWard.prefab
 - Assets/Prefabs/Abilities/Wards/WarlockWard.prefab
 - Assets/Prefabs/Abilities/Range.prefab
+- Assets/Prefabs/Abilities/WarlockRange.prefab
+- Assets/Prefabs/Abilities/SummonTemp.prefab
 - Assets/Prefabs/Abilities/Auras/PriestAura.prefab
 - Assets/Prefabs/Abilities/Auras/MageAura.prefab
 Dependencies: []
