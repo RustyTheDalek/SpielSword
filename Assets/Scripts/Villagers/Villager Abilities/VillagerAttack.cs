@@ -6,25 +6,20 @@ using System.Collections;
 /// </summary>
 public class VillagerAttack : MonoBehaviour
 {
+    public SpriteRenderer m_Sprite;
+    public Rigidbody2D m_Rigidbody;
+    public Collider2D m_Collider;
+    public Animator anim;
+    public AudioSource EffectNoise;
+
+    public AttackType attackType;
+
     public float damage = 1;
     public float damageMult = 1;
 
     public float lifeTime = 1;
 
-    public AudioSource EffectNoise;
-
-    protected SpriteRenderer m_Sprite;
-    protected Rigidbody2D m_Rigidbody;
-    protected Collider2D m_Collider;
-
-    protected void Start()
-    {
-        m_Sprite = GetComponent<SpriteRenderer>();
-        m_Rigidbody = GetComponent<Rigidbody2D>();
-        m_Collider = GetComponent<Collider2D>();
-    }
-
-    protected void Update()
+    protected virtual void Update()
     {
         if (lifeTime < 0)
         {
@@ -39,23 +34,33 @@ public class VillagerAttack : MonoBehaviour
         m_Rigidbody.AddForce(dir, ForceMode2D.Impulse);
     }
 
-    void OnTriggerEnter2D(Collider2D coll)
+    public void OnDeath()
     {
-        if (name.Contains("Range") || name.Contains("Imp"))
+        SetActive(false);
+        GetComponent<RangedAttackTimeObject>().OnDeath();
+    }
+
+    //protected virtual void OnTriggerEnter2D(Collider2D coll)
+    //{
+    //    if (attackType == AttackType.Ranged || name.Contains("Imp"))
+    //    {
+    //        if (coll.gameObject.GetComponent<Head>())
+    //        {
+    //            coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
+    //            anim.SetTrigger("Death");
+    //        }
+    //    }
+    //}
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (attackType == AttackType.Ranged || name.Contains("Imp"))
         {
             if (coll.gameObject.GetComponent<Head>())
             {
                 coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
-                SetActive(false);
+                anim.SetTrigger("Death");
             }
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D coll)
-    {
-        if (name.Contains("Range"))
-        {
-            SetActive(false);
         }
     }
 
@@ -75,6 +80,7 @@ public class VillagerAttack : MonoBehaviour
 
     private void OnEnable()
     {
-        EffectNoise.Play();
+        if(EffectNoise)
+            EffectNoise.Play();
     }
 }

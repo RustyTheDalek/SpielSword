@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3880440460
+CRC: 3488570424
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: fcd6f09d166cdf89482c760ceab6c080
+    Hash: c306f1f08fa38430e1628f37985b7f29
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 495a6e6c4c5c0a4bb4ff7b847e74ae98
+    Hash: 172690de1631971b825926055c6a680a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -60,6 +60,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 624599198eb0e8f49a17b3d1fcc6a193, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 4ebbbd39f18e25a4f8e88f7cf664df36, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 9359cf6963ace04448f3a8bbee8ea2d6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 91c0e29bebb7b2f418077e61e40c0cbd, type: 3}
@@ -69,6 +71,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: d4e7ad2da5a098b4b8046709a1c00b8b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 65b1e1cd07721804b8f0705034ff22e7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fce18c50f036a3544b65c5c3a1cd13eb, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 198
@@ -79,12 +83,16 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+- Class: 221
+  Script: {instanceID: 0}
 - Class: 251
   Script: {instanceID: 0}
 Assets:
+- Assets/Prefabs/Abilities/Fireball.prefab
 - Assets/Prefabs/Abilities/Wards/ShamanWard.prefab
 - Assets/Prefabs/Abilities/Wards/WarlockWard.prefab
 - Assets/Prefabs/Abilities/Range.prefab
+- Assets/Prefabs/Abilities/MagicMissile.prefab
 - Assets/Prefabs/Abilities/WarlockRange.prefab
 - Assets/Prefabs/Abilities/SummonTemp.prefab
 - Assets/Prefabs/Abilities/Auras/PriestAura.prefab

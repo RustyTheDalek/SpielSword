@@ -21,7 +21,6 @@ public class GroundMinion : Minion
 
     #region Protected Variables
 
-
     #endregion
 
     #region Private Variables
@@ -133,7 +132,6 @@ public class GroundMinion : Minion
     public override void OnDeath(Vector2 attackDirection)
     {
         base.OnDeath(attackDirection);
-
         gameObject.layer = LayerMask.NameToLayer("Bits");
     }
 

@@ -286,9 +286,15 @@ public abstract class Villager : Character
 
     public virtual void FireProjectile()
     {
+        FireNamedProjectile(rangeName);
+    }
+
+    public void FireNamedProjectile(string projName)
+    {
         if (villagerState == VillagerState.PresentVillager)
         {
-            rangedAtk = abilities.LoadAsset<VillagerAttack>(rangeName).Spawn(rangedSpawn.position);
+            GameObject gObject = abilities.LoadAsset<GameObject>(projName).Spawn(rangedSpawn.position);
+            rangedAtk = gObject.GetComponent<VillagerAttack>();
             rangedAtk.damageMult = damageMult;
 
             float direction = rangedSpawn.position.x - m_rigidbody.transform.position.x;

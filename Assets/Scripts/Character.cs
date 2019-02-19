@@ -104,7 +104,7 @@ public class Character : MonoBehaviour
 
     public virtual void OnHit(Vector2 attackDirection)
     {
-        if (!shielded)
+        if (!shielded && Alive)
         {
             health--;
 
@@ -129,6 +129,7 @@ public class Character : MonoBehaviour
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.simulated = false;
+
         //gameObject.layer = LayerMask.NameToLayer("PastVillager");
 
         m_Animator.SetFloat("xSpeed", 0);

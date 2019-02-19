@@ -193,6 +193,12 @@ public class SpawnableSpriteTimeObject : RigidbodyTimeObject
         }
     }
 
+    public void OnDeath()
+    {
+        finishFrame = (int)TimeObjectManager.t;
+        tObjectState = TimeObjectState.PresentDead;
+    }
+
     private void OnDestroy()
     {
         OnTrackFrame -= TrackSpawnableSpriteFrame;
