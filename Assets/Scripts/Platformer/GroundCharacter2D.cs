@@ -24,11 +24,11 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     public float alignSpeed = 5;
 
     [Tooltip("How much drag the controller applys to stopping when the there is no desired move")]
-    [Range(0,1)]
+    [Range(0, 1)]
     public float m_dragFactor;
 
     [Tooltip("How much is the character Sprite offset from the motion wheel")]
-    [Range(-10, 10)] 
+    [Range(-10, 10)]
     public float sprite_Offset;
 
     /// <summary>
@@ -56,6 +56,27 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             else
             {
                 return m_Character.localScale.x > 0;
+            }
+        }
+    }
+
+    public Direction FacingDirection
+    {
+        get
+        {
+            if(m_AbsoluteMoveDirection)
+            {
+                if (m_Front.localPosition.x > 0)
+                    return Direction.Right;
+                else
+                    return Direction.Left;
+            }
+            else
+            {
+                if (m_Character.localScale.x > 0)
+                    return Direction.Right;
+                else
+                    return Direction.Left;
             }
         }
     }
