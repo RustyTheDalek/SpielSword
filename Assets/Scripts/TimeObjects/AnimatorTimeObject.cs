@@ -51,12 +51,6 @@ public class AnimatorTimeObject : RigidbodyTimeObject
     //    tObjectState = TimeObjectState.PastFinished;
     //}
 
-    protected virtual void Start()
-    {
-        //TODO:Remove this as it might not be totally nesecary 
-        tObjectState = TimeObjectState.Present;
-    }
-
     protected void TrackSpriteSheetFrame()
     {
         //Adds new sprite to List

@@ -3,13 +3,10 @@
 /// </summary>
 public enum VillagerClass
 {
-    Warrior,
-    Mage,
-    Warlock,
-    Priest,
-    Rogue,
-    Spielsword,
     Berserker,
+    Mage,
+    Paladin,
+    Rogue,
     Shaman,
     Last, //Special Class to find last Class
 }

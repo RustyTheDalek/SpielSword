@@ -64,7 +64,7 @@ public class VillagerManager : MonoBehaviour {
 
     bool endSlateActive = false;
 
-    public VillagerClass classToSpawn = VillagerClass.Warlock;
+    public VillagerClass classToSpawn;
 
     public delegate void VillagerManagerEvent();
     public delegate void NewVillagerEvent(Villager newVillager);
@@ -121,7 +121,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last);
-            //classToSpawn = VillagerClass.Warrior;
+            classToSpawn = VillagerClass.Berserker;
 
             //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is
             villagerPrefabs[(int)classToSpawn].CreatePool(50);
@@ -150,7 +150,7 @@ public class VillagerManager : MonoBehaviour {
 
         villager.SetActive(false);
 
-        if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Priest)
+        if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Paladin)
             villager.GetComponent<AuraVillager>().Setup(this);
 
         if (classToSpawn == VillagerClass.Shaman)
@@ -163,15 +163,14 @@ public class VillagerManager : MonoBehaviour {
         Debug.Log("Combo has been used");
     }
 
-    // Update is called once per frame
-    void Update ()
+    void Update()
     {
 
 #if UNITY_EDITOR //Debug code to allow killing of Player for testing purposes
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            classToSpawn = VillagerClass.Warrior;
+            classToSpawn = VillagerClass.Berserker;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -181,7 +180,17 @@ public class VillagerManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            classToSpawn = VillagerClass.Warlock;
+            classToSpawn = VillagerClass.Paladin;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            classToSpawn = VillagerClass.Rogue;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            classToSpawn = VillagerClass.Shaman;
         }
 #endif
     }
@@ -344,7 +353,7 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in remainingVillagers)
             {
-                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Priest)
+                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Paladin)
                     villager.GetComponent<AuraVillager>().Unsubscribe(this);
 
                 if (classToSpawn == VillagerClass.Shaman)
@@ -357,7 +366,7 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in pastVillagers)
             {
-                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Priest)
+                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Paladin)
                     villager.GetComponent<AuraVillager>().Unsubscribe(this);
 
                 if (classToSpawn == VillagerClass.Shaman)

@@ -45,15 +45,39 @@ public class VillagerTimeObject : AnimatorTimeObject
         startFrame = (int)TimeObjectManager.t;
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
-
         OnPlayFrame += OnVillagerPlayFrame;
         OnTrackFrame += OnVillagerTrackFrame;
         OnStartPlayback += OnVillagerStartPlayback;
         OnFinishPlayback += OnVillagerFinishPlayback;
         OnStartReverse += OnVillagerStartReverse;
+    }
+
+    protected override void TrackTransform()
+    {
+        tempBFrame = new TransformFrameData()
+        {
+            m_Position = m_Ground.m_Character.position,
+            m_Rotation = m_Ground.m_Character.rotation,
+            m_Scale = m_Ground.m_Character.localScale,
+            timeStamp = (int)TimeObjectManager.t,
+
+            enabled = gameObject.activeSelf
+        };
+        bFrames.Add(tempBFrame);
+    }
+
+    protected override void PlayTransormFrame()
+    {
+        if (bFrames.WithinRange(currentFrame))
+        {
+            m_Ground.m_Character.transform.position = bFrames[(int)currentFrame].m_Position;
+            m_Ground.m_Character.transform.rotation = bFrames[(int)currentFrame].m_Rotation;
+            m_Ground.m_Character.transform.localScale = bFrames[(int)currentFrame].m_Scale;
+
+            gameObject.SetActive(bFrames[(int)currentFrame].enabled);
+        }
     }
 
     protected void OnVillagerPlayFrame()
@@ -83,6 +107,7 @@ public class VillagerTimeObject : AnimatorTimeObject
 
         vFrames.Add(tempVFrame);
     }
+
     /// <summary>
     /// What happens when a Villager become a past incarnation
     /// </summary>
@@ -91,6 +116,7 @@ public class VillagerTimeObject : AnimatorTimeObject
         base.OnPast();
 
         villager.villagerState = VillagerState.PastVillager;
+        m_Ground.enabled = false;
     }
 
     protected void OnVillagerStartPlayback()
@@ -131,7 +157,6 @@ public class VillagerTimeObject : AnimatorTimeObject
     private void OnDestroy()
     {
         OnStartPlayback -= OnVillagerStartPlayback;
-
         OnPlayFrame -= OnVillagerPlayFrame;
         OnTrackFrame -= OnVillagerTrackFrame;
         OnFinishPlayback -= OnVillagerFinishPlayback;

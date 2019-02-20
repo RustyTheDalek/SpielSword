@@ -187,7 +187,7 @@ public class TimeObject : MonoBehaviour
         }
     }
 
-    protected void TrackTransform()
+    protected virtual void TrackTransform()
     {
         tempBFrame = new TransformFrameData()
         {
@@ -201,7 +201,7 @@ public class TimeObject : MonoBehaviour
         bFrames.Add(tempBFrame);
     }
 
-    protected void PlayTransormFrame()
+    protected virtual void PlayTransormFrame()
     {
         if (bFrames.WithinRange(currentFrame))
         {

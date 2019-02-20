@@ -140,7 +140,7 @@ public abstract class Villager : Character
 
     }
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         SceneLinkedSMB<Villager>.Initialise(m_Animator, this);
     }

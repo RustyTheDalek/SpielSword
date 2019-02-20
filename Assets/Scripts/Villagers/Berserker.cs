@@ -9,6 +9,14 @@ public class Berserker : Villager
 {
     bool    sacrificing = false,
             rage = false;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        SceneLinkedSMB<Berserker>.Initialise(m_Animator, this);
+    }
+
     public void OnBerserkerRage()
     {
         if (villagerState == VillagerState.PresentVillager && !rage)
@@ -35,15 +43,28 @@ public class Berserker : Villager
         }
     }
 
+    /// <summary>
+    /// This is called sacrifice is stopped, early or when it reaches its conclusion
+    /// </summary>
+    public void StopSacrifice()
+    {
+        SetBodyType(RigidbodyType2D.Dynamic);
+        canMove = true;
+        sacrificing = false;
+    }
+
+    /// <summary>
+    /// Only called at the end of the animation when sacrifice is compelte
+    /// </summary>
     public void FinishSacrifice()
     {
         Debug.Log("Sacrifice Complete");
-        SetBodyType(RigidbodyType2D.Dynamic);
-        sacrificing = false;
+        StopSacrifice();
+
         canSpecial = false;
         special1 = false;
         special2 = false;
-        canMove = true;
+        
         Kill();
     }
 
