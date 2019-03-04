@@ -86,4 +86,11 @@ public class Rogue : WardVillager
             m_rigidbody.position = wardPos;
         }
     }
+
+    public override void OnDeath(Vector2 attackDirection)
+    {
+        base.OnDeath(attackDirection);
+
+        m_SubstitutionTotem.GetComponent<TimeObject>().FinishTracking();
+    }
 }

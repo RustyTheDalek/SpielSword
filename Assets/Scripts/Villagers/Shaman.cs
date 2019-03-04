@@ -34,6 +34,7 @@ public class Shaman : WardVillager
         //Spawn Ward but deactivate
         Summon();
         currentSummon.gameObject.SetActive(false);
+        currentWard.GetComponent<ShamanTotem>().creator = this.gameObject;
     }
 
     #endregion
@@ -91,8 +92,8 @@ public class Shaman : WardVillager
 
     protected override void OnWardUse()
     {
-        currentWard.transform.position = transform.position + wardOffset;
-        currentWard.spawnableTimer = currentWard.spawnableLife;
+        //currentWard.transform.position = transform.position + wardOffset;
+        //currentWard.spawnableTimer = currentWard.spawnableLife;
     }
 
     #endregion

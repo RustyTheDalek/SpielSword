@@ -79,4 +79,34 @@ public class Mage : Villager
             canSpecial = false;
         }
     }
+
+    public override void EnableInsideMask()
+    {
+        base.EnableInsideMask();
+
+        foreach(SpriteRenderer chargeAura in m_ChargeAuras)
+        {
+            chargeAura.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+        }
+    }
+
+    public override void EnableOutsideMask()
+    {
+        base.EnableOutsideMask();
+
+        foreach (SpriteRenderer chargeAura in m_ChargeAuras)
+        {
+            chargeAura.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+        }
+    }
+
+    public override void NoMask()
+    {
+        base.NoMask();
+
+        foreach (SpriteRenderer chargeAura in m_ChargeAuras)
+        {
+            chargeAura.maskInteraction = SpriteMaskInteraction.None;
+        }
+    }
 }

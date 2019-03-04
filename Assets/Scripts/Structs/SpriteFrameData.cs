@@ -7,5 +7,9 @@
 /// </summary>
 public struct SpriteFrameData
 {
+    public bool enabled;
+    public string sprite;
     public Color color;
+    public bool flipX, flipY;
+    public SpriteMaskInteraction maskInteraction;
 }

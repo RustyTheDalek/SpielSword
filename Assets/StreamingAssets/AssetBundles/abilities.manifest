@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3454360905
+CRC: 1794644231
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1e9e8f05b28f7c61e85ade9cf6e380cf
+    Hash: 0c5cee89d207a0a6ff5b5f043abbca53
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 45e8015bd98a1fece0b0babf908bb0ef
+    Hash: 09d8e6f5e480d878934a416a79fbccee
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -48,25 +48,35 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 4b420f032312b8d49ab476971f53f173, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 37b99123db4805e41b83d4d24d0293f1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ef51565313f5b3f419174be0fe61764e, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 6f519d244fec3ad48a5e6e034d1ee458, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0a27ff84ed168ea4f80755f592fee877, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fc0a3fd4ee590624fbb60a2ba8638147, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 281b6bf5b5c639942aedb7729a7363e9, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 157fe497bd8774749819919d76ac7518, type: 3}
+  Script: {fileID: 11500000, guid: 944484f6dbac04c4883cb01bc442cbdd, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 95147898b0fc03c4c9ae8adb923bf68a, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 7b161de84368c2f4784050b6a9b96848, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 624599198eb0e8f49a17b3d1fcc6a193, type: 3}
+  Script: {fileID: 11500000, guid: 58e58019d4f16d44c88b5d6f065fc2d1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4ebbbd39f18e25a4f8e88f7cf664df36, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: c5dfd0492e47a09498f5197c579c6013, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 9359cf6963ace04448f3a8bbee8ea2d6, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: b644102a0be03a2459b5d915e520280d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e9b8b2ae11b7ec4d9fbef0221afb1bc, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 91c0e29bebb7b2f418077e61e40c0cbd, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1997fe3c3f099d042bfd2d2c3dc78f66, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c89d956c4b64a0c47a8e1179150c0f06, type: 3}
 - Class: 114
@@ -74,7 +84,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 65b1e1cd07721804b8f0705034ff22e7, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 37b99123db4805e41b83d4d24d0293f1, type: 3}
+  Script: {fileID: 11500000, guid: d50bc7dfe24443c44bcaeb2980cd086f, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 198
@@ -92,7 +102,7 @@ ClassTypes:
 Assets:
 - Assets/Prefabs/Abilities/Fireball.prefab
 - Assets/Prefabs/Abilities/Wards/ShamanWard.prefab
-- Assets/Prefabs/Abilities/Wards/WarlockWard.prefab
+- Assets/Prefabs/Abilities/Wards/RogueWard.prefab
 - Assets/Prefabs/Abilities/Range.prefab
 - Assets/Prefabs/Abilities/MagicMissile.prefab
 - Assets/Prefabs/Abilities/WarlockRange.prefab

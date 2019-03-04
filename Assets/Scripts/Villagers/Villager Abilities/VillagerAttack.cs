@@ -19,6 +19,19 @@ public class VillagerAttack : MonoBehaviour
 
     public float lifeTime = 1;
 
+    protected void OnEnable()
+    {
+        if (EffectNoise)
+            EffectNoise.Play();
+
+        if (lifeTime == 0)
+        {
+            lifeTime = Mathf.Infinity;
+        }
+
+        m_Rigidbody.AddForce(Vector2.left * 10, ForceMode2D.Impulse);
+    }
+
     protected virtual void Update()
     {
         if (lifeTime < 0)
@@ -37,7 +50,7 @@ public class VillagerAttack : MonoBehaviour
     public void OnDeath()
     {
         SetActive(false);
-        GetComponent<RangedAttackTimeObject>().OnDeath();
+        GetComponent<TimeObject>().FinishTracking();
     }
 
     //protected virtual void OnTriggerEnter2D(Collider2D coll)
@@ -54,14 +67,15 @@ public class VillagerAttack : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (attackType == AttackType.Ranged || name.Contains("Imp"))
+        if (attackType == AttackType.Ranged)
         {
             if (coll.gameObject.GetComponent<Head>())
             {
                 coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
-                anim.SetTrigger("Death");
             }
         }
+
+        anim.SetTrigger("Death");
     }
 
     protected void SetActive(bool active)
@@ -76,11 +90,5 @@ public class VillagerAttack : MonoBehaviour
 
         if (!active)
             enabled = false;
-    }
-
-    private void OnEnable()
-    {
-        if(EffectNoise)
-            EffectNoise.Play();
     }
 }

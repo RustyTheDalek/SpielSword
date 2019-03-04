@@ -121,7 +121,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last);
-            classToSpawn = VillagerClass.Berserker;
+            //classToSpawn = VillagerClass.Berserker;
 
             //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is
             villagerPrefabs[(int)classToSpawn].CreatePool(50);
@@ -150,8 +150,8 @@ public class VillagerManager : MonoBehaviour {
 
         villager.SetActive(false);
 
-        if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Paladin)
-            villager.GetComponent<AuraVillager>().Setup(this);
+        if (classToSpawn == VillagerClass.Paladin)
+            villager.GetComponent<Paladin>().Setup(this);
 
         if (classToSpawn == VillagerClass.Shaman)
             villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Setup(this);
@@ -202,7 +202,7 @@ public class VillagerManager : MonoBehaviour {
             case TimeState.Forward:
 
                 //When the active Villager has died and the animation is finished
-                if (!activeVillager.Alive && activeVillager.deathEnd)
+                if (!activeVillager.Alive && activeVillager.GetComponent<TimeObject>().finished)
                 {
                     //Game over if no lives
                     if (RemainingVillagers <= 0 && !endSlateActive)
@@ -281,9 +281,9 @@ public class VillagerManager : MonoBehaviour {
         {
             if (activeVillager)
             {
-                activeVillager.m_VTimeObject.tObjectState = TimeObjectState.PastStart;
+                activeVillager.GetComponent<TimeObject>().tObjectState = TimeObjectState.PastStart;
                 activeVillager.DisableAnimator();
-                activeVillager.EnableOutsidMask();
+                activeVillager.EnableOutsideMask();
             }
 
 
@@ -353,8 +353,8 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in remainingVillagers)
             {
-                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Paladin)
-                    villager.GetComponent<AuraVillager>().Unsubscribe(this);
+                if (classToSpawn == VillagerClass.Paladin)
+                    villager.GetComponent<Paladin>().Unsubscribe(this);
 
                 if (classToSpawn == VillagerClass.Shaman)
                     villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Unsubscribe(this);
@@ -366,8 +366,8 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in pastVillagers)
             {
-                if (classToSpawn == VillagerClass.Mage || classToSpawn == VillagerClass.Paladin)
-                    villager.GetComponent<AuraVillager>().Unsubscribe(this);
+                if (classToSpawn == VillagerClass.Paladin)
+                    villager.GetComponent<Paladin>().Unsubscribe(this);
 
                 if (classToSpawn == VillagerClass.Shaman)
                     villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Unsubscribe(this);

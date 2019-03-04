@@ -11,7 +11,7 @@ public abstract class WardVillager : Villager
     /// <summary>
     /// Reference to current ward in use by the Villager
     /// </summary>
-    public SpawnableSpriteTimeObject currentWard;
+    public GameObject currentWard;
 
     public bool wardActive = false;
     #endregion
@@ -33,9 +33,7 @@ public abstract class WardVillager : Villager
         //playerSpecialIsTrigger = true;
 
         //Spawn Ward but deactivate
-        GameObject temp  = abilities.LoadAsset<GameObject>(wardName + "Ward").Spawn();
-        currentWard = temp.GetComponent<SpawnableSpriteTimeObject>();
-        currentWard.creator = this;
+        currentWard = abilities.LoadAsset<GameObject>(wardName + "Ward").Spawn();
         currentWard.gameObject.SetActive(false);
     }
 

@@ -53,8 +53,6 @@ public abstract class Villager : Character
     /// </summary>
     public bool canAct = true;
 
-    public bool deathEnd = false;
-
     /// <summary>
     /// If this is the current Villager (Villager being controlled by the player)
     /// </summary>
@@ -66,7 +64,7 @@ public abstract class Villager : Character
         }
     }
 
-    public VillagerTimeObject m_VTimeObject;
+    //public VillagerTimeObject m_VTimeObject;
 
     public SpriteMask portal;
 
@@ -124,7 +122,7 @@ public abstract class Villager : Character
         portal = GetComponentInChildren<SpriteMask>();
         m_Sprite = GetComponentInChildren<SpriteRenderer>();
         m_Ground = GetComponentInChildren<GroundCharacter2D>();
-        m_VTimeObject = GetComponent<VillagerTimeObject>();
+        //m_VTimeObject = GetComponent<VillagerTimeObject>();
         m_rigidbody = transform.Find("Motion").GetComponent<Rigidbody2D>();
 
         DeathSound = GetComponent<AudioSource>();
@@ -142,7 +140,7 @@ public abstract class Villager : Character
 
     protected virtual void OnEnable()
     {
-        SceneLinkedSMB<Villager>.Initialise(m_Animator, this);
+        SceneLinkedSMB<TimeObject>.Initialise(m_Animator, GetComponent<TimeObject>());
     }
 
     protected override void Update()
@@ -312,17 +310,17 @@ public abstract class Villager : Character
             classMeleeAttack.damageMult = val;
     }
 
-    public void EnableInsideMask()
+    public virtual void EnableInsideMask()
     {
         m_Sprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
     }
 
-    public void EnableOutsidMask()
+    public virtual void EnableOutsideMask()
     {
         m_Sprite.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
     }
 
-    public void NoMask()
+    public virtual void NoMask()
     {
         m_Sprite.maskInteraction = SpriteMaskInteraction.None;
     }

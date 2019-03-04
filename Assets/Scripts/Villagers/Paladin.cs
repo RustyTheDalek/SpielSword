@@ -41,6 +41,8 @@ public class Paladin : Villager
                         shielded = true;
                     }
 
+                    m_Aura.m_Sprite.color = m_Aura.m_Sprite.color.SetAlpha(shieldStrength);
+
                     shieldStrength -= Time.deltaTime;
 
                     moveSpeed = channelSpeed;
@@ -72,6 +74,16 @@ public class Paladin : Villager
                 
                 break;
         }
+    }
+
+    public void Setup(VillagerManager vilManager)
+    {
+        m_Aura.OnEnterAuraEvent += vilManager.IncCombosUsed;
+    }
+
+    public void Unsubscribe(VillagerManager villagerManager)
+    {
+        m_Aura.OnEnterAuraEvent -= villagerManager.IncCombosUsed;
     }
 
     public override void OnDeath(Vector2 attackDirection)

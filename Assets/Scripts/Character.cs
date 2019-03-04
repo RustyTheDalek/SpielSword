@@ -121,8 +121,7 @@ public class Character : MonoBehaviour
     /// <param name="attackDirection"> What direction character was attacked from</param>
     public virtual void OnDeath(Vector2 attackDirection)
     {
-        if(GetComponent<TimeObject>())
-            GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
+        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
 
         this.NamedLog("Dead");
 

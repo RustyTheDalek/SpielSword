@@ -13,7 +13,7 @@ public class Aura : MonoBehaviour
 
     GameObject creator;
 
-    public AuraTimeObject m_ATimeObject;
+    //public AuraTimeObject m_ATimeObject;
     public SpriteRenderer m_Sprite;
     public Collider2D m_Coll;
 
@@ -27,14 +27,13 @@ public class Aura : MonoBehaviour
         if (m_Coll.enabled != active)
         {
             m_Coll.enabled = active;
-            m_Sprite.enabled = active;
         }
     }
 
     public void Detach()
     {
         transform.SetParent(null);
-        m_ATimeObject.enabled = true;
+        //m_ATimeObject.enabled = true;
     }
 
     protected virtual void OnEnterAura(Villager villager)

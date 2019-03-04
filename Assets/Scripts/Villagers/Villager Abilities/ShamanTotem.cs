@@ -2,19 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShamanTotem : SpawnableSpriteTimeObject
+public class ShamanTotem : MonoBehaviour
 {
+    public float lifeTime = 15f;
+
+    float timer;
+
     //TODO: Have list of villagers interacted with this to check for multiple combos if desired
     public bool comboUsed = false;
 
+    [Header("References")]
+    public SpriteRenderer m_Sprite;
+    public Collider2D m_Collider;
+    public GameObject creator;
+
+    public delegate void TimeObjectEvent();
     public event TimeObjectEvent OnUsedTotem;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
+        timer = lifeTime;
+    }
 
-        OnStartPlayback += EnableCollider;
-        OnFinishPlayback+= DisableCollider;
+
+    private void Update()
+    {
+        if(timer > 0)
+            timer -= Time.deltaTime;
+        else
+        {
+            m_Sprite.enabled = false;
+            m_Collider.enabled = false;
+            enabled = false;
+            GetComponent<TimeObject>().FinishTracking();
+        }
+
+        m_Sprite.color = m_Sprite.color.SetAlpha(timer / lifeTime);
     }
 
     public void Setup(VillagerManager villagerManager)
@@ -27,29 +50,13 @@ public class ShamanTotem : SpawnableSpriteTimeObject
         OnUsedTotem -= villagerManager.IncCombosUsed;
     }
 
-    protected void EnableCollider()
-    {
-        GetComponent<Collider2D>().enabled = true;
-    }
-
-    protected void DisableCollider()
-    {
-        GetComponent<Collider2D>().enabled = false;
-    }
-
-    private void OnDestroy()
-    {
-        OnStartPlayback -= EnableCollider;
-        OnFinishPlayback-= DisableCollider;
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(creator.gameObject != collision.gameObject)
+        if (creator.gameObject != collision.gameObject)
         {
             if (!comboUsed)
             {
-                if(OnUsedTotem != null)
+                if (OnUsedTotem != null)
                     OnUsedTotem();
             }
         }

@@ -22,13 +22,13 @@ public class Warlock : WardVillager
 
         base.Awake();
 
-        teleportFX = currentWard.GetComponentInChildren<ParticleSystem>();
+        //teleportFX = currentWard.GetComponentInChildren<ParticleSystem>();
     }
 
     protected override void OnWardUse()
     {
         Debug.Log("Teleporting");
-        m_rigidbody.position = currentWard.transform.position;
+        //m_rigidbody.position = currentWard.transform.position;
         teleportFX.Play();
     }
 }

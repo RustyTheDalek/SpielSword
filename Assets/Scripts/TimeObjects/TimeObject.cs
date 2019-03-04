@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,8 +12,6 @@ using UnityEditor;
 /// </summary>
 public class TimeObject : MonoBehaviour
 {
-    protected TransformFrameData tempBFrame;
-    protected List<TransformFrameData> bFrames = new List<TransformFrameData>();
 
     public int startFrame, finishFrame;
 
@@ -27,13 +26,24 @@ public class TimeObject : MonoBehaviour
     [Tooltip("If enabled timeObject will recycle itself after rewinding")]
     public bool oneLife = false;
 
+    [Tooltip("If enabled timeObject will reset after rewinding")]
+    public bool rewindOnly = false;
+
+    public List<ObjectTrackBase> componentsToTrack;
+
+    public bool finished = false;
+
     #region Events
     public delegate void TimeObjectEvent();
-    public event TimeObjectEvent OnPlayFrame;
-    public event TimeObjectEvent OnStartPlayback;
+
+
+
+    public delegate void TimeObjectEventFrame(int frame);
+    public event TimeObjectEventFrame OnPlayFrame;
+    public event TimeObjectEventFrame OnStartPlayback;
     public event TimeObjectEvent OnFinishPlayback;
     public event TimeObjectEvent OnStartReverse;
-    public event TimeObjectEvent OnFinishReverse;
+    public event TimeObjectEventFrame OnFinishReverse;
     public event TimeObjectEvent OnTrackFrame;
     #endregion
 
@@ -41,24 +51,45 @@ public class TimeObject : MonoBehaviour
     {
         get
         {
-            if (bFrames != null)
-                return bFrames.Count;
-            else
-            {
-                Debug.LogWarning("Frame list null, returning 0");
-                return 0;
-            }
+            //    if (componentsToTrack != null)
+            //    {
+            //        return componentsToTrack[0].FrameCount;
+            //    }
+            //    else
+            //    {
+            //        Debug.LogWarning("Frame list null, returning 0");
+            return 0;
         }
+        //}
     }
 
     protected virtual void Awake()
     {
         startFrame = (int)TimeObjectManager.t;
 
-        OnTrackFrame += TrackTransform;
-        OnPlayFrame += PlayTransormFrame;
+        ObjectTrackBase[] objsToTrack = GetComponentsInChildren<ObjectTrackBase>();
 
-        OnFinishReverse += FinishReverse;
+        componentsToTrack.AddRange(objsToTrack);
+
+        foreach(ObjectTrackBase componentToTrack in componentsToTrack)
+        {
+            //componentToTrack.Initalise(this);
+            if (componentToTrack.objectTrackType == ObjectTrackType.FrameTracking)
+            {
+                OnTrackFrame += componentToTrack.TrackFrame;
+                OnPlayFrame += componentToTrack.PlayFrame;
+            }
+            OnStartPlayback     += componentToTrack.OnStartPlayback;
+            OnFinishPlayback    += componentToTrack.OnFinishPlayback;
+            OnStartReverse      += componentToTrack.OnStartReverse;
+            OnFinishReverse     += componentToTrack.OnFinishReverse;
+        }
+    }
+
+    protected virtual void OnEnable()
+    {
+        tObjectState = TimeObjectState.Present;
+        startFrame = (int)TimeObjectManager.t;
     }
 
     protected virtual void Update()
@@ -73,8 +104,9 @@ public class TimeObject : MonoBehaviour
                 {
                     case TimeObjectState.Present:
 
-                        if(OnTrackFrame != null)
-                            OnTrackFrame();
+                        if (OnTrackFrame != null)
+                                OnTrackFrame();
+
                         break;
 
                     case TimeObjectState.PastStart:
@@ -92,7 +124,12 @@ public class TimeObject : MonoBehaviour
                             tObjectState = TimeObjectState.PastPlaying;
 
                             if (OnStartPlayback != null)
-                                OnStartPlayback();
+                            {
+                                if (m_Behaviour)
+                                    m_Behaviour.enabled = false;
+
+                                OnStartPlayback(startFrame);
+                            }
                         }
 
                         break;
@@ -101,15 +138,16 @@ public class TimeObject : MonoBehaviour
 
                         //If finish frame is 0 then timeobject hasn't finished yet and 
                         //will need extra tracking
-                        if (TimeObjectManager.t >= finishFrame && finishFrame != 0 ||
-                            (finishFrame == 0 &&
-                            TimeObjectManager.t >= bFrames[bFrames.Count - 1].timeStamp))
+                        if ( TimeObjectManager.t >= finishFrame && finishFrame != 0 ||
+                            (TimeObjectManager.t >= finishFrame && !finished))
                         {
-                            if (finishFrame == 0)
+                            if (!finished)
                             {
                                 Debug.Log("Gotta finish: " + name);
                                 tObjectState = TimeObjectState.Present;
                                 OnTrackFrame();
+                                finishFrame = 0;
+                                m_Behaviour.enabled = true;
                             }
                             else
                             {
@@ -124,7 +162,7 @@ public class TimeObject : MonoBehaviour
                         }
 
                         if(OnPlayFrame != null)
-                            OnPlayFrame();
+                            OnPlayFrame((int)currentFrame);
 
                         break;
 
@@ -148,6 +186,21 @@ public class TimeObject : MonoBehaviour
                         break;
 
                     case TimeObjectState.PastStart:
+
+                        if(rewindOnly)
+                        {
+                            Debug.Log(name + ": Rewind only so resetting");
+
+                            foreach (ObjectTrackBase objectToTrack in componentsToTrack)
+                            {
+                                objectToTrack.ResetToPresent();
+
+                                m_Behaviour.enabled = false;
+
+                                tObjectState = TimeObjectState.Present;
+                                finishFrame = 0;
+                            }
+                        }
                         break;
 
                     case TimeObjectState.PastPlaying:
@@ -158,14 +211,19 @@ public class TimeObject : MonoBehaviour
                             tObjectState = TimeObjectState.PastStart;
 
                             if (OnFinishReverse != null)
-                                OnFinishReverse();
+                            {
+                                if (oneLife)
+                                    this.Recycle();
+
+                                OnFinishReverse(startFrame);
+                            }
 
                             currentFrame = 0;
                             break;
                         }
 
                         if(OnPlayFrame != null)
-                            OnPlayFrame();
+                            OnPlayFrame((int)currentFrame);
 
                         break;
 
@@ -173,12 +231,16 @@ public class TimeObject : MonoBehaviour
 
                         //We want to make sure it starts at the right time or starts 
                         //reversing if it's in the present
-                        if (TimeObjectManager.t <= finishFrame || (finishFrame == 0 &&
-                            TimeObjectManager.t <= bFrames[bFrames.Count - 1].timeStamp))
+                        if (TimeObjectManager.t <= finishFrame)
                         {
                             tObjectState = TimeObjectState.PastPlaying;
                             if (OnStartReverse != null)
+                            {
+                                if(m_Behaviour)
+                                    m_Behaviour.enabled = false;
+
                                 OnStartReverse();
+                            }
                         }
                         break;
                 }
@@ -187,58 +249,11 @@ public class TimeObject : MonoBehaviour
         }
     }
 
-    protected virtual void TrackTransform()
+    public void FinishTracking()
     {
-        tempBFrame = new TransformFrameData()
-        {
-            m_Position = transform.position,
-            m_Rotation = transform.rotation,
-            m_Scale = transform.localScale,
-            timeStamp = (int)TimeObjectManager.t,
-
-            enabled = gameObject.activeSelf
-        };
-        bFrames.Add(tempBFrame);
-    }
-
-    protected virtual void PlayTransormFrame()
-    {
-        if (bFrames.WithinRange(currentFrame))
-        {
-            transform.position = bFrames[(int)currentFrame].m_Position;
-            transform.rotation = bFrames[(int)currentFrame].m_Rotation;
-            transform.localScale = bFrames[(int)currentFrame].m_Scale;
-
-            gameObject.SetActive(bFrames[(int)currentFrame].enabled);
-        }
-    }
-
-    protected void StartReverse()
-    {
-        if (m_Behaviour)
-        {
-            m_Behaviour.enabled = false;
-        }
-    }
-
-    protected void StartPlayback()
-    {
-        if (m_Behaviour)
-        {
-            m_Behaviour.enabled = true;
-        }
-    }
-
-    protected void FinishReverse()
-    {
-        if (m_Behaviour)
-        {
-        }
-
-        if (oneLife)
-        {
-            this.Recycle();
-        }
+        tObjectState = TimeObjectState.PresentDead;
+        finishFrame = (int)TimeObjectManager.t;
+        finished = true;
     }
 
     /// <summary>
@@ -253,7 +268,7 @@ public class TimeObject : MonoBehaviour
             finishFrame = (int)TimeObjectManager.t;
         }
 
-        currentFrame = bFrames.Count + TimeObjectManager.DeltaT - 1;
+        //currentFrame = bFrames.Count + TimeObjectManager.DeltaT - 1;
 
         //Just in case a frame or to is skipped we will attempt to 
         //keep object in sync by subtracting the difference between their finish frame and current game time
@@ -269,10 +284,18 @@ public class TimeObject : MonoBehaviour
 
     private void OnDestroy()
     {
-        OnTrackFrame -= TrackTransform;
-        OnPlayFrame -= PlayTransormFrame;
-
-        OnFinishReverse -= FinishReverse;
+        foreach (ObjectTrackBase componentToTrack in componentsToTrack)
+        {
+            if (componentToTrack.objectTrackType == ObjectTrackType.FrameTracking)
+            {
+                OnTrackFrame -= componentToTrack.TrackFrame;
+                OnPlayFrame -= componentToTrack.PlayFrame;
+            }
+            OnStartPlayback -= componentToTrack.OnStartPlayback;
+            OnFinishPlayback -= componentToTrack.OnFinishPlayback;
+            OnStartReverse -= componentToTrack.OnStartReverse;
+            OnFinishReverse -= componentToTrack.OnFinishReverse;
+        }
     }
 }
                                                           

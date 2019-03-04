@@ -19,7 +19,7 @@ public class MinionHitAttack : MonoBehaviour
         {
             case "Villager":
 
-                Character character = coll.gameObject.GetComponent<Character>();
+                Character character = coll.gameObject.GetComponentInParent<Character>();
 
                 if(!LevelManager.GodMode)
                 {

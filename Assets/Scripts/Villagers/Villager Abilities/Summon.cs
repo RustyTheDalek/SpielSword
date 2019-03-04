@@ -46,6 +46,7 @@ public class Summon : Character
         lifeTimer = lifeSpan;
 
         SceneLinkedSMB<Summon>.Initialise(m_Animator, this);
+        SceneLinkedSMB<TimeObject>.Initialise(GetComponent<Animator>(), GetComponent<TimeObject>());
     }
 
     protected override void Update()
@@ -117,9 +118,12 @@ public class Summon : Character
 
     public override void OnDeath(Vector2 attackDirection)
     {
-        base.OnDeath(attackDirection);
+        m_Animator.SetFloat("xSpeed", 0);
+        m_Animator.SetFloat("ySpeed", 0);
+        m_Animator.SetFloat("xSpeedAbs", 0);
+        m_Animator.SetBool(m_HashDeadParam, true);
 
-        if(creator)
+        if (creator)
             creator.summonActive = false;
 
         m_GroundCharacter.SetCharacterCollisions(false);
