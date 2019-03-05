@@ -121,7 +121,7 @@ public class VillagerManager : MonoBehaviour {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
             classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last);
-            //classToSpawn = VillagerClass.Berserker;
+            classToSpawn = VillagerClass.Shaman;
 
             //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is
             villagerPrefabs[(int)classToSpawn].CreatePool(50);
@@ -353,10 +353,10 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in remainingVillagers)
             {
-                if (classToSpawn == VillagerClass.Paladin)
+                if (villager.GetComponent<Paladin>())
                     villager.GetComponent<Paladin>().Unsubscribe(this);
 
-                if (classToSpawn == VillagerClass.Shaman)
+                if (villager.GetComponent<Shaman>())
                     villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Unsubscribe(this);
             }
         }
@@ -366,10 +366,10 @@ public class VillagerManager : MonoBehaviour {
         {
             foreach (Villager villager in pastVillagers)
             {
-                if (classToSpawn == VillagerClass.Paladin)
+                if (villager.GetComponent<Paladin>())
                     villager.GetComponent<Paladin>().Unsubscribe(this);
 
-                if (classToSpawn == VillagerClass.Shaman)
+                if (villager.GetComponent<Shaman>())
                     villager.GetComponent<Shaman>().currentWard.GetComponent<ShamanTotem>().Unsubscribe(this);
             }
         }

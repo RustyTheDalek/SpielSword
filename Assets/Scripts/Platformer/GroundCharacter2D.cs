@@ -210,7 +210,6 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             {
                 if (m_Grounded)
                 {
-                    Debug.Log("Stopping");
                     m_Rigidbody2D.velocity *= (1 - m_dragFactor);
                     m_Rigidbody2D.angularVelocity *= (1 - m_dragFactor);
                 }
@@ -338,14 +337,12 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         // If the input is moving the character right and the character is facing left...
         if (desiredDirection > 0 && !FacingRight)
         {
-            Debug.Log("Flipping to right");
             // ... flip the player.
             Flip();
         }
         // Otherwise if the input is moving the character left and the character is facing right...
         else if (desiredDirection < 0 && FacingRight)
         {
-            Debug.Log("Flipping to left");
             // ... flip the player.
             Flip();
         }

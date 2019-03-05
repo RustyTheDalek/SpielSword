@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,7 +33,7 @@ public class FlightMinion : Minion
 
     #region Protected Variables
 
-    protected MinionPartTimeObject[] parts;
+    //protected MinionPartTimeObject[] parts;
 
     protected int moveSpeed;
 
@@ -61,7 +62,7 @@ public class FlightMinion : Minion
         m_Flying.SetMaxVelocity(patrolSpeed);
         moveSpeed = patrolSpeed;
 
-        parts = GetComponentsInChildren<MinionPartTimeObject>();
+        //parts = GetComponentsInChildren<MinionPartTimeObject>();
     }
 
     public override void OnEnable()
@@ -173,11 +174,29 @@ public class FlightMinion : Minion
         m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         m_rigidbody.simulated = false;
 
-        foreach(MinionPartTimeObject part in parts)
-        {
-            part.enabled = true;
-            part.Throw(attackDirection);
-        }
+        //TODO:Re-add this by the separating from TimeObject code
+        //foreach (MinionPartTimeObject part in parts)
+        //{
+        //    part.enabled = true;
+        //    part.Throw(attackDirection);
+
+        //public void Throw(Vector2 direction)
+        //{
+        //    m_Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+
+        //    Vector2 throwforce = (new Vector2(
+        //            direction.x * Random.Range(2f, 10f),
+        //            direction.y * Random.Range(1f, 5f)) * (m_Rigidbody2D.mass * m_Rigidbody2D.mass));
+
+        //    Debug.DrawRay(transform.position, throwforce, Color.red, 5f);
+
+        //    m_Rigidbody2D.AddForce(throwforce, ForceMode2D.Impulse);
+        //    m_Collider.enabled = true;
+        //    transform.SetParent(null);
+
+        //    gameObject.layer = LayerMask.NameToLayer("Bits");
+        //}
+        //}
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)

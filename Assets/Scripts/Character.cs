@@ -15,6 +15,13 @@ public class Character : MonoBehaviour
         {
             return health > 0;
         }
+        set
+        {
+            if (value)
+                health = 1;
+            else
+                health = 0;
+        }
     }
 
     public Transform Rigidbody

@@ -86,7 +86,7 @@ public class TimeObjectManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (t < startT && TimeObjectManager.timeState == TimeState.Backward)
+        if (t < startT && timeState == TimeState.Backward)
         {
             //Skips time ahead to when fight starts
             t = startT;
