@@ -122,8 +122,6 @@ public class GroundMinion : Minion
         if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, transform.right * moveDir, distanceFromWall, layerGround))
         {
             moveDir = -moveDir;
-
-            Debug.Log("At a wall swapping");
         }
 
         #endregion

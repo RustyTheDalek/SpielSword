@@ -36,8 +36,6 @@ public class TimeObject : MonoBehaviour
     #region Events
     public delegate void TimeObjectEvent();
 
-
-
     public delegate void TimeObjectEventFrame(int frame);
     public event TimeObjectEventFrame OnPlayFrame;
     public event TimeObjectEventFrame OnStartPlayback;
@@ -187,20 +185,7 @@ public class TimeObject : MonoBehaviour
 
                     case TimeObjectState.PastStart:
 
-                        if(rewindOnly)
-                        {
-                            Debug.Log(name + ": Rewind only so resetting");
 
-                            foreach (ObjectTrackBase objectToTrack in componentsToTrack)
-                            {
-                                objectToTrack.ResetToPresent();
-
-                                m_Behaviour.enabled = false;
-
-                                tObjectState = TimeObjectState.Present;
-                                finishFrame = 0;
-                            }
-                        }
                         break;
 
                     case TimeObjectState.PastPlaying:
@@ -216,6 +201,24 @@ public class TimeObject : MonoBehaviour
                                     this.Recycle();
 
                                 OnFinishReverse(startFrame);
+
+                                if (rewindOnly)
+                                {
+
+                                    Debug.Break();
+
+                                    Debug.Log(name + ": Rewind only so resetting");
+
+                                    foreach (ObjectTrackBase objectToTrack in componentsToTrack)
+                                    {
+                                        objectToTrack.ResetToPresent();
+
+                                        m_Behaviour.enabled = true;
+
+                                        tObjectState = TimeObjectState.Present;
+                                        finishFrame = 0;
+                                    }
+                                }
                             }
 
                             currentFrame = 0;
