@@ -21,7 +21,7 @@ public class TimeObject : MonoBehaviour
 
     [Tooltip("Script relating to logic that object uses in present so that it " +
     "can be disabled during runtime")]
-    public MonoBehaviour m_Behaviour;
+    public List<MonoBehaviour> m_Behaviours;
 
     [Tooltip("If enabled timeObject will recycle itself after rewinding")]
     public bool oneLife = false;
@@ -123,8 +123,13 @@ public class TimeObject : MonoBehaviour
 
                             if (OnStartPlayback != null)
                             {
-                                if (m_Behaviour)
-                                    m_Behaviour.enabled = false;
+                                if (m_Behaviours != null)
+                                {
+                                    foreach (MonoBehaviour behaviour in m_Behaviours)
+                                    {
+                                        behaviour.enabled = false;
+                                    }
+                                }
 
                                 OnStartPlayback(startFrame);
                             }
@@ -145,7 +150,14 @@ public class TimeObject : MonoBehaviour
                                 tObjectState = TimeObjectState.Present;
                                 OnTrackFrame();
                                 finishFrame = 0;
-                                m_Behaviour.enabled = true;
+
+                                if (m_Behaviours != null)
+                                {
+                                    foreach (MonoBehaviour behaviour in m_Behaviours)
+                                    {
+                                        behaviour.enabled = true;
+                                    }
+                                }
                             }
                             else
                             {
@@ -205,15 +217,17 @@ public class TimeObject : MonoBehaviour
                                 if (rewindOnly)
                                 {
 
-                                    Debug.Break();
-
-                                    Debug.Log(name + ": Rewind only so resetting");
-
                                     foreach (ObjectTrackBase objectToTrack in componentsToTrack)
                                     {
                                         objectToTrack.ResetToPresent();
 
-                                        m_Behaviour.enabled = true;
+                                        if (m_Behaviours != null)
+                                        {
+                                            foreach (MonoBehaviour behaviour in m_Behaviours)
+                                            {
+                                                behaviour.enabled = true;
+                                            }
+                                        }
 
                                         tObjectState = TimeObjectState.Present;
                                         finishFrame = 0;
@@ -239,8 +253,13 @@ public class TimeObject : MonoBehaviour
                             tObjectState = TimeObjectState.PastPlaying;
                             if (OnStartReverse != null)
                             {
-                                if(m_Behaviour)
-                                    m_Behaviour.enabled = false;
+                                if (m_Behaviours != null)
+                                {
+                                    foreach (MonoBehaviour behaviour in m_Behaviours)
+                                    {
+                                        behaviour.enabled = false;
+                                    }
+                                }
 
                                 OnStartReverse();
                             }

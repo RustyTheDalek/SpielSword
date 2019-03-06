@@ -33,7 +33,7 @@ public class FlightMinion : Minion
 
     #region Protected Variables
 
-    //protected MinionPartTimeObject[] parts;
+    protected Rigidbody2D[] minionParts;
 
     protected int moveSpeed;
 
@@ -62,7 +62,7 @@ public class FlightMinion : Minion
         m_Flying.SetMaxVelocity(patrolSpeed);
         moveSpeed = patrolSpeed;
 
-        //parts = GetComponentsInChildren<MinionPartTimeObject>();
+        minionParts = GetComponentsInChildren<Rigidbody2D>();
     }
 
     public override void OnEnable()
@@ -75,6 +75,15 @@ public class FlightMinion : Minion
         transform.position = orginalPosition + Vector3.right * orbitDistance;
 
         SceneLinkedSMB<FlightMinion>.Initialise(m_Animator, this);
+
+        foreach(Rigidbody2D part in minionParts)
+        {
+            if(part.GetComponent<PolygonCollider2D>())
+            {
+                part.bodyType = RigidbodyType2D.Static;
+                part.GetComponent<PolygonCollider2D>().enabled = false;
+            }
+        }
     }
 
     protected override void FixedUpdate()
@@ -175,28 +184,25 @@ public class FlightMinion : Minion
         m_rigidbody.simulated = false;
 
         //TODO:Re-add this by the separating from TimeObject code
-        //foreach (MinionPartTimeObject part in parts)
-        //{
-        //    part.enabled = true;
-        //    part.Throw(attackDirection);
+        foreach (Rigidbody2D part in minionParts)
+        {
+            if (part.GetComponent<PolygonCollider2D>())
+            {
+                part.bodyType = RigidbodyType2D.Dynamic;
 
-        //public void Throw(Vector2 direction)
-        //{
-        //    m_Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+                Vector2 throwforce = (new Vector2(
+                        attackDirection.x * Random.Range(2f, 10f),
+                        attackDirection.y * Random.Range(1f, 5f)) * (part.mass * part.mass));
 
-        //    Vector2 throwforce = (new Vector2(
-        //            direction.x * Random.Range(2f, 10f),
-        //            direction.y * Random.Range(1f, 5f)) * (m_Rigidbody2D.mass * m_Rigidbody2D.mass));
+                Debug.DrawRay(transform.position, throwforce, Color.red, 5f);
 
-        //    Debug.DrawRay(transform.position, throwforce, Color.red, 5f);
+                part.AddForce(throwforce, ForceMode2D.Impulse);
+                part.GetComponent<PolygonCollider2D>().enabled = true;
+                transform.SetParent(null);
 
-        //    m_Rigidbody2D.AddForce(throwforce, ForceMode2D.Impulse);
-        //    m_Collider.enabled = true;
-        //    transform.SetParent(null);
-
-        //    gameObject.layer = LayerMask.NameToLayer("Bits");
-        //}
-        //}
+                gameObject.layer = LayerMask.NameToLayer("Bits");
+            }
+        }
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)

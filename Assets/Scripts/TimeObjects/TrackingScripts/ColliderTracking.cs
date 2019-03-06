@@ -19,7 +19,8 @@ public class ColliderTracking : ObjectTrackBase
 
     public override void PlayFrame(int currentFrame)
     {
-        m_Collider.enabled = (collFrames[currentFrame]);
+        if(collFrames.WithinRange(currentFrame))
+            m_Collider.enabled = (collFrames[currentFrame]);
     }
 
     public override void TrackFrame()
