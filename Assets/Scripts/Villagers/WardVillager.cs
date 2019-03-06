@@ -50,6 +50,7 @@ public abstract class WardVillager : Villager
         {
             currentWard.gameObject.SetActive(true);
             currentWard.transform.position = Sprite.transform.position + wardOffset;
+            currentWard.GetComponent<TimeObject>().tObjectState = TimeObjectState.Present;
             wardActive = true;
         }
         else

@@ -20,7 +20,8 @@ public class SpriteRendererTracking : ObjectTrackBase
 
     public override void ResetToPresent()
     {
-        m_Sprite.enabled = true;
+        m_Sprite.enabled = sFrames[0].enabled;
+        sFrames.Clear();
     }
 
     override public void TrackFrame()
@@ -65,7 +66,7 @@ public class SpriteRendererTracking : ObjectTrackBase
 
     public override void OnStartReverse()
     {
-        m_Sprite.enabled = true;
+        m_Sprite.enabled = sFrames[sFrames.Count -1].enabled;
     }
 
     public override void OnFinishReverse(int startFrame)
@@ -80,12 +81,12 @@ public class SpriteRendererTracking : ObjectTrackBase
     public override void OnStartPlayback(int startFrame)
     {
         if (!m_Sprite.enabled && startFrame != 0)
-            m_Sprite.enabled = true;
+            m_Sprite.enabled = sFrames[sFrames.Count - 1].enabled;
     }
 
     public override void OnFinishPlayback()
     {
-        m_Sprite.enabled = false;
+        m_Sprite.enabled = sFrames[sFrames.Count - 1].enabled;
     }
 
 }

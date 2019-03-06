@@ -28,8 +28,6 @@ public class VillagerAttack : MonoBehaviour
         {
             lifeTime = Mathf.Infinity;
         }
-
-        m_Rigidbody.AddForce(Vector2.left * 10, ForceMode2D.Impulse);
     }
 
     protected virtual void Update()
