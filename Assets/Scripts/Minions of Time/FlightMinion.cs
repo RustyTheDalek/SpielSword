@@ -33,7 +33,7 @@ public class FlightMinion : Minion
 
     #region Protected Variables
 
-    protected Rigidbody2D[] minionParts;
+    protected MinionGibTracking[] minionParts;
 
     protected int moveSpeed;
 
@@ -62,7 +62,7 @@ public class FlightMinion : Minion
         m_Flying.SetMaxVelocity(patrolSpeed);
         moveSpeed = patrolSpeed;
 
-        minionParts = GetComponentsInChildren<Rigidbody2D>();
+        minionParts = GetComponentsInChildren<MinionGibTracking>();
     }
 
     public override void OnEnable()
@@ -75,15 +75,6 @@ public class FlightMinion : Minion
         transform.position = orginalPosition + Vector3.right * orbitDistance;
 
         SceneLinkedSMB<FlightMinion>.Initialise(m_Animator, this);
-
-        foreach(Rigidbody2D part in minionParts)
-        {
-            if(part.GetComponent<PolygonCollider2D>())
-            {
-                part.bodyType = RigidbodyType2D.Static;
-                part.GetComponent<PolygonCollider2D>().enabled = false;
-            }
-        }
     }
 
     protected override void FixedUpdate()
@@ -177,32 +168,34 @@ public class FlightMinion : Minion
 
     public override void OnDeath(Vector2 attackDirection)
     {
-        base.OnDeath(attackDirection);
+        StopAllCoroutines();
 
-        m_Animator.enabled = false;
-        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        moveDir = Vector2.zero;
+        m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.simulated = false;
 
+        m_Animator.SetFloat("xSpeed", 0);
+        m_Animator.SetFloat("ySpeed", 0);
+        m_Animator.SetFloat("xSpeedAbs", 0);
+        m_Animator.SetBool(m_HashDeadParam, true);
+        m_Animator.enabled = false;
+
+        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+
         //TODO:Re-add this by the separating from TimeObject code
-        foreach (Rigidbody2D part in minionParts)
+        foreach (MinionGibTracking part in minionParts)
         {
-            if (part.GetComponent<PolygonCollider2D>())
-            {
-                part.bodyType = RigidbodyType2D.Dynamic;
-
-                Vector2 throwforce = (new Vector2(
-                        attackDirection.x * Random.Range(2f, 10f),
-                        attackDirection.y * Random.Range(1f, 5f)) * (part.mass * part.mass));
-
-                Debug.DrawRay(transform.position, throwforce, Color.red, 5f);
-
-                part.AddForce(throwforce, ForceMode2D.Impulse);
-                part.GetComponent<PolygonCollider2D>().enabled = true;
-                transform.SetParent(null);
-
-                gameObject.layer = LayerMask.NameToLayer("Bits");
-            }
+            part.Throw(attackDirection);
         }
+
+        StartCoroutine(DelayToDeath());
+    }
+
+    public IEnumerator DelayToDeath()
+    {
+        yield return new WaitForSeconds(5f);
+
+        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)

@@ -2,7 +2,6 @@
 using UnityEngine;
 using System;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 /// <summary>
@@ -19,9 +18,8 @@ public class TimeObject : MonoBehaviour
 
     public float currentFrame;
 
-    [Tooltip("Script relating to logic that object uses in present so that it " +
-    "can be disabled during runtime")]
-    public List<MonoBehaviour> m_Behaviours;
+    [Tooltip("Scripts that we want disabled when playing back the object")]
+    public List<Behaviour> m_ComponentsToDisable;
 
     [Tooltip("If enabled timeObject will recycle itself after rewinding")]
     public bool oneLife = false;
@@ -72,15 +70,18 @@ public class TimeObject : MonoBehaviour
         foreach(ObjectTrackBase componentToTrack in componentsToTrack)
         {
             //componentToTrack.Initalise(this);
-            if (componentToTrack.objectTrackType == ObjectTrackType.FrameTracking)
+            if (componentToTrack.objectTrackType.HasFlag(ObjectTrackType.FrameTracking))
             {
                 OnTrackFrame += componentToTrack.TrackFrame;
                 OnPlayFrame += componentToTrack.PlayFrame;
             }
-            OnStartPlayback     += componentToTrack.OnStartPlayback;
-            OnFinishPlayback    += componentToTrack.OnFinishPlayback;
-            OnStartReverse      += componentToTrack.OnStartReverse;
-            OnFinishReverse     += componentToTrack.OnFinishReverse;
+            if (componentToTrack.objectTrackType.HasFlag(ObjectTrackType.EventTracking))
+            {
+                OnStartPlayback += componentToTrack.OnStartPlayback;
+                OnFinishPlayback += componentToTrack.OnFinishPlayback;
+                OnStartReverse += componentToTrack.OnStartReverse;
+                OnFinishReverse += componentToTrack.OnFinishReverse;
+            }
         }
     }
 
@@ -123,9 +124,9 @@ public class TimeObject : MonoBehaviour
 
                             if (OnStartPlayback != null)
                             {
-                                if (m_Behaviours != null)
+                                if (m_ComponentsToDisable != null)
                                 {
-                                    foreach (MonoBehaviour behaviour in m_Behaviours)
+                                    foreach (Behaviour behaviour in m_ComponentsToDisable)
                                     {
                                         behaviour.enabled = false;
                                     }
@@ -151,9 +152,9 @@ public class TimeObject : MonoBehaviour
                                 OnTrackFrame();
                                 finishFrame = 0;
 
-                                if (m_Behaviours != null)
+                                if (m_ComponentsToDisable != null)
                                 {
-                                    foreach (MonoBehaviour behaviour in m_Behaviours)
+                                    foreach (Behaviour behaviour in m_ComponentsToDisable)
                                     {
                                         behaviour.enabled = true;
                                     }
@@ -221,9 +222,9 @@ public class TimeObject : MonoBehaviour
                                     {
                                         objectToTrack.ResetToPresent();
 
-                                        if (m_Behaviours != null)
+                                        if (m_ComponentsToDisable != null)
                                         {
-                                            foreach (MonoBehaviour behaviour in m_Behaviours)
+                                            foreach (Behaviour behaviour in m_ComponentsToDisable)
                                             {
                                                 behaviour.enabled = true;
                                             }
@@ -253,9 +254,9 @@ public class TimeObject : MonoBehaviour
                             tObjectState = TimeObjectState.PastPlaying;
                             if (OnStartReverse != null)
                             {
-                                if (m_Behaviours != null)
+                                if (m_ComponentsToDisable != null)
                                 {
-                                    foreach (MonoBehaviour behaviour in m_Behaviours)
+                                    foreach (Behaviour behaviour in m_ComponentsToDisable)
                                     {
                                         behaviour.enabled = false;
                                     }
@@ -290,6 +291,8 @@ public class TimeObject : MonoBehaviour
             finishFrame = (int)TimeObjectManager.t;
         }
 
+        StopAllCoroutines();
+
         //currentFrame = bFrames.Count + TimeObjectManager.DeltaT - 1;
 
         //Just in case a frame or to is skipped we will attempt to 
@@ -308,15 +311,18 @@ public class TimeObject : MonoBehaviour
     {
         foreach (ObjectTrackBase componentToTrack in componentsToTrack)
         {
-            if (componentToTrack.objectTrackType == ObjectTrackType.FrameTracking)
+            if (componentToTrack.objectTrackType.HasFlag(ObjectTrackType.FrameTracking))
             {
                 OnTrackFrame -= componentToTrack.TrackFrame;
                 OnPlayFrame -= componentToTrack.PlayFrame;
             }
-            OnStartPlayback -= componentToTrack.OnStartPlayback;
-            OnFinishPlayback -= componentToTrack.OnFinishPlayback;
-            OnStartReverse -= componentToTrack.OnStartReverse;
-            OnFinishReverse -= componentToTrack.OnFinishReverse;
+            if (componentToTrack.objectTrackType.HasFlag(ObjectTrackType.EventTracking))
+            {
+                OnStartPlayback -= componentToTrack.OnStartPlayback;
+                OnFinishPlayback -= componentToTrack.OnFinishPlayback;
+                OnStartReverse -= componentToTrack.OnStartReverse;
+                OnFinishReverse -= componentToTrack.OnFinishReverse;
+            }
         }
     }
 }

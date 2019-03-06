@@ -103,4 +103,9 @@ public static class ExtensionMethods
 
         return new Vector2(cos * tx - sin * ty, sin * tx + cos * ty);
     }
+
+    public static bool HasFlag(this ObjectTrackType a, ObjectTrackType b)
+    {
+        return (a & b) == b;
+    }
 }

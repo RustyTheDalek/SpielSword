@@ -13,7 +13,8 @@ public class RigidbodyTracking : ObjectTrackBase
 
     public override void ResetToPresent()
     {
-        m_Rigidbody.simulated = true;
+        if (objectTrackType.HasFlag(ObjectTrackType.EventTracking))
+            m_Rigidbody.simulated = true;
     }
 
     public override void OnStartPlayback(int startFrame)
