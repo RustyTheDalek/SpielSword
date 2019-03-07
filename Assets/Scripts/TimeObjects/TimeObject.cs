@@ -217,21 +217,20 @@ public class TimeObject : MonoBehaviour
 
                                 if (rewindOnly)
                                 {
+                                    if (m_ComponentsToDisable != null)
+                                    {
+                                        foreach (Behaviour behaviour in m_ComponentsToDisable)
+                                        {
+                                            behaviour.enabled = true;
+                                        }
+                                    }
+
+                                    tObjectState = TimeObjectState.Present;
+                                    finishFrame = 0;
 
                                     foreach (ObjectTrackBase objectToTrack in componentsToTrack)
                                     {
                                         objectToTrack.ResetToPresent();
-
-                                        if (m_ComponentsToDisable != null)
-                                        {
-                                            foreach (Behaviour behaviour in m_ComponentsToDisable)
-                                            {
-                                                behaviour.enabled = true;
-                                            }
-                                        }
-
-                                        tObjectState = TimeObjectState.Present;
-                                        finishFrame = 0;
                                     }
                                 }
                             }
