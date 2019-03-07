@@ -20,8 +20,11 @@ public class SpriteRendererTracking : ObjectTrackBase
 
     public override void ResetToPresent()
     {
-        m_Sprite.enabled = sFrames[0].enabled;
-        sFrames.Clear();
+        if (objectTrackType.HasFlag(ObjectTrackType.FrameTracking))
+        {
+            m_Sprite.enabled = sFrames[0].enabled;
+            sFrames.Clear();
+        }
     }
 
     override public void TrackFrame()
