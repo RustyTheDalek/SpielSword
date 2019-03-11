@@ -86,7 +86,7 @@ public class Paladin : Villager
         m_Aura.OnEnterAuraEvent -= villagerManager.IncCombosUsed;
     }
 
-    public override void OnDeath(Vector2 attackDirection)
+    protected override void OnDeath(Vector2 attackDirection)
     {
         base.OnDeath(attackDirection);
 

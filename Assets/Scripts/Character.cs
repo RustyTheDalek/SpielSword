@@ -4,25 +4,12 @@
 /// Base class for player character and NPCS
 /// </summary>
 [RequireComponent(typeof(Animator))]
-public class Character : MonoBehaviour
+public class Character : LivingObject
 {
 
     #region Public Variables
 
-    public bool Alive
-    {
-        get
-        {
-            return health > 0;
-        }
-        set
-        {
-            if (value)
-                health = 1;
-            else
-                health = 0;
-        }
-    }
+
 
     public Transform Rigidbody
     {
@@ -42,11 +29,6 @@ public class Character : MonoBehaviour
     /// </summary>
     public Vector2 moveDir;
 
-    /// <summary>
-    /// If a Villager is shielded they are unable to take damage from attacks
-    /// </summary>
-    public bool shielded = false;
-
     #endregion
 
     #region Protected Variables
@@ -56,7 +38,6 @@ public class Character : MonoBehaviour
     /// </summary>
     public Transform rangedSpawn;
 
-    protected float health = 1;
 
     protected Animator m_Animator;
 
@@ -103,34 +84,13 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected virtual void Update()
-    {
-        if (!Alive)
-            return;
-    }
-
-    public virtual void OnHit(Vector2 attackDirection)
-    {
-        if (!shielded && Alive)
-        {
-            health--;
-
-            if (health <= 0)
-            {
-                OnDeath(attackDirection);
-            }
-        }
-    }
-
     /// <summary>
     /// What happens when character dies
     /// </summary>
     /// <param name="attackDirection"> What direction character was attacked from</param>
-    public virtual void OnDeath(Vector2 attackDirection)
+    protected override void OnDeath(Vector2 attackDirection)
     {
-        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
-
-        this.NamedLog("Dead");
+        base.OnDeath(attackDirection);
 
         moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
@@ -156,26 +116,20 @@ public class Character : MonoBehaviour
         m_Character.Move(moveDir);
     }
 
-    [ContextMenu("RestoreHelth")]
-    public void RestoreHealth()
+    public void PlayMeleeEffect()
     {
-        health = 1;
+        classMeleeAttack.PlayEffect();
     }
 
     /// <summary>
     /// Kills player
     /// </summary>
     [ContextMenu("Kill")]
-    public virtual void Kill()
+    public override void Kill()
     {
         health = 0;
         m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.angularVelocity = 0;
         OnDeath(Vector2.zero);
-    }
-
-    public void PlayMeleeEffect()
-    {
-        classMeleeAttack.PlayEffect();
     }
 }

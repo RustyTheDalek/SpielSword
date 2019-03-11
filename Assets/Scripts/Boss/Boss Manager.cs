@@ -9,14 +9,26 @@ using System;
 /// Created by : Sean Taylor    - 15/06/16
 /// Updated by : Ian Jones      - 13/04/18
 /// </summary>
-public abstract class BossManager : MonoBehaviour
+public abstract class BossManager : LivingObject
 {
     public const float MAXHEALTH = 400;
-    public float health = MAXHEALTH;
-
-    public BossHealthBar bossHealthBar;
 
     public BossState bossState = BossState.Waking;
+
+    [Header("References")]
+    public BossHealthBar bossHealthBar;
+
+    public Sprite originalHead;
+    public Sprite damageHead;
+
+    public Animator animator;
+
+    /// <summary>
+    /// Parts of Boss that can be damaged
+    /// </summary>
+    public List<SpriteRenderer> bossLimbs;
+
+    Timer damageTimer;
 
     #region Attack variables
 
@@ -112,27 +124,12 @@ public abstract class BossManager : MonoBehaviour
     /// </summary>
     public AnimationCurve bossSpeedUp;
 
-    public bool Alive
-	{
-		get
-		{
-			return health > 0;
-		}
-	}
-
-    /// <summary>
-    /// Parts of Boss that can be damaged
-    /// </summary>
-    public List<SpriteRenderer> bossLimbs;
-
     /// <summary>
     /// All parts of Boss including attacks 
     /// </summary>
     List<SpriteRenderer> bossComponents;
 
     #region Variables for retracing the Boss' Actions
-
-    public Animator animator;
 
     protected AnimatorStateInfo animatorStateInfo;
 
@@ -159,6 +156,8 @@ public abstract class BossManager : MonoBehaviour
 
     public virtual void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
 	{
+        health = MAXHEALTH;
+
         //Sets the counter for the list to zero
         for(int i = 0; i < 5; i++)
         {
@@ -329,6 +328,13 @@ public abstract class BossManager : MonoBehaviour
         return false;
     }
 
+    // Use this for initialization
+    protected void Start()
+    {
+        damageTimer = gameObject.AddComponent<Timer>();
+        damageTimer.Setup("Damager", .25f, true);
+    }
+
     // Update is called once per frame
     public virtual void Update()
     {
@@ -347,6 +353,11 @@ public abstract class BossManager : MonoBehaviour
         switch (TimeObjectManager.timeState)
         {
             case TimeState.Forward:
+
+                if (damageTimer.complete)
+                {
+                    bossLimbs[0].sprite = originalHead;
+                }
 
                 bossHealthBar.UpdateFill(health, MAXHEALTH);
 
@@ -578,16 +589,6 @@ public abstract class BossManager : MonoBehaviour
 		transform.DetachChildren();  
 	}
 
-    //void SetVHSEffect(bool enable)
-    //{
-    //    foreach (SpriteRenderer part in bossComponents)
-    //    {
-    //        string val = (enable == true) ? "VHSSprite" : "Sprite";
-    //        part.material = AssetManager.SpriteMaterials[val];
-    //        part.GetComponent<VHSEffect>().enabled = enable;
-    //    }
-    //}
-
     /// <summary>
     /// Turns Boss animations parts into Triggers based on Boolean
     /// </summary>
@@ -612,7 +613,6 @@ public abstract class BossManager : MonoBehaviour
     }
 
     public virtual void PlayEffect() { }
-    
 
     #region Debug Functions
 
@@ -636,4 +636,11 @@ public abstract class BossManager : MonoBehaviour
 
     #endregion
 
+    public override void OnHit(Vector2 attackDirection, float damageMultiplier)
+    {
+        base.OnHit(attackDirection, 1 * damageMultiplier);
+        //Bit hardcoded but first item in list should be head
+        bossLimbs[0].sprite = damageHead;
+        damageTimer.StartTimer();
+    }
 }

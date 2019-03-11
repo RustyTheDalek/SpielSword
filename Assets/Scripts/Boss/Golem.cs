@@ -26,7 +26,6 @@ public class Golem : BossManager {
         bossLimbs[3].sprite = utilityB[num];
         bossLimbs[4].sprite = utilityC[num];
         bossLimbs[5].sprite = rArmStages[num];
-        bossLimbs[6].sprite = lArmStages[num];
     }
 
     #region Stage One

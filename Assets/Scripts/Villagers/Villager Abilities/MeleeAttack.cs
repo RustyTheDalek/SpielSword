@@ -16,6 +16,9 @@ public class MeleeAttack : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Total damage including multiplier
+    /// </summary>
     public int Damage
     {
         get
@@ -28,9 +31,12 @@ public class MeleeAttack : MonoBehaviour
     {
         if (TimeObjectManager.timeState == TimeState.Forward)
         {
-            if (collision.name == "Head" && collision.GetComponent<Head>())
+            switch(LayerMask.LayerToName(collision.gameObject.layer))
             {
-                collision.GetComponent<Head>().OnHit(Damage);
+                case "Boss":
+                    collision.GetComponentInParent<LivingObject>().OnHit(
+                        collision.transform.PointTo(transform), Damage);
+                    break;
             }
         }
     }

@@ -67,9 +67,13 @@ public class VillagerAttack : MonoBehaviour
     {
         if (attackType == AttackType.Ranged)
         {
-            if (coll.gameObject.GetComponent<Head>())
+            switch (LayerMask.LayerToName(coll.gameObject.layer))
             {
-                coll.gameObject.GetComponent<Head>().OnHit(damage * damageMult);
+                case "Boss":
+
+                    coll.gameObject.GetComponent<LivingObject>().OnHit(
+                        transform.PointTo(coll.transform), damage * damageMult);
+                    break;
             }
         }
 

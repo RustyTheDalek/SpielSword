@@ -299,7 +299,7 @@ public abstract class Minion : Character
         state = startingState;
     }
 
-    public override void OnDeath(Vector2 attackDirection)
+    protected override void OnDeath(Vector2 attackDirection)
     {
         base.OnDeath(attackDirection);
         StopAllCoroutines();

@@ -166,7 +166,7 @@ public class FlightMinion : Minion
         moveDir = transform.position.PointTo(orginalPosition);
     }
 
-    public override void OnDeath(Vector2 attackDirection)
+    protected override void OnDeath(Vector2 attackDirection)
     {
         StopAllCoroutines();
 

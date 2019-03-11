@@ -33,10 +33,8 @@ public class WaterSlime : GroundMinion
         lastPos = m_rigidbody.position;
     }
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
-
         if(distanceTravelled >= distanceThreshold)
         {
             distanceTravelled = 0;

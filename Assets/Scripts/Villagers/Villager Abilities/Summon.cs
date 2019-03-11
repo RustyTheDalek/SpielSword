@@ -49,7 +49,7 @@ public class Summon : Character
         SceneLinkedSMB<TimeObject>.Initialise(GetComponent<Animator>(), GetComponent<TimeObject>());
     }
 
-    protected override void Update()
+    protected void Update()
     {
         if (!Alive)
             return;
@@ -116,7 +116,7 @@ public class Summon : Character
 
     #endregion
 
-    public override void OnDeath(Vector2 attackDirection)
+    protected override void OnDeath(Vector2 attackDirection)
     {
         m_Animator.SetFloat("xSpeed", 0);
         m_Animator.SetFloat("ySpeed", 0);

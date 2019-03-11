@@ -7,20 +7,16 @@ public class Fireball : VillagerAttack
     protected void OnTriggerStay2D(Collider2D collision)
     {
         if (attackType == AttackType.Ranged)
-        {
-            switch (LayerMask.LayerToName(collision.gameObject.layer))
+        { 
+            switch(LayerMask.LayerToName(collision.gameObject.layer))
             {
-                case "Minion":
-                    Debug.Log("Burning Minion");
-                    collision.GetComponentInParent<Character>().OnHit(transform.PointTo(collision.transform));
-                    break;
-
                 case "Boss":
 
-                    Debug.Log("Burning Minion");
-                    collision.GetComponent<Head>().OnHit(damageMult);
+                    collision.GetComponentInParent<LivingObject>().OnHit(
+                        transform.PointTo(collision.transform), damage * damageMult);
                     break;
             }
+
         }
     }
 }

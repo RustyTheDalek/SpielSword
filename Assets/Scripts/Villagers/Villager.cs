@@ -143,75 +143,72 @@ public abstract class Villager : Character
         SceneLinkedSMB<TimeObject>.Initialise(m_Animator, GetComponent<TimeObject>());
     }
 
-    protected override void Update()
+    protected virtual void Update()
     {
         m_Animator.SetBool(m_HashGroundParam, m_Ground.m_Grounded);
 
-        base.Update();
+        if (!Alive)
+            return;
 
-        if (Alive)
+        switch (villagerState)
         {
-            switch (villagerState)
-            {
-                case VillagerState.PresentVillager:
+            case VillagerState.PresentVillager:
 
-                    if (canAct)
+                if (canAct)
+                {
+                    //Get PlayerMovement
+                    if (canMove)
                     {
-                        //Get PlayerMovement
-                        if (canMove)
+                        moveDir = Vector2.zero;
+                        moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
+                    }
+
+                    attack = Input.GetButtonDown("Attack");
+
+                    if (attack)
+                    {
+                        switch (attackType)
                         {
-                            moveDir = Vector2.zero;
-                            moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
-                        }
-
-                        attack = Input.GetButtonDown("Attack");
-
-                        if (attack)
-                        {
-                            switch (attackType)
-                            {
-                                case AttackType.Melee:
-                                    m_Animator.SetTrigger(m_HashMeleeParam);
-                                    break;
-
-                                case AttackType.Ranged:
-
-                                    m_Animator.SetTrigger(m_HashRangedParam);
-                                    break;
-                            }
-                        }
-
-                        switch (special1Type)
-                        {
-                            case SpecialType.Hold:
-                                special1 = OnSpecial(Input.GetButton("Special1"), special1Type, m_HashSpecial1Param);
+                            case AttackType.Melee:
+                                m_Animator.SetTrigger(m_HashMeleeParam);
                                 break;
 
-                            case SpecialType.Press:
-                                special1 = OnSpecial(Input.GetButtonDown("Special1"), special1Type, m_HashSpecial1Param);
-                                break;
-                        }
+                            case AttackType.Ranged:
 
-                        switch (special2Type)
-                        {
-                            case SpecialType.Hold:
-                                special2 = OnSpecial(Input.GetButton("Special2"), special2Type, m_HashSpecial2Param);
+                                m_Animator.SetTrigger(m_HashRangedParam);
                                 break;
-
-                            case SpecialType.Press:
-                                special2 = OnSpecial(Input.GetButtonDown("Special2"), special2Type, m_HashSpecial2Param);
-                                break;
-                        }
-
-                        if (!m_Jump)
-                        {
-                            m_Jump = Input.GetButtonDown("Jump");
                         }
                     }
-                    break;
-            }
-        }
 
+                    switch (special1Type)
+                    {
+                        case SpecialType.Hold:
+                            special1 = OnSpecial(Input.GetButton("Special1"), special1Type, m_HashSpecial1Param);
+                            break;
+
+                        case SpecialType.Press:
+                            special1 = OnSpecial(Input.GetButtonDown("Special1"), special1Type, m_HashSpecial1Param);
+                            break;
+                    }
+
+                    switch (special2Type)
+                    {
+                        case SpecialType.Hold:
+                            special2 = OnSpecial(Input.GetButton("Special2"), special2Type, m_HashSpecial2Param);
+                            break;
+
+                        case SpecialType.Press:
+                            special2 = OnSpecial(Input.GetButtonDown("Special2"), special2Type, m_HashSpecial2Param);
+                            break;
+                    }
+
+                    if (!m_Jump)
+                    {
+                        m_Jump = Input.GetButtonDown("Jump");
+                    }
+                }
+                break;
+        }
     }
 
     protected override void FixedUpdate()
@@ -259,7 +256,7 @@ public abstract class Villager : Character
         return playerSpecial;
     }
 
-    public override void OnDeath(Vector2 attackDirection)
+    protected override void OnDeath(Vector2 attackDirection)
     {
         this.NamedLog("Dead");
 

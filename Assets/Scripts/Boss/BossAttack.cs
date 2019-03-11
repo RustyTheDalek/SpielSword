@@ -11,10 +11,12 @@ public class BossAttack : MonoBehaviour
     {
         //BossAttack can only damage Villagers, has to be enabled and God mode off for 
         //obvious reasons
-        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
+        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && enabled
             && !LevelManager.GodMode)
         {
-            coll.gameObject.GetComponentInParent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
+            Debug.Log("Boss Hit : " + coll.gameObject.name);
+            coll.gameObject.GetComponentInParent<LivingObject>().OnHit(
+                coll.transform.position.PointTo(transform.position));
         }
     }
 
@@ -22,10 +24,12 @@ public class BossAttack : MonoBehaviour
     {
         //BossAttack can only damage Villagers, has to be enabled and God mode off for 
         //obvious reasons
-        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && this.enabled
+        if (coll.gameObject.layer == (LayerMask.NameToLayer("Villager")) && enabled
             && !LevelManager.GodMode)
         {
-            coll.gameObject.GetComponentInParent<Villager>().OnHit(coll.transform.position.PointTo(transform.position));
+            Debug.Log("Boss Hit : " + name);
+            coll.gameObject.GetComponentInParent<LivingObject>().OnHit(
+                coll.transform.position.PointTo(transform.position));
         }
     }
 }
