@@ -22,6 +22,11 @@ public class RigidbodyTracking : ObjectTrackBase
         m_Rigidbody.simulated = true;
     }
 
+    public override void OnFinishPlayback()
+    {
+        m_Rigidbody.simulated = false;
+    }
+
     public override void OnStartReverse()
     {
         m_Rigidbody.simulated = false;
