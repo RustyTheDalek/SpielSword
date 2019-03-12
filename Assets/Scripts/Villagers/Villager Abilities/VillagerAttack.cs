@@ -6,12 +6,14 @@ using System.Collections;
 /// </summary>
 public class VillagerAttack : MonoBehaviour
 {
+    [Header("References")]
     public SpriteRenderer m_Sprite;
     public Rigidbody2D m_Rigidbody;
     public Collider2D m_Collider;
     public Animator anim;
     public AudioSource EffectNoise;
 
+    [Header("Settings")]
     public AttackType attackType;
 
     public float damage = 1;
@@ -70,6 +72,7 @@ public class VillagerAttack : MonoBehaviour
             switch (LayerMask.LayerToName(coll.gameObject.layer))
             {
                 case "Boss":
+                case "Minion":
 
                     coll.gameObject.GetComponent<LivingObject>().OnHit(
                         transform.PointTo(coll.transform), damage * damageMult);

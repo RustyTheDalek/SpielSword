@@ -311,18 +311,6 @@ public abstract class Minion : Character
 
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
-            case "Weapon":
-
-                //Don't want Minions to be killed by their attacks being hit.
-                if (Alive && 
-                    collision.otherCollider.gameObject.layer != 
-                    LayerMask.NameToLayer("EnemyAttacks"))
-                {
-                    health--;
-                    OnDeath(collision.transform.position.PointTo(transform.position));
-                }
-                break;
-
             case "Villager":
             case "PastVillager":
 
