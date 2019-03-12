@@ -27,4 +27,9 @@ public class ColliderTracking : ObjectTrackBase
     {
         collFrames.Add(m_Collider.enabled);
     }
+
+    public override void OnFinishPlayback()
+    {
+        m_Collider.enabled = false;
+    }
 }
