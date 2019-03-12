@@ -26,7 +26,9 @@ public abstract class BossManager : LivingObject
     /// <summary>
     /// Parts of Boss that can be damaged
     /// </summary>
-    public List<SpriteRenderer> bossLimbs;
+    DamageableSprite[] bossLimbs;
+
+    int damageStage = 0;
 
     Timer damageTimer;
 
@@ -156,56 +158,12 @@ public abstract class BossManager : LivingObject
 
     public virtual void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
 	{
-        health = MAXHEALTH;
-
-        //Sets the counter for the list to zero
-        for(int i = 0; i < 5; i++)
-        {
-            //Debug.Log(i);
-            numberOAttacks.Add(0);
-            stageAttacks.Add(new List<int>());
-            stageReplaying.Add(true);
-            timeEnteredStage.Add(0);
-        }
-
-        for (int i = 0; i < stageAttacks.Count; i++)
-        {
-            stageAttacks[i] = new List<int>();
-        }
-
         animator = GetComponent<Animator>();
 
         if (immediateStart)
             animator.enabled = true;
 
         OnStageOne();
-
-        switch(stageFinishType)
-        {
-            case StageFinishType.Healthloss:
-
-                stageHealthLimits = new List<float>(4)
-                {
-                    MAXHEALTH * .8f,
-                    MAXHEALTH * .6f,
-                    MAXHEALTH * .4f,
-                    MAXHEALTH * .2f
-                };
-
-                break;
-
-            case StageFinishType.Time:
-
-                stageTimers = new List<int>(4)
-                {
-                    60,
-                    60,
-                    60,
-                    60
-                };
-
-                break;
-        }
 
         OnBossDeath += OnDeath;
         timeManager.OnRestartLevel += Reset;
@@ -328,11 +286,64 @@ public abstract class BossManager : LivingObject
         return false;
     }
 
+    protected void Awake()
+    {
+        bossLimbs = GetComponentsInChildren<DamageableSprite>();
+    }
+
     // Use this for initialization
     protected void Start()
     {
+        health = MAXHEALTH;
         damageTimer = gameObject.AddComponent<Timer>();
         damageTimer.Setup("Damager", .25f, true);
+
+        switch (stageFinishType)
+        {
+            case StageFinishType.Healthloss:
+
+                stageHealthLimits = new List<float>(4)
+                {
+                    MAXHEALTH * .8f,
+                    MAXHEALTH * .6f,
+                    MAXHEALTH * .4f,
+                    MAXHEALTH * .2f
+                };
+
+                break;
+
+            case StageFinishType.Time:
+
+                stageTimers = new List<int>(4)
+                {
+                    60,
+                    60,
+                    60,
+                    60
+                };
+
+                break;
+        }
+
+        //Sets the counter for the list to zero
+        for (int i = 0; i < 5; i++)
+        {
+            //Debug.Log(i);
+            numberOAttacks.Add(0);
+            stageAttacks.Add(new List<int>());
+            stageReplaying.Add(true);
+            timeEnteredStage.Add(0);
+        }
+
+        for (int i = 0; i < stageAttacks.Count; i++)
+        {
+            stageAttacks[i] = new List<int>();
+        }
+    }
+
+    protected virtual void OnEnable()
+    {
+        DamageBoss(0);
     }
 
     // Update is called once per frame
@@ -356,21 +367,22 @@ public abstract class BossManager : LivingObject
 
                 if (damageTimer.complete)
                 {
-                    bossLimbs[0].sprite = originalHead;
+                    bossLimbs[0].m_Sprite.sprite = originalHead;
                 }
 
-                bossHealthBar.UpdateFill(health, MAXHEALTH);
+                if(bossHealthBar)
+                    bossHealthBar.UpdateFill(health, MAXHEALTH);
 
                 animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
                 if (health <= MAXHEALTH * .8f)
                 {
-                    DamageBoss(0);
+                    DamageBoss(1);
                 }
 
                 if (health <= MAXHEALTH * .4f)
                 {
-                    DamageBoss(1);
+                    DamageBoss(2);
                 }
 
                 switch (bossState)
@@ -521,6 +533,7 @@ public abstract class BossManager : LivingObject
         Debug.Log("Starting fight!");
 
         animator.enabled = true;
+        GetComponent<TimeObject>().enabled = true;
 
         //NextStage();
         //Game.bossState = BossState.Attacking;
@@ -562,13 +575,24 @@ public abstract class BossManager : LivingObject
     protected abstract void StageFourAttacks(int attack);
     protected abstract void StageFiveAttacks(int attack);
 
-    protected abstract void DamageBoss(int num);
+    protected virtual void DamageBoss(int num)
+    {
+        if (damageStage != num)
+        {
+            Debug.Log("Setting damage to Stage " + num);
+            foreach (DamageableSprite bossLimb in bossLimbs)
+            {
+                bossLimb.SetDamageSprite(num);
+            }
+            damageStage = num;
+        }
+    }
 
     public virtual void SetBossParts() { }
 
 	void Detach(GameObject target)
 	{
-		foreach (SpriteRenderer sprite in bossLimbs)
+		foreach (DamageableSprite sprite in bossLimbs)
 		{
 			if (!sprite.GetComponent<Rigidbody2D>())
 			{
@@ -595,7 +619,7 @@ public abstract class BossManager : LivingObject
     /// <param name="trigger"> Whether we want Colldiers to become triggers</param>
     public void SetTriggers(bool trigger)
     {
-        foreach (SpriteRenderer bossAttack in bossLimbs)
+        foreach (DamageableSprite bossAttack in bossLimbs)
         {
             if (bossAttack.GetComponent<BossAttack>())
             {
@@ -640,7 +664,7 @@ public abstract class BossManager : LivingObject
     {
         base.OnHit(attackDirection, 1 * damageMultiplier);
         //Bit hardcoded but first item in list should be head
-        bossLimbs[0].sprite = damageHead;
+        bossLimbs[0].m_Sprite.sprite = damageHead;
         damageTimer.StartTimer();
     }
 }

@@ -14,20 +14,6 @@ public class Golem : BossManager {
 
     public AudioSource EffectNoise;
 
-    /// <summary>
-    /// Causes next stage of Boss Damage
-    /// TODO:Make this much more elegant
-    /// </summary>
-    protected override void DamageBoss(int num)
-    {
-        bossLimbs[0].sprite = headStages[num];
-        bossLimbs[1].sprite = bodyStages[num];
-        bossLimbs[2].sprite = utilityA[num];
-        bossLimbs[3].sprite = utilityB[num];
-        bossLimbs[4].sprite = utilityC[num];
-        bossLimbs[5].sprite = rArmStages[num];
-    }
-
     #region Stage One
     public override void OnStageOne()
     {
@@ -242,7 +228,14 @@ public class Golem : BossManager {
 
         attacking = true;
     }// Selects the attack based on the given number
-	#endregion
+    #endregion
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        animator.Play("WakeUp", 0);
+    }
 
     public override void Reset()
     {

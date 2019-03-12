@@ -112,27 +112,34 @@ public class TimeObject : MonoBehaviour
 
                         if (TimeObjectManager.t >= startFrame)
                         {
-                            //This (hopefully keeps the object in sync if game time 
-                            //skips past it's start frame somehow
-                            if (TimeObjectManager.t > startFrame)
+                            if (rewindOnly)
                             {
-                                //Debug.Log("Game time (" + TimeObjectManager.t + ") + greater than " +
-                                //    "start frame (" + startFrame + ") + skipping ahead");
-                                currentFrame = (int)TimeObjectManager.t - startFrame;
+                                ResetTimeObject();
                             }
-                            tObjectState = TimeObjectState.PastPlaying;
-
-                            if (OnStartPlayback != null)
+                            else
                             {
-                                if (m_ComponentsToDisable != null)
+                                //This (hopefully keeps the object in sync if game time 
+                                //skips past it's start frame somehow
+                                if (TimeObjectManager.t > startFrame)
                                 {
-                                    foreach (Behaviour behaviour in m_ComponentsToDisable)
-                                    {
-                                        behaviour.enabled = false;
-                                    }
+                                    //Debug.Log("Game time (" + TimeObjectManager.t + ") + greater than " +
+                                    //    "start frame (" + startFrame + ") + skipping ahead");
+                                    currentFrame = (int)TimeObjectManager.t - startFrame;
                                 }
+                                tObjectState = TimeObjectState.PastPlaying;
 
-                                OnStartPlayback(startFrame);
+                                if (OnStartPlayback != null)
+                                {
+                                    if (m_ComponentsToDisable != null)
+                                    {
+                                        foreach (Behaviour behaviour in m_ComponentsToDisable)
+                                        {
+                                            behaviour.enabled = false;
+                                        }
+                                    }
+
+                                    OnStartPlayback(startFrame);
+                                }
                             }
                         }
 
@@ -142,7 +149,7 @@ public class TimeObject : MonoBehaviour
 
                         //If finish frame is 0 then timeobject hasn't finished yet and 
                         //will need extra tracking
-                        if ( TimeObjectManager.t >= finishFrame && finishFrame != 0 ||
+                        if (TimeObjectManager.t >= finishFrame && finishFrame != 0 ||
                             (TimeObjectManager.t >= finishFrame && !finished))
                         {
                             if (!finished)
@@ -217,21 +224,7 @@ public class TimeObject : MonoBehaviour
 
                                 if (rewindOnly)
                                 {
-                                    if (m_ComponentsToDisable != null)
-                                    {
-                                        foreach (Behaviour behaviour in m_ComponentsToDisable)
-                                        {
-                                            behaviour.enabled = true;
-                                        }
-                                    }
-
-                                    tObjectState = TimeObjectState.Present;
-                                    finishFrame = 0;
-
-                                    foreach (ObjectTrackBase objectToTrack in componentsToTrack)
-                                    {
-                                        objectToTrack.ResetToPresent();
-                                    }
+                                    ResetTimeObject();
                                 }
                             }
 
@@ -251,23 +244,41 @@ public class TimeObject : MonoBehaviour
                         if (TimeObjectManager.t <= finishFrame)
                         {
                             tObjectState = TimeObjectState.PastPlaying;
-                            if (OnStartReverse != null)
-                            {
-                                if (m_ComponentsToDisable != null)
-                                {
-                                    foreach (Behaviour behaviour in m_ComponentsToDisable)
-                                    {
-                                        behaviour.enabled = false;
-                                    }
-                                }
 
-                                OnStartReverse();
+                            if (m_ComponentsToDisable != null)
+                            {
+                                foreach (Behaviour behaviour in m_ComponentsToDisable)
+                                {
+                                    behaviour.enabled = false;
+                                }
                             }
+
+                            if (OnStartReverse != null)
+                                OnStartReverse();
                         }
                         break;
                 }
 
                 break;
+        }
+    }
+
+    private void ResetTimeObject()
+    {
+        if (m_ComponentsToDisable != null)
+        {
+            foreach (Behaviour behaviour in m_ComponentsToDisable)
+            {
+                behaviour.enabled = true;
+            }
+        }
+
+        tObjectState = TimeObjectState.Present;
+        finishFrame = 0;
+
+        foreach (ObjectTrackBase objectToTrack in componentsToTrack)
+        {
+            objectToTrack.ResetToPresent();
         }
     }
 
