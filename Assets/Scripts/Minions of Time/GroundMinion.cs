@@ -107,7 +107,8 @@ public class GroundMinion : Minion
                                 -transform.up, distanceToFloor, 
                                 LayerMask.GetMask("Ground")))
         {
-            moveDir = -moveDir;
+
+                moveDir = -moveDir;
             Debug.Log("No floor swapping");
         }
 
@@ -125,6 +126,18 @@ public class GroundMinion : Minion
         }
 
         #endregion
+    }
+
+    public override void CheckForTrap()
+    {
+        if (Physics2D.Raycast(m_GroundCharacter.m_Front.position,
+                                -transform.up, Mathf.Infinity,
+                                LayerMask.GetMask("EnemyAttacks")))
+        {
+            Debug.Log("Trap below");
+            moveDir = -moveDir;
+        }
+
     }
 
     protected override void OnDeath(Vector2 attackDirection)

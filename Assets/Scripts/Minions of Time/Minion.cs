@@ -109,6 +109,8 @@ public abstract class Minion : Character
 
     public abstract void Patrol();
 
+    public virtual void CheckForTrap() { }
+
     public virtual void MoveToClosest()
     {
         moveDir = m_rigidbody.position.PointTo(closestVillager.Rigidbody.position);

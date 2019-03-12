@@ -24,6 +24,7 @@ public class MinionPatrolSMB : SceneLinkedSMB<Minion>
                 {
                     case AttackType.Melee:
                         m_MonoBehaviour.MoveToClosest();
+                        m_MonoBehaviour.CheckForTrap();
                         m_MonoBehaviour.CheckMeleeAttackRange();
                         break;
 
