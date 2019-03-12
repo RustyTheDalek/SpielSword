@@ -19,10 +19,10 @@ public class Paladin : Villager
 
     protected override void Update()
     {
-        base.Update();
-
         if (!Alive)
             return;
+
+        base.Update();
 
         switch (villagerState)
         {
@@ -32,7 +32,7 @@ public class Paladin : Villager
                 //ability to special and renable when the shield is not in use
                 canSpecial = shieldStrength <= 0 ? false : true;
 
-                //When the player is trying to use the shield and the shield has 
+                //When the player is trying to use the shield or aura and the shield has 
                 //strength detract power  
                 if ((special1 || special2) && shieldStrength > 0)
                 {
@@ -40,8 +40,10 @@ public class Paladin : Villager
                     {
                         shielded = true;
                     }
-
-                    m_Aura.m_Sprite.color = m_Aura.m_Sprite.color.SetAlpha(shieldStrength);
+                    else if (special2)
+                    {
+                        m_Aura.m_Sprite.color = m_Aura.m_Sprite.color.SetAlpha(shieldStrength);
+                    }
 
                     shieldStrength -= Time.deltaTime;
 
