@@ -80,7 +80,8 @@ public class VillagerAttack : MonoBehaviour
             }
         }
 
-        anim.SetTrigger("Death");
+        if(anim)
+            anim.SetTrigger("Death");
     }
 
     protected void SetActive(bool active)
