@@ -16,6 +16,8 @@ public class BallisticMotion : MonoBehaviour {
 
     public Sprite[] m_SpriteVariants;
 
+    public bool m_LookAtTarget;
+
     SpriteRenderer m_Sprite;
 
 
@@ -43,7 +45,9 @@ public class BallisticMotion : MonoBehaviour {
         Vector3 newPos = curPos + (curPos-lastPos) + impulse*dt + accel*dt*dt;
         lastPos = curPos;
         transform.position = newPos;
-        transform.right = newPos - lastPos;
+        
+        if(m_LookAtTarget)
+            transform.right = newPos - lastPos;
 
         impulse = Vector3.zero;
 	}
@@ -56,7 +60,8 @@ public class BallisticMotion : MonoBehaviour {
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            this.enabled = false;
+            Debug.Log("Hitting Ground disabling");
+            gameObject.SetActive(false);
             GetComponent<Collider2D>().enabled = false;
         }
     }

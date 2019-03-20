@@ -130,9 +130,11 @@ public class GroundMinion : Minion
 
     public override void CheckForTrap()
     {
-        if (Physics2D.Raycast(m_GroundCharacter.m_Front.position,
-                                -transform.up, Mathf.Infinity,
-                                LayerMask.GetMask("EnemyAttacks")))
+
+        RaycastHit2D hit = Physics2D.Raycast(m_GroundCharacter.m_Front.position,
+                                -transform.up, Mathf.Infinity);
+
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EnemyAttacks"))
         {
             Debug.Log("Trap below");
             moveDir = -moveDir;
