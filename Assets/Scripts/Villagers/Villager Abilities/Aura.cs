@@ -30,12 +30,6 @@ public class Aura : MonoBehaviour
         }
     }
 
-    public void Detach()
-    {
-        transform.SetParent(null);
-        //m_ATimeObject.enabled = true;
-    }
-
     protected virtual void OnEnterAura(Villager villager)
     {
         Debug.Log("Entered " + name);

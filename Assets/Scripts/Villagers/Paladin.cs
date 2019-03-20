@@ -61,6 +61,8 @@ public class Paladin : Villager
                     shieldStrength += Time.deltaTime;
 
                     moveSpeed = maxSpeed;
+
+                    m_Aura.m_Sprite.color = m_Aura.m_Sprite.color.SetAlpha(0);
                 }
                 else if (shieldStrength > 1)
                 {
@@ -92,10 +94,7 @@ public class Paladin : Villager
     {
         base.OnDeath(attackDirection);
 
-        //TODO:Detach protection aura if it active
-        if(special2 && villagerState == VillagerState.PresentVillager)
-        {
-            m_Aura.Detach();
-        }
+        m_Aura.SetAura(special2 && canSpecial);
+        m_Aura.m_Sprite.color = m_Aura.m_Sprite.color.SetAlpha(0);
     }
 }
