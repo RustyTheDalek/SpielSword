@@ -1,60 +1,83 @@
 fileFormatVersion: 2
 guid: c99aa9b2c91e7a64083df037b5e9da4a
-timeCreated: 1454189569
-licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Jump_4
     21300002: Jump_5
     21300004: Jump_6
     21300006: Jump_13
-  serializedVersion: 2
+  externalObjects: {}
+  serializedVersion: 7
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 8
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Jump_4
+    - serializedVersion: 2
+      name: Jump_4
       rect:
         serializedVersion: 2
         x: 357
@@ -62,9 +85,19 @@ TextureImporter:
         width: 108
         height: 146
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Jump_5
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f14facfe1778074aa770e569f380ab8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jump_5
       rect:
         serializedVersion: 2
         x: 166
@@ -72,9 +105,19 @@ TextureImporter:
         width: 108
         height: 146
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Jump_6
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07fd73dfd056b0e448d074300a3c2a91
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jump_6
       rect:
         serializedVersion: 2
         x: 542
@@ -82,9 +125,19 @@ TextureImporter:
         width: 108
         height: 146
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Jump_13
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d426abe1ee75e04bb77eb7b7e089076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jump_13
       rect:
         serializedVersion: 2
         x: 21
@@ -92,9 +145,28 @@ TextureImporter:
         width: 108
         height: 146
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2de668f4d9a36da4a886c62f4225e195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

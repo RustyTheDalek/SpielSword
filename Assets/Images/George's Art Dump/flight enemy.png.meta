@@ -36,7 +36,7 @@ TextureImporter:
     21300062: Rock_12
     21300064: Rock_13
   externalObjects: {}
-  serializedVersion: 6
+  serializedVersion: 7
   mipmaps:
     mipMapMode: 1
     enableMipMap: 1
@@ -785,6 +785,8 @@ TextureImporter:
     edges: []
     weights: []
   spritePackingTag: FlyingMinion
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
