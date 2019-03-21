@@ -14,6 +14,13 @@ public class Golem : BossManager {
 
     public AudioSource EffectNoise;
 
+    Transform lookAtVillager;
+
+    public Transform golemEye;
+
+    public Vector2 minLookAt;
+    public Vector2 maxLookAt;
+
     #region Stage One
     public override void OnStageOne()
     {
@@ -230,11 +237,35 @@ public class Golem : BossManager {
     }// Selects the attack based on the given number
     #endregion
 
+    public override void Setup(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
+    {
+        base.Setup(arenaEntry, villagerManager, timeManager);
+
+        lookAtVillager = villagerManager.activeVillager.CharacterPosition;
+        villagerManager.OnNextVillager += LookAtNewVillager;
+    }
+
     protected override void OnEnable()
     {
         base.OnEnable();
 
         animator.Play("WakeUp", 0);
+    }
+
+    public override void Update()
+    {
+        if (!Alive)
+            return;
+
+        base.Update();
+
+        if (lookAtVillager)
+        {
+            golemEye.localPosition = golemEye.PointTo(lookAtVillager);
+            Debug.DrawRay(golemEye.position, golemEye.PointTo(lookAtVillager));
+            golemEye.localPosition = new Vector2(Mathf.Clamp(golemEye.localPosition.x, minLookAt.x, maxLookAt.x),
+                Mathf.Clamp(golemEye.localPosition.y, minLookAt.y, maxLookAt.y));
+        }
     }
 
     public override void Reset()
@@ -244,9 +275,22 @@ public class Golem : BossManager {
 		animator.Play("WakeUp", 0);
     }
 
+    protected void LookAtNewVillager(Villager villager)
+    {
+        Debug.Log("Looking at new Villager: " + villager.name);
+        lookAtVillager = villager.CharacterPosition;
+    }
+
     public override void PlayEffect()
     {
         EffectNoise.Stop();
         EffectNoise.Play();
+    }
+
+    public override void Unsubscribe(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
+    {
+        base.Unsubscribe(arenaEntry, villagerManager, timeManager);
+
+        villagerManager.OnNextVillager -= LookAtNewVillager;
     }
 }

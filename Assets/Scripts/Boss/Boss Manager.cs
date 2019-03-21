@@ -628,7 +628,7 @@ public abstract class BossManager : LivingObject
         }
     }
 
-    public void Unsubscribe(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
+    public virtual void Unsubscribe(ArenaEntry arenaEntry, VillagerManager villagerManager, TimeObjectManager timeManager)
     {
         OnBossDeath -= OnDeath;
         arenaEntry.OnPlayerEnterArena -= StartFight;
