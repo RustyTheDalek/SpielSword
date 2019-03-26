@@ -9,8 +9,6 @@ public class Character : LivingObject
 
     #region Public Variables
 
-
-
     public Transform Rigidbody
     {
         get

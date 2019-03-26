@@ -81,6 +81,7 @@ public abstract class Minion : Character
         m_Animator.SetBool(m_HashDeadParam, false);
         m_Animator.Play("Move");
         health = 1;
+        m_Animator.enabled = true;
         m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.constraints = startingConstraints;
         m_rigidbody.simulated = true;

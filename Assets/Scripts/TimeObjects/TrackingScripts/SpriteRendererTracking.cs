@@ -22,8 +22,11 @@ public class SpriteRendererTracking : ObjectTrackBase
     {
         if (objectTrackType.HasFlag(ObjectTrackType.FrameTracking))
         {
-            m_Sprite.enabled = sFrames[0].enabled;
-            sFrames.Clear();
+            if (sFrames != null && sFrames.Count > 1)
+            {
+                m_Sprite.enabled = sFrames[0].enabled;
+                sFrames.Clear();
+            }
         }
     }
 

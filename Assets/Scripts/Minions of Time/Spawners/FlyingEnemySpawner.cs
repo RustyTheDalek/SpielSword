@@ -87,6 +87,7 @@ public class FlyingEnemySpawner : TimeObjectLite
                 //If a minion has already been spawned at this time then renable
                 if (spawns.Count > currentSpawn)
                 {
+                    spawns[currentSpawn].enabled = true;
                     spawns[currentSpawn].gameObject.SetActive(true);
                 }
                 else //Otherwise spawn them 
