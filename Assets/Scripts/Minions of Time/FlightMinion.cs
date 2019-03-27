@@ -39,6 +39,13 @@ public class FlightMinion : Minion
 
     protected readonly int m_HashStuckParam = Animator.StringToHash("Stuck");
 
+    [Header("Eye setup")]
+
+    [SerializeField] protected Sprite eyeSpriteDefault;
+    [SerializeField] protected Sprite eyeSpriteAngry;
+
+    [SerializeField] protected SpriteRenderer eyeRenderer;
+
     #endregion
 
     #region Private Variables
@@ -143,6 +150,18 @@ public class FlightMinion : Minion
     {
         base.StopRest();
         moveSpeed = patrolSpeed;
+    }
+
+    protected override void OnFoundTarget()
+    {
+        base.OnFoundTarget();
+        eyeRenderer.sprite = eyeSpriteAngry;
+    }
+
+    protected override void OnNoMoreTargets()
+    {
+        base.OnNoMoreTargets();
+        eyeRenderer.sprite = eyeSpriteDefault;
     }
 
     protected void OnStuck()
