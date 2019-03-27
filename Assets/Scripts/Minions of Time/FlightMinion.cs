@@ -37,7 +37,6 @@ public class FlightMinion : Minion
 
     protected int moveSpeed;
 
-    protected readonly int m_HashAttackParam = Animator.StringToHash("Attack");
     protected readonly int m_HashStuckParam = Animator.StringToHash("Stuck");
 
     #endregion
@@ -84,6 +83,7 @@ public class FlightMinion : Minion
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
         m_Flying.Move(moveDir, moveSpeed);
+        Debug.Log("Move Speed : " + moveSpeed);
     }
 
     protected override void OnDrawGizmosSelected()
@@ -126,24 +126,22 @@ public class FlightMinion : Minion
     protected override void StartAttack()
     {
         base.StartAttack();
-
-        m_Animator.SetTrigger(m_HashAttackParam);
         moveSpeed = attackMoveSpeed;
+        //m_Flying.SetMaxVelocity(attackMoveSpeed);
+    }
+
+    protected override void StartAttack(AttackType attackToDo)
+    {
+        base.StartAttack(attackToDo);
+        moveSpeed = attackMoveSpeed;
+        //m_Flying.SetMaxVelocity(attackMoveSpeed);
     }
 
     public override void Attack() { }
 
-    protected override void OnNoMoreTargets()
-    {
-        base.OnNoMoreTargets();
-
-        m_Animator.SetBool(m_HashAttackParam, false);
-    }
-
     public override void StopRest()
     {
         base.StopRest();
-
         moveSpeed = patrolSpeed;
     }
 
