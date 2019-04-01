@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 0d520124fca620249ab140b82c660937
-timeCreated: 1529458307
-licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Head Stage 1
@@ -11,7 +9,8 @@ TextureImporter:
     21300008: UpperRing Stage 1
     21300010: MidRing Stage 1
     21300012: LowerRing Stage 1
-  serializedVersion: 4
+  externalObjects: {}
+  serializedVersion: 7
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -29,6 +28,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -39,7 +40,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: -1
     aniso: 16
-    mipBias: -1
+    mipBias: -100
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -51,49 +52,63 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Android
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Android
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: WebGL
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: WebGL
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -323,6 +338,12 @@ TextureImporter:
         - {x: 0.5, y: -191}
       physicsShape: []
       tessellationDetail: 1
+      bones: []
+      spriteID: a80faa3441b273e43a83f7e2eae97ad5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Larm Stage 1
       rect:
@@ -376,6 +397,12 @@ TextureImporter:
         - {x: -5, y: -246.5}
       physicsShape: []
       tessellationDetail: 0.1
+      bones: []
+      spriteID: 7fd94d8c3ebfb394caac80c90b08a005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Chest Stage 1
       rect:
@@ -611,6 +638,12 @@ TextureImporter:
         - {x: 29, y: -133}
       physicsShape: []
       tessellationDetail: 0.5
+      bones: []
+      spriteID: 25ed57935b11745408611e13729b44a1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Rarm Stage 1
       rect:
@@ -693,6 +726,12 @@ TextureImporter:
         - {x: 155, y: -142.5}
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 65798046fa4715e428cf12f3e0bec436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: UpperRing Stage 1
       rect:
@@ -884,6 +923,12 @@ TextureImporter:
         - {x: 18.5, y: -41.5}
       physicsShape: []
       tessellationDetail: 1
+      bones: []
+      spriteID: f80c533f640d047419da5991c249b6cc
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: MidRing Stage 1
       rect:
@@ -907,6 +952,12 @@ TextureImporter:
         - {x: 83.5, y: 30}
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: f10418f4148ae58429c3c6e151c80545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: LowerRing Stage 1
       rect:
@@ -931,9 +982,23 @@ TextureImporter:
         - {x: 10, y: -17}
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 9c7a103bd906ae44fb7aa04527af353c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
+    bones: []
+    spriteID: 
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

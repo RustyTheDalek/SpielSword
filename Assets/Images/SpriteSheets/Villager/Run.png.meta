@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 1d1c8b4a7c5c16542907762703744961
-timeCreated: 1454189300
-licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Run_0
@@ -13,53 +11,78 @@ TextureImporter:
     21300012: Run_10
     21300014: Run_13
     21300016: Run_14
-  serializedVersion: 2
+  externalObjects: {}
+  serializedVersion: 7
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 8
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Run_0
+    - serializedVersion: 2
+      name: Run_0
       rect:
         serializedVersion: 2
         x: 44
@@ -67,9 +90,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_1
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 416b2f5ea760fce4998c2fd48f2d69f9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_1
       rect:
         serializedVersion: 2
         x: 326
@@ -77,9 +110,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01e8c1c4689fc3646a60f2021d856f3b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_2
       rect:
         serializedVersion: 2
         x: 589
@@ -87,9 +130,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_3
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21ea604c86aa8c94e835fbe4d18ab89b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_3
       rect:
         serializedVersion: 2
         x: 885
@@ -97,9 +150,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_6
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6592136947576024f8af4efff7ee0293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_6
       rect:
         serializedVersion: 2
         x: 1148
@@ -107,9 +170,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_7
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 562fd3bfecf34a9438f2ba5f9fd0527e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_7
       rect:
         serializedVersion: 2
         x: 1402
@@ -117,9 +190,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_10
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3febd8968243e44984bccefa2b4ee51
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_10
       rect:
         serializedVersion: 2
         x: 34
@@ -127,9 +210,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_13
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aaff8d3bc40ffd248814d4eee06c78d9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_13
       rect:
         serializedVersion: 2
         x: 330
@@ -137,9 +230,19 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Run_14
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf32c52d2de7fad4785457b7a7287ced
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_14
       rect:
         serializedVersion: 2
         x: 594
@@ -147,9 +250,28 @@ TextureImporter:
         width: 125
         height: 150
       alignment: 9
-      pivot: {x: .479999989, y: .0599999987}
+      pivot: {x: 0.48, y: 0.06}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aca796900ceec5049b4c4c0690329c7a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
