@@ -9,7 +9,7 @@ TextureImporter:
     21300008: bubble_pop_one_spritesheet_512px_by_512px_per_frame_4
     21300010: bubble_pop_one_spritesheet_512px_by_512px_per_frame_5
   externalObjects: {}
-  serializedVersion: 6
+  serializedVersion: 7
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -218,6 +218,8 @@ TextureImporter:
     edges: []
     weights: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
