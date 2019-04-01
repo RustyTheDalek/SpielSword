@@ -18,6 +18,8 @@ public class RockMinion : GroundMinion {
     protected readonly int m_HashAttackRight = Animator.StringToHash("AttackRight");
     protected readonly int m_HashAttackThrowRocks = Animator.StringToHash("ThrowRocks");
 
+    protected List<MinionHitAttack> activeProjectiles = new List<MinionHitAttack>();
+
     #endregion
 
     protected override void StartAttack()
@@ -78,8 +80,6 @@ public class RockMinion : GroundMinion {
         int numSolutions;
         BallisticMotion proj;
 
-        
-
         for (int i = 0; i < m_ProjectilesToSpawn; i++)
         {
             Vector3 posVariance = new Vector3(
@@ -92,12 +92,34 @@ public class RockMinion : GroundMinion {
             proj = objToSpawn.Spawn(null, rangedSpawn.position);
             proj.Initialize(rangedSpawn.position, m_GravityStrength);
 
+            proj.GetComponent<MinionHitAttack>().OnAttack += OnHit;
+            activeProjectiles.Add(proj.GetComponent<MinionHitAttack>());
+
             var impulse = solutions[1];
 
             proj.AddImpulse(impulse);
 
             if (targetPos.x > transform.position.x)
                 proj.GetComponent<ConstantRotation>().m_RotationSpeed *= -1;
+        }
+    }
+
+    public void OnHit(MinionHitAttack projectile, bool hitPlayer)
+    {
+        if(hitPlayer)
+            m_Animator.SetTrigger(m_HashCelebrateParam);
+
+        projectile.OnAttack -= OnHit;
+
+        activeProjectiles.Remove(projectile);
+
+    }
+
+    private void OnApplicationQuit()
+    {
+        foreach(MinionHitAttack hitAttack in activeProjectiles)
+        {
+            hitAttack.OnAttack -= OnHit;
         }
     }
 }

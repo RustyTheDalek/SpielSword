@@ -11,6 +11,9 @@ public class MinionHitAttack : MonoBehaviour
     //public bool attacking = false;
     public AudioSource EN;
 
+    public delegate void AttackEvent(MinionHitAttack projectile, bool hitPlayer);
+    public event AttackEvent OnAttack;
+
     void OnCollisionEnter2D(Collision2D coll)
     {
         //Attack can only damage Villagers, has to be enabled and God mode off for 
@@ -24,6 +27,8 @@ public class MinionHitAttack : MonoBehaviour
                 if (!LevelManager.GodMode)
                 {
                     character.OnHit(coll.transform.position.PointTo(transform.position));
+                    if(OnAttack != null)
+                        OnAttack(this, true);
                 }
 
                 break;
