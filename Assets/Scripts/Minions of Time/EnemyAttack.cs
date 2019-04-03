@@ -8,10 +8,15 @@ using UnityEngine;
 /// </summary>
 public class EnemyAttack : MonoBehaviour
 {
+    public bool spawnable = false;
+
     //public bool attacking = false;
     [Header("References")]
     public AudioSource EN;
     public Animator m_Anim;
+    public Collider2D m_Coll;
+    public SpriteRenderer m_Sprite;
+    public Rigidbody2D m_Rigidbody;
 
     public delegate void AttackEvent(EnemyAttack projectile, bool hitPlayer);
     public event AttackEvent OnHit;
@@ -52,8 +57,16 @@ public class EnemyAttack : MonoBehaviour
 
     void TriggerDeath()
     {
-        if (m_Anim)
-            m_Anim.SetTrigger("Death");
+        if (spawnable)
+        {
+            if (m_Anim)
+                m_Anim.SetTrigger("Death");
+
+            m_Coll.enabled = false;
+            m_Sprite.enabled = false;
+            m_Rigidbody.simulated = false;
+            enabled = false;
+        }
     }
 
     public void PlayEffect()

@@ -48,7 +48,7 @@ public abstract class Minion : Character
 
     //For when Minions suceeds in killing a villager (In case we want a celebration
     //If not it can enforce the Minion goes back to patrolling
-    protected readonly int  m_HashCelebrateParam = Animator.StringToHash("Celebrate"),
+    protected readonly int m_HashCelebrateParam = Animator.StringToHash("Celebrate"),
                             m_HashMeleeAttackParam = Animator.StringToHash("Melee"),
                             m_HashRangedAttackParam = Animator.StringToHash("Ranged");
 
@@ -74,7 +74,7 @@ public abstract class Minion : Character
     }
 
     public virtual void OnEnable()
-    { 
+    {
         StopAllCoroutines();
 
         gameObject.layer = startingLayer;
@@ -95,7 +95,7 @@ public abstract class Minion : Character
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        if(m_rigidbody)
+        if (m_rigidbody)
             Gizmos.DrawWireSphere(m_rigidbody.position, meleeAttackRange);
 
         if (attackType == AttackType.Ranged)
@@ -157,6 +157,11 @@ public abstract class Minion : Character
     public virtual void Attack()
     {
         moveDir = desiredAttackMoveDirection;
+    }
+
+    public virtual void StopAttack()
+    {
+        state = MinionState.Patrolling;
     }
 
     public virtual void StartCelebrate()
