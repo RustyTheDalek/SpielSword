@@ -9,10 +9,12 @@ using UnityEngine;
 public class EnemyAttack : MonoBehaviour
 {
     //public bool attacking = false;
+    [Header("References")]
     public AudioSource EN;
+    public Animator m_Anim;
 
     public delegate void AttackEvent(EnemyAttack projectile, bool hitPlayer);
-    public event AttackEvent OnAttack;
+    public event AttackEvent OnHit;
 
     void OnCollisionEnter2D(Collision2D coll)
     {
@@ -27,12 +29,31 @@ public class EnemyAttack : MonoBehaviour
                 if (!LevelManager.GodMode)
                 {
                     character.OnHit(coll.transform.position.PointTo(transform.position));
-                    if(OnAttack != null)
-                        OnAttack(this, true);
+
+                    if(OnHit != null)
+                        OnHit(this, true);
+
+                    TriggerDeath();
+
                 }
 
                 break;
+
+            case "Ground":
+
+                if (OnHit != null)
+                    OnHit(this, false);
+
+                TriggerDeath();
+
+                break;
         }
+    }
+
+    void TriggerDeath()
+    {
+        if (m_Anim)
+            m_Anim.SetTrigger("Death");
     }
 
     public void PlayEffect()

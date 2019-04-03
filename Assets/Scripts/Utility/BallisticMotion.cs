@@ -7,7 +7,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class BallisticMotion : MonoBehaviour {
+public class BallisticMotion : EnemyAttack
+{
 
     // Private fields
     Vector3 lastPos;
@@ -20,15 +21,15 @@ public class BallisticMotion : MonoBehaviour {
 
     SpriteRenderer m_Sprite;
 
-
-    // Methods
-    void Awake() {
+    void Awake()
+    {
         // Keep scene heirarchy clean
         //transform.parent = GameObject.FindGameObjectWithTag("Projectiles").transform;
         m_Sprite = GetComponent<SpriteRenderer>();
     }
 
-    public void Initialize(Vector3 pos, float gravity) {
+    public void Initialize(Vector3 pos, float gravity)
+    {
         transform.position = pos;
         lastPos = transform.position;
         this.gravity = gravity;
@@ -36,7 +37,8 @@ public class BallisticMotion : MonoBehaviour {
         m_Sprite.sprite = m_SpriteVariants[Random.Range(0, m_SpriteVariants.Length - 1)];
     }
 
-	void FixedUpdate () {
+	void FixedUpdate ()
+    {
         // Simple verlet integration
         float dt = Time.fixedDeltaTime;
         Vector3 accel = -gravity * Vector3.up;
@@ -52,17 +54,8 @@ public class BallisticMotion : MonoBehaviour {
         impulse = Vector3.zero;
 	}
 
-    public void AddImpulse(Vector3 impulse) {
-        this.impulse += impulse;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void AddImpulse(Vector3 impulse)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            Debug.Log("Hitting Ground disabling");
-            gameObject.SetActive(false);
-            GetComponent<Collider2D>().enabled = false;
-        }
+        this.impulse += impulse;
     }
 }

@@ -92,8 +92,8 @@ public class RockMinion : GroundMinion {
             proj = objToSpawn.Spawn(null, rangedSpawn.position);
             proj.Initialize(rangedSpawn.position, m_GravityStrength);
 
-            proj.GetComponent<EnemyAttack>().OnAttack += OnHit;
-            activeProjectiles.Add(proj.GetComponent<EnemyAttack>());
+            proj.OnHit += OnHit;
+            activeProjectiles.Add(proj);
 
             var impulse = solutions[1];
 
@@ -109,7 +109,7 @@ public class RockMinion : GroundMinion {
         if(hitPlayer)
             m_Animator.SetTrigger(m_HashCelebrateParam);
 
-        projectile.OnAttack -= OnHit;
+        projectile.OnHit -= OnHit;
 
         activeProjectiles.Remove(projectile);
 
@@ -119,7 +119,7 @@ public class RockMinion : GroundMinion {
     {
         foreach(EnemyAttack hitAttack in activeProjectiles)
         {
-            hitAttack.OnAttack -= OnHit;
+            hitAttack.OnHit -= OnHit;
         }
     }
 }
