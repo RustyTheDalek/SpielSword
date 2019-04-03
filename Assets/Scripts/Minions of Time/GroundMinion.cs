@@ -40,7 +40,7 @@ public class GroundMinion : Minion
         base.Awake();
 
         m_GroundCharacter = GetComponent<GroundCharacter2D>();
-        minionAttack = GetComponentInChildren<EnemyAttack>();
+        minionAttack = GetComponentInChildren<EnemyAttack>(true);
         m_rigidbody = transform.Find("Motion").GetComponentInChildren<Rigidbody2D>();
 
         //Set a random start direction
