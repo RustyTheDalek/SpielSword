@@ -6,12 +6,12 @@ using UnityEngine;
 /// Script for registering Boss attacks
 /// Created     : Sean Taylor - 24/04/18
 /// </summary>
-public class MinionHitAttack : MonoBehaviour
+public class EnemyAttack : MonoBehaviour
 {
     //public bool attacking = false;
     public AudioSource EN;
 
-    public delegate void AttackEvent(MinionHitAttack projectile, bool hitPlayer);
+    public delegate void AttackEvent(EnemyAttack projectile, bool hitPlayer);
     public event AttackEvent OnAttack;
 
     void OnCollisionEnter2D(Collision2D coll)

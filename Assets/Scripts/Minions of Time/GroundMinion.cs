@@ -31,7 +31,7 @@ public class GroundMinion : Minion
     bool attackLeft = false,
         attackRight = false;
 
-    private MinionHitAttack minionAttack;
+    private EnemyAttack minionAttack;
 
     #endregion
 
@@ -40,7 +40,7 @@ public class GroundMinion : Minion
         base.Awake();
 
         m_GroundCharacter = GetComponent<GroundCharacter2D>();
-        minionAttack = GetComponentInChildren<MinionHitAttack>();
+        minionAttack = GetComponentInChildren<EnemyAttack>();
         m_rigidbody = transform.Find("Motion").GetComponentInChildren<Rigidbody2D>();
 
         //Set a random start direction

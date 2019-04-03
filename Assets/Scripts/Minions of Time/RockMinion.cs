@@ -18,7 +18,7 @@ public class RockMinion : GroundMinion {
     protected readonly int m_HashAttackRight = Animator.StringToHash("AttackRight");
     protected readonly int m_HashAttackThrowRocks = Animator.StringToHash("ThrowRocks");
 
-    protected List<MinionHitAttack> activeProjectiles = new List<MinionHitAttack>();
+    protected List<EnemyAttack> activeProjectiles = new List<EnemyAttack>();
 
     #endregion
 
@@ -92,8 +92,8 @@ public class RockMinion : GroundMinion {
             proj = objToSpawn.Spawn(null, rangedSpawn.position);
             proj.Initialize(rangedSpawn.position, m_GravityStrength);
 
-            proj.GetComponent<MinionHitAttack>().OnAttack += OnHit;
-            activeProjectiles.Add(proj.GetComponent<MinionHitAttack>());
+            proj.GetComponent<EnemyAttack>().OnAttack += OnHit;
+            activeProjectiles.Add(proj.GetComponent<EnemyAttack>());
 
             var impulse = solutions[1];
 
@@ -104,7 +104,7 @@ public class RockMinion : GroundMinion {
         }
     }
 
-    public void OnHit(MinionHitAttack projectile, bool hitPlayer)
+    public void OnHit(EnemyAttack projectile, bool hitPlayer)
     {
         if(hitPlayer)
             m_Animator.SetTrigger(m_HashCelebrateParam);
@@ -117,7 +117,7 @@ public class RockMinion : GroundMinion {
 
     private void OnApplicationQuit()
     {
-        foreach(MinionHitAttack hitAttack in activeProjectiles)
+        foreach(EnemyAttack hitAttack in activeProjectiles)
         {
             hitAttack.OnAttack -= OnHit;
         }
