@@ -47,14 +47,14 @@ public class GroundMinion : Minion
         if (randomStartDir)
             startDir = (Random.Range(0, 2) > 0) ? Direction.Right : Direction.Left;
 
-        moveDir = startDir.ToVector2();
+        pData.moveDir = startDir.ToVector2();
     }
 
     public override void OnEnable()
     {
         base.OnEnable();
 
-        moveDir = startDir.ToVector2();
+        pData.moveDir = startDir.ToVector2();
     }
 
     protected override void OnDrawGizmosSelected()
@@ -71,44 +71,46 @@ public class GroundMinion : Minion
 
         Gizmos.color = Color.green;
         if (m_GroundCharacter)
-            Gizmos.DrawRay(m_GroundCharacter.m_Rigidbody2D.position, moveDir);
+            Gizmos.DrawRay(m_GroundCharacter.m_Rigidbody2D.position, pData.moveDir);
     }
 
     protected override void FixedUpdate()
     {
-        m_Animator.SetFloat("xDir", moveDir.x);
-        m_Animator.SetFloat("yDir", moveDir.y);
-        m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(moveDir.x));
+        m_Animator.SetFloat("xDir", pData.moveDir.x);
+        m_Animator.SetFloat("yDir", pData.moveDir.y);
+        m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(pData.moveDir.x));
         m_Animator.SetFloat("xVel", m_rigidbody.velocity.x);
+
+        Debug.Log(pData.moveDir);
 
         if (m_GroundCharacter.m_ManualFaceDirection && closestVillager)
         {
             var vilDir = (int)Mathf.Sign((closestVillager.Rigidbody.position.XY() - m_rigidbody.position).x);
-            m_GroundCharacter.Move(moveDir, false, vilDir);
+            m_GroundCharacter.Move(pData, false, vilDir);
             //m_Animator.SetFloat("Direction", vilDir);
         }
         else
         {
-            m_GroundCharacter.Move(moveDir, false);
+            m_GroundCharacter.Move(pData);
         }
     }
 
     public override void Patrol()
     {
-        //if(moveDir == Vector2.zero)
-        //{
-        //    moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
-        //}
+        if (pData.moveDir == Vector2.zero)
+        {
+            pData.moveDir = (Random.Range(0, 2) > 0) ? Vector2.right : Vector2.left;
+        }
 
         #region Find the floor
 
-        if(m_GroundCharacter.m_Grounded && 
+        if (m_GroundCharacter.m_Grounded && 
             !Physics2D.Raycast( m_GroundCharacter.m_Front.position, 
                                 -transform.up, distanceToFloor, 
                                 LayerMask.GetMask("Ground")))
         {
 
-                moveDir = -moveDir;
+            pData.moveDir = -pData.moveDir;
             Debug.Log("No floor swapping");
         }
 
@@ -118,11 +120,11 @@ public class GroundMinion : Minion
 
         #region Find the wall
 
-        Debug.DrawRay(m_GroundCharacter.m_Front.position, transform.right * moveDir * distanceFromWall, Color.red);
+        Debug.DrawRay(m_GroundCharacter.m_Front.position, transform.right * pData.moveDir * distanceFromWall, Color.red);
 
-        if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, transform.right * moveDir, distanceFromWall, layerGround))
+        if (Physics2D.Raycast(m_GroundCharacter.m_Front.position, transform.right * pData.moveDir, distanceFromWall, layerGround))
         {
-            moveDir = -moveDir;
+            pData.moveDir = -pData.moveDir;
         }
 
         #endregion
@@ -137,7 +139,7 @@ public class GroundMinion : Minion
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("EnemyAttacks"))
         {
             Debug.Log("Trap below");
-            moveDir = -moveDir;
+            pData.moveDir = -pData.moveDir;
         }
 
     }
@@ -167,16 +169,9 @@ public class GroundMinion : Minion
         }
     }
 
-    public override void Attack()
-    {
-        moveDir = Vector2.zero;
-    }
-
     public override void StartCelebrate()
     {
         base.StartCelebrate();
-
-        moveDir = Vector2.zero;
 
         if (!m_GroundCharacter.m_AbsoluteMoveDirection)
             m_GroundCharacter.m_ManualFaceDirection = false;

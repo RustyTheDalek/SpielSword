@@ -72,6 +72,6 @@ public class Berserker : Villager
     {
         m_rigidbody.bodyType = type;
         m_rigidbody.velocity = Vector3.zero;
-        moveDir = Vector2.zero;
+        pData.moveDir = Vector2.zero;
     }
 }

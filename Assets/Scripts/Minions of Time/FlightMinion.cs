@@ -3,16 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(FlyingCharacter2D))]
+[RequireComponent(typeof(PlatformerMotion2D))]
 public class FlightMinion : Minion
 {
     #region Public Variables
-
-    [Range(1, 100)]
-    public int patrolSpeed = 7;
-
-    [Range(1, 100)]
-    public int attackMoveSpeed = 15;
 
     /// <summary>
     /// Distance Minion orbits from origin
@@ -35,8 +29,6 @@ public class FlightMinion : Minion
 
     protected MinionGibTracking[] minionParts;
 
-    protected int moveSpeed;
-
     protected readonly int m_HashStuckParam = Animator.StringToHash("Stuck");
 
     [Header("Eye setup")]
@@ -52,8 +44,6 @@ public class FlightMinion : Minion
 
     private Vector3 orginalPosition;
 
-    private FlyingCharacter2D m_Flying;
-
     #endregion
 
     protected override void Awake()
@@ -64,10 +54,6 @@ public class FlightMinion : Minion
         //Move the Minion by the distance we want him to Orbit
         transform.position = transform.position + Vector3.right * orbitDistance;
 
-        m_Flying = GetComponent<FlyingCharacter2D>();
-        m_Flying.SetMaxVelocity(patrolSpeed);
-        moveSpeed = patrolSpeed;
-
         minionParts = GetComponentsInChildren<MinionGibTracking>();
     }
 
@@ -75,9 +61,7 @@ public class FlightMinion : Minion
     {
         base.OnEnable();
 
-        moveSpeed = patrolSpeed;
-        moveDir = Vector2.zero;
-
+        pData.moveDir = Vector2.zero;
         transform.position = orginalPosition + Vector3.right * orbitDistance;
 
         SceneLinkedSMB<FlightMinion>.Initialise(m_Animator, this);
@@ -85,12 +69,11 @@ public class FlightMinion : Minion
 
     protected override void FixedUpdate()
     {
-        m_Animator.SetFloat("xSpeed", moveDir.x * 7);
-        m_Animator.SetFloat("ySpeed", moveDir.y * 7);
+        m_Animator.SetFloat("xSpeed", pData.moveDir.x * 7);
+        m_Animator.SetFloat("ySpeed", pData.moveDir.y * 7);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
-        m_Flying.Move(moveDir, moveSpeed);
-        Debug.Log("Move Speed : " + moveSpeed);
+        m_Character.Move(pData);
     }
 
     protected override void OnDrawGizmosSelected()
@@ -111,7 +94,7 @@ public class FlightMinion : Minion
         }
 
         //TODO: improve this, sort of works but it takes them a while to get back
-        moveDir = new Vector2(-1, transform.position.PointTo(orginalPosition).y);
+        pData.moveDir = new Vector2(-1, transform.position.PointTo(orginalPosition).y);
     }
 
     public override void Patrol()
@@ -124,32 +107,10 @@ public class FlightMinion : Minion
             Mathf.Sqrt(toOriginal.x.Sqd() + toOriginal.y.Sqd());
         //We use the direction to the Origin and the desired distance to 
         //adjust the move direction to keep them the right distance away
-        moveDir = forwardPoint.normalized + (toOriginal.normalized *
+        pData.moveDir = forwardPoint.normalized + (toOriginal.normalized *
             (orbitDistance - toOriginal.magnitude) * distanceAmp);
 
         //moveDir = moveDir.normalized;
-    }
-
-    protected override void StartAttack()
-    {
-        base.StartAttack();
-        moveSpeed = attackMoveSpeed;
-        //m_Flying.SetMaxVelocity(attackMoveSpeed);
-    }
-
-    protected override void StartAttack(AttackType attackToDo)
-    {
-        base.StartAttack(attackToDo);
-        moveSpeed = attackMoveSpeed;
-        //m_Flying.SetMaxVelocity(attackMoveSpeed);
-    }
-
-    public override void Attack() { }
-
-    public override void StopRest()
-    {
-        base.StopRest();
-        moveSpeed = patrolSpeed;
     }
 
     protected override void OnFoundTarget()
@@ -172,7 +133,7 @@ public class FlightMinion : Minion
         m_Animator.SetFloat("y", m_Animator.GetFloat("ySpeed"));
         m_Animator.SetTrigger(m_HashStuckParam);
         m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-        moveSpeed = patrolSpeed;
+        pData.maxVelocity = patrolSpeed;
     }
 
     public void OnUnstuck()
@@ -180,14 +141,14 @@ public class FlightMinion : Minion
         this.NamedLog("I'm unstuck now");
         m_rigidbody.constraints = RigidbodyConstraints2D.None;
         state = startingState;
-        moveDir = transform.position.PointTo(orginalPosition);
+        pData.moveDir = transform.position.PointTo(orginalPosition);
     }
 
     protected override void OnDeath(Vector2 attackDirection)
     {
         StopAllCoroutines();
 
-        moveDir = Vector2.zero;
+        pData.moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.simulated = false;
 

@@ -20,14 +20,14 @@ public class Basic : Villager
 
     protected void StopControl()
     {
-        moveDir = new Vector2(0,0);
+        pData.moveDir = new Vector2(0,0);
         transform.position = new Vector3(transform.position.x - 3, transform.position.y);
         canAct = false;
     }
 
     protected void StartControl()
     {
-        moveDir = Vector2.left;
+        pData.moveDir = Vector2.left;
         canAct = true;
     }
 

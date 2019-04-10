@@ -20,11 +20,22 @@ public abstract class Minion : Character
 
     float closetVillageDist = Mathf.Infinity;
 
+    [Header("Attack Ranges")]
     [Range(0, 100)]
     public float meleeAttackRange = 5;
 
     [Range(0, 100)]
     public float rangedAttackRange = 5;
+
+    [Header("State Speeds")]
+    [Range(0, 100)]
+    public int patrolSpeed = 7;
+
+    [Range(0, 100)]
+    public int engageSpeed = 10;
+
+    [Range(0, 100)]
+    public int attackMoveSpeed = 15;
 
     /// <summary>
     /// How much above or below attack range still constitutes an attack
@@ -44,18 +55,11 @@ public abstract class Minion : Character
 
     protected int startingLayer;
 
-    protected Vector2 prevDir = Vector2.zero;
-
     //For when Minions suceeds in killing a villager (In case we want a celebration
     //If not it can enforce the Minion goes back to patrolling
     protected readonly int m_HashCelebrateParam = Animator.StringToHash("Celebrate"),
                             m_HashMeleeAttackParam = Animator.StringToHash("Melee"),
                             m_HashRangedAttackParam = Animator.StringToHash("Ranged");
-
-    /// <summary>
-    /// How the minion moves during attacks
-    /// </summary>
-    protected Vector2 desiredAttackMoveDirection = Vector2.zero;
 
     #endregion
 
@@ -70,7 +74,7 @@ public abstract class Minion : Character
         startingState = state;
         startingConstraints = m_rigidbody.constraints;
         startingLayer = gameObject.layer;
-
+        pData.maxVelocity = patrolSpeed;
     }
 
     public virtual void OnEnable()
@@ -89,6 +93,8 @@ public abstract class Minion : Character
 
         villagerInSight.Clear();
 
+        pData.maxVelocity = patrolSpeed;
+
         SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
     }
 
@@ -106,7 +112,7 @@ public abstract class Minion : Character
 
         Gizmos.color = Color.green;
         if (m_rigidbody)
-            Gizmos.DrawRay(m_rigidbody.position, moveDir);
+            Gizmos.DrawRay(m_rigidbody.position, pData.moveDir);
     }
 
     public abstract void Patrol();
@@ -115,7 +121,7 @@ public abstract class Minion : Character
 
     public virtual void MoveToClosest()
     {
-        moveDir = m_rigidbody.position.PointTo(closestVillager.Rigidbody.position);
+        pData.moveDir = m_rigidbody.position.PointTo(closestVillager.Rigidbody.position);
     }
 
     /// <summary>
@@ -123,7 +129,7 @@ public abstract class Minion : Character
     /// </summary>
     public virtual void MoveToEngage()
     {
-        moveDir = m_rigidbody.position.PointTo(closestVillager.Rigidbody.position
+        pData.moveDir = m_rigidbody.position.PointTo(closestVillager.Rigidbody.position
             + Vector3.right * rangedAttackRange * Mathf.Sign(transform.position.magnitude
             - closestVillager.Rigidbody.position.magnitude));
     }
@@ -132,8 +138,6 @@ public abstract class Minion : Character
     {
         Debug.Log("Starting Attack");
         //Close enough to attack
-        state = MinionState.Attacking;
-        prevDir = moveDir;
         StartAttack(attackType);
     }
 
@@ -142,7 +146,7 @@ public abstract class Minion : Character
         Debug.Log("Starting Attack");
         //Close enough to attack
         state = MinionState.Attacking;
-        prevDir = moveDir;
+        pData.maxVelocity = attackMoveSpeed;
         switch (attackToDo)
         {
             case AttackType.Melee:
@@ -154,30 +158,33 @@ public abstract class Minion : Character
         }
     }
 
-    public virtual void Attack()
-    {
-        moveDir = desiredAttackMoveDirection;
-    }
+    public virtual void Attack() { }
 
-    public virtual void StopAttack()
-    {
-        state = MinionState.Patrolling;
-    }
+    //public virtual void StopAttack()
+    //{
+    //    m_rigidbody.constraints = startingConstraints;
+    //    pData.maxVelocity = patrolSpeed;
+    //}
 
     public virtual void StartCelebrate()
     {
-        prevDir = moveDir;
+        pData.maxVelocity = attackMoveSpeed;
         state = MinionState.Celebrating;
         m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-        m_Animator.SetTrigger(m_HashCelebrateParam);
+    }
+
+    public virtual void Celebrate()
+    {
+        pData.maxVelocity = attackMoveSpeed;
+        state = MinionState.Celebrating;
+        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     public virtual void StopCelebrate()
     {
+        pData.maxVelocity = patrolSpeed;
         m_rigidbody.constraints = startingConstraints;
         state = startingState;
-        moveDir = prevDir;
-        prevDir = Vector2.zero;
     }
 
     public virtual void Migrate() { }
@@ -185,6 +192,7 @@ public abstract class Minion : Character
     public virtual void StartRest()
     {
         state = MinionState.Resting;
+        pData.maxVelocity = patrolSpeed;
         m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
@@ -197,8 +205,7 @@ public abstract class Minion : Character
     {
         m_rigidbody.constraints = startingConstraints;
         state = startingState;
-        moveDir = prevDir;
-        prevDir = Vector2.zero;
+        pData.maxVelocity = patrolSpeed;
     }
 
     /// <summary>
@@ -301,11 +308,13 @@ public abstract class Minion : Character
     protected virtual void OnFoundTarget()
     {
         state = MinionState.ClosingIn;
+        pData.maxVelocity = engageSpeed;
     }
 
     protected virtual void OnNoMoreTargets()
     {
         state = startingState;
+        pData.maxVelocity = patrolSpeed;
     }
 
     protected override void OnDeath(Vector2 attackDirection)
@@ -333,7 +342,7 @@ public abstract class Minion : Character
                     Debug.Log(collision.otherCollider.gameObject.name);
                     this.NamedLog("Hit my target Villager");
                     villagerInSight.Remove(villager);
-                    StartCelebrate();
+                    m_Animator.SetTrigger(m_HashCelebrateParam);
                 }
                 break;
         }
