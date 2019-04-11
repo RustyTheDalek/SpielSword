@@ -96,6 +96,7 @@ public abstract class Minion : Character
         pData.maxVelocity = patrolSpeed;
 
         SceneLinkedSMB<Minion>.Initialise(m_Animator, this);
+        SceneLinkedSMB<TimeObject>.Initialise(m_Animator, GetComponent<TimeObject>());
     }
 
     protected virtual void OnDrawGizmosSelected()

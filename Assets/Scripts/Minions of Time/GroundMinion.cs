@@ -80,8 +80,7 @@ public class GroundMinion : Minion
         m_Animator.SetFloat("yDir", pData.moveDir.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(pData.moveDir.x));
         m_Animator.SetFloat("xVel", m_rigidbody.velocity.x);
-
-        Debug.Log(pData.moveDir);
+        m_Animator.SetFloat("yVel", m_rigidbody.velocity.y);
 
         if (m_GroundCharacter.m_ManualFaceDirection && closestVillager)
         {

@@ -62,9 +62,15 @@ public class EnemyAttack : MonoBehaviour
             if (m_Anim)
                 m_Anim.SetTrigger("Death");
 
-            m_Coll.enabled = false;
-            m_Sprite.enabled = false;
-            m_Rigidbody.simulated = false;
+            if(m_Sprite)
+                m_Sprite.enabled = false;
+
+            if (m_Rigidbody)
+                m_Rigidbody.simulated = false;
+
+            if(m_Coll)
+                m_Coll.enabled = false;
+
             enabled = false;
         }
     }
