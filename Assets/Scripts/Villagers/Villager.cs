@@ -159,7 +159,7 @@ public abstract class Villager : Character
                     if (canMove)
                     {
                         pData.moveDir = Vector2.zero;
-                        /pData.moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
+                        pData.moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
                     }
 
                     attack = Input.GetButtonDown("Attack");
