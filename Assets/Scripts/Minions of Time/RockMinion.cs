@@ -25,16 +25,15 @@ public class RockMinion : GroundMinion {
     protected override void StartAttack()
     {
         state = MinionState.Attacking;
+        pData.maxVelocity = attackMoveSpeed;
 
-        prevDir = moveDir;
-
-        if(moveDir.y > .75f || moveDir.y < -.75f)
+        if (pData.moveDir.y > .75f || pData.moveDir.y < -.75f)
         {
             Debug.Log("They're not on the same plan as me, going to yeet some rocks instead");
 
             m_Animator.SetTrigger(m_HashAttackThrowRocks);
         }
-        else if (moveDir.x < 1)
+        else if (pData.moveDir.x < 1)
         {
             Debug.Log("Attacking to Left");
             m_Animator.SetTrigger(m_HashAttackLeft);
@@ -49,16 +48,15 @@ public class RockMinion : GroundMinion {
     protected override void StartAttack(AttackType attackType)
     {
         state = MinionState.Attacking;
+        pData.maxVelocity = attackMoveSpeed;
 
-        prevDir = moveDir;
-
-        if (Mathf.Abs(moveDir.y) > .5f)
+        if (Mathf.Abs(pData.moveDir.y) > .5f)
         {
             Debug.Log("They're not on the same plan as me, going to yeet some rocks instead");
 
             m_Animator.SetTrigger(m_HashAttackThrowRocks);
         }
-        else if (moveDir.x < 1)
+        else if (pData.moveDir.x < 1)
         {
             Debug.Log("Attacking to Left");
             m_Animator.SetTrigger(m_HashAttackLeft);
@@ -68,6 +66,11 @@ public class RockMinion : GroundMinion {
             Debug.Log("Attacking to Right");
             m_Animator.SetTrigger(m_HashAttackRight);
         }
+    }
+
+    public override void Attack()
+    {
+        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     public void FireProjectiles(BallisticMotion objToSpawn)

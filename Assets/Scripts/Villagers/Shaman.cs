@@ -56,10 +56,10 @@ public class Shaman : WardVillager
             currentSummon.gameObject.SetActive(true);
 
             //We want the Summon to go in the direction the player is moving or looking
-            if (moveDir != Vector2.zero)
-                currentSummon.moveDir = moveDir;
+            if (pData.moveDir != Vector2.zero)
+                currentSummon.pData.moveDir = pData.moveDir;
             else
-                currentSummon.moveDir = m_Ground.FacingRight ? Vector2.right : Vector2.left;
+                currentSummon.pData.moveDir = m_Ground.FacingRight ? Vector2.right : Vector2.left;
 
             summonActive = true;
         }

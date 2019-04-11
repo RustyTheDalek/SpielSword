@@ -19,13 +19,7 @@ public class Character : LivingObject
 
     public AttackType attackType;
 
-    /// <summary>
-    /// The direction for movement
-    /// Left = -1
-    /// None =  0
-    /// Right=  1
-    /// </summary>
-    public Vector2 moveDir;
+    public PlatformerData pData = new PlatformerData();
 
     #endregion
 
@@ -35,7 +29,6 @@ public class Character : LivingObject
     /// Spawn position for Ranged projectiles
     /// </summary>
     public Transform rangedSpawn;
-
 
     protected Animator m_Animator;
 
@@ -49,7 +42,7 @@ public class Character : LivingObject
 
     #region Private Variables
 
-    private PlatformerCharacter2D m_Character;
+    protected PlatformerCharacter2D m_Character;
 
     #endregion
 
@@ -90,7 +83,7 @@ public class Character : LivingObject
     {
         base.OnDeath(attackDirection);
 
-        moveDir = Vector2.zero;
+        pData.moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.simulated = false;
 
@@ -111,7 +104,7 @@ public class Character : LivingObject
         m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
-        m_Character.Move(moveDir);
+        m_Character.Move(pData);
     }
 
     public void PlayMeleeEffect()

@@ -47,7 +47,7 @@ public class Paladin : Villager
 
                     shieldStrength -= Time.deltaTime;
 
-                    moveSpeed = channelSpeed;
+                    pData.maxVelocity = channelSpeed;
                 }
                 else if ((special1 || special2) && shieldStrength < 1)
                 {
@@ -60,7 +60,7 @@ public class Paladin : Villager
 
                     shieldStrength += Time.deltaTime;
 
-                    moveSpeed = maxSpeed;
+                    pData.maxVelocity = maxSpeed;
 
                     m_Aura.m_Sprite.color = m_Aura.m_Sprite.color.SetAlpha(0);
                 }

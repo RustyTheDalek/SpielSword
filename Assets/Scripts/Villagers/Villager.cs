@@ -79,8 +79,7 @@ public abstract class Villager : Character
 
     protected float damageMult = 1;
 
-    protected float     maxSpeed = 15f,
-                        moveSpeed;
+    protected float maxSpeed = 15f;
 
     protected SpriteRenderer m_Sprite;
     protected GroundCharacter2D m_Ground;
@@ -117,7 +116,7 @@ public abstract class Villager : Character
     {
         base.Awake();
 
-        moveSpeed = maxSpeed;
+        pData.maxVelocity = maxSpeed;
 
         portal = GetComponentInChildren<SpriteMask>();
         m_Sprite = GetComponentInChildren<SpriteRenderer>();
@@ -159,8 +158,8 @@ public abstract class Villager : Character
                     //Get PlayerMovement
                     if (canMove)
                     {
-                        moveDir = Vector2.zero;
-                        moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
+                        pData.moveDir = Vector2.zero;
+                        /pData.moveDir = new Vector2((int)Input.GetAxisRaw("Horizontal"), 0);
                     }
 
                     attack = Input.GetButtonDown("Attack");
@@ -220,8 +219,8 @@ public abstract class Villager : Character
         m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
-        m_Ground.Move(moveDir, moveSpeed, m_Jump);
-
+        m_Ground.Move(pData, m_Jump);
+        
         m_Jump = false;
     }
 
@@ -262,7 +261,7 @@ public abstract class Villager : Character
 
         PlayDeathEffect();
 
-        moveDir = Vector2.zero;
+        pData.moveDir = Vector2.zero;
         m_rigidbody.velocity = Vector2.zero;
 
 

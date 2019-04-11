@@ -13,17 +13,22 @@ public class PlatformerCharacter2D : MonoBehaviour
 
     public Rigidbody2D m_Rigidbody2D;
 
-    [SerializeField] protected float m_MoveForce = 10f;                  // Strength of force that moves Character
+    [SerializeField] protected float m_MoveForce = 10f;
+    [SerializeField] protected float m_MaxVelocity = 7f;
 
     #endregion
 
     #region Private Variables
     #endregion
 
-    protected virtual void Awake()
+    public virtual void Move(PlatformerData pData)
     {
-        //m_Rigidbody2D = GetComponentInChildren<Rigidbody2D>();
-    }
 
-    public virtual void Move(Vector2 moveVector) { }
+        Debug.Log(name + ": basic move");
+
+        m_MaxVelocity = pData.maxVelocity;
+
+        m_Rigidbody2D.AddForce(pData.moveDir * m_MoveForce, ForceMode2D.Impulse);
+        m_Rigidbody2D.velocity = Vector2.ClampMagnitude(m_Rigidbody2D.velocity, m_MaxVelocity);
+    }
 }

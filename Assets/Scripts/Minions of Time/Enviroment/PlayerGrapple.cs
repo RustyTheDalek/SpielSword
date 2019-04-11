@@ -178,7 +178,7 @@ public class PlayerGrapple : MonoBehaviour
         target.canAct = false;
 
         if(stopsTarget)
-            target.moveDir = new Vector2(0, 0);
+            target.pData.moveDir = new Vector2(0, 0);
 
         animi.SetBool("Fire", true);
 

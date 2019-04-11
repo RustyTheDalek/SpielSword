@@ -98,7 +98,6 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         }
     }
 
-
     /// <summary>
     /// Previous move
     /// </summary>
@@ -111,10 +110,6 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     /// Can the character control themselves when there in the air
     /// </summary>
     [SerializeField] private bool m_AirControl = true;
-    /// <summary>
-    /// Maximum speed of the character xSpeed
-    /// </summary>
-    [SerializeField] private float m_MaxSpeed = 5f;
 
     [SerializeField] private float m_JumpForce = 15;  // Amount of force added when the character jumps.
 
@@ -133,10 +128,8 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     private Vector2 directionForce;
     #endregion
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
-
         // Setting up references.
         m_Character = transform.Find("Character");
         m_Ground = m_Character.Find("GroundCheck");
@@ -183,14 +176,22 @@ public class GroundCharacter2D : PlatformerCharacter2D {
     //    Gizmos.DrawRay(transform.position, -transform.up);
     //}
 
-    public virtual void Move(Vector2 moveDir, float _MaxSpeed = 15f, bool jump = false, float manualDirection = 1)
+    public virtual void Move(PlatformerData pData, bool jump, 
+        float manualDirection)
     {
-        m_MaxSpeed = _MaxSpeed;
+        Move(pData, jump);
 
-        Move(moveDir, jump, manualDirection);
+        if (m_ManualFaceDirection)
+        {
+            DirectionLogic(manualDirection);
+        }
+        else
+        {
+            DirectionLogic(pData.moveDir.x);
+        }
     }
 
-    public virtual void Move(Vector2 moveDir, bool jump = false, float manualDirection = 1)
+    public virtual void Move(PlatformerData pData, bool jump)
     {
         // If the player should jump...
         if (m_Grounded && jump)
@@ -202,11 +203,18 @@ public class GroundCharacter2D : PlatformerCharacter2D {
             m_Rigidbody2D.AddForce(Vector2.up * new Vector2(0f, m_JumpForce), ForceMode2D.Impulse);
         }
 
+        Move(pData);
+    }
+
+    public override void Move(PlatformerData pData)
+    {
+        m_MaxVelocity = pData.maxVelocity;
+        
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl)
         {
             //If the player stops moving or changes direction then we reduce xVelocity to zero
-            if (m_Grounded && (Mathf.Abs(deltaMoveDir.x - moveDir.x) > .75f) && !m_Sliding)
+            if (m_Grounded && (Mathf.Abs(deltaMoveDir.x - pData.moveDir.x) > .75f) && !m_Sliding)
             {
                 if (m_Grounded)
                 {
@@ -223,34 +231,41 @@ public class GroundCharacter2D : PlatformerCharacter2D {
                 }
             }
 
-            if(!m_Sliding && moveDir.x == 0)
+            if (!m_Sliding && pData.moveDir.x == 0)
             {
                 m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
-            else if(!m_Sliding)
+            else if (!m_Sliding)
             {
                 m_Rigidbody2D.constraints = RigidbodyConstraints2D.None;
             }
 
-            //directionForce = moveVector * moveDir.x * m_MoveForce;
+            m_Rigidbody2D.AddForce(pData.moveDir * m_MoveForce, ForceMode2D.Force);
 
-            m_Rigidbody2D.AddForce(moveDir * m_MoveForce, ForceMode2D.Force);
-
-            m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(
-                    m_Rigidbody2D.velocity.x, -m_MaxSpeed, m_MaxSpeed),
-                    m_Rigidbody2D.velocity.y);
         }
 
-        if (m_ManualFaceDirection)
+        //Since the Wheel can can go up and ramped surfaces we don't want to just limit 
+        //x velocity when on those surfaces
+        if (m_Grounded)
         {
-            DirectionLogic(manualDirection);
+            m_Rigidbody2D.velocity = Vector2.ClampMagnitude(m_Rigidbody2D.velocity,
+                m_MaxVelocity);
         }
+        //When in air we don't want to limity Y Velocity to have a natural falling speed
         else
         {
-            DirectionLogic(moveDir.x);
+            m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(m_Rigidbody2D.velocity.x,
+                -m_MaxVelocity, m_MaxVelocity), m_Rigidbody2D.velocity.y);
         }
 
-        deltaMoveDir = moveDir;
+        if(m_MaxVelocity == 0)
+        {
+            m_Rigidbody2D.angularVelocity = 0;
+        }
+
+        DirectionLogic(pData.moveDir.x);
+
+        deltaMoveDir = pData.moveDir;
     }
 
     /// <summary>
@@ -370,31 +385,31 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         m_Rigidbody2D.transform.position = spawnPos;
     }
 
-    //This works with Triggers in the world to prevent players from flying off of Ramps
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.tag == "RampUp")
-        {
-            //Only fire if moving in the right direction and well actually moving
-            if (!jump && Vector2.Angle(m_Rigidbody2D.velocity, collision.transform.right) < 90)
-            {
-                if (m_Rigidbody2D.velocity.y > 0)
-                {
-                    Debug.Log("Slowing");
-                    m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
-                }
-            }
-        }
+    ////This works with Triggers in the world to prevent players from flying off of Ramps
+    //private void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    if (collision.tag == "RampUp")
+    //    {
+    //        //Only fire if moving in the right direction and well actually moving
+    //        if (!jump && Vector2.Angle(m_Rigidbody2D.velocity, collision.transform.right) < 90)
+    //        {
+    //            if (m_Rigidbody2D.velocity.y > 0)
+    //            {
+    //                Debug.Log("Slowing");
+    //                m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
+    //            }
+    //        }
+    //    }
 
-        if (collision.tag == "RampDown")
-        {
-            //Only fire if moving in the right direction and well actually moving
-            if (!jump && Vector2.Angle(m_Rigidbody2D.velocity, collision.transform.right) < 90)
-            {
-                m_Rigidbody2D.AddForce(new Vector2(0, -100));
-            }
-        }
-    }
+    //    if (collision.tag == "RampDown")
+    //    {
+    //        //Only fire if moving in the right direction and well actually moving
+    //        if (!jump && Vector2.Angle(m_Rigidbody2D.velocity, collision.transform.right) < 90)
+    //        {
+    //            m_Rigidbody2D.AddForce(new Vector2(0, -100));
+    //        }
+    //    }
+    //}
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

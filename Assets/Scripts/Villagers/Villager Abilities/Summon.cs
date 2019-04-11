@@ -75,7 +75,7 @@ public class Summon : Character
         m_Animator.SetFloat("ySpeed", m_rigidbody.velocity.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(m_rigidbody.velocity.x));
 
-        m_GroundCharacter.Move(moveDir, jump);
+        m_GroundCharacter.Move(pData, jump);
 
         jump = false;
     }
@@ -86,14 +86,14 @@ public class Summon : Character
     public void CheckForWall()
     {
         Debug.DrawRay(  m_GroundCharacter.m_Front.position,
-                        transform.right * moveDir * wallReactDistance,
+                        transform.right * pData.moveDir * wallReactDistance,
                         Color.red);
 
         if (Physics2D.Raycast(  m_GroundCharacter.m_Front.position,
-                                transform.right * moveDir, wallReactDistance,
+                                transform.right * pData.moveDir, wallReactDistance,
                                 LayerMask.GetMask("Ground")))
         {
-            moveDir = -moveDir;
+            pData.moveDir = -pData.moveDir;
 
             Debug.Log("At a wall swapping", this);
         }
@@ -138,7 +138,7 @@ public class Summon : Character
 
                 Debug.Log("Saw Minion or boss, attacking", this);
                 m_Animator.SetTrigger(m_HashAttackParam);
-                moveDir = Vector2.zero;
+                pData.moveDir = Vector2.zero;
 
                 break;
             default :
