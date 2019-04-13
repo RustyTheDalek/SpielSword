@@ -188,21 +188,13 @@ public class MagicMissile : VillagerAttack
         switch (LayerMask.LayerToName(coll.gameObject.layer))
         {
             case "Minion":
-
-                collTrans = coll.transform;
-
-                if (!targetsInSight.Contains(collTrans) && targetsInSight.Count < 5)
-                {
-                    targetsInSight.Add(collTrans);
-                }
-
-                break;
-
             case "Boss":
 
                 collTrans = coll.transform;
+                LivingObject target = coll.gameObject.GetComponentInParent<LivingObject>();
 
-                if(!targetsInSight.Contains(collTrans) && targetsInSight.Count < 5)
+                if (target.Alive && 
+                    !targetsInSight.Contains(collTrans) && targetsInSight.Count < 5)
                 {
                     targetsInSight.Add(collTrans);
                 }

@@ -64,7 +64,11 @@ public class VillagerManager : MonoBehaviour {
 
     bool endSlateActive = false;
 
-    public VillagerClass classToSpawn;
+    VillagerClass classToSpawn;
+
+    [Header("Spawning override")]
+    public bool overrideSpawn;
+    public VillagerClass overrideClass;
 
     public delegate void VillagerManagerEvent();
     public delegate void NewVillagerEvent(Villager newVillager);
@@ -120,8 +124,10 @@ public class VillagerManager : MonoBehaviour {
         {
             spawnOffset += new Vector3(-1.5f, 0, 0);
 
-            classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last);
-            //classToSpawn = VillagerClass.Mage;
+            if (overrideSpawn)
+                classToSpawn = overrideClass;
+            else
+                classToSpawn = (VillagerClass)Random.Range(0, (int)VillagerClass.Last);
 
             //TODO:Change creatpool size to be whatever the maximum number of villagers you can have in that level is
             villagerPrefabs[(int)classToSpawn].CreatePool(50);
@@ -170,27 +176,27 @@ public class VillagerManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            classToSpawn = VillagerClass.Berserker;
+            overrideClass = VillagerClass.Berserker;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            classToSpawn = VillagerClass.Mage;
+            overrideClass = VillagerClass.Mage;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            classToSpawn = VillagerClass.Paladin;
+            overrideClass = VillagerClass.Paladin;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            classToSpawn = VillagerClass.Rogue;
+            overrideClass = VillagerClass.Rogue;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            classToSpawn = VillagerClass.Shaman;
+            overrideClass = VillagerClass.Shaman;
         }
 #endif
     }
