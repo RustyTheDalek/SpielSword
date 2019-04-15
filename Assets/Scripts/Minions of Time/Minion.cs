@@ -45,6 +45,9 @@ public abstract class Minion : Character
     [Tooltip("If the player enters within Melee Range of a Ranged minion will they do a Melee attack?")]
     public bool meleePanic;
 
+    [Tooltip("Does the minion drop into indiviudal pieces when it dies?")]
+    public bool minionGibs = false;
+
     #endregion
 
     #region Protected Variables
@@ -61,6 +64,9 @@ public abstract class Minion : Character
                             m_HashMeleeAttackParam = Animator.StringToHash("Melee"),
                             m_HashRangedAttackParam = Animator.StringToHash("Ranged");
 
+
+    protected MinionGibTracking[] minionParts;  
+
     #endregion
 
     #region Private Variables
@@ -75,6 +81,8 @@ public abstract class Minion : Character
         startingConstraints = m_rigidbody.constraints;
         startingLayer = gameObject.layer;
         pData.maxVelocity = patrolSpeed;
+
+        minionParts = GetComponentsInChildren<MinionGibTracking>();
     }
 
     public virtual void OnEnable()
@@ -327,7 +335,28 @@ public abstract class Minion : Character
     protected override void OnDeath(Vector2 attackDirection)
     {
         base.OnDeath(attackDirection);
+
         StopAllCoroutines();
+        //TODO:Re-add this by the separating from TimeObject code
+        if (minionGibs)
+        {
+            m_Animator.enabled = false;
+            m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+
+            foreach (MinionGibTracking part in minionParts)
+            {
+                part.Throw(attackDirection);
+            }
+
+            StartCoroutine(DelayToDeath());
+        }
+    }
+
+    public IEnumerator DelayToDeath()
+    {
+        yield return new WaitForSeconds(5f);
+
+        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)

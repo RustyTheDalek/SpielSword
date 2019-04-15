@@ -27,8 +27,6 @@ public class FlightMinion : Minion
 
     #region Protected Variables
 
-    protected MinionGibTracking[] minionParts;
-
     protected readonly int m_HashStuckParam = Animator.StringToHash("Stuck");
 
     [Header("Eye setup")]
@@ -53,8 +51,6 @@ public class FlightMinion : Minion
         orginalPosition = transform.position;
         //Move the Minion by the distance we want him to Orbit
         transform.position = transform.position + Vector3.right * orbitDistance;
-
-        minionParts = GetComponentsInChildren<MinionGibTracking>();
     }
 
     public override void OnEnable()
@@ -142,38 +138,6 @@ public class FlightMinion : Minion
         m_rigidbody.constraints = RigidbodyConstraints2D.None;
         state = startingState;
         pData.moveDir = transform.position.PointTo(orginalPosition);
-    }
-
-    protected override void OnDeath(Vector2 attackDirection)
-    {
-        StopAllCoroutines();
-
-        pData.moveDir = Vector2.zero;
-        m_rigidbody.velocity = Vector2.zero;
-        m_rigidbody.simulated = false;
-
-        m_Animator.SetFloat("xSpeed", 0);
-        m_Animator.SetFloat("ySpeed", 0);
-        m_Animator.SetFloat("xSpeedAbs", 0);
-        m_Animator.SetBool(m_HashDeadParam, true);
-        m_Animator.enabled = false;
-
-        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-
-        //TODO:Re-add this by the separating from TimeObject code
-        foreach (MinionGibTracking part in minionParts)
-        {
-            part.Throw(attackDirection);
-        }
-
-        StartCoroutine(DelayToDeath());
-    }
-
-    public IEnumerator DelayToDeath()
-    {
-        yield return new WaitForSeconds(5f);
-
-        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)
