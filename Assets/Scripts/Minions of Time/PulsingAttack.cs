@@ -56,6 +56,7 @@ public class PulsingAttack : MonoBehaviour
                 villager.Alive) // don't want them to attack dead villagers
                 {
                     villagers.Add(villager);
+                    villager.pData.velocityDampen = .5f;
                 }
                 break;
         }
@@ -73,7 +74,8 @@ public class PulsingAttack : MonoBehaviour
                     if (villagers.Contains(villager))
                     {
                         villagers.Remove(villager);
-                    }
+                        villager.pData.velocityDampen = 0;
+                }
                 break;
             }
         }

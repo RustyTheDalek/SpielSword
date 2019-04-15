@@ -208,7 +208,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
 
     public override void Move(PlatformerData pData)
     {
-        m_MaxVelocity = pData.maxVelocity;
+        m_MaxVelocity = pData.maxVelocity * (1 - pData.velocityDampen);
         
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl)
