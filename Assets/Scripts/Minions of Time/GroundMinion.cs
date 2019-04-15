@@ -76,8 +76,6 @@ public class GroundMinion : Minion
 
     protected override void FixedUpdate()
     {
-        m_Animator.SetFloat("xDir", pData.moveDir.x);
-        m_Animator.SetFloat("yDir", pData.moveDir.y);
         m_Animator.SetFloat("xSpeedAbs", Mathf.Abs(pData.moveDir.x));
         m_Animator.SetFloat("xVel", m_rigidbody.velocity.x);
         m_Animator.SetFloat("yVel", m_rigidbody.velocity.y);

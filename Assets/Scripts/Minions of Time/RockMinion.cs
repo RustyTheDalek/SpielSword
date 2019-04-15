@@ -68,11 +68,6 @@ public class RockMinion : GroundMinion {
         }
     }
 
-    public override void Attack()
-    {
-        m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-    }
-
     public void FireProjectiles(BallisticMotion objToSpawn)
     {
         Vector3 targetPos = closestVillager.Rigidbody.transform.position;

@@ -19,8 +19,6 @@ public class BallisticMotion : EnemyAttack
 
     public bool m_LookAtTarget;
 
-    SpriteRenderer m_Sprite;
-
     void Awake()
     {
         // Keep scene heirarchy clean

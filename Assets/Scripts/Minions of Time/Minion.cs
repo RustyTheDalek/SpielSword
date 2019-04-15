@@ -104,6 +104,8 @@ public abstract class Minion : Character
         Gizmos.color = Color.red;
         if (m_rigidbody)
             Gizmos.DrawWireSphere(m_rigidbody.position, meleeAttackRange);
+        else
+            Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
 
         if (attackType == AttackType.Ranged)
         {
@@ -112,8 +114,6 @@ public abstract class Minion : Character
         }
 
         Gizmos.color = Color.green;
-        if (m_rigidbody)
-            Gizmos.DrawRay(m_rigidbody.position, pData.moveDir);
     }
 
     public abstract void Patrol();
@@ -159,7 +159,13 @@ public abstract class Minion : Character
         }
     }
 
-    public virtual void Attack() { }
+    public virtual void Attack()
+    {
+        if(attackMoveSpeed == 0)
+        {
+            m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+    }
 
     //public virtual void StopAttack()
     //{
