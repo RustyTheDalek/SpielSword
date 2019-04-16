@@ -25,7 +25,7 @@ public class StormKing : BossManager{
     #region Stage One
     public override void OnStageOne()
     {
-        attackCountStage = 6;
+        attackCountStage = 4;
     }
 
     protected override void StageOneAttacks(int attack)
@@ -34,22 +34,22 @@ public class StormKing : BossManager{
         {
             case 0:
 
-                //animator.SetTrigger("S1A1L");
+                animator.SetTrigger("S1A1L");
                 break;
 
             case 1:
 
-                //animator.SetTrigger("S1A1R");
+                animator.SetTrigger("S1A1R");
                 break;
 
             case 2:
 
-                //animator.SetTrigger("S1A2L");
+                animator.SetTrigger("S1A1C");
                 break;
 
             case 3:
 
-                //animator.SetTrigger("S1A2R");
+                animator.SetTrigger("S1A2");
                 break;
 
             case 4:
