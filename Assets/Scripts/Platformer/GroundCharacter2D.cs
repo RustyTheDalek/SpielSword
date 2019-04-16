@@ -255,7 +255,7 @@ public class GroundCharacter2D : PlatformerCharacter2D {
         else
         {
             m_Rigidbody2D.velocity = new Vector2(Mathf.Clamp(m_Rigidbody2D.velocity.x,
-                -m_MaxVelocity, m_MaxVelocity), m_Rigidbody2D.velocity.y);
+                -m_MaxVelocity, m_MaxVelocity), Mathf.Clamp(m_Rigidbody2D.velocity.y, -m_MaxVelocity, m_MaxVelocity));
         }
 
         if(m_MaxVelocity == 0)
