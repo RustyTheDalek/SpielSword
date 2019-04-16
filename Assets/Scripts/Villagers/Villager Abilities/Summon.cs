@@ -35,12 +35,6 @@ public class Summon : Character
 
     #endregion
 
-    protected override void Awake()
-    {
-        base.Awake();
-
-    }
-
     private void OnEnable()
     {
         lifeTimer = lifeSpan;

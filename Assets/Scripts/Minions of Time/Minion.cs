@@ -92,7 +92,7 @@ public abstract class Minion : Character
         gameObject.layer = startingLayer;
         m_Animator.SetBool(m_HashDeadParam, false);
         m_Animator.Play("Move");
-        health = 1;
+        health = MaxHealth;
         m_Animator.enabled = true;
         m_rigidbody.velocity = Vector2.zero;
         m_rigidbody.constraints = startingConstraints;

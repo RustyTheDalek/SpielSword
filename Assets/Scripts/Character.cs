@@ -46,8 +46,10 @@ public class Character : LivingObject
 
     #endregion
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+         
         m_Character = GetComponent<PlatformerCharacter2D>();
         m_Animator = GetComponentInChildren<Animator>();
         m_rigidbody = GetComponent<Rigidbody2D>();

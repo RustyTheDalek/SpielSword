@@ -11,7 +11,6 @@ using System;
 /// </summary>
 public abstract class BossManager : LivingObject
 {
-    public const float MAXHEALTH = 400;
 
     public BossState bossState = BossState.Waking;
 
@@ -286,15 +285,17 @@ public abstract class BossManager : LivingObject
         return false;
     }
 
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         bossLimbs = GetComponentsInChildren<DamageableSprite>();
     }
 
     // Use this for initialization
     protected void Start()
     {
-        health = MAXHEALTH;
+        health = MaxHealth;
         damageTimer = gameObject.AddComponent<Timer>();
         damageTimer.Setup("Damager", .25f, true);
 
@@ -304,10 +305,10 @@ public abstract class BossManager : LivingObject
 
                 stageHealthLimits = new List<float>(4)
                 {
-                    MAXHEALTH * .8f,
-                    MAXHEALTH * .6f,
-                    MAXHEALTH * .4f,
-                    MAXHEALTH * .2f
+                    MaxHealth * .8f,
+                    MaxHealth * .6f,
+                    MaxHealth * .4f,
+                    MaxHealth * .2f
                 };
 
                 break;
@@ -371,16 +372,16 @@ public abstract class BossManager : LivingObject
                 }
 
                 if(bossHealthBar)
-                    bossHealthBar.UpdateFill(health, MAXHEALTH);
+                    bossHealthBar.UpdateFill(health, MaxHealth);
 
                 animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-                if (health <= MAXHEALTH * .8f)
+                if (health <= MaxHealth * .8f)
                 {
                     DamageBoss(1);
                 }
 
-                if (health <= MAXHEALTH * .4f)
+                if (health <= MaxHealth * .4f)
                 {
                     DamageBoss(2);
                 }
@@ -519,7 +520,7 @@ public abstract class BossManager : LivingObject
                 stageReplaying[i] = true;
             }
 
-            health = MAXHEALTH;
+            health = MaxHealth;
         }
     }
 

@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class LivingObject : MonoBehaviour
 {
-    protected float health = 1;
+    protected float health;
     public bool Alive
     {
         get
@@ -23,10 +23,17 @@ public class LivingObject : MonoBehaviour
         }
     }
 
+    public float MaxHealth = 1;
+
     /// <summary>
     /// If a Villager is shielded they are unable to take damage from attacks
     /// </summary>
     public bool shielded = false;
+
+    protected virtual void Awake()
+    {
+        health = MaxHealth;
+    }
 
     public virtual void OnHit(Vector2 attackDirection, float damage = 1)
     {
@@ -55,7 +62,7 @@ public class LivingObject : MonoBehaviour
     [ContextMenu("RestoreHelth")]
     public void RestoreHealth()
     {
-        health = 1;
+        health = MaxHealth;
     }
 
     /// <summary>
