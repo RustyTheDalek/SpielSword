@@ -91,7 +91,7 @@ public abstract class Minion : Character
 
         gameObject.layer = startingLayer;
         m_Animator.SetBool(m_HashDeadParam, false);
-        m_Animator.Play("Move");
+        m_Animator.Play("Default");
         health = MaxHealth;
         m_Animator.enabled = true;
         m_rigidbody.velocity = Vector2.zero;
@@ -361,7 +361,7 @@ public abstract class Minion : Character
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name + " Collided with me" + LayerMask.LayerToName(collision.gameObject.layer));
+        //Debug.Log(collision.gameObject.name + " Collided with me" + LayerMask.LayerToName(collision.gameObject.layer));
 
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {

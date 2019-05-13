@@ -82,7 +82,7 @@ public class FlightMinion : Minion
 
     public override void Migrate()
     {
-        //TODO: Make this appropriate in future
+        //TODO: Make this appropriate in future for working with TimeObject
         if(transform.position.x < killZone)
         {
             gameObject.SetActive(false);

@@ -3,6 +3,7 @@
 /// </summary>
 public enum AttackType
 {
+    None,
     Melee,
     Ranged,
 }
