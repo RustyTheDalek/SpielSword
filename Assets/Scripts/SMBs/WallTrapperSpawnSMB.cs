@@ -17,5 +17,6 @@ public class WallTrapperSpawnSMB : SceneLinkedSMB<WallTrapMinion>
     {
         base.OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex);
         m_MonoBehaviour.MinionSpawning();
+        m_MonoBehaviour.CheckDetachedEyes();
     }
 }
