@@ -12,6 +12,11 @@ public class MinionGibTracking : ObjectTrackBase
 
     Collider2D m_Collider;
 
+    [Range(0,1)]
+    public float forceMultiplier = 1;
+
+    public bool autoThrow = true;
+
     private void Awake()
     {
         m_Parent = transform.parent;
@@ -41,7 +46,7 @@ public class MinionGibTracking : ObjectTrackBase
 
         Debug.DrawRay(transform.position, throwforce, Color.red, 5f);
 
-        m_Rigidbody.AddForce(throwforce, ForceMode2D.Impulse);
+        m_Rigidbody.AddForce(throwforce * forceMultiplier, ForceMode2D.Impulse);
         m_Collider.enabled = true;
         transform.SetParent(null);
 

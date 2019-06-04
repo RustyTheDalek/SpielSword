@@ -28,11 +28,6 @@ public class WallTrapMinion : FlightMinion
         MinionPatrolSMB.Initialise(m_Animator, this);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void MinionSpawning()
     {
@@ -75,5 +70,50 @@ public class WallTrapMinion : FlightMinion
             currentEye.enabled = true;
             detachedSummonEyes.Add(currentEye);
         }
+    }
+
+    protected override void OnDeath(Vector2 attackDirection)
+    {
+        base.OnDeath(attackDirection);
+
+        if (minionGibs)
+        {
+            //Any eyes that are firing or returning fall gib like the the rest.
+            foreach (SummonEye summonEye in detachedSummonEyes)
+            {
+                summonEye.enabled = false;
+
+                switch (summonEye.eyeState)
+                {
+                    case SummonEyeState.Firing:
+                    case SummonEyeState.Returning:
+
+                        Debug.Log("Throwing Eye off");
+                        summonEye.Throw();
+                        break;
+
+                    case SummonEyeState.None:
+
+                        summonEye.DisablePhysics();
+                        break;
+
+                    case SummonEyeState.Summoned:
+
+                        Debug.Log("Killing attached Minion");
+                        summonEye.KillMinion();
+                        break;
+                }
+            }
+
+            while(attachedSummonEyes.Count > 0)
+            {
+                var summonEye = attachedSummonEyes.Dequeue();
+                summonEye.enabled = false;
+                summonEye.DisablePhysics();
+            }
+        }
+
+        //Force kill any summoned minions
+        //Animates the walls failing in some way
     }
 }

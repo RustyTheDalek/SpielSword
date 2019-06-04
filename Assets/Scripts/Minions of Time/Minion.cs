@@ -334,29 +334,46 @@ public abstract class Minion : Character
 
     protected override void OnDeath(Vector2 attackDirection)
     {
-        base.OnDeath(attackDirection);
-
         StopAllCoroutines();
         //TODO:Re-add this by the separating from TimeObject code
+        /*Minion Gibbing overrides usual death logic as we want to delay the death 
+        slightly to track the gibbing parts*/
         if (minionGibs)
         {
+            pData.moveDir = Vector2.zero;
+            m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.simulated = false;
+
+            //gameObject.layer = LayerMask.NameToLayer("PastVillager");
+
+            m_Animator.SetFloat("xSpeed", 0);
+            m_Animator.SetFloat("ySpeed", 0);
+            m_Animator.SetFloat("xSpeedAbs", 0);
+            m_Animator.SetBool(m_HashDeadParam, true);
+
             m_Animator.enabled = false;
             m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
 
             foreach (MinionGibTracking part in minionParts)
             {
-                part.Throw(attackDirection);
+                if(part.autoThrow)
+                    part.Throw(attackDirection);
             }
 
             StartCoroutine(DelayToDeath());
+        }
+        else 
+        {
+            base.OnDeath(attackDirection);
         }
     }
 
     public IEnumerator DelayToDeath()
     {
+        Debug.Log("Delaying Death");
         yield return new WaitForSeconds(5f);
-
-        GetComponent<TimeObject>().tObjectState = TimeObjectState.PresentDead;
+        Debug.Log("Dead");
+        GetComponent<TimeObject>().FinishTracking();
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)

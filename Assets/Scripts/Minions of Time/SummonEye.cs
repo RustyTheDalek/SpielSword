@@ -13,7 +13,9 @@ public class SummonEye : MonoBehaviour
     public float eyeReturnSpeed = 20f;
     public GameObject RockMinion;
     public SpriteRenderer m_SpriteRenderer;
-
+    public MinionGibTracking m_MinionGibTracking;
+    public Collider2D m_Collider;
+    public Rigidbody2D m_Rigidbody;
     public SummonEyeState eyeState = SummonEyeState.Firing;
 
     RockMinion rockMinion;
@@ -86,7 +88,7 @@ public class SummonEye : MonoBehaviour
             case SummonEyeState.Returning:
 
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPos, eyeReturnSpeed * Time.deltaTime);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, startRot, eyeReturnSpeed * 10 * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, startRot, eyeReturnSpeed * 100 * Time.deltaTime);
 
                 if(Mathf.Approximately(transform.localPosition.x, startPos.x) && Mathf.Approximately(transform.localPosition.y, startPos.y))
                 {
@@ -97,5 +99,21 @@ public class SummonEye : MonoBehaviour
 
                 break;
         }
+    }
+
+    public void Throw()
+    {
+        m_MinionGibTracking.Throw(Vector2.zero);
+    }
+
+    public void DisablePhysics()
+    {
+        Destroy(m_Collider);
+        Destroy(m_Rigidbody);
+    }
+
+    public void KillMinion()
+    {
+        rockMinion.Kill();
     }
 }
