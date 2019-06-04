@@ -24,8 +24,6 @@ public class PlatformerCharacter2D : MonoBehaviour
     public virtual void Move(PlatformerData pData)
     {
 
-        Debug.Log(name + ": basic move");
-
         m_MaxVelocity = pData.maxVelocity;
 
         m_Rigidbody2D.AddForce(pData.moveDir * m_MoveForce, ForceMode2D.Impulse);

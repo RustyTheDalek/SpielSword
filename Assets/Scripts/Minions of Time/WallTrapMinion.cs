@@ -10,7 +10,8 @@ public class WallTrapMinion : FlightMinion
 
     public float timer = 0;
 
-    Queue<SummonEye> summonEyes;
+    Queue<SummonEye> attachedSummonEyes;
+    List<SummonEye> detachedSummonEyes = new List<SummonEye>();
 
     SummonEye currentEye;
 
@@ -18,7 +19,7 @@ public class WallTrapMinion : FlightMinion
     {
         base.Awake();
 
-        summonEyes = new Queue<SummonEye>(GetComponentsInChildren<SummonEye>());
+        attachedSummonEyes = new Queue<SummonEye>(GetComponentsInChildren<SummonEye>());
     }
 
     public override void OnEnable()
@@ -30,28 +31,49 @@ public class WallTrapMinion : FlightMinion
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void MinionSpawning()
     {
-        timer += Time.deltaTime;
+        if (attachedSummonEyes.Count > 0)
+        {
+            timer += Time.deltaTime;
 
-        if(timer >= minionSpawnInterval)
+            if (timer >= minionSpawnInterval)
+            {
+                timer = 0;
+                Debug.Log("Spawning Minion");
+                SpawnMinion();
+            }
+        }
+        else
         {
             timer = 0;
-            Debug.Log("Spawning Minion");
-            SpawnMinion();
+        }
+    }
+
+    public void CheckDetachedEyes()
+    {
+        foreach (SummonEye eye in detachedSummonEyes.ToList())
+        {
+            if (eye.eyeState == SummonEyeState.None)
+            {
+                attachedSummonEyes.Enqueue(eye);
+                detachedSummonEyes.Remove(eye);
+                eye.enabled = false;
+            }
         }
     }
 
     void SpawnMinion()
     {
-        if (summonEyes.Count > 0)
+        if (attachedSummonEyes.Count > 0)
         {
-            currentEye = summonEyes.Dequeue();
-            currentEye.transform.SetParent(null);
+            currentEye = attachedSummonEyes.Dequeue();
+            currentEye.transform.SetParent(null, true);
             currentEye.enabled = true;
+            detachedSummonEyes.Add(currentEye);
         }
     }
 }

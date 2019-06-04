@@ -9,37 +9,46 @@ public class SummonEye : MonoBehaviour
     public float fallTime = 1.7f;
     [Range(-10, 0)]
     public float yKillZone = 0f;
+    [Range(0f, 500f)]
+    public float eyeReturnSpeed = 20f;
     public GameObject RockMinion;
     public SpriteRenderer m_SpriteRenderer;
 
     public SummonEyeState eyeState = SummonEyeState.Firing;
 
     RockMinion rockMinion;
-    Vector2 startPos;
-    float startRot;
+    Transform parentTransform;
+    Vector3 startPos, firePos;
+    Quaternion startRot;
     float interPol;
     float timer = 0;
     int direction = 0;
 
-    void Start()
+    private void Awake()
     {
-        startPos = transform.position.XY();
-
-        //change to local position when needed
+        parentTransform = transform.parent;
+        startPos = transform.localPosition;
+        startRot = transform.localRotation;
         direction = (int)Mathf.Sign(transform.localPosition.x);
+    }
+
+    private void OnEnable()
+    {
+        eyeState = SummonEyeState.Firing;
+        timer = 0;
+        firePos = transform.position;
     }
 
     void Update()
     {
         switch(eyeState)
         {
-
             case SummonEyeState.Firing:
 
                 interPol = Mathf.InverseLerp(0, 1, timer / fallTime);
 
-                transform.position = new Vector3(startPos.x + xFall.Evaluate(interPol) * direction,
-                                                startPos.y + yFall.Evaluate(interPol),
+                transform.position = new Vector3(firePos.x + xFall.Evaluate(interPol) * direction,
+                                                firePos.y + yFall.Evaluate(interPol),
                                                 transform.position.z);
 
                 transform.rotation = Quaternion.Euler(0, 0, interPol * -180 * direction);
@@ -67,19 +76,22 @@ public class SummonEye : MonoBehaviour
                 {
                     m_SpriteRenderer.enabled = true;
                     eyeState = SummonEyeState.Returning;
+                    //TODO:Change this to match perfectly with Minions eye
+                    transform.SetParent(parentTransform, true);
+                    transform.position = rockMinion.Rigidbody.transform.position;
                 }
 
                 break;
 
             case SummonEyeState.Returning:
 
-                transform.position = Vector3.MoveTowards(transform.position, startPos, .5f);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, startRot), .5f);
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPos, eyeReturnSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, startRot, eyeReturnSpeed * 10 * Time.deltaTime);
 
-                if(Mathf.Approximately(transform.position.x, startPos.x) && Mathf.Approximately(transform.position.y, startPos.y))
+                if(Mathf.Approximately(transform.localPosition.x, startPos.x) && Mathf.Approximately(transform.localPosition.y, startPos.y))
                 {
-                    transform.position = startPos;
-                    transform.rotation = Quaternion.Euler(0, 0, startRot);
+                    transform.localPosition = startPos;
+                    transform.rotation = startRot;
                     eyeState = SummonEyeState.None;
                 }
 
