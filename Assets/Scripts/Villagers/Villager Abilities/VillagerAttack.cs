@@ -4,6 +4,7 @@ using System.Collections;
 /// <summary>
 /// Script for handling attacks against the boss
 /// </summary>
+//TODO: Make more generic so can be used by minions too
 public class VillagerAttack : MonoBehaviour
 {
     [Header("References")]
@@ -19,7 +20,27 @@ public class VillagerAttack : MonoBehaviour
     public float damage = 1;
     public float damageMult = 1;
 
+    /// <summary>
+    /// Total damage including multiplier
+    /// </summary>
+    public float Damage
+    {
+        get
+        {
+            return damage * damageMult;
+        }
+    }
+
     public float lifeTime = 1;
+
+    private void Awake()
+    {
+        if (EffectNoise == null)
+        {
+            Debug.LogWarning("EffectNoise not set, attempting to find it");
+            EffectNoise = GetComponent<AudioSource>();
+        }
+    }
 
     protected void OnEnable()
     {
@@ -84,9 +105,38 @@ public class VillagerAttack : MonoBehaviour
             anim.SetTrigger("Death");
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (TimeObjectManager.timeState == TimeState.Forward)
+        {
+            switch (LayerMask.LayerToName(collision.gameObject.layer))
+            {
+                case "Boss":
+                case "Minion":
+                    collision.GetComponentInParent<LivingObject>().OnHit(
+                        collision.transform.PointTo(transform), Damage);
+                    break;
+            }
+        }
+    }
+
+    public void PlayEffect()
+    {
+        if (EffectNoise)
+        {
+            EffectNoise.Stop();
+            EffectNoise.Play();
+        }
+        else
+        {
+            Debug.LogWarning("No Noise assigned");
+        }
+    }
+
     protected void SetActive(bool active)
     {
-        m_Sprite.enabled = active;
+        if (m_Sprite)
+            m_Sprite.enabled = active;
 
         if (m_Collider)
             m_Collider.enabled = active;

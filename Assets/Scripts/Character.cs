@@ -36,7 +36,7 @@ public class Character : LivingObject
 
     protected readonly int m_HashDeadParam = Animator.StringToHash("Dead");
 
-    protected MeleeAttack classMeleeAttack;
+    protected VillagerAttack classMeleeAttack;
 
     #endregion
 
@@ -66,7 +66,7 @@ public class Character : LivingObject
 
                 try
                 {
-                    classMeleeAttack = GetComponentInChildren<MeleeAttack>();
+                    classMeleeAttack = GetComponentInChildren<VillagerAttack>();
                 }
                 catch
                 {
