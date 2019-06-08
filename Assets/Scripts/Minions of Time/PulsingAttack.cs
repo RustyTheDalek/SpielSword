@@ -7,7 +7,10 @@ using UnityEngine;
 /// </summary>
 public class PulsingAttack : MonoBehaviour
 {
-    public List<Villager> villagers = new List<Villager>(5);
+    /// <summary>
+    /// List of Objects being afffected by the Pulsing attack
+    /// </summary>
+    public List<Rigidbody2D> reactiveObjs = new List<Rigidbody2D>(5);
 
     [Header("Force Settigns")]
 
@@ -20,6 +23,13 @@ public class PulsingAttack : MonoBehaviour
     private void OnEnable()
     {
         timer = 0;
+
+        SetRangeConstraints(false);
+    }
+
+    private void OnDisable()
+    {
+        SetRangeConstraints(true);
     }
 
     // Update is called once per frame
@@ -31,52 +41,115 @@ public class PulsingAttack : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach(Villager villager in villagers)
+        foreach(Rigidbody2D obj in reactiveObjs)
         {
-            villager.GetComponentInChildren<Rigidbody2D>().AddForce(
-                new Vector2(Mathf.Sign(villager.Rigidbody.transform.position.x - transform.position.x), 
+            obj.AddForce(new Vector2(Mathf.Sign(transform.PointTo(obj.transform).x), 
                 pulseDirection.y) * forceOverTime.Evaluate(timer), ForceMode2D.Impulse);
 
-            Debug.DrawRay(villager.Rigidbody.transform.position, new Vector2(Mathf.Sign(villager.Rigidbody.transform.position.x - transform.position.x),
+            Debug.DrawRay(obj.transform.position, new Vector2(
+                Mathf.Sign(transform.PointTo(obj.transform).x),
                 pulseDirection.y), Color.red);
+        }
+    }
+
+    /// <summary>
+    /// Sets Rigidbody Constraints of the Ranged projectiles within Pulse minions 
+    /// influence
+    /// </summary>
+    /// <param name="active"> 1 = Activating constraints. 0 = Deactivating constraints.</param>
+    public void SetRangeConstraints(bool constrain)
+    {
+        foreach (Rigidbody2D rb in reactiveObjs)
+        {
+            if (LayerMask.LayerToName(rb.gameObject.layer) == "Weapon")
+            {
+                if (constrain)
+                {
+                    rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+                }
+                else
+                {
+                    rb.constraints = RigidbodyConstraints2D.None;
+                }
+            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Rigidbody2D rb;
+
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
             case "Villager":
             case "PastVillager":
 
                 Villager villager = collision.GetComponentInParent<Villager>();
+                rb = villager.GetComponentInChildren<Rigidbody2D>();
 
-                if (villagers.Count < villagers.Capacity &&
-                !villagers.Contains(villager) &&
-                villager.Alive) // don't want them to attack dead villagers
+                if (reactiveObjs.Count < reactiveObjs.Capacity && 
+                    !reactiveObjs.Contains(rb) && villager.Alive)
                 {
-                    villagers.Add(villager);
+                    reactiveObjs.Add(rb);
                     villager.pData.velocityDampen = .5f;
                 }
+
+                break;
+
+            case "Weapon":
+
+                rb = collision.GetComponentInParent<Rigidbody2D>();
+
+                if (rb != null)
+                {
+                    if (reactiveObjs.Count < reactiveObjs.Capacity &&
+                    !reactiveObjs.Contains(rb))
+                    {
+                        reactiveObjs.Add(rb);
+                    }
+                }
+
                 break;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-            switch (LayerMask.LayerToName(collision.gameObject.layer))
-            {
-                case "Villager":
-                case "PastVillager":
+        Rigidbody2D rb;
 
-                    Villager villager = collision.GetComponentInParent<Villager>();
+        switch (LayerMask.LayerToName(collision.gameObject.layer))
+        {
+            case "Villager":
+            case "PastVillager":
 
-                    if (villagers.Contains(villager))
+                rb = collision.GetComponentInParent<Rigidbody2D>();
+
+                if (rb != null)
+                {
+                    if (reactiveObjs.Contains(rb))
                     {
-                        villagers.Remove(villager);
-                        villager.pData.velocityDampen = 0;
+                        reactiveObjs.Remove(rb);
+                        rb.GetComponentInParent<Villager>().pData.velocityDampen = 0;
+
+                    }
                 }
+
                 break;
-            }
+
+            case "Weapon":
+
+                rb = collision.GetComponentInParent<Rigidbody2D>();
+
+                if(rb != null)
+                {
+                    if(reactiveObjs.Contains(rb))
+                    {
+                        reactiveObjs.Remove(rb);
+                        rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+                    }
+                }
+
+            break;
         }
+    }
 }
