@@ -116,4 +116,22 @@ public class WallTrapMinion : FlightMinion
         //Force kill any summoned minions
         //Animates the walls failing in some way
     }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+
+        Debug.Log("Trigger entered");
+
+        switch (LayerMask.LayerToName(collision.gameObject.layer))
+        {
+            case "Villager":
+            case "PastVillager":
+
+                Debug.Log("Villager type");
+                m_Animator.SetTrigger("Trap");
+
+                break;
+        }
+    }
 }

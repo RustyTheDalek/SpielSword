@@ -401,7 +401,7 @@ public abstract class Minion : Character
         }
     }
     
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
@@ -425,7 +425,7 @@ public abstract class Minion : Character
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    protected virtual void OnTriggerStay2D(Collider2D collision)
     {
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
@@ -443,7 +443,7 @@ public abstract class Minion : Character
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    protected virtual void OnTriggerExit2D(Collider2D collision)
     {
         switch (LayerMask.LayerToName(collision.gameObject.layer))
         {
