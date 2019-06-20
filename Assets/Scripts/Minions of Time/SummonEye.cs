@@ -65,6 +65,8 @@ public class SummonEye : MonoBehaviour
                     rockMinion.randomStartDir = false;
                     rockMinion.startDir = (Direction)direction;
                     rockMinion.pData.moveDir = new Vector2(direction, 0);
+                    rockMinion.GetComponent<TimeObject>().oneLife = true;
+                    rockMinion.GetComponent<TimeObject>().rewindOnly = true;
                     m_SpriteRenderer.enabled = false;
 
                     eyeState = SummonEyeState.Summoned;

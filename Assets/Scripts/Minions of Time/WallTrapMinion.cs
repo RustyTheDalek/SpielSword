@@ -26,8 +26,11 @@ public class WallTrapMinion : FlightMinion
     {
         WallTrapperSpawnSMB.Initialise(m_Animator, this);
         MinionPatrolSMB.Initialise(m_Animator, this);
-    }
 
+        timer = 0;
+
+        base.OnEnable();
+    }   
 
     public void MinionSpawning()
     {
